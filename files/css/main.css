@@ -65,3 +65,126 @@ h2 {
   margin-top: auto;
   margin-bottom: calc( var(--baseline) * 1rem);
 }
+
+form {
+  /* Just to center the form on the page */
+  margin: 0 auto;
+  width: 52em;
+  /* To see the outline of the form */
+  padding: 1em;
+}
+
+form div + div {
+  margin-top: 1em;
+}
+
+fieldset {
+  border-radius: 0.2em;
+  border: 1px solid #CCC;
+  padding: 1.2em;
+  margin-top: 1.2em;
+}
+
+legend {
+  font-size: 1.2em;
+}
+
+label {
+  /* To make sure that all labels have the same size and are properly aligned */
+  display: block;
+  text-align: left;
+  padding-bottom: 0.3em;
+}
+
+.checkbox input {
+  width: 1.2em;
+}
+
+.checkbox label {
+  display: inline;
+}
+
+input, textarea {
+
+  /* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font */
+  font: 1em sans-serif;
+
+  /* To harmonize the look & feel of text field border */
+  border: 1px solid #999;
+}
+
+input {
+  /* To give the same size to all text fields */
+  width: 10em;
+  box-sizing: border-box;
+}
+
+textarea {
+  /* To give the same size to all text fields */
+  width: 49em;
+  box-sizing: border-box;
+}
+
+input:focus, textarea:focus {
+  /* To give a little highlight on active elements */
+  border-color: #000;
+}
+
+textarea {
+  /* To properly align multiline text fields with their labels */
+  vertical-align: top;
+
+  /* To give enough room to type some text */
+  height: 5em;
+}
+
+.button {
+  /* To position the buttons to the same position of the text fields */
+  padding-left: 1.2em; /* same size as the label elements */
+}
+
+button {
+  /* This extra margin represent roughly the same space as the space
+     between the labels and their text fields */
+  margin-left: .5em;
+}
+
+
+/* This is our style for the invalid fields */
+input:invalid{
+  border-color: #900;
+  background-color: #FDD;
+}
+
+input:focus.xforms-valid {
+  outline: none;
+}
+
+/* This is the style of our error messages */
+.error {
+  width  : 100%;
+  padding: 0;
+
+  font-size: 80%;
+  color: white;
+  background-color: #900;
+  border-radius: 0 0 5px 5px;
+
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+.error.active {
+  padding: 0.3em;
+}
+
+
+
+.xforms-invalid input {
+  background-color: #FDD;
+};
+
+.xforms-input input {
+  border-color: #900;
+}
