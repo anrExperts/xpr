@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- eXperts model -->
+<expertise xmlns="xpr">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <unitid type="cote-de-consultation"></unitid>
+        <unitid type="pieces"></unitid>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent></extent>
+            <appendices>
+                <appendice type="">
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+                <appendice type="">
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!-- TODO retravailler ce point, l'idéal serait de pouvoir rattacher chaque lieu à une date de vacation
+                RMQ Juliette nous indique qu' « au début de chaque nouvelle vacation est inscrite une formule précisant normalement la date et l'endroit où elle se déroule »
+                Il est donc possible de simplifier comme suit
+            -->
+            <!--
+                TODO comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne 
+            -->
+            <!--Dates de l'expertise -->
+            <date when="" type=""/>
+            <date when=""/>
+            <!--<session n="" type="paris"/>
+            <session n="" type="suburb"/>
+            <session n="" type="province"/>-->
+        </sessions>
+        <places>
+            <!--Lieux de l'expertise-->
+            <place type="">
+                <street/>
+                <complement/>
+                <parish/>
+                <city/>
+                <district/>
+            </place>
+            <!--TODO expertise au bureau
+                RMQ discussion avec Robert : il s'agit véritablement du lieu, ne pas placer cette mention dans "type d'expertise", même si effectivement l'expertise au bureau correspond souvent à un même cas de figure.
+                On garde le principe du booléen. Il n'est pas nécessaire de préciser le lieu, on ne l'aura pas forcément. Souvent c'est dans le bureau du greffier, mais ça peut être chez l'expert et il y aura certainement d'autres lieux.
+            -->
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!-- TODO
+                RMQ discussion avec Robert : plusieurs rubriques principales peuvent être selectionnées. À chaque fois il est possible de préciser le contexte (= plusieurs sous-rubriques ?)
+                Il n'est en revanche pas nécessaire/possible de donner un "ordre" pour selectionner une rubrique principale.
+                J'en rediscute avec Juliette demain pour comprendre ce qu'elle a fait dans un des dossiers qu'elle nous a fait parvenir lors de la dernière réunion.
+            -->
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure type="">
+            <!--Origine de l'expertise-->
+            <origination type=""/>
+            <!--Intervention d'une institution-->
+            <sentenses>
+                <sentence>
+                    <orgName/>
+                    <date/>
+                </sentence>
+            </sentenses>
+        </procedure>
+    </description>
+</expertise>
