@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- eXperts model -->
-<expertise xmlns="xpr">
+<!--TODO
+    dans la XSLT de Xforms, créer une règle pour xf:case/xf:label => création d'un h2 en html et pas un <label/>
+-->
+<expertise xmlns="">
     <meta/>
     <sourceDesc>
         <!--Réferences-->
-        <unitid type="cote-de-consultation"></unitid>
-        <unitid type="pieces"></unitid>
+        <idno type="unitid"/>
+        <idno type="item"/>
         <facsimile from="" to=""/>
         <!--Description physique du pv et des annexes-->
         <physDesc>
-            <extent></extent>
+            <!--TODO ajouter un indicateur pour la présence d'un croquis sur le PV (et non en annexe)-->
+            <extent/>
             <appendices>
-                <appendice type="">
-                    <extent/>
-                    <desc/>
-                    <note/>
-                </appendice>
                 <appendice type="">
                     <extent/>
                     <desc/>
@@ -34,45 +33,118 @@
                 TODO comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne 
             -->
             <!--Dates de l'expertise -->
+            <session/>
             <date when="" type=""/>
-            <date when=""/>
+            <!--Utiliser @when, ou @from et @to ?-->
             <!--<session n="" type="paris"/>
             <session n="" type="suburb"/>
             <session n="" type="province"/>-->
         </sessions>
         <places>
             <!--Lieux de l'expertise-->
+            <!--Robert parle vraiment des lieux de l'expertise et non des biens expertisés
+                si l'expertise se passe également au bureau, il faut l'indiquer ici également
+                Toutefois, je ne sais pas c'est possible, dans le cas d'une expertise se passant uniquement au bureau, 
+                le bien expertisé ne serait alors jamais décrit ?
+                TODO à rediscuter donc mais je remplace donc estates/estate par places/place
+            -->
             <place type="">
-                <street/>
+                <address/>
                 <complement/>
                 <parish/>
                 <city/>
                 <district/>
+                <!--TODO Juliette : peut-il y avoir plusieurs biens immeubles expertisés par vacation 
+                RMQ EC, une vacation peut concerner deux immeubles mitoyens, comment gérer ce cas de figure, créer deux lieux ?
+                peut-on rattacher toutes les sessions à un lieu. => vraisemblablement non. 
+                -->
+                <!--<session></session>-->
             </place>
             <!--TODO expertise au bureau
-                RMQ discussion avec Robert : il s'agit véritablement du lieu, ne pas placer cette mention dans "type d'expertise", même si effectivement l'expertise au bureau correspond souvent à un même cas de figure.
+                RMQ discussion avec Robert : il s'agit véritablement du lieu, ne pas placer cette mention dans "type d'expertise", même si effectivement l'expertise au bureau correspond souvent à un même cas de figure.
                 On garde le principe du booléen. Il n'est pas nécessaire de préciser le lieu, on ne l'aura pas forcément. Souvent c'est dans le bureau du greffier, mais ça peut être chez l'expert et il y aura certainement d'autres lieux.
             -->
         </places>
         <!--Type d'expertise-->
         <categories>
+            <categorie type=""><!--renseigner en même temps un @type pour facilité le traitement--><!--Valeur textuel--></categorie>
+            <categorie/>
             <!-- TODO
-                RMQ discussion avec Robert : plusieurs rubriques principales peuvent être selectionnées. À chaque fois il est possible de préciser le contexte (= plusieurs sous-rubriques ?)
-                Il n'est en revanche pas nécessaire/possible de donner un "ordre" pour selectionner une rubrique principale.
+                RMQ discussion avec Robert : plusieurs rubriques principales peuvent être sélectionnées. À chaque fois il est possible de préciser le contexte (= plusieurs sous-rubriques ?)
+                Il n'est en revanche pas nécessaire/possible de donner un "ordre" pour sélectionner une rubrique principale.
                 J'en rediscute avec Juliette demain pour comprendre ce qu'elle a fait dans un des dossiers qu'elle nous a fait parvenir lors de la dernière réunion.
             -->
         </categories>
         <!--Procedure encadrant l'expertise-->
-        <procedure type="">
+        <procedure>
+            <framework type=""><!-- @type est renseigné en même temps pour facilité le traitement--><!--Valeur textuel de la procédure--></framework>
             <!--Origine de l'expertise-->
-            <origination type=""/>
+            <origination type=""><!--idem--></origination>
             <!--Intervention d'une institution-->
             <sentenses>
                 <sentence>
                     <orgName/>
                     <date/>
+                    <date/>
                 </sentence>
             </sentenses>
+            <!--Cause de l'expertise-->
+            <case/>
+            <objects>
+                <object><!--idem (valeur textuelle + @type)--></object>
+            </objects>
         </procedure>
+        <participants>
+            <experts>
+                <expert context="" appointment="">
+                    <name/>
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <name/>
+                </clerk>
+            </clerks>
+            <parties>
+                <party>
+                    <!-- une même partie peut regrouper plusieurs personnes
+                        <person/> est répétable afin de les distinguer.
+                    -->
+                    <person>
+                        <name/>
+                        <!--RMQ On veut décrire la qualité et la profession d'une personne
+                            En anglais "occupation" peut regrouper les deux
+                            utiliser le même et le répéter si besoin ?
+                            utiliser profession ? state ?
+                        -->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <person/>
+                    <!--TODO Qualification individuelle
+                            la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)
+                        -->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert/>
+                    <!--Représentant ou procureur (répétable)
+                        TODO distinguer ?
+                    -->
+                    <representative/>
+                    <representative/>
+                    <prosecutor/>
+                    <!--TODO partie Opposante/requérante-->
+                    <!--TODO partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <name/>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
     </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
 </expertise>
