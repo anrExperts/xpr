@@ -12,10 +12,10 @@
         <facsimile from="" to=""/>
         <!--Description physique du pv et des annexes-->
         <physDesc>
-            <!--TODO ajouter un indicateur pour la présence d'un croquis sur le PV (et non en annexe)-->
-            <extent/>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
             <appendices>
-                <appendice type="">
+                <appendice type="" subtype="">
                     <extent/>
                     <desc/>
                     <note/>
@@ -25,73 +25,47 @@
     </sourceDesc>
     <description>
         <sessions>
-            <!-- TODO retravailler ce point, l'idéal serait de pouvoir rattacher chaque lieu à une date de vacation
-                RMQ Juliette nous indique qu' « au début de chaque nouvelle vacation est inscrite une formule précisant normalement la date et l'endroit où elle se déroule »
-                Il est donc possible de simplifier comme suit
-            -->
-            <!--
-                TODO comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne 
-            -->
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
             <!--Dates de l'expertise -->
-            <session/>
             <date when="" type=""/>
-            <!--Utiliser @when, ou @from et @to ?-->
-            <!--<session n="" type="paris"/>
-            <session n="" type="suburb"/>
-            <session n="" type="province"/>-->
+            <!--@type="paris/suburbs/province"/>-->
         </sessions>
         <places>
-            <!--Lieux de l'expertise-->
-            <!--Robert parle vraiment des lieux de l'expertise et non des biens expertisés
-                si l'expertise se passe également au bureau, il faut l'indiquer ici également
-                Toutefois, je ne sais pas c'est possible, dans le cas d'une expertise se passant uniquement au bureau, 
-                le bien expertisé ne serait alors jamais décrit ?
-                TODO à rediscuter donc mais je remplace donc estates/estate par places/place
-            -->
-            <place type="">
+            <place type="paris">
                 <address/>
                 <complement/>
                 <parish/>
                 <city/>
                 <district/>
-                <!--TODO Juliette : peut-il y avoir plusieurs biens immeubles expertisés par vacation 
-                RMQ EC, une vacation peut concerner deux immeubles mitoyens, comment gérer ce cas de figure, créer deux lieux ?
-                peut-on rattacher toutes les sessions à un lieu. => vraisemblablement non. 
-                -->
-                <!--<session></session>-->
+                <owner/>
             </place>
-            <!--TODO expertise au bureau
-                RMQ discussion avec Robert : il s'agit véritablement du lieu, ne pas placer cette mention dans "type d'expertise", même si effectivement l'expertise au bureau correspond souvent à un même cas de figure.
-                On garde le principe du booléen. Il n'est pas nécessaire de préciser le lieu, on ne l'aura pas forcément. Souvent c'est dans le bureau du greffier, mais ça peut être chez l'expert et il y aura certainement d'autres lieux.
-            -->
         </places>
         <!--Type d'expertise-->
         <categories>
-            <categorie type=""><!--renseigner en même temps un @type pour facilité le traitement--><!--Valeur textuel--></categorie>
-            <categorie/>
-            <!-- TODO
-                RMQ discussion avec Robert : plusieurs rubriques principales peuvent être sélectionnées. À chaque fois il est possible de préciser le contexte (= plusieurs sous-rubriques ?)
-                Il n'est en revanche pas nécessaire/possible de donner un "ordre" pour sélectionner une rubrique principale.
-                J'en rediscute avec Juliette demain pour comprendre ce qu'elle a fait dans un des dossiers qu'elle nous a fait parvenir lors de la dernière réunion.
-            -->
+            <!-- @todo -->
+            <!-- répétable -->
+            <category type=""><!--récupération de la valeur textuelle--></category>
+            <!-- @type="estimation/acceptation/registration/settlement/assessment"-->
+            <!--non répétable-->
+            <designation rubric=""></designation>
         </categories>
         <!--Procedure encadrant l'expertise-->
         <procedure>
-            <framework type=""><!-- @type est renseigné en même temps pour facilité le traitement--><!--Valeur textuel de la procédure--></framework>
+            <framework type=""><!--Valeur textuel de la procédure--></framework>
             <!--Origine de l'expertise-->
-            <origination type=""><!--idem--></origination>
+            <origination type=""><!--Valeur textuel de la procédure--></origination>
             <!--Intervention d'une institution-->
-            <sentenses>
+            <sentences>
                 <sentence>
                     <orgName/>
-                    <date/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
                     <date/>
                 </sentence>
-            </sentenses>
+            </sentences>
             <!--Cause de l'expertise-->
             <case/>
             <objects>
-                <object><!--idem (valeur textuelle + @type)--></object>
+                <object type=""><!--Valeur textuel de la procédure--></object>
             </objects>
         </procedure>
         <participants>
@@ -108,33 +82,22 @@
             </clerks>
             <parties>
                 <party>
-                    <!-- une même partie peut regrouper plusieurs personnes
-                        <person/> est répétable afin de les distinguer.
-                    -->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
                     <person>
                         <name/>
-                        <!--RMQ On veut décrire la qualité et la profession d'une personne
-                            En anglais "occupation" peut regrouper les deux
-                            utiliser le même et le répéter si besoin ?
-                            utiliser profession ? state ?
-                        -->
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
                         <occupation/>
                         <!--<profession></profession>-->
                     </person>
-                    <person/>
-                    <!--TODO Qualification individuelle
-                            la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)
-                        -->
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
                     <!-- Expert agissant pour cette partie -->
                     <expert/>
-                    <!--Représentant ou procureur (répétable)
-                        TODO distinguer ?
-                    -->
-                    <representative/>
+                    <!-- @rmq représentant/procureur sont répétables-->
                     <representative/>
                     <prosecutor/>
-                    <!--TODO partie Opposante/requérante-->
-                    <!--TODO partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                    <!-- @todo partie Opposante/requérante-->
+                    <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
                 </party>
             </parties>
             <!--Entrepreneur, architecte ou maître d’œuvre-->
