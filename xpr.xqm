@@ -30,277 +30,723 @@ function xform() {
                 <xf:bind
                     nodeset="sourceDesc/idno[@type='unitid']"
                     required="true()"/>
+                
                 <xf:bind
                     nodeset="sourceDesc/idno[@type='item']"
                     required="true()"/>
+                
                 <xf:submission
                     id="submit"
                     resource="form03"
                     method="get"
                     replace="instance"/>
-                    
-                <!--Autocompletion-->
-                <xf:instance id="streets">
-                    <streets>
-                        <street>rue Notre-Dame</street>
-                        <street>rue de la Verrerie</street>
-                        <street>rue Saint-Jacques</street>
-                        <street>route des Impressionistes</street>
-                        <street>rue Nicolas Poussin</street>
-                    </streets>
-                </xf:instance>
-                    
-                <xf:bind nodeset="description/places/place/address" 
-                     relevant="count(instance('streets')//street) &gt; 1"/>
+                
+                <!--bind pour physDesc-->
+                <!--@todo trouver une -->
+                <xf:bind
+                    nodeset="sourceDesc/physDesc/appendices/appendice/@subtype"
+                    relevant="./parent::appendice[contains(@type, 'other')]"/>
+                
+                
+                
+                <!-- bind pour places -->
+                <xf:bind
+                    nodeset="description/places/place/address 
+                    | description/places/place/complement
+                    | description/places/place/owner"
+                    relevant="../@type='paris' 
+                    or ../@type='suburbs' 
+                    or ../@type='province' 
+                    or ../@type='indeterminate'"/>
+                <xf:bind
+                    nodeset="description/places/place/parish"
+                    relevant="../@type='paris'"/>
+                
+                <xf:bind
+                    nodeset="description/places/place/city
+                    | description/places/place/district"
+                    relevant="../@type='suburbs' 
+                    or ../@type='province'"/>
+            
             </xf:model>
         </head>
         <body>
             <h1>Formulaire Z1J</h1>
             <form>
-            <xf:trigger>
-                <xf:label>Références</xf:label>
-                <xf:toggle
-                    case="references"
-                    ev:event="DOMActivate"/>
-            </xf:trigger>
-            <xf:trigger>
-                <xf:label>Vacations</xf:label>
-                <xf:toggle
-                    case="sessions"
-                    ev:event="DOMActivate"/>
-            </xf:trigger>
-            <xf:trigger>
-                <xf:label>Descriptions</xf:label>
-                <xf:toggle
-                    case="physDesc"
-                    ev:event="DOMActivate"/>
-            </xf:trigger>
-            <xf:trigger>
-                <xf:label>Lieux de l'expertise</xf:label>
-                <xf:toggle
-                    case="places"
-                    ev:event="DOMActivate"/>
-            </xf:trigger>
-            <xf:switch>
-                <xf:case
-                    id="references"
-                    selected="true">
+                <xf:trigger>
                     <xf:label>Références</xf:label>
-                    <xf:group
-                        ref="sourceDesc">
-                        <xf:label>Identifiants</xf:label>
-                        <xf:input
-                            ref="idno[@type='unitid']"
-                            incremental="true">
-                            <xf:label>Cote</xf:label>
-                        </xf:input>
-                        <xf:input
-                            ref="idno[@type='item']"
-                            incremental="true">
-                            <xf:label>Dossier</xf:label>
-                        </xf:input>
-                    </xf:group>
-                    <xf:group
-                        ref="sourceDesc/facsimile">
-                        <xf:label>Identifiants des vues</xf:label>
-                        <xf:input
-                            ref="@from"
-                            incremental="true">
-                            <xf:label>Première vue</xf:label>
-                        </xf:input>
-                        <xf:input
-                            ref="@to"
-                            incremental="true">
-                            <xf:label>Dernière vue</xf:label>
-                        </xf:input>
-                    </xf:group>
-                </xf:case>
-                <xf:case
-                    id="sessions"
-                    selected="false">
+                    <xf:toggle
+                        case="references"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:trigger>
                     <xf:label>Vacations</xf:label>
-                    <xf:repeat
-                        id="repeatSessions"
-                        nodeset="description/sessions/date">
-                        <xf:input
-                            ref="@when"
-                            incremental="true">
-                            <xf:label>Date</xf:label>
-                        </xf:input>
-                        <xf:select1
-                            ref="@type">
-                            <xf:label>Lieu</xf:label>
-                            <xf:item>
-                                <xf:label>Paris et faubourgs</xf:label>
-                                <xf:value>paris</xf:value>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Banlieue</xf:label>
-                                <xf:value>banlieue</xf:value>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Campagne</xf:label>
-                                <xf:value>campagne</xf:value>
-                            </xf:item>
-                        </xf:select1>
-                        <xf:trigger>
-                            <xf:label>&#10007;</xf:label>
-                            <xf:delete
-                                nodeset="."
-                                at="1"
-                                ev:event="DOMActivate"
-                                if="count(//description/sessions/date) > 1"/>
-                        </xf:trigger>
-                    </xf:repeat>
-                    <xf:trigger>
-                        <xf:label>Ajouter une vacation</xf:label>
-                        <xf:insert
-                            nodeset="description/sessions/date"
-                            at="index('repeatSessions')"
-                            position="after"
-                            ev:event="DOMActivate"/>
-                    </xf:trigger>
-                </xf:case>
-                <xf:case
-                    id="physDesc"
-                    selected="false">
-                    <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
-                    <xf:input
-                        ref="sourceDesc/physDesc/extent"
-                        incremental="true">
-                        <xf:label>Nombre de cahiers et de feuillets
-                        </xf:label>
-                    </xf:input>
-                    <xf:group ref="sourceDesc/physDesc/appendices">
-                        <xf:label>Pièces annexes</xf:label>
-                        <!--@rmq Pourra servir au contrôle à partir des informations tirées du récolement. -->
-                        <xf:output value="count(appendice)"><xf:label>Nombre de pièces annexes</xf:label></xf:output>
-                        <xf:repeat
-                            id="repeatAppendice"
-                            nodeset="appendice"
-                            appearance="full">
-                            <xf:select
-                                ref="@type"
-                                appearance="full">
-                                <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
-                                <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
-                                <xf:label>Type de pièce annexe</xf:label>
-                                <xf:item>
-                                    <xf:label>Dessin</xf:label>
-                                    <xf:value>drawing</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Plan</xf:label>
-                                    <xf:value>plan</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Croquis</xf:label>
-                                    <xf:value>sketch</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Brouillon</xf:label>
-                                    <xf:value>rough</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Pouvoir/procuration (acte sous seing privé)</xf:label>
-                                    <xf:value>proxyPA</xf:value>
-                                    <!--@rmq private agreement-->
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Pouvoir/procuration (acte notarié)</xf:label>
-                                    <xf:value>proxyNA</xf:value>
-                                    <!--@rmq notarial act-->
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Requête</xf:label>
-                                    <xf:value>petition</xf:value>
-                                </xf:item>
-                            </xf:select>
-                            <xf:input ref="@type" incremental="true">
-                                <xf:label>autre (à préciser)</xf:label>
-                            </xf:input>
-                            <xf:input ref="extent" incremental="true">
-                                <xf:label>Nombre de feuillets</xf:label>
-                            </xf:input>
-                            <xf:textarea ref="desc" incremental="true">
-                                <xf:label>Description physique</xf:label>
-                            </xf:textarea>
-                            <xf:textarea ref="note" incremental="true">
-                                <xf:label>Commentaires</xf:label>
-                            </xf:textarea>
-                            <xf:trigger>
-                                <xf:label>Supprimer une annexe</xf:label>
-                                <xf:delete
-                                    nodeset="."
-                                    at="1"
-                                    ev:event="DOMActivate"
-                                    if="count(//appendice) > 1"/>
-                            </xf:trigger>
-                        </xf:repeat>
-                        <xf:trigger>
-                            <xf:label>Ajouter une pièce annexe</xf:label>
-                            <xf:action
-                                ev:event="DOMActivate">
-                                <xf:insert
-                                    nodeset="appendice"
-                                    at="index('repeatAppendice')"
-                                    position="after"
-                                    ev:event="DOMActivate"/>
-                                <xf:setvalue
-                                    ref="appendice[index('repeatAppendice')]/@type"
-                                    value=""/>
-                                <xf:setvalue
-                                    ref="appendice[index('repeatAppendice')]/extent"
-                                    value=""/>
-                                <xf:setvalue
-                                    ref="appendice[index('repeatAppendice')]/desc"
-                                    value=""/>
-                                <xf:setvalue
-                                    ref="appendice[index('repeatAppendice')]/note"
-                                    value=""/>
-                            </xf:action>
-                        </xf:trigger>
-                    </xf:group>
-                </xf:case>
-                <xf:case
-                    id="places"
-                    selected="false">
+                    <xf:toggle
+                        case="sessions"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Descriptions</xf:label>
+                    <xf:toggle
+                        case="physDesc"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:trigger>
                     <xf:label>Lieux de l'expertise</xf:label>
-                    <xf:group ref="description/places">
-                    <!--@rmq utilisation d'un xf:group pour récupérer le noeud places-->
-                        <xf:repeat
-                            id="repeatPlace"
-                            nodeset="place"
-                            appearance="full">
-                            <xf:input ref="address" >
-                                <xf:label>Voie</xf:label>
+                    <xf:toggle
+                        case="places"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Catégories de l'expertise</xf:label>
+                    <xf:toggle
+                        case="categories"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Procédure et cadre de l'expertise</xf:label>
+                    <xf:toggle
+                        case="procedure"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Acteurs de l'expertise</xf:label>
+                    <xf:toggle
+                        case="participants"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
+                <xf:switch>
+                    <xf:case
+                        id="references"
+                        selected="true">
+                        <xf:label>Références</xf:label>
+                        <xf:group
+                            ref="sourceDesc">
+                            <xf:label>Identifiants</xf:label>
+                            <xf:input
+                                ref="idno[@type='unitid']"
+                                incremental="true">
+                                <xf:label>Cote</xf:label>
                             </xf:input>
+                            <xf:input
+                                ref="idno[@type='item']"
+                                incremental="true">
+                                <xf:label>Dossier</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="sourceDesc/facsimile">
+                            <xf:label>Identifiants des vues</xf:label>
+                            <xf:input
+                                ref="@from"
+                                incremental="true">
+                                <xf:label>Première vue</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@to"
+                                incremental="true">
+                                <xf:label>Dernière vue</xf:label>
+                            </xf:input>
+                        </xf:group>
+                    </xf:case>
+                    <xf:case
+                        id="sessions"
+                        selected="false">
+                        <xf:label>Vacations</xf:label>
+                        <xf:repeat
+                            id="repeatSessions"
+                            nodeset="description/sessions/date">
+                            <xf:input
+                                ref="@when"
+                                incremental="true">
+                                <xf:label>Date</xf:label>
+                            </xf:input>
+                            <xf:select1
+                                ref="@type">
+                                <xf:label>Lieu</xf:label>
+                                <xf:item>
+                                    <xf:label>Paris et faubourgs</xf:label>
+                                    <xf:value>paris</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Banlieue</xf:label>
+                                    <xf:value>suburbs</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Campagne</xf:label>
+                                    <xf:value>province</xf:value>
+                                </xf:item>
+                            </xf:select1>
                             <xf:trigger>
-                                <xf:label>Supprimer un lieu</xf:label>
+                                <xf:label>&#10007;</xf:label>
                                 <xf:delete
                                     nodeset="."
                                     at="1"
                                     ev:event="DOMActivate"
-                                    if="count(//place) > 1"/>
+                                    if="count(//description/sessions/date) > 1"/>
                             </xf:trigger>
                         </xf:repeat>
                         <xf:trigger>
-                            <xf:label>Ajouter un lieu</xf:label>
-                            <xf:action
-                                ev:event="DOMActivate">
-                                <xf:insert
-                                    nodeset="place"
-                                    at="index('repeatPlace')"
-                                    position="after"
-                                    ev:event="DOMActivate"/>
-                                <xf:setvalue
-                                    ref="place[index('repeatPlace')]"
-                                    value=""/>
-                            </xf:action>
+                            <xf:label>Ajouter une vacation</xf:label>
+                            <xf:insert
+                                nodeset="description/sessions/date"
+                                at="index('repeatSessions')"
+                                position="after"
+                                ev:event="DOMActivate"/>
                         </xf:trigger>
-                    </xf:group>
-                </xf:case>
-            </xf:switch>
+                    </xf:case>
+                    <xf:case
+                        id="physDesc"
+                        selected="false">
+                        <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
+                        <xf:group
+                            ref="sourceDesc/physDesc/extent">
+                            <xf:input
+                                ref="."
+                                incremental="true">
+                                <xf:label>Nombre de cahiers et de feuillets</xf:label>
+                            </xf:input>
+                            <xf:select1 
+                                ref="@sketch">
+                                <xf:label>Croquis sur le procès-verbal</xf:label>
+                                <xf:item>
+                                    <xf:label>oui</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>non</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </xf:group>
+                        <xf:group
+                            ref="sourceDesc/physDesc/appendices">
+                            <xf:label>Pièces annexes</xf:label>
+                            <!--@rmq Pourra servir au contrôle à partir des informations tirées du récolement. -->
+                            <xf:output
+                                value="count(appendice)"><xf:label>Nombre de pièces annexes</xf:label></xf:output>
+                            <xf:repeat
+                                id="repeatAppendice"
+                                nodeset="appendice"
+                                appearance="full">
+                                <xf:select
+                                    ref="@type"
+                                    appearance="full">
+                                    <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
+                                    <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
+                                    <xf:label>Type de pièce annexe</xf:label>
+                                    <xf:item>
+                                        <xf:label>Dessin</xf:label>
+                                        <xf:value>drawing</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Plan</xf:label>
+                                        <xf:value>plan</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Croquis</xf:label>
+                                        <xf:value>sketch</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Brouillon</xf:label>
+                                        <xf:value>rough</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Pouvoir/procuration (acte sous seing privé)</xf:label>
+                                        <xf:value>proxyPA</xf:value>
+                                        <!--@rmq private agreement-->
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Pouvoir/procuration (acte notarié)</xf:label>
+                                        <xf:value>proxyNA</xf:value>
+                                        <!--@rmq notarial act-->
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Requête</xf:label>
+                                        <xf:value>petition</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Autre</xf:label>
+                                        <xf:value>other</xf:value>
+                                    </xf:item>
+                                </xf:select>
+                                <xf:input
+                                    ref="@subtype"
+                                    incremental="true">
+                                    <xf:label>autre (à préciser)</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="extent"
+                                    incremental="true">
+                                    <xf:label>Nombre de feuillets</xf:label>
+                                </xf:input>
+                                <xf:textarea
+                                    ref="desc"
+                                    incremental="true">
+                                    <xf:label>Description physique</xf:label>
+                                </xf:textarea>
+                                <xf:textarea
+                                    ref="note"
+                                    incremental="true">
+                                    <xf:label>Commentaires</xf:label>
+                                </xf:textarea>
+                                <xf:trigger>
+                                    <xf:label>Supprimer une annexe</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//appendice) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter une pièce annexe</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="appendice"
+                                        at="index('repeatAppendice')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="appendice[index('repeatAppendice')]/@type"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="appendice[index('repeatAppendice')]/extent"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="appendice[index('repeatAppendice')]/desc"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="appendice[index('repeatAppendice')]/note"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                    </xf:case>
+                    <xf:case
+                        id="places"
+                        selected="false">
+                        <xf:label>Lieux de l'expertise</xf:label>
+                        <xf:group
+                            ref="description/places">
+                            <xf:repeat
+                                id="repeatPlace"
+                                nodeset="place"
+                                appearance="full">
+                                <xf:select1
+                                    ref="@type">
+                                    <xf:item>
+                                        <xf:label>Paris</xf:label>
+                                        <xf:value>paris</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Banlieue</xf:label>
+                                        <xf:value>suburbs</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Campagne</xf:label>
+                                        <xf:value>province</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Bureau des experts</xf:label>
+                                        <xf:value>office</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Indéterminé</xf:label>
+                                        <xf:value>indeterminate</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:input
+                                    ref="address">
+                                    <xf:label>Voie</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="complement">
+                                    <xf:label>Précisions géographiques</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="parish">
+                                    <xf:label>Paroisse</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="city">
+                                    <xf:label>Ville</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="district">
+                                    <xf:label>Département</xf:label>
+                                </xf:input>
+                                <xf:repeat
+                                    id="repeatOwner"
+                                    nodeset="owner"
+                                    appearance="full">
+                                    <xf:input
+                                        ref=".">
+                                        <xf:label>Propriétaire</xf:label>
+                                    </xf:input>
+                                    <xf:trigger>
+                                        <xf:label>Supprimer un propriétaire</xf:label>
+                                        <xf:delete
+                                            nodeset="."
+                                            at="1"
+                                            ev:event="DOMActivate"
+                                            if="count(//owner) > 1"/>
+                                    </xf:trigger>
+                                </xf:repeat>
+                                <xf:trigger>
+                                    <xf:label>Ajouter un propriétaire</xf:label>
+                                    <xf:action
+                                        ev:event="DOMActivate">
+                                        <xf:insert
+                                            nodeset="owner"
+                                            at="index('repeatOwner')"
+                                            position="after"
+                                            ev:event="DOMActivate"/>
+                                        <xf:setvalue
+                                            ref="owner[index('repeatOwner')]"
+                                            value=""/>
+                                    </xf:action>
+                                </xf:trigger>
+                                <xf:trigger>
+                                    <xf:label>Supprimer un lieu</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//place) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter un lieu</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="place"
+                                        at="index('repeatPlace')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/@type"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/address"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/complement"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/parish"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/city"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/province"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="place[index('repeatPlace')]/owner"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                    </xf:case>
+                    <xf:case
+                        id="categories"
+                        selected="false">
+                        <xf:label>Types d'expertise</xf:label>
+                        <xf:group
+                            ref="description/categories">
+                            <xf:repeat
+                                id="repeatCategory"
+                                nodeset="category">
+                                <xf:select1
+                                    ref="@type">
+                                    <xf:label>Catégories d'expertise</xf:label>
+                                    <xf:item>
+                                        <xf:label>Estimer la valeur des biens</xf:label>
+                                        <xf:value>estimation</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::category">Estimer la valeur des biens</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Recevoir et évaluer le travail réalisé</xf:label>
+                                        <xf:value>acceptation</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::category">Recevoir et évaluer le travail réalisé</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Enregistrer</xf:label>
+                                        <xf:value>registration</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::category">Enregistrer</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Départager</xf:label>
+                                        <xf:value>settlement</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::category">Départager</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Évaluer les coûts à venir</xf:label>
+                                        <xf:value>assessment</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::category">Évaluer les coûts à venir</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:trigger>
+                                    <xf:label>Supprimer une catégorie</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//category) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter une catégorie</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="category"
+                                        at="index('repeatCategory')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="category[index('repeatCategory')]"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="category[index('repeatCategory')]/@type"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                            <xf:input
+                                ref="designation">
+                                <xf:label>Désignation</xf:label>
+                            </xf:input>
+                            <xf:select1
+                                ref="designation/@rubric"
+                                appearance="full">
+                                <xf:label>En rubrique</xf:label>
+                                <xf:item>
+                                    <xf:label>oui</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>non</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                        </xf:group>
+                    </xf:case>
+                    <xf:case
+                        id="procedure"
+                        selected="false">
+                        <xf:label>Procédure et cadre de l’expertise</xf:label>
+                        <xf:group
+                            ref="description/procedure">
+                            <xf:group
+                                ref="framework">
+                                <xf:select1
+                                    ref="@type">
+                                    <!--@quest je ne suis pas certain qu'il y a besoin de détailler autant ? (juste besoin de A-B1-B2A-B2B-C)-->
+                                    <!--@todo afficher s'il s'agit d'une affaire gracieuse ou contentieuse-->
+                                    <!--@todo ajouter un output pour le texte de framework-->
+                                    <!--@rmq voir si on peut passer par un petit modèle de raisonnement pour garder la logique B-B2-B2a-->
+                                    <!--@todo à défaut, mettre un message d'alerte si B ou B2 sont cochés-->
+                                    <xf:label>Procédure</xf:label>
+                                    <xf:item>
+                                        <xf:label>A/ Commun accord des parties</xf:label>
+                                        <xf:value>a</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::framework">Commun accord des parties</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:choices>
+                                        <xf:label>B/ Saisie du lieutenant civil (ou autre, à préciser)</xf:label>
+                                        <xf:item>
+                                            <xf:label>B1/ Requête auprès du LC pour qu’il demande une expertise</xf:label>
+                                            <xf:value>b1</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::framework">Requête auprès du lieutenant civil pour qu’il demande une expertise</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                    </xf:choices>
+                                    <xf:choices>
+                                        <xf:label>B2/ Le LC est saisi dans le cadre d’une procédure</xf:label>
+                                        <xf:item>
+                                            <xf:label>B2a/ LC saisi dans le cadre d’une procédure (Les parties nomment chacune leur expert ou un expert commun)</xf:label>
+                                            <xf:value>b2a</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::framework">Le lieutenant civil est saisi dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>B2b/ LC saisi dans le cadre d’une procédure (Le LC nomme un ou deux experts)</xf:label>
+                                            <xf:value>b2b</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::framework">Le lieutenant civil est saisi dans le cadre d’une procédure (le lieutenant civil nomme un ou deux experts)</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                    </xf:choices>
+                                    <!--@todo comment faire pour préciser si ce n'est pas le LC ?-->
+                                    <xf:item>
+                                        <xf:label>C/ Cas problématique</xf:label>
+                                        <xf:value>c</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::framework">Cas problématique</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:output
+                                    ref=".">
+                                    <xf:label>Procédure</xf:label>
+                                </xf:output>
+                            </xf:group>
+                            <xf:group
+                                ref="origination">
+                                <xf:label>Origine de l'expertise</xf:label>
+                                <xf:select1
+                                    ref="@type">
+                                    <xf:label>Déclenchement de l’expertise</xf:label>
+                                    <xf:item>
+                                        <xf:label>Les parties</xf:label>
+                                        <xf:value>parties</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="ancestor::origination"
+                                                value="'Les parties'"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Une institution</xf:label>
+                                        <xf:value>institution</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="ancestor::origination"
+                                                value="'Une institution'"/>
+                                        </xf:action>
+                                    </xf:item>
+                                </xf:select1>
+                            </xf:group>
+                            <xf:group
+                                ref="sentences">
+                                <xf:label>Intervention d'une institution</xf:label>
+                                <xf:repeat
+                                    id="repeatSentence"
+                                    nodeset="sentence"
+                                    appearance="full">
+                                    <xf:input
+                                        ref="orgName">
+                                        <xf:label>Description de l'institution</xf:label>
+                                    </xf:input>
+                                    <xf:repeat
+                                        id="repeatDateSentence"
+                                        nodeset="date">
+                                        <xf:input
+                                            ref=".">
+                                            <xf:label>Date</xf:label>
+                                        </xf:input>
+                                        <xf:trigger>
+                                            <xf:label>Supprimer une date</xf:label>
+                                            <xf:delete
+                                                nodeset="."
+                                                at="1"
+                                                ev:event="DOMActivate"
+                                                if="count(//sentence/date) > 1"/>
+                                        </xf:trigger>
+                                    </xf:repeat>
+                                    <xf:trigger>
+                                        <xf:label>Ajouter une date</xf:label>
+                                        <xf:action
+                                            ev:event="DOMActivate">
+                                            <xf:insert
+                                                nodeset="date"
+                                                at="index('repeatDateSentence')"
+                                                position="after"
+                                                ev:event="DOMActivate"/>
+                                            <xf:setvalue
+                                                ref="date[index('repeatDateSentence')]"
+                                                value=""/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                    <xf:trigger>
+                                        <xf:label>Supprimer une institution</xf:label>
+                                        <xf:delete
+                                            nodeset="."
+                                            at="1"
+                                            ev:event="DOMActivate"
+                                            if="count(//sentence) > 1"/>
+                                    </xf:trigger>
+                                </xf:repeat>
+                                <!--@todo si l'on a renseigné une première institution avec plusieurs sentences, lorsqu'on ajoute une institution, le même nombre de sentence est copié => le remettre à 1-->
+                                <xf:trigger>
+                                    <xf:label>Ajouter une institution</xf:label>
+                                    <xf:action
+                                        ev:event="DOMActivate">
+                                        <xf:insert
+                                            nodeset="sentence"
+                                            at="index('repeatSentence')"
+                                            position="after"
+                                            ev:event="DOMActivate"/>
+                                        <xf:setvalue
+                                            ref="sentence[index('repeatSentence')]/orgName"
+                                            value=""/>
+                                        <xf:setvalue
+                                            ref="sentence[index('repeatSentence')]/date"
+                                            value=""/>
+                                    </xf:action>
+                                </xf:trigger>
+                            </xf:group>
+                            <xf:group
+                                ref="case">
+                                <!--@todo titre ?-->
+                                <xf:input
+                                    ref=".">
+                                    <!--@todo mettre une zone de texte ?-->
+                                    <xf:label>Cause de l'expertise</xf:label>
+                                </xf:input>
+                            </xf:group>
+                        </xf:group>
+                    </xf:case>
+                    
+                    
+                    <xf:case
+                        id=""
+                        selected="false">
+                        <xf:label></xf:label>
+                        <xf:group
+                            ref="">
+                        </xf:group>
+                    </xf:case>
+                </xf:switch>
             </form>
             <pre>
                 <xf:output
