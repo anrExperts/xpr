@@ -96,9 +96,10 @@
                 <!-- @todo partie Opposante/requérante-->
                 <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
                 <!---->
-                <party role="" presence="">
+                <party role="" presence="" intervention="">
                     <!--@role="opponent/petitioner"-->
                     <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
                     <!--@rmq person est répétable pour chaque personne d'une même partie-->
                     <person>
                         <name>
@@ -157,7 +158,7 @@
                 <!--si true-->
                 <expert/>
                 <clerk/>
-                <roll/>
+                <rolls/>
                 <papers/>
                 <plans/>
                 <prosecutor/>
@@ -165,6 +166,11 @@
                 <!--si true/false-->
                 <total/>
             </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses>
+                <!--@type="clerk/expert/notMentioned"-->
+                <expense type=""/>
+            </expenses>
         </conclusions>
     </description>
     <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
