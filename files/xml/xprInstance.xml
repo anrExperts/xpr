@@ -15,7 +15,17 @@
             <extent sketch=""/>
             <!--@sketch="true/false"-->
             <appendices>
-                <appendice type="" subtype="">
+                <appendice>
+                    <type type=""></type>
+                    <!--@type
+                    - drawing = Dessin
+                    - plan = Plan
+                    - sketch = Croquis
+                    - rough = Brouillon
+                    - proxyPA = Pouvoir/procuration (acte sous seing privé) @rmq private agreement
+                    - proxyNA = Pouvoir/procuration (acte notarié) @rmq notarial act
+                    - petition = Requête
+                    - other = autre-->
                     <extent/>
                     <desc/>
                     <note/>
@@ -42,12 +52,9 @@
         </places>
         <!--Type d'expertise-->
         <categories>
-            <!-- @todo -->
-            <!-- répétable -->
-            <category type=""><!--récupération de la valeur textuelle--></category>
-            <!-- @type="estimation/acceptation/registration/settlement/assessment"-->
+            <!--xprCategories-->
             <!--non répétable-->
-            <designation rubric=""></designation>
+            <designation rubric=""/>
         </categories>
         <!--Procedure encadrant l'expertise-->
         <procedure>
@@ -64,50 +71,101 @@
             </sentences>
             <!--Cause de l'expertise-->
             <case/>
-            <objects>
-                <object type=""><!--Valeur textuel de la procédure--></object>
-            </objects>
+            <!--Objet de l'expertise-->
+            <objects/>
         </procedure>
         <participants>
             <experts>
                 <expert context="" appointment="">
-                    <name/>
+                    <name>
+                        <surname/>
+                        <forename/>
+                    </name>
                     <title/>
                 </expert>
             </experts>
             <clerks>
                 <clerk>
-                    <name/>
+                    <name>
+                        <surname/>
+                        <forename/>
+                    </name>
                 </clerk>
             </clerks>
             <parties>
-                <party>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
                     <!--@rmq person est répétable pour chaque personne d'une même partie-->
                     <person>
-                        <name/>
+                        <name>
+                            <surname/>
+                            <forename/>
+                        </name>
                         <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
                         <occupation/>
                         <!--<profession></profession>-->
                     </person>
+                    <!--qualification individuelle-->
+                    <status/>
                     <!-- Qualification individuelle-->
                     <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
                     <!-- Expert agissant pour cette partie -->
                     <expert/>
                     <!-- @rmq représentant/procureur sont répétables-->
-                    <representative/>
-                    <prosecutor/>
-                    <!-- @todo partie Opposante/requérante-->
-                    <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                    <representative>
+                        <name>
+                            <surname/>
+                            <forename/>
+                        </name>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <name>
+                            <surname/>
+                            <forename/>
+                        </name>
+                    </prosecutor>
                 </party>
             </parties>
             <!--Entrepreneur, architecte ou maître d’œuvre-->
             <craftmen>
                 <craftman>
-                    <name/>
+                    <name>
+                        <surname/>
+                        <forename/>
+                    </name>
                     <occupation/>
                 </craftman>
             </craftmen>
         </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion><!--répétable--></opinion>
+            <!--montant global-->
+            <estimate><!--sumTotal = montant total ?--></estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <!--si true-->
+                <expert/>
+                <clerk/>
+                <roll/>
+                <papers/>
+                <plans/>
+                <prosecutor/>
+                <help/>
+                <!--si true/false-->
+                <total/>
+            </fees>
+        </conclusions>
     </description>
     <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
 </expertise>
