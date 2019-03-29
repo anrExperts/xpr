@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<appendices xmlns="">
+    <appendice>
+        <type/>
+        <type type="drawing">Dessin</type>
+        <type type="plan">Plan</type>
+        <type type="sketch">Croquis</type>
+        <type type="rough">Brouillon</type>
+        <type type="proxyPA">Pouvoir/procuration (acte sous seing privé)</type>
+        <type type="proxyNA">Pouvoir/procuration (acte notarié)</type>
+        <type type="petition">Requête</type>
+        <type type="other"/>
+        <extent/>
+        <desc/>
+        <note/>
+    </appendice>
+</appendices>

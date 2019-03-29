@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<categories xmlns="">
+    <category/>
+    <category type="estimation">Estimer la valeur des biens</category>
+    <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+    <category type="registration">Enregistrer</category>
+    <category type="settlement">Départager</category>
+    <category type="assessment">Évaluer les coûts à venir</category>
+</categories>
