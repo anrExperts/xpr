@@ -29,70 +29,14 @@ function xform() {
                     src="files/xml/xprInstance.xml"/>
                 
                 <xf:instance
-                    id="xprAppendices">
-                    <appendices
-                        xmlns="">
-                        <appendice></appendice>
-                        <appendice
-                            type="drawing">Dessin</appendice>
-                        <appendice
-                            type="plan">Plan</appendice>
-                        <appendice
-                            type="sketch">Croquis</appendice>
-                        <appentice
-                            type="rough">Brouillon</appentice>
-                        <appendice
-                            type="proxyPA">Pouvoir/procuration (acte sous seing privé)</appendice>
-                        <appendice
-                            type="proxyNA">Pouvoir/procuration (acte notarié)</appendice>
-                        <appendice
-                            type="petition">Requête</appendice>
-                        <appendice
-                            type="other">Autre</appendice>
-                    </appendices>
-                </xf:instance>
-                
+                    id="xprAppendice"
+                    src="files/xml/xprAppendice.xml"/>
                 <xf:instance
-                    id="xprCategories">
-                    <categories
-                        xmlns="">
-                        <category></category>
-                        <category
-                            type="estimation">Estimer la valeur des biens</category>
-                        <category
-                            type="acceptation">Recevoir et évaluer le travail réalisé</category>
-                        <category
-                            type="registration">Enregistrer</category>
-                        <category
-                            type="settlement">Départager</category>
-                        <category
-                            type="assessment">Évaluer les coûts à venir</category>
-                    </categories>
-                </xf:instance>
-                
+                    id="xprCategories"
+                    src="files/xml/xprCategories.xml"/>
                 <xf:instance
-                    id="xprObjects">
-                    <objects
-                        xmlns="">
-                        <object></object>
-                        <object
-                            type="house">Maison</object>
-                        <object
-                            type="plot">Terrain</object>
-                        <object
-                            type="buildings">Ensemble de bâtiments</object>
-                        <object
-                            type="territory">Domaine, terres, fief</object>
-                        <object
-                            type="wall">Mur</object>
-                        <object
-                            type="cesspool">Fosse d'aisance</object>
-                        <object
-                            type="well">Puits</object>
-                        <object
-                            type="other">Autre</object>
-                    </objects>
-                </xf:instance>
+                    id="xprObjects"
+                    src="files/xml/xprObjects.xml"/>
                 
                 <xf:submission
                     id="submit"
@@ -468,9 +412,60 @@ function xform() {
                     nodeset="description/conclusions/opinion"/>
                 
                 <xf:bind
-                    id="estimation"
-                    nodeset="description/conclusions/estimation"/>
-            
+                    id="estimate"
+                    nodeset="description/conclusions/estimate"/>
+                
+                <xf:bind
+                    id="fees"
+                    nodeset="description/conclusions/fees"/>
+                
+                <xf:bind
+                    id="feesDetail"
+                    nodeset="description/conclusions/fees/@detail"/>
+                
+                <xf:bind
+                    id="feesExpert"
+                    nodeset="description/conclusions/fees/expert"/>
+                
+                <xf:bind
+                    id="feesClerk"
+                    nodeset="description/conclusions/fees/clerk"/>
+                
+                <xf:bind
+                    id="feesRolls"
+                    nodeset="description/conclusions/fees/rolls"/>
+                
+                <xf:bind
+                    id="feesPapers"
+                    nodeset="description/conclusions/fees/papers"/>
+                
+                <xf:bind
+                    id="feesPlans"
+                    nodeset="description/conclusions/fees/plans"/>
+                
+                <xf:bind
+                    id="feesProsecutor"
+                    nodeset="description/conclusions/fees/prosecutor"/>
+                
+                <xf:bind
+                    id="feesHelp"
+                    nodeset="description/conclusions/fees/help"/>
+                
+                <xf:bind
+                    id="feesTotal"
+                    nodeset="description/conclusions/fees/total"/>
+                
+                <xf:bind
+                    id="expenses"
+                    nodeset="description/conclusions/expenses"/>
+                
+                <xf:bind
+                    id="expense"
+                    nodeset="description/conclusions/expense"/>
+                
+                <xf:bind
+                    id="expenseType"
+                    nodeset="description/conclusions/expense/type"/>
             
             </xf:model>
         </head>
@@ -820,7 +815,7 @@ function xform() {
                                             nodeset="."
                                             at="1"
                                             ev:event="DOMActivate"
-                                            if="count(//description/places/place/owner) > 1"/>
+                                            if="count(//description/places/place[index('repeatPlace')]/owner) > 1"/>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <xf:trigger>
@@ -1525,29 +1520,28 @@ function xform() {
                                             value=""/>
                                     </xf:action>
                                 </xf:trigger>
-                                <!--@todo @ref-->
-                                <!--<xf:select1>
+                                <xf:select1
+                                    ref="@role">
                                     <xf:label>Partie</xf:label>
                                     <xf:item>
                                         <xf:label>Requérante</xf:label>
-                                        <xf:value>claimant</xf:value>
+                                        <xf:value>petitioner</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Opposante</xf:label>
-                                        <xf:value>opposing</xf:value>
+                                        <xf:value>opponent</xf:value>
                                     </xf:item>
-                                </xf:select1>-->
-                                <!--@todo @ref-->
-                                <!--<xf:select1>
+                                </xf:select1>
+                                <xf:select1
+                                    ref="status">
                                     <xf:label>Qualification individuelle</xf:label>
                                     <xf:item>
                                         <xf:label>Entrepreneur</xf:label>
-                                        <!-\-@todo-\->
-                                        <xf:value>contractor</xf:value>
+                                        <xf:value>builder</xf:value>
                                     </xf:item>
                                     <xf:item>
-                                        <xf:value>Propriétaire</xf:value>
-                                        <xf:label>owner</xf:label>
+                                        <xf:label>Propriétaire</xf:label>
+                                        <xf:value>owner</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Copropriétaire</xf:label>
@@ -1583,10 +1577,9 @@ function xform() {
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Fermier judiciaire</xf:label>
-                                        <!-\-@todo-/->
-                                        <xf:value>fermier</xf:value>
+                                        <xf:value>contractor</xf:value>
                                     </xf:item>
-                                </xf:select1>-->
+                                </xf:select1>
                                 <!--@todo faire un repeat pour les représentants et procureurs ?-->
                                 <xf:group
                                     ref="representative">
@@ -1686,6 +1679,30 @@ function xform() {
                                         </xf:action>
                                     </xf:trigger>
                                 </xf:group>
+                                <xf:select1
+                                    ref="@presence">
+                                    <xf:label>Partie présente</xf:label>
+                                    <xf:item>
+                                        <xf:label>oui</xf:label>
+                                        <xf:value>true</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>non</xf:label>
+                                        <xf:value>false</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:select1
+                                    ref="@intervention">
+                                    <xf:label>Partie intervenance</xf:label>
+                                    <xf:item>
+                                        <xf:label>oui</xf:label>
+                                        <xf:value>true</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>non</xf:label>
+                                        <xf:value>false</xf:value>
+                                    </xf:item>
+                                </xf:select1>
                                 <xf:trigger>
                                     <xf:label>Supprimer une partie</xf:label>
                                     <xf:delete
@@ -1844,10 +1861,62 @@ function xform() {
                                 </xf:action>
                             </xf:trigger>
                             <xf:input
-                                bind="estimation">
+                                bind="estimate">
                                 <xf:label>Montant global (pour les estimations)</xf:label>
                             </xf:input>
-                            
+                            <xf:group
+                                ref="fees">
+                                <xf:label>Coût de l'expertise</xf:label>
+                            </xf:group>
+                            <xf:select1
+                                bind="feesDetail"
+                                appearance="full">
+                                <xf:label>Détail</xf:label>
+                                <item>
+                                    <xf:label>oui</xf:label>
+                                    <xf:value>true</xf:value>
+                                </item>
+                                <item>
+                                    <xf:label>non</xf:label>
+                                    <xf:value>false</xf:value>
+                                </item>
+                            </xf:select1>
+                            <xf:input
+                                bind="feesExpert">
+                                <xf:label>Expert(s)</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesClerk">
+                                <xf:label>Greffier</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesRolls">
+                                <xf:label>Rôles</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesPapers">
+                                <xf:label>Papiers</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesPlans">
+                                <xf:label>Plans</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesProsecutor">
+                                <xf:label>Procureur</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesHelp">
+                                <xf:label>Aides</xf:label>
+                            </xf:input>
+                            <xf:input
+                                bind="feesTotal">
+                                <xf:label>Total</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="expenses">
+                            <xf:label>Bourse commune</xf:label>
                         </xf:group>
                         <!--control-->
                         <pre>
