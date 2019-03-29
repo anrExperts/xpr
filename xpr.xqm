@@ -28,7 +28,7 @@ declare variable $xpr:xslt := file:base-dir();
  : @bug namespace xf:instance
 :)
 declare
-%rest:path('/formxpr')
+%rest:path("/formxpr")
 %output:method("xml")
 function xform() {
   let $xsltformsPath := 'files/xsltforms/xsltforms/xsltforms.xsl'
