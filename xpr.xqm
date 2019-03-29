@@ -25,15 +25,74 @@ function xform() {
             <!-- XForms data models -->
             <xf:model>
                 <xf:instance
+                    id="xprModel"
                     src="files/xml/xprInstance.xml"/>
                 
-                <xf:bind
-                    nodeset="sourceDesc/idno[@type='unitid']"
-                    required="true()"/>
+                <xf:instance
+                    id="xprAppendices">
+                    <appendices
+                        xmlns="">
+                        <appendice></appendice>
+                        <appendice
+                            type="drawing">Dessin</appendice>
+                        <appendice
+                            type="plan">Plan</appendice>
+                        <appendice
+                            type="sketch">Croquis</appendice>
+                        <appentice
+                            type="rough">Brouillon</appentice>
+                        <appendice
+                            type="proxyPA">Pouvoir/procuration (acte sous seing privé)</appendice>
+                        <appendice
+                            type="proxyNA">Pouvoir/procuration (acte notarié)</appendice>
+                        <appendice
+                            type="petition">Requête</appendice>
+                        <appendice
+                            type="other">Autre</appendice>
+                    </appendices>
+                </xf:instance>
                 
-                <xf:bind
-                    nodeset="sourceDesc/idno[@type='item']"
-                    required="true()"/>
+                <xf:instance
+                    id="xprCategories">
+                    <categories
+                        xmlns="">
+                        <category></category>
+                        <category
+                            type="estimation">Estimer la valeur des biens</category>
+                        <category
+                            type="acceptation">Recevoir et évaluer le travail réalisé</category>
+                        <category
+                            type="registration">Enregistrer</category>
+                        <category
+                            type="settlement">Départager</category>
+                        <category
+                            type="assessment">Évaluer les coûts à venir</category>
+                    </categories>
+                </xf:instance>
+                
+                <xf:instance
+                    id="xprObjects">
+                    <objects
+                        xmlns="">
+                        <object></object>
+                        <object
+                            type="house">Maison</object>
+                        <object
+                            type="plot">Terrain</object>
+                        <object
+                            type="buildings">Ensemble de bâtiments</object>
+                        <object
+                            type="territory">Domaine, terres, fief</object>
+                        <object
+                            type="wall">Mur</object>
+                        <object
+                            type="cesspool">Fosse d'aisance</object>
+                        <object
+                            type="well">Puits</object>
+                        <object
+                            type="other">Autre</object>
+                    </objects>
+                </xf:instance>
                 
                 <xf:submission
                     id="submit"
@@ -41,32 +100,377 @@ function xform() {
                     method="get"
                     replace="instance"/>
                 
-                <!--bind pour physDesc-->
-                <!--@todo trouver une -->
+                <!--**sourceDesc**-->
                 <xf:bind
+                    id="sourceDesc"
+                    nodeset="sourceDesc"/>
+                <!--référence-->
+                
+                <xf:bind
+                    id="unitid"
+                    nodeset="sourceDesc/idno[@type='unitid']"
+                    required="true()"/>
+                
+                <xf:bind
+                    id="item"
+                    nodeset="sourceDesc/idno[@type='item']"
+                    required="true()"/>
+                
+                <xf:bind
+                    id="facsimileFrom"
+                    nodeset="sourceDesc/facsimile/@from"/>
+                
+                <xf:bind
+                    id="facsimileTo"
+                    nodeset="sourceDesc/facsimile/@to"/>
+                
+                <!--physDesc-->
+                <xf:bind
+                    id="physDesc"
+                    nodeset="physDesc"/>
+                
+                <xf:bind
+                    id="extent"
+                    nodeset="sourceDesc/physDesc/extent"/>
+                
+                <xf:bind
+                    id="sketch"
+                    nodeset="sourceDesc/physDesc/extent/@sketch"/>
+                
+                <xf:bind
+                    id="appendice"
+                    nodeset="sourceDesc/physDesc/appendices/appendice"/>
+                
+                <xf:bind
+                    id="appendiceType"
+                    nodeset="sourceDesc/physDesc/appendices/appendice/@type"/>
+                
+                <xf:bind
+                    id="appendiceExtent"
+                    nodeset="sourceDesc/physDesc/appendices/appendice/extent"/>
+                
+                <xf:bind
+                    id="appendiceDesc"
+                    nodeset="sourceDesc/physDesc/appendices/appendice/desc"/>
+                
+                <xf:bind
+                    id="appendiceNote"
+                    nodeset="sourceDesc/physDesc/appendices/appendice/note"/>
+                
+                <!--<xf:bind
                     nodeset="sourceDesc/physDesc/appendices/appendice/@subtype"
-                    relevant="./parent::appendice[contains(@type, 'other')]"/>
-                
-                
-                
-                <!-- bind pour places -->
+                    relevant="./parent::appendice[contains(@type, 'other')]"/>-->
+                <!--**description**-->
                 <xf:bind
-                    nodeset="description/places/place/address 
-                    | description/places/place/complement
-                    | description/places/place/owner"
+                    id="description"
+                    nodeset="description"/>
+                
+                <!--sessions-->
+                <xf:bind
+                    id="sessions"
+                    nodeset="description/sessions"/>
+                
+                <xf:bind
+                    id="sessionsDate"
+                    nodeset="description/sessions/date"/>
+                
+                <xf:bind
+                    id="sessionsWhen"
+                    nodeset="description/sessions/session/@when"/>
+                
+                <xf:bind
+                    id="sessionsType"
+                    nodeset="description/sessions/date/@type"/>
+                
+                <!--places-->
+                <xf:bind
+                    id="places"
+                    nodeset="description/places"/>
+                
+                <xf:bind
+                    id="place"
+                    nodeset="description/places/place"/>
+                
+                <xf:bind
+                    id="placeAddress"
+                    nodeset="description/places/place/address"
                     relevant="../@type='paris' 
                     or ../@type='suburbs' 
                     or ../@type='province' 
                     or ../@type='indeterminate'"/>
+                
                 <xf:bind
+                    id="placeComplement"
+                    nodeset="description/places/place/complement"
+                    relevant="../@type='paris' 
+                    or ../@type='suburbs' 
+                    or ../@type='province' 
+                    or ../@type='indeterminate'"/>
+                
+                <xf:bind
+                    id="placeParish"
                     nodeset="description/places/place/parish"
                     relevant="../@type='paris'"/>
                 
                 <xf:bind
-                    nodeset="description/places/place/city
-                    | description/places/place/district"
+                    id="placeCity"
+                    nodeset="description/places/place/city"
                     relevant="../@type='suburbs' 
                     or ../@type='province'"/>
+                
+                <xf:bind
+                    id="placeDistrict"
+                    nodeset="description/places/place/district"
+                    relevant="../@type='suburbs' 
+                    or ../@type='province'"/>
+                
+                <xf:bind
+                    id="placeOwner"
+                    nodeset="description/places/place/owner"
+                    relevant="../@type='paris' 
+                    or ../@type='suburbs' 
+                    or ../@type='province' 
+                    or ../@type='indeterminate'"/>
+                
+                <!--Categories-->
+                
+                <xf:bind
+                    id="categories"
+                    nodeset="description/categories"/>
+                
+                <xf:bind
+                    id="category"
+                    nodeset="description/categories/category"/>
+                
+                <xf:bind
+                    id="categoryType"
+                    nodeset="description/categories/category/@type"/>
+                
+                <xf:bind
+                    id="designation"
+                    nodeset="description/categories/designation"/>
+                
+                <xf:bind
+                    id="designationRubric"
+                    nodeset="description/categories/designation/@rubric"/>
+                
+                <!--procedure encadrant l'expertise-->
+                <xf:bind
+                    id="procedure"
+                    nodeset="description/procedure"/>
+                <!--cadre-->
+                <xf:bind
+                    id="framework"
+                    nodeset="description/procedure/framework"/>
+                
+                <xf:bind
+                    id="frameworkType"
+                    nodeset="description/procedure/framework/@type"/>
+                
+                <!--Origine de l'expertise-->
+                <xf:bind
+                    id="origination"
+                    nodeset="description/procedure/origination"/>
+                
+                <xf:bind
+                    id="originationType"
+                    nodeset="description/procedure/origination/@type"/>
+                
+                <!--intervention d'une institution-->
+                <xf:bind
+                    id="sentences"
+                    nodeset="description/procedure/sentences"/>
+                
+                <xf:bind
+                    id="sentence"
+                    nodeset="description/procedure/sentences/sentence"/>
+                
+                <xf:bind
+                    id="sentenceOrg"
+                    nodeset="description/procedure/sentences/sentence/orgName"/>
+                
+                <xf:bind
+                    id="sentenceDate"
+                    nodeset="description/procedure/sentences/sentence/date"/>
+                
+                <!--Cause de l'expertise-->
+                <xf:bind
+                    id="case"
+                    nodeset="description/procedure/case"/>
+                
+                <!--Objets de l'expertise-->
+                <xf:bind
+                    id="objectOther"
+                    nodeset="description/procedure/objects/object[@type='other']"
+                    relevant="."/>
+                
+                <!--Acteurs de l'expertise-->
+                <xf:bind
+                    id="participants"
+                    nodeset="description/participants"/>
+                
+                <!--Les experts-->
+                <xf:bind
+                    id="experts"
+                    nodeset="description/participants/experts"/>
+                
+                <xf:bind
+                    id="expert"
+                    nodeset="description/participants/experts/expert"/>
+                
+                <xf:bind
+                    id="expertName"
+                    nodeset="description/participants/experts/expert/name"/>
+                
+                <xf:bind
+                    id="expertSurname"
+                    nodeset="description/participants/experts/expert/name/surname"/>
+                
+                <xf:bind
+                    id="expertForename"
+                    nodeset="description/participants/experts/expert/name/Forename"/>
+                
+                <xf:bind
+                    id="expertTitle"
+                    nodeset="description/participants/experts/expert/title"/>
+                
+                <!--Les greffiers-->
+                <xf:bind
+                    id="clerks"
+                    nodeset="description/participants/clerks"/>
+                
+                <xf:bind
+                    id="clerk"
+                    nodeset="description/participants/clerks/clerk"/>
+                
+                <xf:bind
+                    id="clerkName"
+                    nodeset="description/participants/clerks/clerk/name"/>
+                
+                <xf:bind
+                    id="clerkSurname"
+                    nodeset="description/participants/clerks/clerk/name/surname"/>
+                
+                <xf:bind
+                    id="clerkForename"
+                    nodeset="description/participants/clerks/clerk/name/forename"/>
+                
+                <!--Les parties-->
+                <xf:bind
+                    id="parties"
+                    nodeset="description/participants/parties"/>
+                
+                <xf:bind
+                    id="party"
+                    nodeset="description/participants/parties/party"/>
+                
+                <xf:bind
+                    id="person"
+                    nodeset="description/participants/parties/party/person"/>
+                
+                <xf:bind
+                    id="personName"
+                    nodeset="description/participants/parties/party/person/name"/>
+                
+                <xf:bind
+                    id="personSurname"
+                    nodeset="description/participants/parties/party/person/name/surname"/>
+                
+                <xf:bind
+                    id="personForename"
+                    nodeset="description/participants/parties/party/person/name/forename"/>
+                
+                <xf:bind
+                    id="personOccupation"
+                    nodeset="description/participants/parties/party/person/occupation"/>
+                
+                <xf:bind
+                    id="partyExpert"
+                    nodeset="description/participants/parties/party/expert"/>
+                
+                <xf:bind
+                    id="representative"
+                    nodeset="description/participants/parties/party/representative"/>
+                
+                <xf:bind
+                    id="representativeName"
+                    nodeset="description/participants/parties/party/representative/name"/>
+                
+                <xf:bind
+                    id="representativeSurname"
+                    nodeset="description/participants/parties/party/representative/name/surname"/>
+                
+                <xf:bind
+                    id="representativeForename"
+                    nodeset="description/participants/parties/party/representative/name/forename"/>
+                
+                <xf:bind
+                    id="representativeOccupation"
+                    nodeset="description/participants/parties/party/representative/occupation"/>
+                
+                <xf:bind
+                    id="prosecutor"
+                    nodeset="description/participants/parties/party/prosecutor"/>
+                
+                <xf:bind
+                    id="prosecutorName"
+                    nodeset="description/participants/parties/party/prosecutor/name"/>
+                
+                <xf:bind
+                    id="prosecutorSurname"
+                    nodeset="description/participants/parties/party/prosecutor/name/surname"/>
+                
+                <xf:bind
+                    id="prosecutorForename"
+                    nodeset="description/participants/parties/party/prosecutor/name/forename"/>
+                
+                <!--Entrepreneur, architecte ou maître d’œuvre-->
+                
+                <xf:bind
+                    id="craftmen"
+                    nodeset="description/participants/craftmen"/>
+                
+                <xf:bind
+                    id="craftman"
+                    nodeset="description/participants/craftmen/craftman"/>
+                
+                <xf:bind
+                    id="craftmanName"
+                    nodeset="description/participants/craftmen/craftman/name"/>
+                
+                <xf:bind
+                    id="craftmanSurname"
+                    nodeset="description/participants/craftmen/craftman/name/surname"/>
+                
+                <xf:bind
+                    id="craftmanForename"
+                    nodeset="description/participants/craftmen/craftman/name/Forename"/>
+                
+                <xf:bind
+                    id="craftmanOccupation"
+                    nodeset="description/participants/craftmen/craftman/occupation"/>
+                
+                <!--Conclusions-->
+                <xf:bind
+                    id="conclusions"
+                    nodeset="description/conclusions"/>
+                
+                <xf:bind
+                    id="agreement"
+                    nodeset="description/conclusions/agreement"/>
+                
+                <xf:bind
+                    id="agreementType"
+                    nodeset="description/conclusions/agreement/@type"/>
+                
+                <xf:bind
+                    id="opinion"
+                    nodeset="description/conclusions/opinion"/>
+                
+                <xf:bind
+                    id="estimation"
+                    nodeset="description/conclusions/estimation"/>
+            
             
             </xf:model>
         </head>
@@ -115,21 +519,27 @@ function xform() {
                         case="participants"
                         ev:event="DOMActivate"/>
                 </xf:trigger>
+                <xf:trigger>
+                    <xf:label>Conclusions ou dispositifs de l'expertise</xf:label>
+                    <xf:toggle
+                        case="conclusions"
+                        ev:event="DOMActivate"/>
+                </xf:trigger>
                 <xf:switch>
                     <xf:case
                         id="references"
                         selected="true">
                         <xf:label>Références</xf:label>
                         <xf:group
-                            ref="sourceDesc">
+                            ref="sourceDesc/idno">
                             <xf:label>Identifiants</xf:label>
                             <xf:input
-                                ref="idno[@type='unitid']"
+                                bind="unitid"
                                 incremental="true">
                                 <xf:label>Cote</xf:label>
                             </xf:input>
                             <xf:input
-                                ref="idno[@type='item']"
+                                bind="item"
                                 incremental="true">
                                 <xf:label>Dossier</xf:label>
                             </xf:input>
@@ -138,76 +548,96 @@ function xform() {
                             ref="sourceDesc/facsimile">
                             <xf:label>Identifiants des vues</xf:label>
                             <xf:input
-                                ref="@from"
+                                bind="facsimileFrom"
                                 incremental="true">
                                 <xf:label>Première vue</xf:label>
                             </xf:input>
                             <xf:input
-                                ref="@to"
+                                bind="facsimileTo"
                                 incremental="true">
                                 <xf:label>Dernière vue</xf:label>
                             </xf:input>
                         </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(sourceDesc, 'yes')"/>
+                        </pre>
                     </xf:case>
                     <xf:case
                         id="sessions"
                         selected="false">
                         <xf:label>Vacations</xf:label>
-                        <xf:repeat
-                            id="repeatSessions"
-                            nodeset="description/sessions/date">
-                            <xf:input
-                                ref="@when"
-                                incremental="true">
-                                <xf:label>Date</xf:label>
-                            </xf:input>
-                            <xf:select1
-                                ref="@type">
-                                <xf:label>Lieu</xf:label>
-                                <xf:item>
-                                    <xf:label>Paris et faubourgs</xf:label>
-                                    <xf:value>paris</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Banlieue</xf:label>
-                                    <xf:value>suburbs</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Campagne</xf:label>
-                                    <xf:value>province</xf:value>
-                                </xf:item>
-                            </xf:select1>
+                        <xf:group
+                            ref="description/sessions">
+                            <xf:repeat
+                                id="repeatSession"
+                                bind="sessionsDate">
+                                <xf:input
+                                    ref="@when"
+                                    incremental="true">
+                                    <xf:label>Date</xf:label>
+                                </xf:input>
+                                <xf:select1
+                                    ref="@type">
+                                    <xf:label>Lieu</xf:label>
+                                    <xf:item>
+                                        <xf:label>Paris et faubourgs</xf:label>
+                                        <xf:value>paris</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Banlieue</xf:label>
+                                        <xf:value>suburbs</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Campagne</xf:label>
+                                        <xf:value>province</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:trigger>
+                                    <xf:label>&#10007;</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//description/sessions/date) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
                             <xf:trigger>
-                                <xf:label>&#10007;</xf:label>
-                                <xf:delete
-                                    nodeset="."
-                                    at="1"
-                                    ev:event="DOMActivate"
-                                    if="count(//description/sessions/date) > 1"/>
+                                <xf:label>Ajouter une vacation</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="date"
+                                        at="index('repeatSession')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="date[index('repeatSession')]/@when"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="date[index('repeatSession')]/@type"
+                                        value=""/>
+                                </xf:action>
                             </xf:trigger>
-                        </xf:repeat>
-                        <xf:trigger>
-                            <xf:label>Ajouter une vacation</xf:label>
-                            <xf:insert
-                                nodeset="description/sessions/date"
-                                at="index('repeatSessions')"
-                                position="after"
-                                ev:event="DOMActivate"/>
-                        </xf:trigger>
+                        </xf:group>
+                        <pre>
+                            <xf:output
+                                value="serialize(description/sessions, 'yes')"/>
+                        </pre>
                     </xf:case>
                     <xf:case
                         id="physDesc"
                         selected="false">
                         <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
-                        <xf:group
-                            ref="sourceDesc/physDesc/extent">
+                        <xf:group>
                             <xf:input
-                                ref="."
+                                bind="extent"
                                 incremental="true">
                                 <xf:label>Nombre de cahiers et de feuillets</xf:label>
                             </xf:input>
-                            <xf:select1 
-                                ref="@sketch">
+                            <xf:select1
+                                bind="sketch">
                                 <xf:label>Croquis sur le procès-verbal</xf:label>
                                 <xf:item>
                                     <xf:label>oui</xf:label>
@@ -224,10 +654,10 @@ function xform() {
                             <xf:label>Pièces annexes</xf:label>
                             <!--@rmq Pourra servir au contrôle à partir des informations tirées du récolement. -->
                             <xf:output
-                                value="count(appendice)"><xf:label>Nombre de pièces annexes</xf:label></xf:output>
+                                value="count(//sourceDesc/physDesc/appendices/appendice)"><xf:label>Nombre de pièces annexes</xf:label></xf:output>
                             <xf:repeat
                                 id="repeatAppendice"
-                                nodeset="appendice"
+                                bind="appendice"
                                 appearance="full">
                                 <xf:select
                                     ref="@type"
@@ -254,12 +684,10 @@ function xform() {
                                     <xf:item>
                                         <xf:label>Pouvoir/procuration (acte sous seing privé)</xf:label>
                                         <xf:value>proxyPA</xf:value>
-                                        <!--@rmq private agreement-->
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Pouvoir/procuration (acte notarié)</xf:label>
                                         <xf:value>proxyNA</xf:value>
-                                        <!--@rmq notarial act-->
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Requête</xf:label>
@@ -270,11 +698,7 @@ function xform() {
                                         <xf:value>other</xf:value>
                                     </xf:item>
                                 </xf:select>
-                                <xf:input
-                                    ref="@subtype"
-                                    incremental="true">
-                                    <xf:label>autre (à préciser)</xf:label>
-                                </xf:input>
+                                <!--@todo appendice autre-->
                                 <xf:input
                                     ref="extent"
                                     incremental="true">
@@ -296,7 +720,7 @@ function xform() {
                                         nodeset="."
                                         at="1"
                                         ev:event="DOMActivate"
-                                        if="count(//appendice) > 1"/>
+                                        if="count(//sourceDesc/physDesc/appendices/appendice) > 1"/>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger>
@@ -323,6 +747,11 @@ function xform() {
                                 </xf:action>
                             </xf:trigger>
                         </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(sourceDesc/physDesc, 'yes')"/>
+                        </pre>
                     </xf:case>
                     <xf:case
                         id="places"
@@ -332,7 +761,7 @@ function xform() {
                             ref="description/places">
                             <xf:repeat
                                 id="repeatPlace"
-                                nodeset="place"
+                                bind="place"
                                 appearance="full">
                                 <xf:select1
                                     ref="@type">
@@ -391,7 +820,7 @@ function xform() {
                                             nodeset="."
                                             at="1"
                                             ev:event="DOMActivate"
-                                            if="count(//owner) > 1"/>
+                                            if="count(//description/places/place/owner) > 1"/>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <xf:trigger>
@@ -404,7 +833,7 @@ function xform() {
                                             position="after"
                                             ev:event="DOMActivate"/>
                                         <xf:setvalue
-                                            ref="owner[index('repeatOwner')]"
+                                            ref="place/owner[index('repeatOwner')]"
                                             value=""/>
                                     </xf:action>
                                 </xf:trigger>
@@ -414,7 +843,7 @@ function xform() {
                                         nodeset="."
                                         at="1"
                                         ev:event="DOMActivate"
-                                        if="count(//place) > 1"/>
+                                        if="count(//description/places/place) > 1"/>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger>
@@ -450,97 +879,105 @@ function xform() {
                                 </xf:action>
                             </xf:trigger>
                         </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/places, 'yes')"/>
+                        </pre>
                     </xf:case>
                     <xf:case
                         id="categories"
                         selected="false">
                         <xf:label>Types d'expertise</xf:label>
                         <xf:group
-                            ref="description/categories">
-                            <xf:repeat
-                                id="repeatCategory"
-                                nodeset="category">
-                                <xf:select1
-                                    ref="@type">
-                                    <xf:label>Catégories d'expertise</xf:label>
-                                    <xf:item>
-                                        <xf:label>Estimer la valeur des biens</xf:label>
-                                        <xf:value>estimation</xf:value>
-                                        <xf:action
-                                            ev:event="xforms-select">
-                                            <xf:setvalue
-                                                ref="parent::category">Estimer la valeur des biens</xf:setvalue>
-                                        </xf:action>
-                                    </xf:item>
-                                    <xf:item>
-                                        <xf:label>Recevoir et évaluer le travail réalisé</xf:label>
-                                        <xf:value>acceptation</xf:value>
-                                        <xf:action
-                                            ev:event="xforms-select">
-                                            <xf:setvalue
-                                                ref="parent::category">Recevoir et évaluer le travail réalisé</xf:setvalue>
-                                        </xf:action>
-                                    </xf:item>
-                                    <xf:item>
-                                        <xf:label>Enregistrer</xf:label>
-                                        <xf:value>registration</xf:value>
-                                        <xf:action
-                                            ev:event="xforms-select">
-                                            <xf:setvalue
-                                                ref="parent::category">Enregistrer</xf:setvalue>
-                                        </xf:action>
-                                    </xf:item>
-                                    <xf:item>
-                                        <xf:label>Départager</xf:label>
-                                        <xf:value>settlement</xf:value>
-                                        <xf:action
-                                            ev:event="xforms-select">
-                                            <xf:setvalue
-                                                ref="parent::category">Départager</xf:setvalue>
-                                        </xf:action>
-                                    </xf:item>
-                                    <xf:item>
-                                        <xf:label>Évaluer les coûts à venir</xf:label>
-                                        <xf:value>assessment</xf:value>
-                                        <xf:action
-                                            ev:event="xforms-select">
-                                            <xf:setvalue
-                                                ref="parent::category">Évaluer les coûts à venir</xf:setvalue>
-                                        </xf:action>
-                                    </xf:item>
-                                </xf:select1>
-                                <xf:trigger>
-                                    <xf:label>Supprimer une catégorie</xf:label>
-                                    <xf:delete
-                                        nodeset="."
-                                        at="1"
-                                        ev:event="DOMActivate"
-                                        if="count(//category) > 1"/>
-                                </xf:trigger>
-                            </xf:repeat>
-                            <xf:trigger>
-                                <xf:label>Ajouter une catégorie</xf:label>
-                                <xf:action
-                                    ev:event="DOMActivate">
-                                    <xf:insert
-                                        nodeset="category"
-                                        at="index('repeatCategory')"
-                                        position="after"
-                                        ev:event="DOMActivate"/>
-                                    <xf:setvalue
-                                        ref="category[index('repeatCategory')]"
-                                        value=""/>
-                                    <xf:setvalue
-                                        ref="category[index('repeatCategory')]/@type"
-                                        value=""/>
-                                </xf:action>
-                            </xf:trigger>
+                            ref="instance('xprCategories')">
+                            <xf:select
+                                ref="category"
+                                appearance="full">
+                                <xf:label>Catégories d'expertise</xf:label>
+                                <xf:item>
+                                    <xf:label>Estimer la valeur des biens</xf:label>
+                                    <xf:value>estimation</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:insert
+                                            context="instance('xprModel')/description/categories"
+                                            origin="instance('xprCategories')/category[@type='estimation']"/>
+                                    </xf:action>
+                                    <xf:action
+                                        ev:event="xforms-deselect">
+                                        <xf:delete
+                                            ref="instance('xprModel')/description/categories/category[@type='estimation']"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Recevoir et évaluer le travail réalisé</xf:label>
+                                    <xf:value>acceptation</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:insert
+                                            context="instance('xprModel')/description/categories"
+                                            origin="instance('xprCategories')/category[@type='acceptation']"/>
+                                    </xf:action>
+                                    <xf:action
+                                        ev:event="xforms-deselect">
+                                        <xf:delete
+                                            ref="instance('xprModel')/description/categories/category[@type='acceptation']"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Enregistrer</xf:label>
+                                    <xf:value>registration</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:insert
+                                            context="instance('xprModel')/description/categories"
+                                            origin="instance('xprCategories')/category[@type='registration']"/>
+                                    </xf:action>
+                                    <xf:action
+                                        ev:event="xforms-deselect">
+                                        <xf:delete
+                                            ref="instance('xprModel')/description/categories/category[@type='registration']"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Départager</xf:label>
+                                    <xf:value>settlement</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:insert
+                                            context="instance('xprModel')/description/categories"
+                                            origin="instance('xprCategories')/category[@type='settlement']"/>
+                                    </xf:action>
+                                    <xf:action
+                                        ev:event="xforms-deselect">
+                                        <xf:delete
+                                            ref="instance('xprModel')/description/categories/category[@type='settlement']"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Évaluer les coûts à venir</xf:label>
+                                    <xf:value>assessment</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:insert
+                                            context="instance('xprModel')/description/categories"
+                                            origin="instance('xprCategories')/category[@type='assessment']"/>
+                                    </xf:action>
+                                    <xf:action
+                                        ev:event="xforms-deselect">
+                                        <xf:delete
+                                            ref="instance('xprModel')/description/categories/category[@type='assessment']"/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:select>
                             <xf:input
-                                ref="designation">
+                                bind="designation"
+                                incremental="true">
                                 <xf:label>Désignation</xf:label>
                             </xf:input>
                             <xf:select1
-                                ref="designation/@rubric"
+                                bind="designationRubric"
                                 appearance="full">
                                 <xf:label>En rubrique</xf:label>
                                 <xf:item>
@@ -553,7 +990,13 @@ function xform() {
                                 </xf:item>
                             </xf:select1>
                         </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/categories, 'yes')"/>
+                        </pre>
                     </xf:case>
+                    
                     <xf:case
                         id="procedure"
                         selected="false">
@@ -563,9 +1006,9 @@ function xform() {
                             <xf:group
                                 ref="framework">
                                 <xf:select1
-                                    ref="@type">
+                                    bind="frameworkType"
+                                    appearance="full">
                                     <!--@quest je ne suis pas certain qu'il y a besoin de détailler autant ? (juste besoin de A-B1-B2A-B2B-C)-->
-                                    <!--@todo afficher s'il s'agit d'une affaire gracieuse ou contentieuse-->
                                     <!--@todo ajouter un output pour le texte de framework-->
                                     <!--@rmq voir si on peut passer par un petit modèle de raisonnement pour garder la logique B-B2-B2a-->
                                     <!--@todo à défaut, mettre un message d'alerte si B ou B2 sont cochés-->
@@ -623,16 +1066,13 @@ function xform() {
                                         </xf:action>
                                     </xf:item>
                                 </xf:select1>
-                                <xf:output
-                                    ref=".">
-                                    <xf:label>Procédure</xf:label>
-                                </xf:output>
                             </xf:group>
+                            
                             <xf:group
                                 ref="origination">
                                 <xf:label>Origine de l'expertise</xf:label>
                                 <xf:select1
-                                    ref="@type">
+                                    bind="originationType">
                                     <xf:label>Déclenchement de l’expertise</xf:label>
                                     <xf:item>
                                         <xf:label>Les parties</xf:label>
@@ -656,15 +1096,17 @@ function xform() {
                                     </xf:item>
                                 </xf:select1>
                             </xf:group>
+                            
                             <xf:group
                                 ref="sentences">
                                 <xf:label>Intervention d'une institution</xf:label>
                                 <xf:repeat
                                     id="repeatSentence"
-                                    nodeset="sentence"
+                                    bind="sentence"
                                     appearance="full">
                                     <xf:input
-                                        ref="orgName">
+                                        ref="orgName"
+                                        incremental="true">
                                         <xf:label>Description de l'institution</xf:label>
                                     </xf:input>
                                     <xf:repeat
@@ -680,7 +1122,7 @@ function xform() {
                                                 nodeset="."
                                                 at="1"
                                                 ev:event="DOMActivate"
-                                                if="count(//sentence/date) > 1"/>
+                                                if="count(//description/procedure/sentences/sentence/date) > 1"/>
                                         </xf:trigger>
                                     </xf:repeat>
                                     <xf:trigger>
@@ -703,7 +1145,7 @@ function xform() {
                                             nodeset="."
                                             at="1"
                                             ev:event="DOMActivate"
-                                            if="count(//sentence) > 1"/>
+                                            if="count(//description/procedure/sentences/sentence) > 1"/>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <!--@todo si l'on a renseigné une première institution avec plusieurs sentences, lorsqu'on ajoute une institution, le même nombre de sentence est copié => le remettre à 1-->
@@ -725,18 +1167,694 @@ function xform() {
                                     </xf:action>
                                 </xf:trigger>
                             </xf:group>
+                            
                             <xf:group
                                 ref="case">
-                                <!--@todo titre ?-->
                                 <xf:input
-                                    ref=".">
+                                    bind="case"
+                                    incremental="true">
                                     <!--@todo mettre une zone de texte ?-->
                                     <xf:label>Cause de l'expertise</xf:label>
                                 </xf:input>
                             </xf:group>
+                            
+                            <xf:group
+                                ref="instance('xprObjects')">
+                                <xf:select
+                                    ref="object"
+                                    appearance="full">
+                                    <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
+                                    <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
+                                    <xf:label>Objet de l'expertise</xf:label>
+                                    <xf:item>
+                                        <xf:label>Maison</xf:label>
+                                        <xf:value>house</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='house']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='house']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Terrain</xf:label>
+                                        <xf:value>plot</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='plot']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='plot']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Ensemble de bâtiments</xf:label>
+                                        <xf:value>buildings</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='buildings']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='buildings']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Domaine, terres, fief</xf:label>
+                                        <xf:value>territory</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='territory']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='territory']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Mur</xf:label>
+                                        <xf:value>wall</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='wall']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='wall']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Fosse d'aisance</xf:label>
+                                        <xf:value>cesspool</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='cesspool']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='cesspool']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Puits</xf:label>
+                                        <xf:value>well</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='well']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='well']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Autre</xf:label>
+                                        <xf:value>other</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:insert
+                                                context="instance('xprModel')/description/procedure/objects"
+                                                origin="instance('xprObjects')/object[@type='other']"/>
+                                        </xf:action>
+                                        <xf:action
+                                            ev:event="xforms-deselect">
+                                            <xf:delete
+                                                ref="instance('xprModel')/description/procedure/objects/object[@type='other']"/>
+                                        </xf:action>
+                                    </xf:item>
+                                </xf:select>
+                                <xf:input
+                                    ref="instance('xprModel')/description/procedure/objects/object[@type='other']"><xf:label>Autre, à préciser</xf:label></xf:input>
+                            </xf:group>
                         </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/procedure, 'yes')"/>
+                        </pre>
                     </xf:case>
-                    
+                    <xf:case
+                        id="participants"
+                        selected="false">
+                        <xf:label>Acteurs de l'expertise</xf:label>
+                        <xf:group
+                            ref="description/participants/experts">
+                            <!--@todo au pluriel ?-->
+                            <xf:label>Expert</xf:label>
+                            <xf:repeat
+                                id="repeatExpert"
+                                bind="expert"
+                                appearance="full">
+                                <xf:label>Patronyme</xf:label>
+                                <xf:input
+                                    ref="name/surname"
+                                    incremental="true">
+                                    <xf:label>Nom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="name/forename"
+                                    incremental="true">
+                                    <xf:label>Prénom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="title"
+                                    incremental="true">
+                                    <xf:label>Dénomination de l’expert dans l'acte</xf:label>
+                                </xf:input>
+                                <xf:select1
+                                    ref="@context">
+                                    <xf:label>Expert nommé en</xf:label>
+                                    <xf:item>
+                                        <xf:label>premier lieu</xf:label>
+                                        <xf:value>primary</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>tiers expert</xf:label>
+                                        <xf:value>third-party</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>indéterminé</xf:label>
+                                        <xf:value>unknown</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:select1
+                                    ref="@appointment">
+                                    <xf:label>Expert nommé</xf:label>
+                                    <xf:item>
+                                        <xf:label>d’office (par le lieutenant civil)</xf:label>
+                                        <xf:value>court-appointed</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>par les parties</xf:label>
+                                        <xf:value>appointed</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>indéterminé</xf:label>
+                                        <xf:value>unknown</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:trigger>
+                                    <xf:label>Supprimer un expert</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//description/participants/experts/expert) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter un expert</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="expert"
+                                        at="index('repeatExpert')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="expert[index('repeatExpert')]/@context"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="expert[index('repeatExpert')]/@appointment"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="expert[index('repeatExpert')]/name/surname"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="expert[index('repeatExpert')]/name/forename"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="expert[index('repeatExpert')]/title"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/participants/experts, 'yes')"/>
+                        </pre>
+                        <xf:group
+                            ref="description/participants/clerks">
+                            <!--@todo au pluriel ?-->
+                            <xf:label>Greffier</xf:label>
+                            <xf:repeat
+                                id="repeatClerk"
+                                bind="clerk"
+                                appearance="full">
+                                <xf:label>Patronyme</xf:label>
+                                <xf:input
+                                    ref="name/surname"
+                                    incremental="true">
+                                    <xf:label>Nom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="name/forename"
+                                    incremental="true">
+                                    <xf:label>Prénom</xf:label>
+                                </xf:input>
+                                <xf:trigger>
+                                    <xf:label>Supprimer un greffier</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//description/participants/clerks/clerk) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter un greffier</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="clerk"
+                                        at="index('repeatClerk')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="clerk[index('repeatClerk')]/name/surname"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="clerk[index('repeatClerk')]/name/forename"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/participants/clerks, 'yes')"/>
+                        </pre>
+                        <xf:group
+                            ref="description/participants/parties">
+                            <!--@todo au pluriel ?-->
+                            <xf:label>Partie</xf:label>
+                            <xf:repeat
+                                id="repeatParty"
+                                bind="party"
+                                appearance="full">
+                                <xf:repeat
+                                    id="repeatPerson"
+                                    nodeset="person"
+                                    appearance="full">
+                                    <xf:label>Patronyme</xf:label>
+                                    <xf:input
+                                        ref="name/surname"
+                                        incremental="true">
+                                        <xf:label>Nom</xf:label>
+                                    </xf:input>
+                                    <xf:input
+                                        ref="name/forename"
+                                        incremental="true">
+                                        <xf:label>Prénom</xf:label>
+                                    </xf:input>
+                                    <xf:input
+                                        ref="occupation">
+                                        <xf:label>Qualité, profession</xf:label>
+                                    </xf:input>
+                                    <xf:trigger>
+                                        <xf:label>Supprimer une personne</xf:label>
+                                        <xf:delete
+                                            nodeset="."
+                                            at="1"
+                                            ev:event="DOMActivate"
+                                            if="count(//description/participants/parties/party/person) > 1"/>
+                                    </xf:trigger>
+                                </xf:repeat>
+                                <xf:trigger>
+                                    <xf:label>Ajouter une personne</xf:label>
+                                    <xf:action
+                                        ev:event="DOMActivate">
+                                        <xf:insert
+                                            nodeset="person"
+                                            at="index('repeatPerson')"
+                                            position="after"
+                                            ev:event="DOMActivate"/>
+                                        <xf:setvalue
+                                            ref="person[index('repeatPerson')]/name/surname"
+                                            value=""/>
+                                        <xf:setvalue
+                                            ref="person[index('repeatPerson')]/name/forename"
+                                            value=""/>
+                                        <xf:setvalue
+                                            ref="person[index('repeatPerson')]/occupation"
+                                            value=""/>
+                                    </xf:action>
+                                </xf:trigger>
+                                <!--@todo @ref-->
+                                <!--<xf:select1>
+                                    <xf:label>Partie</xf:label>
+                                    <xf:item>
+                                        <xf:label>Requérante</xf:label>
+                                        <xf:value>claimant</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Opposante</xf:label>
+                                        <xf:value>opposing</xf:value>
+                                    </xf:item>
+                                </xf:select1>-->
+                                <!--@todo @ref-->
+                                <!--<xf:select1>
+                                    <xf:label>Qualification individuelle</xf:label>
+                                    <xf:item>
+                                        <xf:label>Entrepreneur</xf:label>
+                                        <!-\-@todo-\->
+                                        <xf:value>contractor</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:value>Propriétaire</xf:value>
+                                        <xf:label>owner</xf:label>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Copropriétaire</xf:label>
+                                        <xf:value>joint-owner</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Commanditaire</xf:label>
+                                        <xf:value>limited-partner</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Héritier</xf:label>
+                                        <xf:value>heir</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Voisin</xf:label>
+                                        <xf:value>neighbour</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Locataire</xf:label>
+                                        <xf:value>tenant</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Principal locataire</xf:label>
+                                        <xf:value>main-tenant</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Créancier</xf:label>
+                                        <xf:value>creditor</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Débiteur</xf:label>
+                                        <xf:value>mortgagor</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Fermier judiciaire</xf:label>
+                                        <!-\-@todo-/->
+                                        <xf:value>fermier</xf:value>
+                                    </xf:item>
+                                </xf:select1>-->
+                                <!--@todo faire un repeat pour les représentants et procureurs ?-->
+                                <xf:group
+                                    ref="representative">
+                                    <xf:label>Représentants</xf:label>
+                                    <xf:repeat
+                                        id="repeatRepresentative"
+                                        nodeset="."
+                                        appearance="full">
+                                        <xf:label>Patronyme</xf:label>
+                                        <xf:input
+                                            ref="name/surname"
+                                            incremental="true">
+                                            <xf:label>Nom</xf:label>
+                                        </xf:input>
+                                        <xf:input
+                                            ref="name/forename"
+                                            incremental="true">
+                                            <xf:label>Prénom</xf:label>
+                                        </xf:input>
+                                        <xf:input
+                                            ref="occupation">
+                                            <xf:label>Qualité, profession</xf:label>
+                                        </xf:input>
+                                        <xf:trigger>
+                                            <xf:label>Supprimer un représentant</xf:label>
+                                            <xf:delete
+                                                nodeset="."
+                                                at="1"
+                                                ev:event="DOMActivate"
+                                                if="count(//description/participants/parties/party/representative) > 1"/>
+                                        </xf:trigger>
+                                    </xf:repeat>
+                                    <xf:trigger>
+                                        <xf:label>Ajouter un représentant</xf:label>
+                                        <xf:action
+                                            ev:event="DOMActivate">
+                                            <xf:insert
+                                                nodeset="."
+                                                at="index('repeatRepresentative')"
+                                                position="after"
+                                                ev:event="DOMActivate"/>
+                                            <xf:setvalue
+                                                ref="representative[index('repeatRepresentative')]/name/surname"
+                                                value=""/>
+                                            <xf:setvalue
+                                                ref="representative[index('repeatRepresentative')]/name/forename"
+                                                value=""/>
+                                            <xf:setvalue
+                                                ref="representative[index('repeatRepresentative')]/occupation"
+                                                value=""/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </xf:group>
+                                
+                                <xf:group
+                                    ref="prosecutor">
+                                    <xf:label>Procureur</xf:label>
+                                    <xf:repeat
+                                        id="repeatProsecutor"
+                                        nodeset="."
+                                        appearance="full">
+                                        <xf:label>Patronyme</xf:label>
+                                        <xf:input
+                                            ref="name/surname"
+                                            incremental="true">
+                                            <xf:label>Nom</xf:label>
+                                        </xf:input>
+                                        <xf:input
+                                            ref="name/forename"
+                                            incremental="true">
+                                            <xf:label>Prénom</xf:label>
+                                        </xf:input>
+                                        <xf:trigger>
+                                            <xf:label>Supprimer un procureur</xf:label>
+                                            <xf:delete
+                                                nodeset="."
+                                                at="1"
+                                                ev:event="DOMActivate"
+                                                if="count(//description/participants/parties/party/prosecutor) > 1"/>
+                                        </xf:trigger>
+                                    </xf:repeat>
+                                    <xf:trigger>
+                                        <xf:label>Ajouter un procureur</xf:label>
+                                        <xf:action
+                                            ev:event="DOMActivate">
+                                            <xf:insert
+                                                nodeset="."
+                                                at="index('repeatProsecutor')"
+                                                position="after"
+                                                ev:event="DOMActivate"/>
+                                            <xf:setvalue
+                                                ref="prosecutor[index('repeatProsecutor')]/name/surname"
+                                                value=""/>
+                                            <xf:setvalue
+                                                ref="prosecutor[index('repeatProsecutor')]/name/forename"
+                                                value=""/>
+                                        </xf:action>
+                                    </xf:trigger>
+                                </xf:group>
+                                <xf:trigger>
+                                    <xf:label>Supprimer une partie</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//description/participants/parties/party) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter une partie</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="party"
+                                        at="index('repeatParty')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <!--@todo set value-->
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/participants/parties, 'yes')"/>
+                        </pre>
+                        <xf:group
+                            ref="description/participants/craftmen">
+                            <!--@quest au pluriel ?-->
+                            <xf:label>Entrepreneur, architecte ou maître d'œuvre</xf:label>
+                            <xf:label>Greffier</xf:label>
+                            <xf:repeat
+                                id="repeatCraftman"
+                                bind="craftman"
+                                appearance="full">
+                                <xf:label>Patronyme</xf:label>
+                                <xf:input
+                                    ref="name/surname"
+                                    incremental="true">
+                                    <xf:label>Nom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="name/forename"
+                                    incremental="true">
+                                    <xf:label>Prénom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="occupation"
+                                    incremental="true">
+                                    <xf:label>profession</xf:label>
+                                </xf:input>
+                                <xf:trigger>
+                                    <xf:label>Supprimer un entrepreneur, architecte ou maître d'œuvre</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//description/participants/craftmen/craftman) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter un entrepreneur, architecte ou maître d'œuvre</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="craftman"
+                                        at="index('repeatCraftman')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="craftman[index('repeatCraftman')]/name/surname"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="craftman[index('repeatCraftman')]/name/forename"
+                                        value=""/>
+                                    <xf:setvalue
+                                        ref="craftman[index('repeatCraftman')]/occupation"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                        </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/participants/craftmen, 'yes')"/>
+                        </pre>
+                    </xf:case>
+                    <xf:case
+                        id="conclusions"
+                        selected="false">
+                        <xf:label>Conclusions ou dispositifs de l'expertise</xf:label>
+                        <xf:group
+                            ref="description/conclusions">
+                            <xf:select1
+                                bind="agreement"
+                                appearance="full">
+                                <xf:item>
+                                    <xf:label>Accord</xf:label>
+                                    <xf:value>Accord</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            bind="agreementType">agreement</xf:setvalue>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Désaccord</xf:label>
+                                    <xf:value>Désaccord</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            bind="agreementType">disagreement</xf:setvalue>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Sans conclusion</xf:label>
+                                    <xf:value>Sans conclusion</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            bind="agreementType">noConclusion</xf:setvalue>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:select1>
+                            <xf:repeat
+                                id="repeatOpinion"
+                                bind="opinion">
+                                <xf:label>Transcription de toutes les conclusions ou dispositifs d'experts</xf:label>
+                                <xf:textarea
+                                    ref="."
+                                    incremental="true">
+                                    <xf:label>Conclusions</xf:label>
+                                </xf:textarea>
+                                <xf:trigger>
+                                    <xf:label>Supprimer une conclusion</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//description/conclusions/opinion) > 1"/>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter une conclusion</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="opinion"
+                                        at="index('repeatOpinion')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="opinion[index('repeatOpinion')]"
+                                        value=""/>
+                                </xf:action>
+                            </xf:trigger>
+                            <xf:input
+                                bind="estimation">
+                                <xf:label>Montant global (pour les estimations)</xf:label>
+                            </xf:input>
+                            
+                        </xf:group>
+                        <!--control-->
+                        <pre>
+                            <xf:output
+                                value="serialize(description/conclusions, 'yes')"/>
+                        </pre>
+                    </xf:case>
                     
                     <xf:case
                         id=""
@@ -748,10 +1866,10 @@ function xform() {
                     </xf:case>
                 </xf:switch>
             </form>
-            <pre>
+            <!--<pre>
                 <xf:output
                     value="serialize(., 'yes')"/>
-            </pre>
+            </pre>-->
         </body>
     </html>
     )
