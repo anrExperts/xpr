@@ -10,28 +10,28 @@
         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet"/>
         <link href="files/css/normalize.css" rel="stylesheet" />
         <link
-            href="files/css/main.css"
+            href="/xpr/files/css/main.css"
             rel="stylesheet"/>
             <!-- XForms data models -->
             <xf:model>
                 <xf:instance
                     id="xprModel"
-                    src="files/xprInstance.xml"/>
+                    src="/xpr/files/xprInstance.xml"/>
                 
                 <xf:instance
                     id="xprAppendice"
-                    src="files/xprAppendice.xml"/>
+                    src="/xpr/files/xprAppendice.xml"/>
                 <xf:instance
                     id="xprCategories"
-                    src="files/xprCategories.xml"/>
+                    src="/xpr/files/xprCategories.xml"/>
                 <xf:instance
                     id="xprObjects"
-                    src="files/xprObjects.xml"/>
+                    src="/xpr/files/xprObjects.xml"/>
                 
                 <xf:submission
                     id="submit"
-                    resource="form03"
-                    method="get"
+                    resource="xpr/edit/post"
+                    method="post"
                     replace="instance"/>
                 
                 <!--**sourceDesc**-->
@@ -1924,6 +1924,9 @@
                         </xf:group>
                     </xf:case>
                 </xf:switch>
+                <xf:submit submission="submit">
+                  <xf:label>Enregistrer</xf:label>
+                </xf:submit>
             </form>
             <!--<pre>
                 <xf:output

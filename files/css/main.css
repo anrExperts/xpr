@@ -3,8 +3,8 @@
 }
 
 :root {
-  --colorMain: #fff;
-  --colorSub: /* #3f51b5; */ #E73E0D;
+  --colorMain: #E73E0D;
+  --colorSub: /* #3f51b5; */ #fff;
   --colorAccent: /* #3f51b5; */ #E73E0D;
   --baseline: 1.5; /* 1.5 * 18 = 27px*/
   font-size: 1.125em; /* 18px */
@@ -78,15 +78,11 @@ form div + div {
   margin-top: 1em;
 }
 
-fieldset {
-  border-radius: 0.2em;
+.xforms-group-content {
+  border-radius: 0.1em;
   border: 1px solid #CCC;
   padding: 1.2em;
   margin-top: 1.2em;
-}
-
-legend {
-  font-size: 1.2em;
 }
 
 label {
@@ -94,24 +90,33 @@ label {
   display: block;
   text-align: left;
   padding-bottom: 0.3em;
+  padding-top: 0.3em;
+  font-size: 0.8em;
 }
 
-.checkbox input {
-  width: 1.2em;
+.xforms-value input {
+  width: 1.3em;
 }
 
-.checkbox label {
+.xforms-value label {
   display: inline;
+}
+
+select {
+  font-family: 'IBM Plex Serif';
+  font-size: 0.8em;
+  width: 14em;
 }
 
 input, textarea {
 
   /* To make sure that all text fields have the same font settings
      By default, textareas have a monospace font */
-  font: 1em sans-serif;
+  font: 1em 'IBM Plex Serif';
 
   /* To harmonize the look & feel of text field border */
-  border: 1px solid #999;
+  border-radius: 0.1em;
+  border: 1px solid #CCC;
 }
 
 input {
@@ -139,7 +144,7 @@ textarea {
   height: 5em;
 }
 
-.button {
+button {
   /* To position the buttons to the same position of the text fields */
   padding-left: 1.2em; /* same size as the label elements */
 }
@@ -148,6 +153,12 @@ button {
   /* This extra margin represent roughly the same space as the space
      between the labels and their text fields */
   margin-left: .5em;
+  font-family: 'IBM Plex Serif';
+  font-size: 0.8em;
+  width: 14em;
+  box-sizing: border-box;
+  border-radius: 0.1em;
+  border: 1px solid #CCC;
 }
 
 

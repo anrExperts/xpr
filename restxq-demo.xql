@@ -1,21 +1,20 @@
 xquery version "3.0";
-
-(: 
- : Defines all the RestXQ endpoints used by the XForms.
- :)
 module namespace demo="restxq/demo";
+(: 
+ : This module defines the RestXQ endpoints of an adress book
+ :)
 
-(:
-  import module namespace config="http://exist-db.org/xquery/apps/config" at "../../modules/config.xqm";
-:)
+declare namespace rest = "http://exquery.org/ns/restxq";
+declare namespace file = "http://expath.org/ns/file";
+declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
+declare namespace web = "http://basex.org/modules/web";
 
-declare namespace rest="http://exquery.org/ns/restxq";
-declare namespace output="http://www.w3.org/2010/xslt-xquery-serialization";
 
 declare variable $demo:data := "/data/addresses";
 
 (:~
- : List all addresses and return them as XML.
+ : This module is an adress list
+ : @return a list of all addresses as XML
  :)
 declare
     %rest:GET

@@ -1,54 +1,166 @@
-xquery version '3.0';
-module namespace xpr = 'xpr';
+xquery version "3.0";
+module namespace xpr = "xpr";
 (:~
- : this xquery module is an application for the ANR Experts
- : @author emchateau et sardinecan
+ : This xquery module is an application for the Z1J expertises called xpr
+ :
+ : @author emchateau et sardinecan (ANR Experts)
  : @since 2019-01
- : @licence GNU
+ : @licence GNU http://www.gnu.org/licenses
+ :
+ : xpr is free software: you can redistribute it and/or modify
+ : it under the terms of the GNU General Public License as published by
+ : the Free Software Foundation, either version 3 of the License, or
+ : (at your option) any later version.
+ :
  :)
 
 declare namespace rest = "http://exquery.org/ns/restxq";
 declare namespace file = "http://expath.org/ns/file";
 declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
 declare namespace web = "http://basex.org/modules/web";
+declare namespace update = "http://basex.org/modules/update";
+declare namespace db = "http://basex.org/modules/db";
 
-declare default element namespace 'xpr';
-declare default function namespace 'xpr';
+declare default element namespace "xpr";
+declare default function namespace "xpr";
 
 declare variable $xpr:xslt := file:base-dir();
 
-
 (:~
- : this function list all available instances
+ : This resource function defines the application root
+ : @return redirect to the home page or to the install
  :)
-
+declare 
+  %rest:path("/xpr")
+  %output:method("xml")
+function index() {
+  if (db:exists("xpr"))
+    then web:redirect("/xpr/home") 
+    else web:redirect("/xpr/install") 
+};
 
 (:~
- : This function controls the form
+ : This resource function install
+ : @return create the db
+ :)
+declare 
+  %rest:path("/xpr/install")
+  %output:method("xml")
+  %updating
+function install() {
+  if (db:exists("xpr")) 
+    then (
+      update:output("La base xpr existe déjà, voulez-vous l’écraser ?")
+     )
+    else (
+      update:output("La base a été créée"),
+      db:create( "xpr", <expertises/>, "z1j.xml", map {"chop" : fn:false()} )
+      )
+};
+
+(:~
+ : This resource function defines the application home
+ : @return redirect to the expertises list
+ :)
+declare 
+  %rest:path("/xpr/home")
+  %output:method("xml")
+function home() {
+  web:redirect("/xpr/expertises") 
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("xpr/expertises")
+%output:method("html")
+function listExpertises() {
+  let $expertises := db:open("xpr")//expertise
+  let $content := for $expertise in $expertises return <p><a href="{$expertise/xml:id}">{$expertise}</a></p>
+  return 
+    <html>
+      <head>
+        <title>Expertises</title>
+      </head>
+      <body>
+        <h1>Expertises Z1J</h1>
+        {$content}
+        <button>Nouveau</button>
+      </body>
+    </html>
+};
+
+(:~
+ : This resource function edits an exertise
+ : @param an expertise id
+ : @return an xforms for the expertise
  : @bug namespace xf:instance
 :)
 declare
-%rest:path("/formxpr")
+%rest:path("xpr/expertises/new")
 %output:method("xml")
 function xform() {
-  let $xsltformsPath := 'files/xsltforms/xsltforms/xsltforms.xsl'
-  let $xprFormPath := file:base-dir() || 'files/xprForm.xml'
+  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
+  let $xprFormPath := file:base-dir() || "files/xprForm.xml"
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), 'type="text/xsl"'},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     fn:doc($xprFormPath)
     )
 };
 
 declare
-%rest:path('/form01Result')
-%output:method('xml')
-%rest:POST('{$param}')
+%rest:path("xpr/edit/post")
+%output:method("xml")
+%rest:POST("{$param}")
+%updating
 function xformResult($param) {
-    <div>
-        <head>Resultat Form01</head>
-        <p>{$param}</p>
-    </div>
+  let $id := $param/text()
+  let $db := db:open("xpr")
+  return (
+    insert node (attribute xml:id {$id} ) into $param/*:expertise,
+    insert node $param into $db//expertises
+  )
+};
+
+declare
+%rest:path("xpr/test")
+%output:method("xml")
+function formTest() {
+  (
+    processing-instruction xml-stylesheet {'href="files/xsltforms/xsltforms/xsltforms.xsl"', 'type="text/xsl"'},
+    <?css-conversion no?>,
+     <html
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:ev="http://www.w3.org/2001/xml-events"
+        xmlns:xf="http://www.w3.org/2002/xforms">
+        <head>
+          <title>test</title>
+          <xf:model>
+            <xf:instance xmlns="">
+               <expertise>
+                 <item>test</item>
+               </expertise>
+            </xf:instance>
+            <xf:submission id="submit" method="post" resource="/xpr/edit/post" replace="none"  />
+          </xf:model>
+        </head>
+        <body>
+        <h1>test</h1>
+          <form>
+            <xf:input ref="item" incremental="true">
+              <xf:label>Text</xf:label>
+              <xf:hint>hint</xf:hint>
+            </xf:input>
+            <xf:submit submission="submit">
+              <xf:label>Envoyer</xf:label>
+            </xf:submit>
+          </form>
+        </body>
+      </html>
+    )
 };
 
 
@@ -60,7 +172,7 @@ declare
 %rest:path("/form03")
 %output:method("xml")
 %rest:GET
-%rest:query-param('reference', "{$reference}")
+%rest:query-param("reference", "{$reference}")
 function form03($reference) {
     (
     processing-instruction xml-stylesheet {'href="files/xsltforms/xsltforms/xsltforms.xsl"', 'type="text/xsl"'},
@@ -487,7 +599,7 @@ function old() {
  : @return binary file
  :)
 declare
-%rest:path('/files/{$file=.+}')
+%rest:path('xpr/files/{$file=.+}')
 function xpr:file($file as xs:string) as item()+ {
     let $path := file:base-dir() || 'files/' || $file
     return
