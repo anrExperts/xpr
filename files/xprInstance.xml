@@ -16,7 +16,7 @@
             <!--@sketch="true/false"-->
             <appendices>
                 <appendice>
-                    <type type=""></type>
+                    <type type=""/>
                     <!--@type
                     - drawing = Dessin
                     - plan = Plan
@@ -155,21 +155,11 @@
             <!--coût de l'expertise => frais d'expertise = consultancy fees-->
             <fees detail="">
                 <!--@detail="true/false"-->
-                <!--si true-->
-                <expert/>
-                <clerk/>
-                <rolls/>
-                <papers/>
-                <plans/>
-                <prosecutor/>
-                <help/>
-                <!--si true/false-->
-                <total/>
+                <total l="" d="" s=""/>
             </fees>
             <!--bourse commune = (to share expenses)-->
-            <expenses>
-                <!--@type="clerk/expert/notMentioned"-->
-                <expense type=""/>
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
             </expenses>
         </conclusions>
     </description>
