@@ -76,20 +76,17 @@
         </procedure>
         <participants>
             <experts>
-                <expert context="" appointment="">
-                    <name>
-                        <surname/>
-                        <forename/>
-                    </name>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
                     <title/>
                 </expert>
             </experts>
             <clerks>
                 <clerk>
-                    <name>
+                    <persName>
                         <surname/>
                         <forename/>
-                    </name>
+                    </persName>
                 </clerk>
             </clerks>
             <parties>
@@ -102,10 +99,10 @@
                     <!--@intervention="true/false"-->
                     <!--@rmq person est répétable pour chaque personne d'une même partie-->
                     <person>
-                        <name>
+                        <persName>
                             <surname/>
                             <forename/>
-                        </name>
+                        </persName>
                         <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
                         <occupation/>
                         <!--<profession></profession>-->
@@ -115,30 +112,30 @@
                     <!-- Qualification individuelle-->
                     <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
                     <!-- Expert agissant pour cette partie -->
-                    <expert/>
+                    <expert ref=""/>
                     <!-- @rmq représentant/procureur sont répétables-->
                     <representative>
-                        <name>
+                        <persName>
                             <surname/>
                             <forename/>
-                        </name>
+                        </persName>
                         <occupation/>
                     </representative>
                     <prosecutor>
-                        <name>
+                        <persName>
                             <surname/>
                             <forename/>
-                        </name>
+                        </persName>
                     </prosecutor>
                 </party>
             </parties>
             <!--Entrepreneur, architecte ou maître d’œuvre-->
             <craftmen>
                 <craftman>
-                    <name>
+                    <persName>
                         <surname/>
                         <forename/>
-                    </name>
+                    </persName>
                     <occupation/>
                 </craftman>
             </craftmen>
@@ -155,7 +152,6 @@
             <!--coût de l'expertise => frais d'expertise = consultancy fees-->
             <fees detail="">
                 <!--@detail="true/false"-->
-                <total l="" d="" s=""/>
             </fees>
             <!--bourse commune = (to share expenses)-->
             <expenses mentioned="">
