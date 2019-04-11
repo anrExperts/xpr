@@ -112,7 +112,8 @@ function xform() {
 };
 
 (:~
- : this 
+ : This function consumes new expertises 
+ : @param $param content
  : @bug solve the xml namespace in xforms
  :)
 declare
@@ -121,14 +122,13 @@ declare
 %rest:PUT("{$param}")
 %updating
 function xformResult($param) {
-  let $id := 'toto'
+  let $id := $param/*/*:sourceDesc/*:idno[@type="unitid"]/text()
   let $db := db:open("xpr")
-  (: let $param := 
+  let $param := 
     copy $d := $param
-    modify insert node attribute foo {$id} into $d
-    return $d :)
-  return insert node $param into $db/expertises
-    (: insert node (attribute xml:id {$id} ) into $param/*:expertise, :)
+    modify insert node attribute xml:id {$id} into $d/*
+    return $d
+  return insert node $param into $db
 };
 
 declare
