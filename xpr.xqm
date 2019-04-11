@@ -86,8 +86,8 @@ function listExpertises() {
       </head>
       <body>
         <h1>Expertises Z1J</h1>
-        {$content}
-        <button>Nouveau</button>
+        {for $pv in db:open('xpr')/expertise return $pv}
+        <button onclick="location.href='/xpr/expertises/new'">Nouveau</button>
       </body>
     </html>
 };
@@ -111,17 +111,37 @@ function xform() {
     )
 };
 
+(:~
+ : this 
+ : @bug solve the xml namespace in xforms
+ :)
 declare
-%rest:path("xpr/edit/post")
+%rest:path("xpr/expertises/put")
+%output:method("xml")
+%rest:PUT("{$param}")
+%updating
+function xformResult($param) {
+  let $id := 'toto'
+  let $db := db:open("xpr")
+  (: let $param := 
+    copy $d := $param
+    modify insert node attribute foo {$id} into $d
+    return $d :)
+  return insert node $param into $db/expertises
+    (: insert node (attribute xml:id {$id} ) into $param/*:expertise, :)
+};
+
+declare
+%rest:path("xpr/expertises/post")
 %output:method("xml")
 %rest:POST("{$param}")
 %updating
-function xformResult($param) {
+function updateExpertise($param) {
   let $id := $param/text()
   let $db := db:open("xpr")
   return (
-    insert node (attribute xml:id {$id} ) into $param/*:expertise,
-    insert node $param into $db//expertises
+    (: insert node (attribute xml:id {$id} ) into $param/*:expertise, :)
+    insert node $param into $db/expertises
   )
 };
 

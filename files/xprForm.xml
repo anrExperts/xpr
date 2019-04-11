@@ -18,7 +18,7 @@
             <xf:instance id="xprExpenses" src="/xpr/files/xprExpenses.xml"/>
             <xf:instance id="xprFees" src="/xpr/files/xprFees.xml"/>
 
-            <xf:submission id="submit" resource="xpr/edit/post" method="post" replace="instance"/>
+            <xf:submission id="submit" resource="put" method="PUT" />
 
             <!--**sourceDesc**-->
             <xf:bind id="sourceDesc" nodeset="sourceDesc"/>
