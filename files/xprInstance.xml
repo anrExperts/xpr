@@ -158,6 +158,20 @@
                 <!--@mentioned = true/false-->
             </expenses>
         </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
     </description>
     <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
 </expertise>
