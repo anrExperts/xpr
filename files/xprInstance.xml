@@ -3,7 +3,7 @@
 <!--TODO
     dans la XSLT de Xforms, créer une règle pour xf:case/xf:label => création d'un h2 en html et pas un <label/>
 -->
-<expertise xmlns="">
+<expertise xmlns="xpr">
     <meta/>
     <sourceDesc>
         <!--Réferences-->
@@ -66,7 +66,7 @@
                 <sentence>
                     <orgName/>
                     <!--@rmq date est répétable pour toutes les sentences d'une institution-->
-                    <date/>
+                    <date when=""/>
                 </sentence>
             </sentences>
             <!--Cause de l'expertise-->
@@ -152,6 +152,7 @@
             <!--coût de l'expertise => frais d'expertise = consultancy fees-->
             <fees detail="">
                 <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
             </fees>
             <!--bourse commune = (to share expenses)-->
             <expenses mentioned="">

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<categories xmlns="">
+<categories xmlns="xpr">
     <category/>
     <category type="estimation">Estimer la valeur des biens</category>
     <category type="acceptation">Recevoir et évaluer le travail réalisé</category>

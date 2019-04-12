@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<appendice xmlns="">
+<appendice xmlns="xpr">
     <type type="drawing">Dessin</type>
     <type type="plan">Plan</type>
     <type type="sketch">Croquis</type>
