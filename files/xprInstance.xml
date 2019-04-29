@@ -42,7 +42,10 @@
         </sessions>
         <places>
             <place type="paris">
-                <address/>
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
                 <complement/>
                 <parish/>
                 <city/>

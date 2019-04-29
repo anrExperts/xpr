@@ -58,10 +58,15 @@
             <!--places-->
             <xf:bind id="places" nodeset="xpr:description/xpr:places"/>
             <xf:bind id="place" nodeset="xpr:description/xpr:places/xpr:place"/>
-            <xf:bind id="placeAddress" nodeset="xpr:description/xpr:places/xpr:place/xpr:address" relevant="../@type='paris' 
+            <xf:bind id="placeAddresse" nodeset="xpr:description/xpr:places/xpr:place/xpr:address"/>
+            <xf:bind id="placeStreet" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris' 
                     or ../@type='suburbs' 
                     or ../@type='province' 
                     or ../@type='indeterminate'"/>
+            <xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris' 
+                or ../@type='suburbs' 
+                or ../@type='province' 
+                or ../@type='indeterminate'" type="xs:integer"/>
             <xf:bind id="placeComplement" nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris' 
                     or ../@type='suburbs' 
                     or ../@type='province' 
@@ -448,8 +453,11 @@
                                     <xf:value>indeterminate</xf:value>
                                 </xf:item>
                             </xf:select1>
-                            <xf:input ref="xpr:address" incremental="true">
+                            <xf:input ref="xpr:address/xpr:street" incremental="true">
                                 <xf:label>Voie</xf:label>
+                            </xf:input>
+                            <xf:input ref="xpr:address/xpr:buildingNumber" incremental="true">
+                                <xf:label>Numéro de la voie</xf:label>
                             </xf:input>
                             <xf:input ref="xpr:complement" incremental="true">
                                 <xf:label>Précisions géographiques</xf:label>
@@ -489,7 +497,8 @@
                             <xf:action ev:event="DOMActivate">
                                 <xf:insert nodeset="xpr:place" at="index('repeatPlace')" position="after" ev:event="DOMActivate"/>
                                 <xf:setvalue ref="xpr:place[index('repeatPlace')]/@type" value=""/>
-                                <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:address" value=""/>
+                                <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:address/xpr:street" value=""/>
+                                <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:address/xpr:buildingNumber" value=""/>
                                 <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:complement" value=""/>
                                 <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:parish" value=""/>
                                 <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:city" value=""/>
