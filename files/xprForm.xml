@@ -1,8 +1,4 @@
-<html lang="fr" xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ev="http://www.w3.org/2001/xml-events"
-                xmlns:xf="http://www.w3.org/2002/xforms"
-                xmlns:xs="http://www.w3.org/2001/XMLSchema"
-                xmlns:xpr="xpr">
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xpr:bogus="fix Firefox namespace issue">
     <head>
         <title>xpr (formulaire)</title>
         <meta charset="utf-8" />
@@ -15,7 +11,7 @@
         <xf:model>
             <!--Instance principale-->
             <xf:instance id="xprModel" src="/xpr/files/xprInstance.xml"/>
-            
+
             <!--Instances secondaires-->
             <xf:instance id="xprExperts" src="/xpr/files/xprExperts.xml"/>
             <xf:instance id="xprAppendice" src="/xpr/files/xprAppendice.xml"/>
@@ -48,15 +44,15 @@
             <!--<xf:bind
                     nodeset="sourceDesc/physDesc/appendices/appendice/@subtype"
                     relevant="./parent::appendice[contains(@type, 'other')]"/>-->
-            
-            
+
+
             <!--**description**-->
             <xf:bind id="description" nodeset="xpr:description"/>
 
             <!--sessions-->
             <xf:bind id="sessions" nodeset="xpr:description/xpr:sessions"/>
             <xf:bind id="sessionsDate" nodeset="xpr:description/xpr:sessions/xpr:date"/>
-            <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xs:date"/>
+            <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xs:date" constraint="(. &gt;= '1690-01-01') and (. &lt;= '1791-01-01')"/>
             <xf:bind id="sessionsType" nodeset="xpr:description/xpr:sessions/xpr:date/@type"/>
 
             <!--places-->
@@ -89,11 +85,11 @@
 
             <!--procedure encadrant l'expertise-->
             <xf:bind id="procedure" nodeset="xpr:description/xpr:procedure"/>
-            
+
             <!--cadre-->
             <xf:bind id="framework" nodeset="xpr:description/xpr:procedure/xpr:framework"/>
             <xf:bind id="frameworkType" nodeset="xpr:description/xpr:procedure/xpr:framework/@type"/>
-            
+
             <!--Origine de l'expertise-->
             <xf:bind id="origination" nodeset="xpr:description/xpr:procedure/xpr:origination"/>
             <xf:bind id="originationType" nodeset="xpr:description/xpr:procedure/xpr:origination/@type"/>
@@ -1468,7 +1464,7 @@
                     </pre>
                     <xf:group ref="xpr:description/xpr:noteworthy">
                         <xf:label>Éléments remarquables</xf:label>
-                        <xf:textarea ref="."><xf:label></xf:label></xf:textarea>
+                        <xf:textarea ref="."><xf:label/></xf:textarea>
                     </xf:group>
                     <pre>
                         <xf:output value="serialize(xpr:description/xpr:noteworthy, 'yes')"/>
