@@ -230,8 +230,8 @@
                         <xf:label>Identifiants</xf:label>
                         <xf:input bind="unitid" incremental="true">
                             <xf:label>Cote</xf:label>
-                            <xf:help>Ceci est un message d'aide.</xf:help>
-                            <xf:hint>La cote doit respecter le format suivant : Z1JXXX</xf:hint>
+                            <xf:help>La cote doit respecter le format suivant : Z1JXXX</xf:help>
+                            <!--<xf:hint>La cote doit respecter le format suivant : Z1JXXX</xf:hint>-->
                             <xf:alert>Le champ cote est requis.</xf:alert>
                         </xf:input>
                         <xf:input bind="item" incremental="true">

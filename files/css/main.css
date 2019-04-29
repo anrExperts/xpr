@@ -1,201 +1,245 @@
-*, *::before, *::after {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 :root {
-  --colorMain: #E73E0D;
-  --colorSub: /* #3f51b5; */ #fff;
-  --colorAccent: /* #3f51b5; */ #E73E0D;
-  --baseline: 1.5; /* 1.5 * 18 = 27px*/
-  font-size: 1.125em; /* 18px */
-  line-height: var(--baseline);
+    --colorMain: #E73E0D;
+    --colorSub: /* #3f51b5; */ #fff;
+    --colorAccent: /* #3f51b5; */ #E73E0D;
+    --baseline: 1.5; /* 1.5 * 18 = 27px*/
+    font-size: 1.125em; /* 18px */
+    line-height: var(--baseline);
 }
 
 body {
-  background-color: var(--colorSub);
-  color: var(--colorMain);
+    background-color: var(--colorSub);
+    color: var(--colorMain);
 }
 
 main {
-  background-color: var(--colorMain);
-  color: var(--colorSub);
+    background-color: var(--colorMain);
+    color: var(--colorSub);
 }
 
 section {
-  background-color: var(--colorMain);
-  color: var(--colorSub);
+    background-color: var(--colorMain);
+    color: var(--colorSub);
 }
 
-header, footer, .alternate {
-  background-color: var(--colorSub);
-  color: var(--colorMain);
+header,
+footer,
+.alternate {
+    background-color: var(--colorSub);
+    color: var(--colorMain);
 }
 
 section {
-  width: 100%;
-  max-width: 47rem;
-  margin: auto;
-  margin-bottom: calc( var(--baseline) * 3rem);
-  margin-bottom: calc( var(--baseline) * 3rem);
+    width: 100%;
+    max-width: 47rem;
+    margin: auto;
+    margin-bottom: calc(var(--baseline)* 3rem);
+    margin-bottom: calc(var(--baseline)* 3rem);
 }
 
 /* typo */
 body {
-  font-family: 'IBM Plex Serif', serif;
-  font-weight: normal;
-  letter-spacing: 0.0em
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: normal;
+    letter-spacing: 0.0em
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'IBM Plex Sans', sans-serif;
-  font-style: oblique;
-  font-weight: normal;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-style: oblique;
+    font-weight: normal;
 }
 
 /* typographic scale https://drewish.com/tools/vertical-rhythm/ */
 h1 {
-  font-size: 2.2222em; /* 40px */
-  line-height: 1.3500; /* 54px */
+    font-size: 2.2222em; /* 40px */
+    line-height: 1.3500; /* 54px */
 
 }
 
 h2 {
-  font-size: 1.7222em; /* 31px */
-  line-height: 1.7419em; /* 54px */
-  margin-top: auto;
-  margin-bottom: calc( var(--baseline) * 1rem);
+    font-size: 1.7222em; /* 31px */
+    line-height: 1.7419em; /* 54px */
+    margin-top: auto;
+    margin-bottom: calc(var(--baseline)* 1rem);
 }
 
 form {
-  /* Just to center the form on the page */
-  margin: 0 auto;
-  width: 52em;
-  /* To see the outline of the form */
-  padding: 1em;
+    /* Just to center the form on the page */
+    margin: 0 auto;
+    width: 52em;
+    /* To see the outline of the form */
+    padding: 1em;
 }
 
 form div + div {
-  margin-top: 1em;
+    margin-top: 1em;
 }
 
 .xforms-group-content {
-  border-radius: 0.1em;
-  border: 1px solid #CCC;
-  padding: 1.2em;
-  margin-top: 1.2em;
+    border-radius: 0.1em;
+    border: 1px solid #CCC;
+    padding: 1.2em;
+    margin-top: 1.2em;
 }
 
 label {
-  /* To make sure that all labels have the same size and are properly aligned */
-  display: block;
-  text-align: left;
-  padding-bottom: 0.3em;
-  padding-top: 0.3em;
-  font-size: 0.8em;
+    /* To make sure that all labels have the same size and are properly aligned */
+    display: block;
+    text-align: left;
+    padding-bottom: 0.3em;
+    padding-top: 0.3em;
+    font-size: 0.8em;
 }
 
 .xforms-value input {
-  width: 1.3em;
+    width: 1.3em;
 }
 
 .xforms-value label {
-  display: inline;
+    display: inline;
 }
 
 select {
-  font-family: 'IBM Plex Serif';
-  font-size: 0.8em;
-  width: 14em;
+    font-family: 'IBM Plex Serif';
+    font-size: 0.8em;
+    width: 14em;
 }
 
-input, textarea {
+input,
+textarea {
 
-  /* To make sure that all text fields have the same font settings
+    /* To make sure that all text fields have the same font settings
      By default, textareas have a monospace font */
-  font: 1em 'IBM Plex Serif';
+    font: 1em 'IBM Plex Serif';
 
-  /* To harmonize the look & feel of text field border */
-  border-radius: 0.1em;
-  border: 1px solid #CCC;
+    /* To harmonize the look & feel of text field border */
+    border-radius: 0.1em;
+    border: 1px solid #CCC;
 }
 
 input {
-  /* To give the same size to all text fields */
-  width: 10em;
-  box-sizing: border-box;
+    /* To give the same size to all text fields */
+    width: 10em;
+    box-sizing: border-box;
 }
 
 textarea {
-  /* To give the same size to all text fields */
-  width: 49em;
-  box-sizing: border-box;
+    /* To give the same size to all text fields */
+    width: 49em;
+    box-sizing: border-box;
 }
 
-input:focus, textarea:focus {
-  /* To give a little highlight on active elements */
-  border-color: #000;
+input:focus,
+textarea:focus {
+    /* To give a little highlight on active elements */
+    border-color: #000;
 }
 
 textarea {
-  /* To properly align multiline text fields with their labels */
-  vertical-align: top;
+    /* To properly align multiline text fields with their labels */
+    vertical-align: top;
 
-  /* To give enough room to type some text */
-  height: 5em;
+    /* To give enough room to type some text */
+    height: 5em;
 }
 
 button {
-  /* To position the buttons to the same position of the text fields */
-  padding-left: 1.2em; /* same size as the label elements */
+    /* To position the buttons to the same position of the text fields */
+    padding-left: 1.2em; /* same size as the label elements */
 }
 
 button {
-  /* This extra margin represent roughly the same space as the space
+    /* This extra margin represent roughly the same space as the space
      between the labels and their text fields */
-  margin-left: .5em;
-  font-family: 'IBM Plex Serif';
-  font-size: 0.8em;
-  width: 14em;
-  box-sizing: border-box;
-  border-radius: 0.1em;
-  border: 1px solid #CCC;
+    margin-left: .5em;
+    font-family: 'IBM Plex Serif';
+    font-size: 0.8em;
+    width: 14em;
+    box-sizing: border-box;
+    border-radius: 0.1em;
+    border: 1px solid #CCC;
 }
 
 
 /* This is our style for the invalid fields */
-input:invalid{
-  border-color: #900;
-  background-color: #FDD;
+input:invalid {
+    border-color: #900;
+    background-color: #FDD;
 }
 
 input:focus.xforms-valid {
-  outline: none;
+    outline: none;
 }
 
 /* This is the style of our error messages */
 .error {
-  width  : 100%;
-  padding: 0;
+    width: 100%;
+    padding: 0;
 
-  font-size: 80%;
-  color: white;
-  background-color: #900;
-  border-radius: 0 0 5px 5px;
+    font-size: 80%;
+    color: white;
+    background-color: #900;
+    border-radius: 0 0 5px 5px;
 
-  -moz-box-sizing: border-box;
-  box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .error.active {
-  padding: 0.3em;
+    padding: 0.3em;
 }
 
 
 
 .xforms-invalid input {
-  background-color: #FDD;
-};
+    background-color: #FDD;
+}
+;
 
 .xforms-input input {
-  border-color: #900;
+    border-color: #900;
+}
+
+.xforms-group-content {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.xforms-input {
+    display: flex;
+}
+
+.xforms-input .xforms-label {
+    order: 1;
+}
+
+.xforms-input .xforms-required-icon {
+    order: 2;
+}
+
+.xforms-input .value {
+    order: 3;
+}
+
+.xforms-input .xforms-help {
+    order: 4;
+}
+
+.xforms-input .xforms-alert {
+    display:block;
+    order: 5;
 }
