@@ -184,7 +184,7 @@
             <xf:bind id="noteworthy" nodeset="xpr:description/xpr:noteworthy"/>
         </xf:model>
     </head>
-    <body>
+    <body onload="repeat()">
         <h1>Formulaire Z1J</h1>
         <form>
             <xf:trigger>
@@ -1484,5 +1484,15 @@
                 <xf:label>Enregistrer</xf:label>
             </xf:submit>
         </form>
+        <script>
+            function repeat() {
+                var element = document.querySelectorAll('div.xforms-group-content');
+                for (var i = 0; i &lt; element.length; i++) {
+                    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+                        element[i].classList.add('repeat');
+                    }	    
+                }
+            }
+        </script>
     </body>
 </html>

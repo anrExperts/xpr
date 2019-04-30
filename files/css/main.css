@@ -219,27 +219,53 @@ input:focus.xforms-valid {
     grid-auto-rows: minmax(100px, auto);
 }
 
-.xforms-input {
+.xforms-input, .xforms-select1 {
     display: flex;
+    flex-wrap: wrap;
+    /* travail sur repeat */
+    margin: auto;
 }
 
-.xforms-input .xforms-label {
+.xforms-input .xforms-label, .xforms-select1 .xforms-label {
     order: 1;
 }
 
-.xforms-input .xforms-required-icon {
+.xforms-input .xforms-required-icon, .xforms-select1 .xforms-required-icon {
     order: 2;
 }
 
-.xforms-input .value {
+.xforms-input .value, .xforms-select1 .value {
     order: 3;
+    flex-basis:100%;
 }
 
-.xforms-input .xforms-help {
+.xforms-input .xforms-help, .xforms-select1 .xforms-help {
     order: 4;
 }
 
-.xforms-input .xforms-alert {
-    display:block;
+.xforms-input .xforms-alert, .xforms-select1 .xforms-alert {
+    display: block;
     order: 5;
+}
+
+/* Repeat */
+
+.repeat {
+    display:inherit;
+}
+
+.xforms-repeat-item {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+    grid-auto-rows: minmax(100px, auto);
+}
+
+.xforms-trigger {
+    margin: auto;
+}
+
+/* Calendar button */
+button.aid-button {
+    display:none
 }
