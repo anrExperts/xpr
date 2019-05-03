@@ -186,12 +186,12 @@
     </head>
     <body onload="repeat()">
         <nav id="navigation">
-          <ul>
-            <li><a href="/xpr">¡xpr!</a></li>
-            <li><a href="/xpr/expertises">pv</a></li>
-            <li><a href="/xpr">prosopo</a></li>
-            <li><a href="/xpr/about">?</a></li>
-          </ul>
+            <ul>
+                <li><a href="/xpr">¡xpr!</a></li>
+                <li><a href="/xpr/expertises">pv</a></li>
+                <li><a href="/xpr">prosopo</a></li>
+                <li><a href="/xpr/about">?</a></li>
+            </ul>
         </nav>
         <form>
             <xf:trigger>
@@ -476,7 +476,7 @@
                             <xf:trigger bind="placeOwner" class="insert">
                                 <xf:label>Ajouter un propriétaire</xf:label>
                                 <xf:action ev:event="DOMActivate">
-                                    <xf:insert nodeset="xpr:owner" at="index('repeatOwner')" position="after" ev:event="DOMActivate"/>
+                                    <xf:insert nodeset="." at="index('repeatOwner')" position="after" ev:event="DOMActivate"/>
                                     <xf:setvalue ref="xpr:place/xpr:owner[index('repeatOwner')]" value=""/>
                                 </xf:action>
                             </xf:trigger>
@@ -579,7 +579,8 @@
                     <!--control-->
                     <pre>
                             <xf:output value="serialize(xpr:description/xpr:categories, 'yes')"/>
-                        </pre> <xf:group ref="xpr:description/xpr:procedure">
+                        </pre>
+                    <xf:group ref="xpr:description/xpr:procedure">
                         <xf:label>Procédure et cadre de l’expertise</xf:label>
                         <xf:group ref="xpr:framework">
                             <xf:select1 bind="frameworkType" appearance="full">
@@ -1475,8 +1476,16 @@
             </xf:submit>
         </form>
         <script>
-function repeat() {
+/*function repeat() {
   var element = document.querySelectorAll('div.xforms-group-content');
+  for (var i = 0; i &lt; element.length; i++) {
+    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+    }
+  }*/
+function repeat() {
+  var element = document.querySelectorAll('div.xforms-repeat');
   for (var i = 0; i &lt; element.length; i++) {
     if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
       element[i].classList.add('repeat');
