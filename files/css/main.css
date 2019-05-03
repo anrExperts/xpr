@@ -61,12 +61,12 @@ pre {
  */
 
 nav {
-  width: 100%;
-  line-height: calc(var(--baseline) * 1.5rem);
-  background: var(--colorSub);
-  text-align: center;
-  margin:0;
-  padding:0;
+    width: 100%;
+    line-height: calc(var(--baseline)* 1.5rem);
+    background: var(--colorSub);
+    text-align: center;
+    margin: 0;
+    padding: 0;
 }
 
 nav ul {
@@ -79,34 +79,34 @@ nav ul {
 }
 
 nav ul a {
-  display: block;
-  padding: 0.02rem 1.4rem;
-  font-weight: bolder;
+    display: block;
+    padding: 0.02rem 1.4rem;
+    font-weight: bolder;
 }
 
 nav ul li:first-child {
-  margin-right: auto;
+    margin-right: auto;
 }
 
 /* applied after scroll height reached */
 .fixed-nav nav {
-  position: fixed;
-  top:0;
-  z-index: 1;
-  //box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);
+    position: fixed;
+    top: 0;
+    z-index: 1;
+    /*box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);*/
 }
 
-nav>ul>li>a {
-  color: var(--colorMain);
-  text-decoration: none;
-  transition: background-size .45s;
+nav > ul > li > a {
+    color: var(--colorMain);
+    text-decoration: none;
+    transition: background-size .45s;
 }
 
-nav>ul>li>a:hover {
-  color: var(--colorMain);
-  opacity: .7;
-  background-size: 0.35em 0.35em;
- }
+nav > ul > li > a:hover {
+    color: var(--colorMain);
+    opacity: .7;
+    background-size: 0.35em 0.35em;
+}
 }
 
 /*
@@ -163,6 +163,7 @@ input {
     /* To give the same size to all text fields */
     width: 10em;
     box-sizing: border-box;
+    height: 1.6em;
 }
 
 textarea {
@@ -190,6 +191,7 @@ select {
     font-family: 'IBM Plex Serif';
     font-size: 1em;
     width: 14em;
+    height: 1.6em;
     border-radius: 0.1em;
     border: 1px solid var(--colorMain);
     /* needed */
@@ -235,61 +237,105 @@ input:focus.xforms-valid {
 }
 
 .xforms-input,
-.xforms-select1 {
+.xforms-select1,
+.xforms-select,
+.xforms-textarea {
     display: flex;
     flex-wrap: wrap;
 }
 
 .xforms-input .xforms-label,
-.xforms-select1 .xforms-label {
+.xforms-select1 .xforms-label,
+.xforms-select .xforms-label,
+.xforms-textarea .xforms-label {
     order: 1;
 }
 
 .xforms-input .xforms-required-icon,
-.xforms-select1 .xforms-required-icon {
+.xforms-select1 .xforms-required-icon,
+.xforms-select .xforms-required-icon,
+.xforms-textarea .xforms-required-icon {
     order: 2;
 }
 
 .xforms-input .value,
-.xforms-select1 .value {
+.xforms-select1 .value,
+.xforms-select .value,
+.xforms-textarea .value {
     order: 3;
     flex-basis: 100%;
 }
 
 .xforms-input .xforms-help,
-.xforms-select1 .xforms-help {
+.xforms-select1 .xforms-help,
+.xforms-select .xforms-help,
+.xforms-textarea .xforms-help
+{
     order: 4;
 }
 
 .xforms-input .xforms-alert,
-.xforms-select1 .xforms-alert {
+.xforms-select1 .xforms-alert,
+.xforms-select .xforms-alert,
+.xforms-textarea .xforms-alert {
     order: 5;
+}
+
+/* this hide the calendar button */
+button.aid-button {
+    display: none;
 }
 
 /* This is the style of our delete and insert trigger */
 
-span.delete button {
-    background-color: #d44949;
-    visibility: visible;
-    border: 0;
-    height: 40px;
-    width: 40px;
-    display: flex;
-    /* centre le texte du button (mais pas celui que l'on ajoute en css) */
-    align-items: center;
-    justify-content: center;
-    color: #fff;
-    border-radius: 100%;
-}
-
-span.delete button span {
-    visibility: hidden;
-}
-/* reste à centrer le texte du content */
-span.delete button span:before {
-    visibility: visible;
-    content: 'x';
-}
-
+.delete,
 .insert {
+    display:flex;
+}
+
+.delete span.value,
+.insert span.value {
+    position: relative;
+    width: 1em;
+    height: 1em;
+    flex-shrink: 0;
+}
+
+.delete span.value {
+    -webkit-mask: url(picol/cancel.svg) no-repeat 50% 50%;
+    mask: url(picol/cancel.svg) no-repeat 50% 50%;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    background-color: var(--colorMain);
+    background-size: 1em 1em;
+}
+
+.insert span.value {
+    -webkit-mask: url(picol/plus.svg) no-repeat 50% 50%;
+    mask: url(picol/plus.svg) no-repeat 50% 50%;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    background-color: var(--colorMain);
+}
+
+.delete button,
+.insert button {
+    border: 0;
+}
+
+.delete button span,
+.insert button span {
+    display: none;
+}
+
+.repeat {
+    background-color:blue;
+    border: 1px;
+    border-color: blue;
+}
+
+.repeat .xforms-repeat {
+    background-color:green;
+    border: 1px;
+    border-color: blue;
 }
