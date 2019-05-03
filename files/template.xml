@@ -1,0 +1,14 @@
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xpr:bogus="fix Firefox namespace issue">
+  <head>
+    <title>xpr</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Application de l’ANR Experts" />
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
+    <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
+    <link href="/xpr/files/css/main.css" rel="stylesheet" />
+  </head>
+  <body>
+    
+  </body>
+</html>

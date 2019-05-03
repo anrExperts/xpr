@@ -1,11 +1,11 @@
 <html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xpr:bogus="fix Firefox namespace issue">
     <head>
-        <title>xpr (formulaire)</title>
+        <title>xpr</title>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="description" content="Formulaire de dépouillement Z1J" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="description" content="Application de l’ANR Experts" />
         <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
-        <link href="files/css/normalize.css" rel="stylesheet" />
+        <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
         <link href="/xpr/files/css/main.css" rel="stylesheet" />
         <!-- XForms data models -->
         <xf:model>
@@ -59,26 +59,26 @@
             <xf:bind id="places" nodeset="xpr:description/xpr:places"/>
             <xf:bind id="place" nodeset="xpr:description/xpr:places/xpr:place"/>
             <xf:bind id="placeAddresse" nodeset="xpr:description/xpr:places/xpr:place/xpr:address"/>
-            <xf:bind id="placeStreet" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris' 
-                    or ../@type='suburbs' 
-                    or ../@type='province' 
+            <xf:bind id="placeStreet" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris'
+                    or ../@type='suburbs'
+                    or ../@type='province'
                     or ../@type='indeterminate'"/>
-            <xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris' 
-                or ../@type='suburbs' 
-                or ../@type='province' 
+            <xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
+                or ../@type='suburbs'
+                or ../@type='province'
                 or ../@type='indeterminate'" type="xs:integer"/>
-            <xf:bind id="placeComplement" nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris' 
-                    or ../@type='suburbs' 
-                    or ../@type='province' 
+            <xf:bind id="placeComplement" nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris'
+                    or ../@type='suburbs'
+                    or ../@type='province'
                     or ../@type='indeterminate'"/>
             <xf:bind id="placeParish" nodeset="xpr:description/xpr:places/xpr:place/xpr:parish" relevant="../@type='paris'"/>
-            <xf:bind id="placeCity" nodeset="xpr:description/xpr:places/xpr:place/xpr:city" relevant="../@type='suburbs' 
+            <xf:bind id="placeCity" nodeset="xpr:description/xpr:places/xpr:place/xpr:city" relevant="../@type='suburbs'
                     or ../@type='province'"/>
-            <xf:bind id="placeDistrict" nodeset="xpr:description/xpr:places/xpr:place/xpr:district" relevant="../@type='suburbs' 
+            <xf:bind id="placeDistrict" nodeset="xpr:description/xpr:places/xpr:place/xpr:district" relevant="../@type='suburbs'
                     or ../@type='province'"/>
-            <xf:bind id="placeOwner" nodeset="xpr:description/xpr:places/xpr:place/xpr:owner" relevant="../@type='paris' 
-                    or ../@type='suburbs' 
-                    or ../@type='province' 
+            <xf:bind id="placeOwner" nodeset="xpr:description/xpr:places/xpr:place/xpr:owner" relevant="../@type='paris'
+                    or ../@type='suburbs'
+                    or ../@type='province'
                     or ../@type='indeterminate'"/>
 
             <!--Categories-->
@@ -185,7 +185,14 @@
         </xf:model>
     </head>
     <body onload="repeat()">
-        <h1>Formulaire Z1J</h1>
+        <nav id="navigation">
+          <ul>
+            <li><a href="/xpr">¡xpr!</a></li>
+            <li><a href="/xpr/expertises">pv</a></li>
+            <li><a href="/xpr">prosopo</a></li>
+            <li><a href="/xpr/about">?</a></li>
+          </ul>
+        </nav>
         <form>
             <xf:trigger>
                 <xf:label>Références</xf:label>
@@ -1468,14 +1475,34 @@
             </xf:submit>
         </form>
         <script>
-            function repeat() {
-                var element = document.querySelectorAll('div.xforms-group-content');
-                for (var i = 0; i &lt; element.length; i++) {
-                    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
-                        element[i].classList.add('repeat');
-                    }	    
-                }
-            }
+function repeat() {
+  var element = document.querySelectorAll('div.xforms-group-content');
+  for (var i = 0; i &lt; element.length; i++) {
+    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+    }
+  }
         </script>
+        <script>
+// Sticky navigation
+const nav = document.querySelector('#navigation');
+const navTop = nav.offsetTop;
+
+function stickyNavigation() {
+  console.log('navTop = ' + navTop);
+  console.log('scrollY = ' + window.scrollY);
+  if (window.scrollY >= navTop) {
+    // nav offsetHeight = height of nav
+    document.body.style.paddingTop = nav.offsetHeight + 'px';
+    document.body.classList.add('fixed-nav');
+    }
+    else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove('fixed-nav');
+    }
+  }
+window.addEventListener('scroll', stickyNavigation);
+    </script>
     </body>
 </html>

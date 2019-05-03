@@ -77,7 +77,7 @@ declare
 %rest:path("xpr/expertises")
 %output:method("html")
 function listExpertises() {
-  let $expertises := db:open("xpr")//expertise
+  let $expertises := db:open("xpr")//*:expertise
   let $content := for $expertise in $expertises return <p><a href="{$expertise/xml:id}">{$expertise}</a></p>
   return 
     <html>
@@ -86,7 +86,7 @@ function listExpertises() {
       </head>
       <body>
         <h1>Expertises Z1J</h1>
-        {for $pv in db:open('xpr')/expertise return $pv}
+        {for $pv in $expertises return $pv}
         <button onclick="location.href='/xpr/expertises/new'">Nouveau</button>
       </body>
     </html>

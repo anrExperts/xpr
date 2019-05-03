@@ -51,7 +51,67 @@ section {
     margin-bottom: calc(var(--baseline)* 3rem);
 }
 
-/* typo */
+/* mode debug */
+pre {
+    display: none;
+}
+
+/*
+ * Navigation
+ */
+
+nav {
+  width: 100%;
+  line-height: calc(var(--baseline) * 1.5rem);
+  background: var(--colorSub);
+  text-align: center;
+  margin:0;
+  padding:0;
+}
+
+nav ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    max-width: 47em;
+    margin: 0 auto;
+    padding: 0;
+}
+
+nav ul a {
+  display: block;
+  padding: 0.02rem 1.4rem;
+  font-weight: bolder;
+}
+
+nav ul li:first-child {
+  margin-right: auto;
+}
+
+/* applied after scroll height reached */
+.fixed-nav nav {
+  position: fixed;
+  top:0;
+  z-index: 1;
+  //box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);
+}
+
+nav>ul>li>a {
+  color: var(--colorMain);
+  text-decoration: none;
+  transition: background-size .45s;
+}
+
+nav>ul>li>a:hover {
+  color: var(--colorMain);
+  opacity: .7;
+  background-size: 0.35em 0.35em;
+ }
+}
+
+/*
+ * typo
+ */
 body {
     font-family: 'IBM Plex Serif', serif;
     font-weight: normal;
@@ -83,12 +143,10 @@ h2 {
     margin-bottom: calc(var(--baseline)* 1rem);
 }
 
-/* mode debug */
-pre {
-    display: none;
-}
 
-/* Fields */
+/*
+ * Fields
+ */
 input,
 textarea {
 
@@ -208,9 +266,7 @@ input:focus.xforms-valid {
     order: 5;
 }
 
-
 /* This is the style of our delete and insert trigger */
-
 
 span.delete button {
     background-color: #d44949;
@@ -236,5 +292,4 @@ span.delete button span:before {
 }
 
 .insert {
-
 }
