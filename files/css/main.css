@@ -216,6 +216,78 @@ input:focus.xforms-valid {
     outline: none;
 }
 
+/* Hide base elements */
+[type = "radio"],
+[type = "checkbox"] {
+    position: absolute;
+    left: -9999px;
+}
+
+/* Position the <label> */
+[type = "radio"] + label,
+[type = "checkbox"] + label {
+    position: relative;
+    display: inline-block;
+    height: 1em;
+    line-height: 1.25em;
+    padding-left: 2em;
+    cursor: pointer;
+}
+
+/* SHARED STYLES - Radio & Checkbox - Unchecked */
+[type = "radio"] + label:before,
+[type = "checkbox"] + label:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    width: 1em;
+    height: 1em;
+    border: 1px solid;
+    background-color: #fff;
+}
+
+/* RADIO - Unchecked */
+[type = "radio"]:checked + label:before,
+[type = "radio"]:not(:checked) + label:before {
+    border-radius: 50%;
+}
+
+/* RADIO - Checked */
+/*@todo problème de centrage du point lorsqu'on zoom avec le navigateur*/
+[type = "radio"]:checked + label:after {
+    position: absolute;
+    content: '';
+    top: 50%;
+    transform: translateY(-50%);
+    left: 4px;
+    /*left: 0.23em;*/
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: var(--colorMain);
+}
+
+/* CHECKBOX - Unchecked */
+[type = "checkbox"]:not(:checked) + label:before {
+    /* Add styles if needed */
+}
+
+/* CHECKBOX - Checked ( CSS Tick ) */
+[type = "checkbox"]:checked + label:after {
+    position: absolute;
+    content: "";
+    left: 0.375em;
+    top: 0.1em;
+    -webkit-transform: rotate(45deg);
+    transform: rotate(45deg);
+    /* Short Arm */
+    width: 5px;
+    border-bottom: 2px solid;
+    /* Long Arm */
+    height: 11px;
+    border-right: 2px solid;
+}
+
 /* This is the style of our error messages */
 .error {
     width: 100%;
@@ -290,7 +362,12 @@ button.aid-button {
 
 .delete,
 .insert {
-    display:flex;
+    display: flex;
+    position: relative;
+}
+
+.delete {
+    left: 100%;
 }
 
 .delete span.value,
@@ -321,6 +398,7 @@ button.aid-button {
 .delete button,
 .insert button {
     border: 0;
+    display: none;
 }
 
 .delete button span,
@@ -328,14 +406,65 @@ button.aid-button {
     display: none;
 }
 
+.delete .xforms-help-icon {
+    display: none;
+}
+
+.delete .xforms-help-value {
+    visibility: hidden;
+}
+
+.delete:hover .xforms-help-value {
+    display: inline-block;
+    visibility: visible;
+    margin-top: 0;
+    margin-left: 0;
+    position: absolute;
+}
+
+.xforms-group {
+    /*! border: 1em; */
+
+    /*! border-color: black; */
+}
+
 .repeat {
-    background-color:blue;
-    border: 1px;
-    border-color: blue;
+    background-color: blue;
 }
 
 .repeat .xforms-repeat {
-    background-color:green;
-    border: 1px;
-    border-color: blue;
+    background-color: green;
+}
+
+.xform-repeat-item {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.xsltforms-range-rail {
+    width: 3em;
+    height: 1.6em;
+    border: 1px solid;
+    position: relative;
+    margin: 6px 15px 0 10px;
+    display: inline-block;
+    border-radius: 20px;
+}
+
+.xsltforms-range-cursor {
+    margin: 0;
+    margin-top: 0.3em;
+    margin-left: -0.5em;
+    width: 1em;
+    height: 1em;
+    position: absolute;
+    background-image: none;
+    outline-style: none;
+    background-color: var(--colorMain);
+    border-radius: 100%;
+}
+
+.xsltforms-range-value {
+    display:none;
 }

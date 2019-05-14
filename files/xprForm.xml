@@ -19,7 +19,7 @@
             <xf:instance id="xprObjects" src="/xpr/files/xprObjects.xml"/>
             <xf:instance id="xprExpenses" src="/xpr/files/xprExpenses.xml"/>
             <xf:instance id="xprFees" src="/xpr/files/xprFees.xml"/>
-
+            <xf:instance id="xprRanges" src="/xpr/files/xprRanges.xml"/>
             <xf:submission id="submit" resource="put" method="PUT"/>
 
             <!--**sourceDesc**-->
@@ -251,7 +251,7 @@
                         <xf:input bind="extent" incremental="true">
                             <xf:label>Nombre de cahiers et de feuillets</xf:label>
                         </xf:input>
-                        <xf:select1 bind="sketch">
+                        <!--<xf:select1 bind="sketch">
                             <xf:label>Croquis sur le procès-verbal</xf:label>
                             <xf:item>
                                 <xf:label>oui</xf:label>
@@ -262,7 +262,20 @@
                                 <xf:value>false</xf:value>
                             </xf:item>
                             <xf:help>Ceci est un message d'aide</xf:help>
-                        </xf:select1>
+                        </xf:select1>-->
+                        <xf:range ref="instance('xprRanges')/xpr:range[@type='sketch']/@n" start="1" end="3" step="1" incremental="true">
+                            <xf:label>Croquis sur le procès-verbal</xf:label>
+                            <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='1'">
+                                <xf:setvalue ref="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch">true</xf:setvalue>
+                            </xf:action>
+                            <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='2'">
+                                <xf:setvalue ref="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/>
+                            </xf:action>
+                            <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='3'">
+                                <xf:setvalue ref="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch">false</xf:setvalue>
+                            </xf:action>
+                        </xf:range>
+                        <xf:output value="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/>
                     </xf:group>
                     <xf:group ref="xpr:sourceDesc/xpr:physDesc/xpr:appendices">
                         <xf:label>Pièces annexes</xf:label>
@@ -335,6 +348,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>&#10007;</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type) > 1"/>
+                                    <xf:help>Supprimer un type.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -560,6 +574,7 @@
                                     <xf:delete ref="instance('xprModel')/xpr:description/xpr:categories/xpr:category[@type='assessment']"/>
                                 </xf:action>
                             </xf:item>
+                            <xf:help>Plusieurs cases peuvent être cochées.</xf:help>
                         </xf:select>
                         <xf:input bind="designation" incremental="true">
                             <xf:label>Désignation</xf:label>
@@ -984,9 +999,9 @@
                             </xf:select1>
                             <!--<xf:output ref="instance('xprExpert')/expert[@xml:id=instance('xprModel')/description/participants/experts/expert/@ref]/name/surname"/>-->
                             <!--@todo faire un repeat pour les représentants et procureurs ?-->
-                            <xf:group ref="xpr:representative">
+                            <xf:group>
                                 <xf:label>Représentants</xf:label>
-                                <xf:repeat id="repeatRepresentative" nodeset="." appearance="full">
+                                <xf:repeat id="repeatRepresentative" nodeset="xpr:representative" appearance="full">
                                     <xf:label>Patronyme</xf:label>
                                     <xf:input ref="xpr:persName/xpr:surname" incremental="true">
                                         <xf:label>Nom</xf:label>
@@ -1005,16 +1020,16 @@
                                 <xf:trigger class="insert">
                                     <xf:label>Ajouter un représentant</xf:label>
                                     <xf:action ev:event="DOMActivate">
-                                        <xf:insert nodeset="." at="index('repeatRepresentative')" position="after" ev:event="DOMActivate"/>
+                                        <xf:insert nodeset="xpr:representative" at="index('repeatRepresentative')" position="after" ev:event="DOMActivate"/>
                                         <xf:setvalue ref="xpr:representative[index('repeatRepresentative')]/xpr:persName/xpr:surname" value=""/>
                                         <xf:setvalue ref="xpr:representative[index('repeatRepresentative')]/xpr:persName/xpr:forename" value=""/>
                                         <xf:setvalue ref="xpr:representative[index('repeatRepresentative')]/xpr:occupation" value=""/>
                                     </xf:action>
                                 </xf:trigger>
                             </xf:group>
-                            <xf:group ref="xpr:prosecutor">
+                            <xf:group>
                                 <xf:label>Procureur</xf:label>
-                                <xf:repeat id="repeatProsecutor" nodeset="." appearance="full">
+                                <xf:repeat id="repeatProsecutor" nodeset="xpr:prosecutor" appearance="full">
                                     <xf:label>Patronyme</xf:label>
                                     <xf:input ref="xpr:persName/xpr:surname" incremental="true">
                                         <xf:label>Nom</xf:label>
@@ -1030,7 +1045,7 @@
                                 <xf:trigger class="insert">
                                     <xf:label>Ajouter un procureur</xf:label>
                                     <xf:action ev:event="DOMActivate">
-                                        <xf:insert nodeset="." at="index('repeatProsecutor')" position="after" ev:event="DOMActivate"/>
+                                        <xf:insert nodeset="xpr:prosecutor" at="index('repeatProsecutor')" position="after" ev:event="DOMActivate"/>
                                         <xf:setvalue ref="xpr:prosecutor[index('repeatProsecutor')]/xpr:persName/xpr:surname" value=""/>
                                         <xf:setvalue ref="xpr:prosecutor[index('repeatProsecutor')]/xpr:persName/xpr:forename" value=""/>
                                     </xf:action>
