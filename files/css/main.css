@@ -185,6 +185,7 @@ textarea {
 
     /* To give enough room to type some text */
     height: 5em;
+    width: 100%;
 }
 
 select {
@@ -368,7 +369,15 @@ button.aid-button {
 }
 
 .delete {
-    left: 100%;
+    grid-column-start: 1;
+    grid-column-end: 5;
+    justify-content: end;
+    right: -1em;
+
+}
+
+.insert {
+    left: -1em;
 }
 
 .delete span.value,
@@ -427,6 +436,8 @@ button.aid-button {
     /*! border: 1em; */
 
     /*! border-color: black; */
+    grid-column-start: 1;
+    grid-column-end: 5;
 }
 
 .repeat {
@@ -467,24 +478,29 @@ button.aid-button {
 }
 
 .xsltforms-range-value {
-    display: none;
+    display:none;
 }
 
-.xforms-group-content,
-.xforms-repeat-item {
+.xforms-group-content, .xforms-repeat-item {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     column-gap: 1em;
 }
 
 .xforms-input {
-    grid-column: auto/span 2;
+    grid-column: auto / span 2;    
 }
 
-.xforms-appearance-full,
-.xforms-textarea,
-.xforms-repeat,
-.xforms-repeat + .xforms-trigger {
+.xforms-select1 {
+    grid-column: auto / span 2;    
+}
+
+xforms-group-content xforms-group {
+    grid-column-start: 1;
+    grid-column-end: 5;    
+}
+
+.xforms-appearance-full, .xforms-textarea, .xforms-repeat, .xforms-repeat +.xforms-trigger {
     grid-column-start: 1;
     grid-column-end: 5;
 }
