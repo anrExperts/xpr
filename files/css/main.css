@@ -143,6 +143,51 @@ h2 {
     margin-bottom: calc(var(--baseline)* 1rem);
 }
 
+h3 {
+  font-size: 1.334em; /* 18 * 1.334em = 24px */
+  line-height: 1.125; /* 24 * 1.125 = 27px*/
+  margin-bottom: calc( var(--baseline) * 1rem);
+}
+
+h3::before {
+  content: '';
+  display: block;
+  // height: 100%;
+  width: 15%;
+  border-bottom: calc( var(--baseline) * 0.1rem) solid ;
+  margin-bottom: calc( var(--baseline) * 0.9rem);
+}
+
+h4 {
+  font-size: 1.2222em; /* 22px */
+  line-height: 1.2273; /* 27px */
+  margin: auto;
+}
+
+h5 {
+  font-size: 1.1111em; /* 20px */
+  line-height: 1.350; /* 27px */
+  margin: auto;
+}
+
+h6 {
+  font-size: 1em;
+  margin: auto;
+}
+
+p {
+  margin-top: auto;
+  margin-bottom: calc(var(--baseline) * 1rem);
+}
+
+sup {
+  vertical-align: middle;
+  font-size: smaller;
+}
+
+sup.note {
+  font-size: 0.7em;
+}
 
 /*
  * Fields
@@ -447,7 +492,7 @@ button.aid-button {
 }
 
 .xforms-control > .xforms-label {
-    
+
 }
 
 .repeat {
@@ -498,16 +543,16 @@ button.aid-button {
 }
 
 .xforms-input {
-    grid-column: auto / span 2;    
+    grid-column: auto / span 2;
 }
 
 .xforms-select1 {
-    grid-column: auto / span 2;    
+    grid-column: auto / span 2;
 }
 
 xforms-group-content xforms-group {
     grid-column-start: 1;
-    grid-column-end: 5;    
+    grid-column-end: 5;
 }
 
 .xforms-appearance-full, .xforms-textarea, .xforms-repeat, .xforms-repeat +.xforms-trigger {
@@ -519,4 +564,3 @@ xforms-group-content xforms-group {
     grid-column-start: 1;
     grid-column-end: 5;
 }
-
