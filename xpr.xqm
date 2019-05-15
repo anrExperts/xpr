@@ -85,11 +85,40 @@ function listExpertises() {
         <title>Expertises</title>
       </head>
       <body>
-        <h1>Expertises Z1J</h1>
-        {for $pv in $expertises return $pv}
+        <h1>Liste des expertises</h1>
+        <ul>{
+          for $expertise in $expertises 
+          let $cote := $expertise/sourceDesc/idno[@type="unitid"]
+          let $dossier := $expertise/sourceDesc/idno[@type="item"]
+          let $date := $expertise/description/sessions/date/@when
+          return 
+            <li>
+              <span>{$cote || ' n° ' || $dossier}</span>
+              <span>{fn:string($date)}</span>
+              <button onclick="location.href='/xpr/expertises/{$cote}'">Nouveau</button>
+            </li>
+        }</ul>
         <button onclick="location.href='/xpr/expertises/new'">Nouveau</button>
       </body>
     </html>
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("xpr/expertises/{$id}")
+%output:method("xml")
+function modifyExpertise($id) {
+  let $expertises := db:open("xpr")//*:expertise
+  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
+  let $xprFormPath := file:base-dir() || "files/xprForm.xml"
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    fn:doc($xprFormPath)
+    )
 };
 
 (:~
@@ -639,4 +668,87 @@ declare function xpr:mime-type(
 $name as xs:string
 ) as xs:string {
     fetch:content-type($name)
+};
+
+(:~
+ : this function 
+ :
+ : @param $data the result of the query
+ : @return an updated document and instantiate pattern
+ :)
+declare function wrapper($content as map(*), $outputParams as map(*)) as node()* {
+  let $layout := file:base-dir() || "files/" || map:get($outputParams, 'layout')
+  let $wrap := fn:doc($layout)
+  let $regex := '\{(.+?)\}'
+  return
+    $wrap/* update (
+      for $node in .//*[fn:matches(text(), $regex)] | .//@*[fn:matches(., $regex)]
+      return associate($content, $outputParams, $node)
+      )
+};
+
+(:~
+ : this function dispatch the content with the data
+ :
+ : @param $data the result of the query to dispacth (meta or content)
+ : @param $outputParams the serialization params
+ : @return an updated node with the data
+ :) 
+declare %updating function associate($data as map(*), $outputParams as map(*), $node as node()) {
+  let $regex := '\{(.+?)\}'
+  let $data := $data
+  let $keys := fn:analyze-string($node, $regex)//fn:group/text()
+  let $values := map:get($data, $keys)
+    return typeswitch ($values)
+    case document-node() return replace node $node with $values
+    case empty-sequence() return ()
+    case text() return replace value of node $node with $values
+    case xs:string return replace value of node $node with $values
+    case xs:string+ return 
+      if ($node instance of attribute()) (: when key is an attribute value :)
+      then 
+        replace node $node/parent::* with 
+          element {fn:name($node/parent::*)} {
+          for $att in $node/parent::*/(@* except $node) return $att, 
+          attribute {fn:name($node)} {fn:string-join($values, ' ')},
+          $node/parent::*/text()
+          }
+    else
+      replace node $node with 
+      for $value in $values 
+      return element {fn:name($node)} { 
+        for $att in $node/@* return $att,
+        $value
+      } 
+    case xs:integer return replace value of node $node with xs:string($values)
+    case element()+ return replace node $node with 
+      for $value in $values 
+      return element {fn:name($node)} { 
+        for $att in $node/@* return $att, "todo"
+      }
+    default return replace value of node $node with 'default'
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("xpr/test/{$id}")
+%output:method("xml")
+function test($id) {
+  let $expertises := db:open("xpr")//*:expertise
+  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
+  let $content := map {
+    'model' : fn:doc(file:base-dir() || "files/" || "xprModelForm.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
 };
