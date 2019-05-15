@@ -257,7 +257,7 @@
                             <xf:input bind="extent" incremental="true">
                                 <xf:label>Nombre de cahiers et de feuillets</xf:label>
                             </xf:input>
-                            <!--<xf:select1 bind="sketch">
+                            <xf:select1 bind="sketch" appearance="full">
                             <xf:label>Croquis sur le procès-verbal</xf:label>
                             <xf:item>
                                 <xf:label>oui</xf:label>
@@ -267,9 +267,9 @@
                                 <xf:label>non</xf:label>
                                 <xf:value>false</xf:value>
                             </xf:item>
-                            <xf:help>Ceci est un message d'aide</xf:help>
-                        </xf:select1>-->
-                            <xf:range ref="instance('xprRanges')/xpr:range[@type='sketch']/@n" start="1" end="3" step="1" incremental="true">
+                            <!--<xf:help>Ceci est un message d'aide</xf:help>-->
+                        </xf:select1>
+                            <!--<xf:range ref="instance('xprRanges')/xpr:range[@type='sketch']/@n" start="1" end="3" step="1" incremental="true">
                                 <xf:label>Croquis sur le procès-verbal <xf:output value="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/></xf:label>
                                 <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='1'">
                                     <xf:setvalue ref="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch">true</xf:setvalue>
@@ -280,7 +280,7 @@
                                 <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='3'">
                                     <xf:setvalue ref="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch">false</xf:setvalue>
                                 </xf:action>
-                            </xf:range>
+                            </xf:range>-->
                         </xf:group>
                         <xf:trigger bind="addAppendice">
                             <xf:label>Ajouter une annexe</xf:label>
@@ -1026,6 +1026,28 @@
                                         <xf:value ref="@xml:id"/>
                                     </xf:itemset>
                                 </xf:select1>
+                                <xf:select1 ref="@presence">
+                                    <xf:label>Partie présente</xf:label>
+                                    <xf:item>
+                                        <xf:label>oui</xf:label>
+                                        <xf:value>true</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>non</xf:label>
+                                        <xf:value>false</xf:value>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:select1 ref="@intervention">
+                                    <xf:label>Partie intervenante</xf:label>
+                                    <xf:item>
+                                        <xf:label>oui</xf:label>
+                                        <xf:value>true</xf:value>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>non</xf:label>
+                                        <xf:value>false</xf:value>
+                                    </xf:item>
+                                </xf:select1>
                                 <!--<xf:output ref="instance('xprExpert')/expert[@xml:id=instance('xprModel')/description/participants/experts/expert/@ref]/name/surname"/>-->
                                 <!--@todo faire un repeat pour les représentants et procureurs ?-->
                                 <xf:group>
@@ -1080,28 +1102,6 @@
                                         </xf:action>
                                     </xf:trigger>
                                 </xf:group>
-                                <xf:select1 ref="@presence">
-                                    <xf:label>Partie présente</xf:label>
-                                    <xf:item>
-                                        <xf:label>oui</xf:label>
-                                        <xf:value>true</xf:value>
-                                    </xf:item>
-                                    <xf:item>
-                                        <xf:label>non</xf:label>
-                                        <xf:value>false</xf:value>
-                                    </xf:item>
-                                </xf:select1>
-                                <xf:select1 ref="@intervention">
-                                    <xf:label>Partie intervenante</xf:label>
-                                    <xf:item>
-                                        <xf:label>oui</xf:label>
-                                        <xf:value>true</xf:value>
-                                    </xf:item>
-                                    <xf:item>
-                                        <xf:label>non</xf:label>
-                                        <xf:value>false</xf:value>
-                                    </xf:item>
-                                </xf:select1>
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer une partie</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party) > 1"/>
