@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<appendice xmlns="xpr">
+<appendices>
+    <appendice>
+        <type type=""/>
+        <extent/>
+        <desc/>
+        <note/>
+    </appendice>
+</appendices>
+<!--<appendice xmlns="xpr">
     <type type="drawing">Dessin</type>
     <type type="plan">Plan</type>
     <type type="sketch">Croquis</type>
@@ -8,4 +16,4 @@
     <type type="proxyNA">Pouvoir/procuration (acte notarié)</type>
     <type type="petition">Requête</type>
     <type type="other"/>
-</appendice>
+</appendice>-->
