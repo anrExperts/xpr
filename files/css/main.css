@@ -433,11 +433,21 @@ button.aid-button {
 }
 
 .xforms-group {
-    /*! border: 1em; */
-
-    /*! border-color: black; */
     grid-column-start: 1;
     grid-column-end: 5;
+}
+
+.xforms-group:after {
+    content: " ";
+    display: block;
+    border-bottom:1px solid;
+    margin-bottom: 1.5em;
+    margin-top: 1.5em;
+    width: 15%;
+}
+
+.xforms-control > .xforms-label {
+    
 }
 
 .repeat {
