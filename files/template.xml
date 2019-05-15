@@ -7,17 +7,62 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
-    <p>{model}</p>
+    <xf:model>
+       <instance>{model}</instance>
+    </xf:model>
   </head>
   <body onload="repeat()">
-    <nav id="navigation">
-      <ul>
-        <li><a href="/xpr">¡xpr!</a></li>
-        <li><a href="/xpr/expertises">pv</a></li>
-        <li><a href="/xpr">prosopo</a></li>
-        <li><a href="/xpr/about">?</a></li>
-      </ul>
-    </nav>
-    {form}
+        <nav id="navigation">
+            <ul>
+                <li><a href="/xpr">¡xpr!</a></li>
+                <li><a href="/xpr/expertises">pv</a></li>
+                <li><a href="/xpr">prosopo</a></li>
+                <li><a href="/xpr/about">?</a></li>
+            </ul>
+        </nav>
+        <nav id="navForm">
+          <trigger>{trigger}</trigger>
+        </nav>
+        <main>
+          <form>{form}</form>
+        </main>
+        <script>
+/*function repeat() {
+  var element = document.querySelectorAll('div.xforms-group-content');
+  for (var i = 0; i &lt; element.length; i++) {
+    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+    }
+  }*/
+function repeat() {
+  var element = document.querySelectorAll('div.xforms-repeat');
+  for (var i = 0; i &lt; element.length; i++) {
+    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+    }
+  }
+        </script>
+        <script>
+// Sticky navigation
+const nav = document.querySelector('#navigation');
+const navTop = nav.offsetTop;
+
+function stickyNavigation() {
+  console.log('navTop = ' + navTop);
+  console.log('scrollY = ' + window.scrollY);
+  if (window.scrollY >= navTop) {
+    // nav offsetHeight = height of nav
+    document.body.style.paddingTop = nav.offsetHeight + 'px';
+    document.body.classList.add('fixed-nav');
+    }
+    else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove('fixed-nav');
+    }
+  }
+window.addEventListener('scroll', stickyNavigation);
+    </script>
   </body>
 </html>

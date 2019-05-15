@@ -740,8 +740,9 @@ function test($id) {
   let $expertises := db:open("xpr")//*:expertise
   let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
   let $content := map {
-    'model' : fn:doc(file:base-dir() || "files/" || "xprModelForm.xml"),
-    'form' : fn:doc(file:base-dir() || "files/" || "xprForm.xml")
+    'model' : fn:doc(file:base-dir() || "files/" || "xprExpertiseModel.xml"),
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprExpertiseTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprExpertiseForm.xml")
   }
   let $outputParam := map {
     'layout' : "template.xml"

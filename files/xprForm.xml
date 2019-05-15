@@ -10,16 +10,16 @@
         <!-- XForms data models -->
         <xf:model>
             <!--Instance principale-->
-            <xf:instance id="xprModel" src="/xpr/files/xprInstance.xml"/>
+            <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
 
             <!--Instances secondaires-->
-            <xf:instance id="xprExperts" src="/xpr/files/xprExperts.xml"/>
-            <xf:instance id="xprAppendices" src="/xpr/files/xprAppendices.xml"/>
-            <xf:instance id="xprCategories" src="/xpr/files/xprCategories.xml"/>
-            <xf:instance id="xprObjects" src="/xpr/files/xprObjects.xml"/>
-            <xf:instance id="xprExpenses" src="/xpr/files/xprExpenses.xml"/>
-            <xf:instance id="xprFees" src="/xpr/files/xprFees.xml"/>
-            <xf:instance id="xprRanges" src="/xpr/files/xprRanges.xml"/>
+            <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
+            <xf:instance id="xprAppendices" src="/xpr/files/_xprAppendices.xml"/>
+            <xf:instance id="xprCategories" src="/xpr/files/_xprCategories.xml"/>
+            <xf:instance id="xprObjects" src="/xpr/files/_xprObjects.xml"/>
+            <xf:instance id="xprExpenses" src="/xpr/files/_xprExpenses.xml"/>
+            <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml"/>
+            <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml"/>
             <xf:submission id="submit" resource="put" method="PUT"/>
 
             <!--**sourceDesc**-->
