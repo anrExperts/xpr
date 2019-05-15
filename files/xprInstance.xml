@@ -14,23 +14,14 @@
         <physDesc>
             <extent sketch=""/>
             <!--@sketch="true/false"-->
-            <appendices>
+            <!--<appendices>
                 <appendice>
                     <type type=""/>
-                    <!--@type
-                    - drawing = Dessin
-                    - plan = Plan
-                    - sketch = Croquis
-                    - rough = Brouillon
-                    - proxyPA = Pouvoir/procuration (acte sous seing privé) @rmq private agreement
-                    - proxyNA = Pouvoir/procuration (acte notarié) @rmq notarial act
-                    - petition = Requête
-                    - other = autre-->
                     <extent/>
                     <desc/>
                     <note/>
                 </appendice>
-            </appendices>
+            </appendices>-->
         </physDesc>
     </sourceDesc>
     <description>

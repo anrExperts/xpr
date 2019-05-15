@@ -161,7 +161,7 @@ textarea {
 
 input {
     /* To give the same size to all text fields */
-    width: 10em;
+    width: 100%;
     box-sizing: border-box;
     height: 1.6em;
 }
@@ -190,7 +190,7 @@ textarea {
 select {
     font-family: 'IBM Plex Serif';
     font-size: 1em;
-    width: 14em;
+    width: 100%;
     height: 1.6em;
     border-radius: 0.1em;
     border: 1px solid var(--colorMain);
@@ -314,6 +314,7 @@ input:focus.xforms-valid {
 .xforms-textarea {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
 }
 
 .xforms-input .xforms-label,
@@ -436,10 +437,10 @@ button.aid-button {
     background-color: green;
 }
 
-.xform-repeat-item {
+/*.xform-repeat-item {
     display: flex;
     flex-direction: row;
-}
+}*/
 
 
 .xsltforms-range-rail {
@@ -466,5 +467,30 @@ button.aid-button {
 }
 
 .xsltforms-range-value {
-    display:none;
+    display: none;
 }
+
+.xforms-group-content,
+.xforms-repeat-item {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 1em;
+}
+
+.xforms-input {
+    grid-column: auto/span 2;
+}
+
+.xforms-appearance-full,
+.xforms-textarea,
+.xforms-repeat,
+.xforms-repeat + .xforms-trigger {
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+.xforms-label {
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+

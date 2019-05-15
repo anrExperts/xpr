@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<appendices>
+<appendices xmlns="xpr">
     <appendice>
         <type type=""/>
         <extent/>
@@ -7,7 +7,7 @@
         <note/>
     </appendice>
 </appendices>
-<!--<appendice xmlns="xpr">
+<!--<appendice>
     <type type="drawing">Dessin</type>
     <type type="plan">Plan</type>
     <type type="sketch">Croquis</type>
