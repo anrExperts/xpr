@@ -143,31 +143,37 @@ h2 {
     margin-bottom: calc(var(--baseline)* 1rem);
 }
 
-h3 {
+h3,
+.xforms-case > .xforms-label {
   font-size: 1.334em; /* 18 * 1.334em = 24px */
   line-height: 1.125; /* 24 * 1.125 = 27px*/
   margin-bottom: calc( var(--baseline) * 1rem);
 }
 
-h3::before {
+h3:before,
+.xforms-case > .xforms-label:before {
   content: '';
   display: block;
   // height: 100%;
   width: 15%;
-  border-bottom: calc( var(--baseline) * 0.1rem) solid ;
-  margin-bottom: calc( var(--baseline) * 0.9rem);
+  /*border-bottom: calc( var(--baseline) * 0.1rem) solid ;*/
+  margin-bottom: calc( var(--baseline) * 1rem);
 }
 
-h4 {
+h4, 
+.xforms-case > .xforms-group > .xforms-label
+{
   font-size: 1.2222em; /* 22px */
   line-height: 1.2273; /* 27px */
   margin: auto;
+  margin-top: calc( var(--baseline) * 1rem);
 }
 
-h5 {
+h5,
+.xforms-repeat-item > .xforms-label {
   font-size: 1.1111em; /* 20px */
   line-height: 1.350; /* 27px */
-  margin: auto;
+  /*margin: auto;*/
 }
 
 h6 {
@@ -245,7 +251,7 @@ select {
     -moz-appearance: none;
     appearance: none;
     /* SVG background image */
-    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%238C98F2'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(231, 62, 13)'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
     background-size: 0.75em;
     background-position: calc(100% - 0.75em) center;
     background-repeat: no-repeat;
@@ -417,12 +423,16 @@ button.aid-button {
     grid-column-start: 1;
     grid-column-end: 5;
     justify-content: end;
-    right: -1em;
+    /*right: -1em;*/
 
 }
 
 .insert {
-    left: -1em;
+    left: ;
+}
+
+.repeat > .xforms-repeat-item > .delete:last-of-type {
+    right: -2em;
 }
 
 .delete span.value,
@@ -485,9 +495,18 @@ button.aid-button {
 .xforms-group:after {
     content: " ";
     display: block;
-    border-bottom:1px solid;
-    margin-bottom: 1.5em;
-    margin-top: 1.5em;
+    border-bottom: 0.1rem solid;
+    margin-bottom: calc( var(--baseline) * 0.9rem);
+    margin-top: calc( var(--baseline) * 1rem);
+    width: 15%;
+}
+
+.xforms-group .xforms-group:last-of-type:after {
+    content: " ";
+    display: block;
+    border: 0;
+    margin-bottom: calc( var(--baseline) * 0.9rem);
+    margin-top: calc( var(--baseline) * 1rem);
     width: 15%;
 }
 
@@ -496,11 +515,12 @@ button.aid-button {
 }
 
 .repeat {
-    background-color: blue;
+    background-color: var(--colorTint);
+    border: 1em solid var(--colorTint)
 }
 
 .repeat .xforms-repeat {
-    background-color: green;
+    
 }
 
 /*.xform-repeat-item {
@@ -555,7 +575,7 @@ xforms-group-content xforms-group {
     grid-column-end: 5;
 }
 
-.xforms-appearance-full, .xforms-textarea, .xforms-repeat, .xforms-repeat +.xforms-trigger {
+.xforms-appearance-full, .xforms-appearance-minimal, .xforms-textarea, .xforms-repeat, .xforms-repeat +.xforms-trigger {
     grid-column-start: 1;
     grid-column-end: 5;
 }
@@ -563,4 +583,8 @@ xforms-group-content xforms-group {
 .xforms-label {
     grid-column-start: 1;
     grid-column-end: 5;
+}
+
+.xforms-item .xforms-input {
+    grid-column: inherit;
 }
