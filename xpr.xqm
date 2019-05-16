@@ -91,14 +91,16 @@ function listExpertises() {
           let $cote := $expertise/sourceDesc/idno[@type="unitid"]
           let $dossier := $expertise/sourceDesc/idno[@type="item"]
           let $date := $expertise/description/sessions/date/@when
+          let $id := $expertise/@xml:id
           return 
             <li>
               <span>{$cote || ' n° ' || $dossier}</span>
               <span>{fn:string($date)}</span>
-              <button onclick="location.href='/xpr/expertises/{$cote}'">Nouveau</button>
+              <button onclick="location.href='/xpr/expertises/{$id}'">voir</button>
+              <button onclick="location.href='/xpr/expertises/{$id}/modify'">Modifier</button>
             </li>
         }</ul>
-        <button onclick="location.href='/xpr/expertises/new'">Nouveau</button>
+        <button onclick="location.href='/xpr/expertises/new'">Ajouter une expertise</button>
       </body>
     </html>
 };
@@ -110,10 +112,22 @@ function listExpertises() {
 declare 
 %rest:path("xpr/expertises/{$id}")
 %output:method("xml")
+function showExpertise($id) {
+  db:open('xpr')//expertise[@xml:id=$id]
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("xpr/expertises/{$id}/modify")
+%output:method("xml")
 function modifyExpertise($id) {
   let $expertises := db:open("xpr")//*:expertise
   let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
   let $xprFormPath := file:base-dir() || "files/xprForm.xml"
+  let $model := db:open('xpr')//expertise[@xml:id=$id]
   return
     (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
@@ -151,7 +165,7 @@ declare
 %rest:PUT("{$param}")
 %updating
 function xformResult($param) {
-  let $id := $param/*/*:sourceDesc/*:idno[@type="unitid"]/text()
+  let $id := $param/*/*:sourceDesc/*:idno[@type="unitid"] || '-' || fn:format-integer($param/*/*:sourceDesc/*:idno[@type="item"], '000')
   let $db := db:open("xpr")
   let $param := 
     copy $d := $param

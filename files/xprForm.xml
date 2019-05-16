@@ -196,7 +196,7 @@
                 <li><a href="/xpr/about">?</a></li>
             </ul>
         </nav>
-        <nav id="navForm">
+        <aside id="navForm">
             <xf:trigger>
                 <xf:label>Références</xf:label>
                 <xf:toggle case="referencesPanel" ev:event="DOMActivate"/>
@@ -221,7 +221,7 @@
                 <xf:label>Mots-clés et commentaires</xf:label>
                 <xf:toggle case="keywordsPanel" ev:event="DOMActivate"/>
             </xf:trigger>
-        </nav>
+        </aside>
         <main>
             <form>
                 <xf:switch>
