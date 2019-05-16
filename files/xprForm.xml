@@ -55,7 +55,8 @@
             <!--sessions-->
             <xf:bind id="sessions" nodeset="xpr:description/xpr:sessions"/>
             <xf:bind id="sessionsDate" nodeset="xpr:description/xpr:sessions/xpr:date"/>
-            <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xs:date" constraint="(. &gt;= '1690-01-01') and (. &lt;= '1791-01-01')"/>
+            <!--<xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xs:date" constraint="(. &gt;= '1690-01-01') and (. &lt;= '1791-01-01')"/>-->
+            <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when"/>
             <xf:bind id="sessionsType" nodeset="xpr:description/xpr:sessions/xpr:date/@type"/>
 
             <!--places-->
@@ -66,10 +67,14 @@
                     or ../@type='suburbs'
                     or ../@type='province'
                     or ../@type='indeterminate'"/>
+            <!--<xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
+                or ../@type='suburbs'
+                or ../@type='province'
+                or ../@type='indeterminate'" type="xs:integer"/>-->
             <xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
                 or ../@type='suburbs'
                 or ../@type='province'
-                or ../@type='indeterminate'" type="xs:integer"/>
+                or ../@type='indeterminate'"/>
             <xf:bind id="placeComplement" nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris'
                     or ../@type='suburbs'
                     or ../@type='province'
@@ -107,7 +112,8 @@
             <xf:bind id="sentence" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence"/>
             <xf:bind id="sentenceOrg" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:orgName"/>
             <xf:bind id="sentenceDate" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date"/>
-            <xf:bind id="sentenceWhen" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date/@when" type="xs:date"/>
+            <!--<xf:bind id="sentenceWhen" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date/@when" type="xs:date"/>-->
+            <xf:bind id="sentenceWhen" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date/@when"/>
 
             <!--Cause de l'expertise-->
             <xf:bind id="case" nodeset="xpr:description/xpr:procedure/xpr:case"/>
@@ -169,7 +175,8 @@
             <xf:bind id="feesDetail" nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail"/>
             <xf:bind id="fee" nodeset="instance('xprFees')/xpr:fee" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
             <xf:bind id="feesTotal" nodeset="xpr:description/xpr:conclusions/xpr:fees/xpr:total"/>
-            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" type="xs:decimal"/>
+<!--            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" type="xs:decimal"/>-->
+            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s"/>
             <xf:bind id="expenses" nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>
             <xf:bind id="expensesMentioned" nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>
             <xf:bind id="expenseType" nodeset="instance('xprExpenses')/xpr:expense" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
