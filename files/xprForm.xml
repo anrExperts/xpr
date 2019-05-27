@@ -477,6 +477,10 @@
                                         <xf:value>office</xf:value>
                                     </xf:item>
                                     <xf:item>
+                                        <xf:label>Bureau du greffier</xf:label>
+                                        <xf:value>clerkOffice</xf:value>
+                                    </xf:item>
+                                    <xf:item>
                                         <xf:label>Indéterminé</xf:label>
                                         <xf:value>indeterminate</xf:value>
                                     </xf:item>
