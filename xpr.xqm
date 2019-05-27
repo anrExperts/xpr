@@ -90,7 +90,7 @@ function listExpertises() {
           for $expertise in $expertises 
           let $cote := $expertise/sourceDesc/idno[@type="unitid"]
           let $dossier := $expertise/sourceDesc/idno[@type="item"]
-          let $date := $expertise/description/sessions/date/@when
+          let $date := $expertise/description/sessions/date[1]/@when
           return 
             <li>
               <span>{$cote || ' n° ' || $dossier}</span>
