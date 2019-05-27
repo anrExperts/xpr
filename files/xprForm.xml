@@ -175,7 +175,7 @@
             <xf:bind id="feesDetail" nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail"/>
             <xf:bind id="fee" nodeset="instance('xprFees')/xpr:fee" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
             <xf:bind id="feesTotal" nodeset="xpr:description/xpr:conclusions/xpr:fees/xpr:total"/>
-<!--            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" type="xs:decimal"/>-->
+            <!--            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" type="xs:decimal"/>-->
             <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s"/>
             <xf:bind id="expenses" nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>
             <xf:bind id="expensesMentioned" nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>
@@ -265,17 +265,17 @@
                                 <xf:label>Nombre de cahiers et de feuillets</xf:label>
                             </xf:input>
                             <xf:select1 bind="sketch" appearance="full">
-                            <xf:label>Croquis sur le procès-verbal</xf:label>
-                            <xf:item>
-                                <xf:label>oui</xf:label>
-                                <xf:value>true</xf:value>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>non</xf:label>
-                                <xf:value>false</xf:value>
-                            </xf:item>
-                            <!--<xf:help>Ceci est un message d'aide</xf:help>-->
-                        </xf:select1>
+                                <xf:label>Croquis sur le procès-verbal</xf:label>
+                                <xf:item>
+                                    <xf:label>oui</xf:label>
+                                    <xf:value>true</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>non</xf:label>
+                                    <xf:value>false</xf:value>
+                                </xf:item>
+                                <!--<xf:help>Ceci est un message d'aide</xf:help>-->
+                            </xf:select1>
                             <!--<xf:range ref="instance('xprRanges')/xpr:range[@type='sketch']/@n" start="1" end="3" step="1" incremental="true">
                                 <xf:label>Croquis sur le procès-verbal <xf:output value="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/></xf:label>
                                 <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='1'">
@@ -1252,8 +1252,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1268,8 +1268,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='clerk']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1284,8 +1284,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='rolls']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1300,8 +1300,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='papers']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1316,8 +1316,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='plans']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1332,8 +1332,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='prosecutors']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1348,16 +1348,16 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='help']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                 </xf:select>
                                 <xf:group ref="xpr:total">
                                     <xf:label>Total</xf:label>
                                     <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                    <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                     <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                    <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                 </xf:group>
                             </xf:group>
                             <xf:group ref="xpr:expenses">
@@ -1388,9 +1388,9 @@
                                         </xf:action>
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']">
                                             <xf:label>Montant</xf:label>
-                                            <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label><xf:alert>requis</xf:alert></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
+                                            <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                     <xf:item>
@@ -1405,8 +1405,8 @@
                                         <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']">
                                             <xf:label>Montant</xf:label>
                                             <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                             <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
+                                            <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
                                         </xf:group>
                                     </xf:item>
                                 </xf:select>

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <fees xmlns="xpr">
     <fee/>
-    <fee type="expert" l="" d="" s=""/>
-    <fee type="clerk" l="" d="" s=""/>
-    <fee type="rolls" l="" d="" s=""/>
-    <fee type="papers" l="" d="" s=""/>
-    <fee type="plans" l="" d="" s=""/>
-    <fee type="prosecutors" l="" d="" s=""/>
-    <fee type="help" l="" d="" s=""/>
+    <fee type="expert" l="" s="" d=""/>
+    <fee type="clerk" l="" s="" d=""/>
+    <fee type="rolls" l="" s="" d=""/>
+    <fee type="papers" l="" s="" d=""/>
+    <fee type="plans" l="" s="" d=""/>
+    <fee type="prosecutors" l="" s="" d=""/>
+    <fee type="help" l="" s="" d=""/>
 </fees>
