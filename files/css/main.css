@@ -52,9 +52,9 @@ section {
 }
 
 /* mode debug */
-pre {
+/*pre {
     display: none;
-}
+}*/
 
 /*
  * Navigation
@@ -471,15 +471,18 @@ button.aid-button {
     display: none;
 }
 
-.delete .xforms-help-icon {
+.delete .xforms-help-icon,
+.insert .xforms-help-icon {
     display: none;
 }
 
-.delete .xforms-help-value {
+.delete .xforms-help-value,
+.insert .xforms-help-value {
     visibility: hidden;
 }
 
-.delete:hover .xforms-help-value {
+.delete:hover .xforms-help-value,
+.insert:hover .xforms-help-value {
     display: inline-block;
     visibility: visible;
     margin-top: 0;

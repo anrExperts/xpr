@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<supplement xmlns="xpr">
+    <!--Annexes-->
+    <appendices>
+        <appendice>
+            <type type=""/>
+            <extent/>
+            <desc/>
+            <note/>
+        </appendice>
+    </appendices>
+    
+    <!--Parties's representative-->
+    <representative>
+        <persName>
+            <surname/>
+            <forename/>
+        </persName>
+        <occupation/>
+    </representative>
+    
+    <!--Parties's prosecutor-->
+    <prosecutor>
+        <persName>
+            <surname/>
+            <forename/>
+        </persName>
+    </prosecutor>
+</supplement>

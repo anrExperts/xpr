@@ -20,6 +20,7 @@
             <xf:instance id="xprExpenses" src="/xpr/files/_xprExpenses.xml"/>
             <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml"/>
             <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml"/>
+            <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
             <xf:submission id="submit" resource="put" method="PUT"/>
 
             <!--**sourceDesc**-->
@@ -36,7 +37,7 @@
             <xf:bind id="extent" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent"/>
             <xf:bind id="sketch" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/>
 
-            <xf:bind id="addAppendice" nodeset="instance('xprAppendices')" relevant="not(instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)"/>
+            <xf:bind id="addAppendice" nodeset="instance('xprSupplement')/xpr:appendices" relevant="not(instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)"/>
 
             <xf:bind id="appendice" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice"/>
             <xf:bind id="appendiceType" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type"/>
@@ -146,11 +147,15 @@
             <xf:bind id="personForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName/xpr:forename"/>
             <xf:bind id="personOccupation" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:occupation"/>
             <xf:bind id="partyExpert" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:expert"/>
+            
+            <xf:bind id="addRepresentative" nodeset="instance('xprSupplement')/xpr:representative"/>
             <xf:bind id="representative" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative"/>
             <xf:bind id="representativeName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName"/>
             <xf:bind id="representativeSurname" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:surname"/>
             <xf:bind id="representativeForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:forename"/>
             <xf:bind id="representativeOccupation" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:occupation"/>
+            
+            <xf:bind id="addProsecutor" nodeset="instance('xprSupplement')/xpr:prosecutor"/>
             <xf:bind id="prosecutor" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor"/>
             <xf:bind id="prosecutorName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName"/>
             <xf:bind id="prosecutorSurname" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName/xpr:surname"/>
@@ -293,9 +298,10 @@
                             <xf:label>Ajouter une annexe</xf:label>
                             <xf:action ev:event="DOMActivate">
                                 <xf:delete nodeset="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"/>
-                                <xf:insert origin="instance('xprAppendices')" nodeset="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/*" at="last()" position="after"/>
+                                <xf:insert origin="instance('xprSupplement')/xpr:appendices" nodeset="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/*" at="last()" position="after"/>
                                 <!--<xf:insert nodeset="instance('xprAppendices')"/>-->
                             </xf:action>
+                            <xf:help>Ajouter une annexe.</xf:help>
                         </xf:trigger>
                         <xf:group ref="xpr:sourceDesc/xpr:physDesc/xpr:appendices">
                             <xf:label>Pièces annexes</xf:label>
@@ -368,7 +374,7 @@
                                     <xf:trigger class="delete">
                                         <xf:label>&#10007;</xf:label>
                                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type) > 1"/>
-                                        <xf:help>Supprimer un type.</xf:help>
+                                        <xf:help>Supprimer un type d'annexe.</xf:help>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <xf:trigger class="insert">
@@ -378,6 +384,7 @@
                                         <xf:setvalue ref="xpr:type[index('repeatAppendiceType')]" value=""/>
                                         <xf:setvalue ref="xpr:type[index('repeatAppendiceType')]/@type" value=""/>
                                     </xf:action>
+                                    <xf:help>Ajouter un type d'annexe.</xf:help>
                                 </xf:trigger>
                                 <!--@todo appendice autre-->
                                 <xf:input ref="xpr:extent" incremental="true">
@@ -393,6 +400,7 @@
                                     <xf:label>Supprimer une annexe</xf:label>
                                     <xf:delete nodeset="parent::xpr:appendices" if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice) = 1" ev:event="DOMActivate"/>
                                     <xf:delete nodeset="." at="1" if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice) > 1" ev:event="DOMActivate"/>
+                                    <xf:help>Supprimer une annexe.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -406,6 +414,7 @@
                                     <xf:setvalue ref="xpr:appendice[index('repeatAppendice')]/xpr:desc" value=""/>
                                     <xf:setvalue ref="xpr:appendice[index('repeatAppendice')]/xpr:note" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter une pièce annexe.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <!--control-->
@@ -441,6 +450,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>&#10007;</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:sessions/xpr:date) > 1"/>
+                                    <xf:help>Supprimer une vacation.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -450,6 +460,7 @@
                                     <xf:setvalue ref="xpr:date[index('repeatSession')]/@when" value=""/>
                                     <xf:setvalue ref="xpr:date[index('repeatSession')]/@type" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter une vacation.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <pre>
@@ -510,6 +521,7 @@
                                     <xf:trigger class="delete">
                                         <xf:label>Supprimer un propriétaire</xf:label>
                                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:places/xpr:place[index('repeatPlace')]/xpr:owner) > 1"/>
+                                        <xf:help>Supprimer un propriétaire.</xf:help>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <xf:trigger bind="placeOwner" class="insert">
@@ -518,10 +530,12 @@
                                         <xf:insert nodeset="." at="index('repeatOwner')" position="after" ev:event="DOMActivate"/>
                                         <xf:setvalue ref="xpr:place/xpr:owner[index('repeatOwner')]" value=""/>
                                     </xf:action>
+                                    <xf:help>Ajouter un propriétaire.</xf:help>
                                 </xf:trigger>
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer un lieu</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:places/xpr:place) > 1"/>
+                                    <xf:help>Supprimer un lieu.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -537,6 +551,7 @@
                                     <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:province" value=""/>
                                     <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:owner" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un lieu.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <!--control-->
@@ -706,6 +721,7 @@
                                         <xf:trigger class="delete">
                                             <xf:label>Supprimer une date</xf:label>
                                             <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date) > 1"/>
+                                            <xf:help>Supprimer une date.</xf:help>
                                         </xf:trigger>
                                     </xf:repeat>
                                     <xf:trigger class="insert">
@@ -714,10 +730,12 @@
                                             <xf:insert nodeset="xpr:date" at="index('repeatDateSentence')" position="after" ev:event="DOMActivate"/>
                                             <xf:setvalue ref="xpr:date[index('repeatDateSentence')]/@when" value=""/>
                                         </xf:action>
+                                        <xf:help>Ajouter une date.</xf:help>
                                     </xf:trigger>
                                     <xf:trigger class="delete">
                                         <xf:label>Supprimer une institution</xf:label>
                                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:procedure/xpr:sentences/xpr:sentence) > 1"/>
+                                        <xf:help>Supprimer une institution.</xf:help>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <!--@todo si l'on a renseigné une première institution avec plusieurs sentences, lorsqu'on ajoute une institution, le même nombre de sentence est copié => le remettre à 1-->
@@ -728,6 +746,7 @@
                                         <xf:setvalue ref="xpr:sentence[index('repeatSentence')]/xpr:orgName" value=""/>
                                         <xf:setvalue ref="xpr:sentence[index('repeatSentence')]/xpr:date" value=""/>
                                     </xf:action>
+                                    <xf:help>Ajouter une institution.</xf:help>
                                 </xf:trigger>
                             </xf:group>
                             <xf:group ref="xpr:case">
@@ -883,6 +902,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer un expert</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
+                                    <xf:help>Supprimer un expert.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -894,6 +914,7 @@
                                     <xf:setvalue ref="xpr:expert[index('repeatExpert')]/@appointment" value=""/>
                                     <xf:setvalue ref="xpr:expert[index('repeatExpert')]/xpr:title" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un expert.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <!--control-->
@@ -914,6 +935,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer un greffier</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:clerks/xpr:clerk) > 1"/>
+                                    <xf:help>Supprimer un greffier.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -923,6 +945,7 @@
                                     <xf:setvalue ref="xpr:clerk[index('repeatClerk')]/xpr:persName/xpr:surname" value=""/>
                                     <xf:setvalue ref="xpr:clerk[index('repeatClerk')]/xpr:persName/xpr:forename" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un greffier.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <!--control-->
@@ -949,6 +972,7 @@
                                     <xf:trigger class="delete">
                                         <xf:label>Supprimer une personne</xf:label>
                                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person) > 1"/>
+                                        <xf:help>Supprimer une personne.</xf:help>
                                     </xf:trigger>
                                 </xf:repeat>
                                 <xf:trigger class="insert">
@@ -959,6 +983,7 @@
                                         <xf:setvalue ref="xpr:person[index('repeatPerson')]/xpr:persName/xpr:forename" value=""/>
                                         <xf:setvalue ref="xpr:person[index('repeatPerson')]/xpr:occupation" value=""/>
                                     </xf:action>
+                                    <xf:help>Ajouter une personne.</xf:help>
                                 </xf:trigger>
                                 <xf:select1 ref="@role">
                                     <xf:label>Partie</xf:label>
@@ -1076,17 +1101,25 @@
                                         </xf:input>
                                         <xf:trigger class="delete">
                                             <xf:label>Supprimer un représentant</xf:label>
-                                            <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative) > 1"/>
+                                            <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                                            <xf:help>Supprimer un représentant.</xf:help>
                                         </xf:trigger>
                                     </xf:repeat>
-                                    <xf:trigger class="insert">
+                                    <!--<xf:trigger class="insert">
                                         <xf:label>Ajouter un représentant</xf:label>
                                         <xf:action ev:event="DOMActivate">
-                                            <xf:insert nodeset="xpr:representative" at="index('repeatRepresentative')" position="after" ev:event="DOMActivate"/>
-                                            <xf:setvalue ref="xpr:representative[index('repeatRepresentative')]/xpr:persName/xpr:surname" value=""/>
-                                            <xf:setvalue ref="xpr:representative[index('repeatRepresentative')]/xpr:persName/xpr:forename" value=""/>
-                                            <xf:setvalue ref="xpr:representative[index('repeatRepresentative')]/xpr:occupation" value=""/>
+                                            <xf:insert nodeset="instance('xprModel')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative" at="index('repeatRepresentative')" position="after" ev:event="DOMActivate"/>
+                                            <xf:setvalue ref=".[index('repeatRepresentative')]/xpr:persName/xpr:surname" value=""/>
+                                            <xf:setvalue ref=".[index('repeatRepresentative')]/xpr:persName/xpr:forename" value=""/>
+                                            <xf:setvalue ref=".[index('repeatRepresentative')]/xpr:occupation" value=""/>
                                         </xf:action>
+                                    </xf:trigger>-->
+                                    <xf:trigger bind="addRepresentative">
+                                        <xf:label>Ajouter un representant</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:insert origin="instance('xprSupplement')/xpr:representative" nodeset="instance('xprModel')/xpr:description/xpr:participants/xpr:parties/xpr:party[index('repeatParty')]/*" at="last()" position="after"/>
+                                        </xf:action>
+                                        <xf:help>Ajouter un représentant.</xf:help>
                                     </xf:trigger>
                                 </xf:group>
                                 <xf:group>
@@ -1101,21 +1134,30 @@
                                         </xf:input>
                                         <xf:trigger class="delete">
                                             <xf:label>Supprimer un procureur</xf:label>
-                                            <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor) > 1"/>
+                                            <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                                            <xf:help>Supprimer un procureur.</xf:help>
                                         </xf:trigger>
                                     </xf:repeat>
-                                    <xf:trigger class="insert">
+                                    <!--<xf:trigger class="insert">
                                         <xf:label>Ajouter un procureur</xf:label>
                                         <xf:action ev:event="DOMActivate">
                                             <xf:insert nodeset="xpr:prosecutor" at="index('repeatProsecutor')" position="after" ev:event="DOMActivate"/>
                                             <xf:setvalue ref="xpr:prosecutor[index('repeatProsecutor')]/xpr:persName/xpr:surname" value=""/>
                                             <xf:setvalue ref="xpr:prosecutor[index('repeatProsecutor')]/xpr:persName/xpr:forename" value=""/>
                                         </xf:action>
+                                    </xf:trigger>-->
+                                    <xf:trigger bind="addProsecutor">
+                                        <xf:label>Ajouter un procureur</xf:label>
+                                        <xf:action ev:event="DOMActivate">
+                                            <xf:insert origin="instance('xprSupplement')/xpr:prosecutor" nodeset="instance('xprModel')/xpr:description/xpr:participants/xpr:parties/xpr:party[index('repeatParty')]/*" at="last()" position="after"/>
+                                        </xf:action>
+                                        <xf:help>Ajouter un procureur.</xf:help>
                                     </xf:trigger>
                                 </xf:group>
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer une partie</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party) > 1"/>
+                                    <xf:help>Supprimer une partie.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1133,14 +1175,18 @@
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:person/xpr:occupation" value=""/>
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:status" value=""/>
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:expert/@ref" value=""/>
-                                    <xf:delete ref="xpr:party[index('repeatParty')]/xpr:representative[position() &gt; 1]"/>
+                                    <xf:delete ref="xpr:party[index('repeatParty')]/xpr:representative"/>
+                                    <xf:delete ref="xpr:party[index('repeatParty')]/xpr:prosecutor"/>
+                                    <!--<xf:delete ref="xpr:party[index('repeatParty')]/xpr:representative[position() &gt; 1]"/>
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:representative/xpr:persName/xpr:surname" value=""/>
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:representative/xpr:persName/xpr:forename" value=""/>
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:representative/xpr:occupation" value=""/>
                                     <xf:delete ref="xpr:party[index('repeatParty')]/xpr:prosecutor[position() &gt; 1]"/>
+                                    <xf:delete ref="xpr:party[index('repeatParty')]/xpr:prosecutor[position() &gt; 1]"/>
                                     <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:prosecutor/xpr:persName/xpr:surname" value=""/>
-                                    <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:prosecutor/xpr:persName/xpr:forename" value=""/>
+                                    <xf:setvalue ref="xpr:party[index('repeatParty')]/xpr:prosecutor/xpr:persName/xpr:forename" value=""/>-->
                                 </xf:action>
+                                <xf:help>Ajouter une partie.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <!--control-->
@@ -1164,6 +1210,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer un entrepreneur, architecte ou maître d’œuvre</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:craftmen/xpr:craftman) > 1"/>
+                                    <xf:help>Supprimer un entrepreneur, architecte ou maître d’œuvre.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1174,6 +1221,7 @@
                                     <xf:setvalue ref="xpr:craftman[index('repeatCraftman')]/xpr:persName/xpr:forename" value=""/>
                                     <xf:setvalue ref="xpr:craftman[index('repeatCraftman')]/xpr:occupation" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un entrepreneur, architecte ou maître d’œuvre.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <!--control-->
@@ -1215,6 +1263,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>Supprimer une conclusion</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:conclusions/xpr:opinion) > 1"/>
+                                    <xf:help>Supprimer une conclusion.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1223,6 +1272,7 @@
                                     <xf:insert nodeset="xpr:opinion" at="index('repeatOpinion')" position="after" ev:event="DOMActivate"/>
                                     <xf:setvalue ref="xpr:opinion[index('repeatOpinion')]" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter une conclusion.</xf:help>
                             </xf:trigger>
                             <xf:input bind="estimate" incremental="true">
                                 <xf:label>Montant global (pour les estimations)</xf:label>
@@ -1432,6 +1482,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>&#10007;</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:keywords[@type='technical']/xpr:term) > 1"/>
+                                    <xf:help>Supprimer un mot-clé.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1440,6 +1491,7 @@
                                     <xf:insert nodeset="xpr:term" at="index('repeatTechnicalTerm')" position="after" ev:event="DOMActivate"/>
                                     <xf:setvalue ref="xpr:term[index('repeatTechnicalTerm')]" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un mot-clé.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <pre>
@@ -1454,6 +1506,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>&#10007;</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:keywords[@type='tools']/xpr:term) > 1"/>
+                                    <xf:help>Supprimer un mot-clé.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1462,6 +1515,7 @@
                                     <xf:insert nodeset="xpr:term" at="index('repeatToolsTerm')" position="after" ev:event="DOMActivate"/>
                                     <xf:setvalue ref="xpr:term[index('repeatToolsTerm')]" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un mot-clé.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <pre>
@@ -1476,6 +1530,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>&#10007;</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:keywords[@type='estimation']/xpr:term) > 1"/>
+                                    <xf:help>Supprimer un mot-clé.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1484,6 +1539,7 @@
                                     <xf:insert nodeset="xpr:term" at="index('repeatEstimationTerm')" position="after" ev:event="DOMActivate"/>
                                     <xf:setvalue ref="xpr:term[index('repeatEstimationTerm')]" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un mot-clé.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <pre>
@@ -1498,6 +1554,7 @@
                                 <xf:trigger class="delete">
                                     <xf:label>&#10007;</xf:label>
                                     <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:keywords[@type='law']/xpr:term) > 1"/>
+                                    <xf:help>Supprimer un mot-clé.</xf:help>
                                 </xf:trigger>
                             </xf:repeat>
                             <xf:trigger class="insert">
@@ -1506,6 +1563,7 @@
                                     <xf:insert nodeset="xpr:term" at="index('repeatLawTerm')" position="after" ev:event="DOMActivate"/>
                                     <xf:setvalue ref="xpr:term[index('repeatLawTerm')]" value=""/>
                                 </xf:action>
+                                <xf:help>Ajouter un mot-clé.</xf:help>
                             </xf:trigger>
                         </xf:group>
                         <pre>
