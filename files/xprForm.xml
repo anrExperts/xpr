@@ -56,8 +56,8 @@
             <!--sessions-->
             <xf:bind id="sessions" nodeset="xpr:description/xpr:sessions"/>
             <xf:bind id="sessionsDate" nodeset="xpr:description/xpr:sessions/xpr:date"/>
-            <!--<xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xs:date" constraint="(. &gt;= '1690-01-01') and (. &lt;= '1791-01-01')"/>-->
-            <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when"/>
+            <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))"/>
+            <!--<xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when"/>-->
             <xf:bind id="sessionsType" nodeset="xpr:description/xpr:sessions/xpr:date/@type"/>
 
             <!--places-->
@@ -147,14 +147,14 @@
             <xf:bind id="personForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName/xpr:forename"/>
             <xf:bind id="personOccupation" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:occupation"/>
             <xf:bind id="partyExpert" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:expert"/>
-            
+
             <xf:bind id="addRepresentative" nodeset="instance('xprSupplement')/xpr:representative"/>
             <xf:bind id="representative" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative"/>
             <xf:bind id="representativeName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName"/>
             <xf:bind id="representativeSurname" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:surname"/>
             <xf:bind id="representativeForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:forename"/>
             <xf:bind id="representativeOccupation" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:occupation"/>
-            
+
             <xf:bind id="addProsecutor" nodeset="instance('xprSupplement')/xpr:prosecutor"/>
             <xf:bind id="prosecutor" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor"/>
             <xf:bind id="prosecutorName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName"/>
@@ -178,13 +178,13 @@
             <xf:bind id="estimate" nodeset="xpr:description/xpr:conclusions/xpr:estimate"/>
             <xf:bind id="fees" nodeset="xpr:description/xpr:conclusions/xpr:fees"/>
             <xf:bind id="feesDetail" nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail"/>
-            <xf:bind id="fee" nodeset="instance('xprFees')/xpr:fee" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+            <xf:bind id="fee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
             <xf:bind id="feesTotal" nodeset="xpr:description/xpr:conclusions/xpr:fees/xpr:total"/>
             <!--            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" type="xs:decimal"/>-->
             <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s"/>
             <xf:bind id="expenses" nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>
             <xf:bind id="expensesMentioned" nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>
-            <xf:bind id="expenseType" nodeset="instance('xprExpenses')/xpr:expense" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
+            <xf:bind id="expenseType" nodeset="instance('xprSupplement')/xpr:expenses/xpr:expense" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
 
             <!--Mots-clés et commentaires-->
             <xf:bind id="keywordsTechnical" nodeset="xpr:description/xpr:keywords[@type='technical']"/>
@@ -971,7 +971,7 @@
                                     </xf:input>
                                     <xf:trigger class="delete">
                                         <xf:label>Supprimer une personne</xf:label>
-                                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person) > 1"/>
+                                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party[index('repeatParty')]/xpr:person) > 1"/>
                                         <xf:help>Supprimer une personne.</xf:help>
                                     </xf:trigger>
                                 </xf:repeat>
@@ -1293,12 +1293,12 @@
                                         </xf:action>
                                     </xf:item>
                                 </xf:select1>
-                                <xf:select ref="instance('xprFees')/xpr:fee" appearance="full">
+                                <xf:select ref="instance('xprSupplement')/xpr:fees/xpr:fee" appearance="full">
                                     <xf:item>
                                         <xf:label>Expert(s)</xf:label>
                                         <xf:value>expert</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='expert']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='expert']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']"/>
@@ -1314,7 +1314,7 @@
                                         <xf:label>Greffier</xf:label>
                                         <xf:value>clerk</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='clerk']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='clerk']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='clerk']"/>
@@ -1330,7 +1330,7 @@
                                         <xf:label>Rôles</xf:label>
                                         <xf:value>rolls</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='rolls']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='rolls']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='rolls']"/>
@@ -1346,7 +1346,7 @@
                                         <xf:label>Papier et contrôle</xf:label>
                                         <xf:value>papers</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='papers']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='papers']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='papers']"/>
@@ -1362,7 +1362,7 @@
                                         <xf:label>Plans</xf:label>
                                         <xf:value>plans</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='plans']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='plans']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='plans']"/>
@@ -1378,7 +1378,7 @@
                                         <xf:label>Procureurs</xf:label>
                                         <xf:value>prosecutors</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='prosecutors']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='prosecutors']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='prosecutors']"/>
@@ -1394,7 +1394,7 @@
                                         <xf:label>Aides</xf:label>
                                         <xf:value>help</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprFees')/xpr:fee[@type='help']"/>
+                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='help']"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='help']"/>
@@ -1430,12 +1430,12 @@
                                         </xf:action>
                                     </xf:item>
                                 </xf:select1>
-                                <xf:select ref="instance('xprExpenses')/xpr:expense" appearance="full">
+                                <xf:select ref="instance('xprSupplement')/xpr:expenses/xpr:expense" appearance="full">
                                     <xf:item>
                                         <xf:label>Bourse commune des experts</xf:label>
                                         <xf:value>expert</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses" origin="instance('xprExpenses')/xpr:expense[@type='expert']"/>
+                                            <xf:insert origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='expert']" context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']"/>
@@ -1451,7 +1451,7 @@
                                         <xf:label>Bourse commune des greffiers</xf:label>
                                         <xf:value>clerk</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses" origin="instance('xprExpenses')/xpr:expense[@type='clerk']"/>
+                                            <xf:insert origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='clerk']" context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses"/>
                                         </xf:action>
                                         <xf:action ev:event="xforms-deselect">
                                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']"/>

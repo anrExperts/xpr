@@ -9,7 +9,7 @@
             <note/>
         </appendice>
     </appendices>
-    
+
     <!--Parties's representative-->
     <representative>
         <persName>
@@ -18,7 +18,7 @@
         </persName>
         <occupation/>
     </representative>
-    
+
     <!--Parties's prosecutor-->
     <prosecutor>
         <persName>
@@ -26,4 +26,22 @@
             <forename/>
         </persName>
     </prosecutor>
+    
+    
+    <expenses>
+        <expense/>
+        <expense type="clerk" l="" s="" d=""/>
+        <expense type="expert" l="" s="" d=""/>
+    </expenses>
+    
+    <fees>
+        <fee/>
+        <fee type="expert" l="" s="" d=""/>
+        <fee type="clerk" l="" s="" d=""/>
+        <fee type="rolls" l="" s="" d=""/>
+        <fee type="papers" l="" s="" d=""/>
+        <fee type="plans" l="" s="" d=""/>
+        <fee type="prosecutors" l="" s="" d=""/>
+        <fee type="help" l="" s="" d=""/>
+    </fees>
 </supplement>
