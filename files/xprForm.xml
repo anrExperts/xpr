@@ -10,7 +10,8 @@
         <!-- XForms data models -->
         <xf:model>
             <!--Instance principale-->
-            <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
+            <!-- <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/> -->
+            <xf:instance id="xprModel" src="/xpr/expertises/Z1J-4000-099"/>
 
             <!--Instances secondaires-->
             <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
@@ -563,6 +564,7 @@
                     <xf:case id="procedurePanel" selected="false">
                         <xf:group ref="instance('xprCategories')">
                             <xf:label>Types d’expertise</xf:label>
+                            <xf:output value="serialize(instance('xprCategories'), yes)"></xf:output>
                             <xf:select ref="xpr:category" appearance="full">
                                 <xf:label>Catégories d’expertise</xf:label>
                                 <xf:item>
@@ -617,6 +619,18 @@
                                 </xf:item>
                                 <xf:help>Plusieurs cases peuvent être cochées.</xf:help>
                             </xf:select>
+                            
+                            
+                            <!-- @todo not solved -->
+                            <xf:setvalue ev:event="xforms-ready" ref="instance('xprCategories')/xpr:category" value="concat(
+                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[1], ' ',
+                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[2], ' ',
+                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[3], ' ',
+                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[4], ' ',
+                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[5]
+                                    )"></xf:setvalue>
+                                
+                            
                             <xf:input bind="designation" incremental="true">
                                 <xf:label>Désignation</xf:label>
                             </xf:input>

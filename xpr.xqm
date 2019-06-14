@@ -166,6 +166,7 @@ declare
 %updating
 function xformResult($param) {
   let $id := $param/*/*:sourceDesc/*:idno[@type="unitid"] || '-' || fn:format-integer($param/*/*:sourceDesc/*:idno[@type="item"], '000')
+  let $id := fn:replace($id, '/', '-')
   let $db := db:open("xpr")
   let $param := 
     copy $d := $param
