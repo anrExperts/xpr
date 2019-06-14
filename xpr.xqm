@@ -91,6 +91,7 @@ function listExpertises() {
           let $cote := $expertise/sourceDesc/idno[@type="unitid"]
           let $dossier := $expertise/sourceDesc/idno[@type="item"]
           let $date := $expertise/description/sessions/date[1]/@when
+          let $id := $expertise/@xml:id
           return 
             <li>
               <span>{$cote || ' n° ' || $dossier}</span>
