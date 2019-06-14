@@ -97,7 +97,13 @@
             <xf:bind id="categoryType" nodeset="xpr:description/xpr:categories/xpr:category/@type"/>
             <xf:bind id="designation" nodeset="xpr:description/xpr:categories/xpr:designation"/>
             <xf:bind id="designationRubric" nodeset="xpr:description/xpr:categories/xpr:designation/@rubric"/>
-
+            <xf:bind nodeset="instance('xprCategories')/xpr:category[not(@type)]" calculate="concat(
+                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[1], ' ',
+                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[2], ' ',
+                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[3], ' ',
+                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[4], ' ',
+                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[5]
+                )"/>
             <!--procedure encadrant l'expertise-->
             <xf:bind id="procedure" nodeset="xpr:description/xpr:procedure"/>
 
@@ -619,18 +625,6 @@
                                 </xf:item>
                                 <xf:help>Plusieurs cases peuvent être cochées.</xf:help>
                             </xf:select>
-                            
-                            
-                            <!-- @todo not solved -->
-                            <xf:setvalue ev:event="xforms-ready" ref="instance('xprCategories')/xpr:category" value="concat(
-                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[1], ' ',
-                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[2], ' ',
-                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[3], ' ',
-                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[4], ' ',
-                                    instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[5]
-                                    )"></xf:setvalue>
-                                
-                            
                             <xf:input bind="designation" incremental="true">
                                 <xf:label>Désignation</xf:label>
                             </xf:input>
