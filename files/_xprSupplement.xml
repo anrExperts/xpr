@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<supplement xmlns="xpr">
+    <!--Annexes-->
+    <appendices>
+        <appendice>
+            <type type=""/>
+            <extent/>
+            <desc/>
+            <note/>
+        </appendice>
+    </appendices>
+
+    <!--Parties's representative-->
+    <representative>
+        <persName>
+            <surname/>
+            <forename/>
+        </persName>
+        <occupation/>
+    </representative>
+
+    <!--Parties's prosecutor-->
+    <prosecutor>
+        <persName>
+            <surname/>
+            <forename/>
+        </persName>
+    </prosecutor>
+    
+    
+    <expenses>
+        <expense/>
+        <expense type="clerk" l="" s="" d=""/>
+        <expense type="expert" l="" s="" d=""/>
+    </expenses>
+    
+    <fees>
+        <fee/>
+        <fee type="expert" l="" s="" d=""/>
+        <fee type="clerk" l="" s="" d=""/>
+        <fee type="rolls" l="" s="" d=""/>
+        <fee type="papers" l="" s="" d=""/>
+        <fee type="plans" l="" s="" d=""/>
+        <fee type="prosecutors" l="" s="" d=""/>
+        <fee type="help" l="" s="" d=""/>
+    </fees>
+</supplement>
