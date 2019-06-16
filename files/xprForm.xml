@@ -9,9 +9,30 @@
         <link href="/xpr/files/css/main.css" rel="stylesheet" />
         <!-- XForms data models -->
         <xf:model>
+            
+            <xf:action ev:event="xforms-ready">
+                <xf:setvalue ref="instance('xprCategories')/xpr:category[not(@type)]" value="concat(
+                    instance('xprModel')/xpr:description/xpr:categories/xpr:category[1]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:categories/xpr:category[2]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:categories/xpr:category[3]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:categories/xpr:category[4]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:categories/xpr:category[5]/@type
+                    )"/>
+                <xf:setvalue ref="instance('xprObjects')/xpr:object[not(@type)]" value="concat(
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[1]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[2]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[3]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[4]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[5]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[6]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
+                    instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
+                    )"/>
+            </xf:action>
+            
             <!--Instance principale-->
-            <!-- <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/> -->
-            <xf:instance id="xprModel" src="/xpr/expertises/Z1J-4000-099"/>
+            <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/> 
+            <!--<xf:instance id="xprModel" src="/xpr/expertises/Z1J-4000-099"/>-->
 
             <!--Instances secondaires-->
             <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
@@ -97,13 +118,7 @@
             <xf:bind id="categoryType" nodeset="xpr:description/xpr:categories/xpr:category/@type"/>
             <xf:bind id="designation" nodeset="xpr:description/xpr:categories/xpr:designation"/>
             <xf:bind id="designationRubric" nodeset="xpr:description/xpr:categories/xpr:designation/@rubric"/>
-            <xf:bind nodeset="instance('xprCategories')/xpr:category[not(@type)]" calculate="concat(
-                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[1], ' ',
-                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[2], ' ',
-                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[3], ' ',
-                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[4], ' ',
-                instance('xprModel')/xpr:description/xpr:categories/xpr:category/@type[5]
-                )"/>
+            
             <!--procedure encadrant l'expertise-->
             <xf:bind id="procedure" nodeset="xpr:description/xpr:procedure"/>
 
@@ -570,7 +585,8 @@
                     <xf:case id="procedurePanel" selected="false">
                         <xf:group ref="instance('xprCategories')">
                             <xf:label>Types d’expertise</xf:label>
-                            <xf:output value="serialize(instance('xprCategories'), yes)"></xf:output>
+                            <xf:output value="serialize(instance('xprModel')//xpr:description/xpr:categories, 'yes')"/>
+                            <xf:output value="serialize(instance('xprCategories'), yes)"/>
                             <xf:select ref="xpr:category" appearance="full">
                                 <xf:label>Catégories d’expertise</xf:label>
                                 <xf:item>
