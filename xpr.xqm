@@ -27,7 +27,7 @@ declare namespace ev = "http://www.w3.org/2001/xml-events";
 declare default element namespace "xpr";
 declare default function namespace "xpr";
 
-declare variable $xpr:xslt := file:base-dir();
+declare variable $xpr:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl";
 
 (:~
  : This resource function defines the application root
@@ -72,22 +72,28 @@ function home() {
   web:redirect("/xpr/expertises") 
 };
 
-
 (:~
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
 declare 
-  %rest:path("/xpr/list")
-  %output:method("html")
-function listExpertisesHTML() {
-  let $expertises := db:open("xpr")//*:expertise
-  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
-  let $xprFormPath := file:base-dir() || "files/xprList.xml"
+%rest:path("/xpr/expertises/list")
+%rest:produces('text/html')
+%output:method("xml")
+function listHtml() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprExpertiseModel.xml',
+    'trigger' : '',
+    'form' : fn:doc(file:base-dir() || "files/" || "xprList.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    fn:doc($xprFormPath)
+    wrapper($content, $outputParam)
     )
 };
 
@@ -96,6 +102,18 @@ function listExpertisesHTML() {
  : @return an ordered list of expertises
  :)
 declare 
+%rest:path("/xpr/expertises")
+%rest:produces('application/xml')
+%output:method("xml")
+function list() {
+  db:open('xpr')
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+(: declare 
 %rest:path("xpr/expertises")
 %output:method("xml")
 function listExpertises() {
@@ -127,7 +145,7 @@ function listExpertises() {
         <button onclick="location.href='/xpr/expertises/new'">Ajouter une expertise</button>
       </body>
     </html> :)
-};
+}; :)
 
 (:~
  : This resource function lists all the expertises
@@ -149,11 +167,10 @@ function showExpertise($id) {
 %output:method("xml")
 function modifyExpertise($id) {
   let $expertises := db:open("xpr")//*:expertise
-  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
   let $xprFormPath := file:base-dir() || "files/xprForm.xml"
   let $model := db:open('xpr')//expertise[@xml:id=$id]
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     fn:doc($xprFormPath)
     )
@@ -166,9 +183,7 @@ function modifyExpertise($id) {
 declare 
 %rest:path("xpr/expertises/{$id}/modify")
 %output:method("xml")
-function test($id) {
-  let $expertises := db:open("xpr")//*:expertise
-  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
+function modify($id) {
   let $content := map {
     'instance' : $id,
     'model' : 'xprExpertiseModel.xml',
@@ -179,7 +194,7 @@ function test($id) {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     wrapper($content, $outputParam)
     )
@@ -195,10 +210,9 @@ declare
 %rest:path("xpr/expertises/new")
 %output:method("xml")
 function xform() {
-  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
   let $xprFormPath := file:base-dir() || "files/xprForm.xml"
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     fn:doc($xprFormPath)
     )
@@ -215,14 +229,14 @@ declare
 %rest:PUT("{$param}")
 %updating
 function xformResult($param) {
-  let $id := $param/*/*:sourceDesc/*:idno[@type="unitid"] || '-' || fn:format-integer($param/*/*:sourceDesc/*:idno[@type="item"], '000')
+  let $id := $param/expertise/sourceDesc/idno[@type="unitid"] || '-' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
   let $id := fn:replace($id, '/', '-')
   let $db := db:open("xpr")
   let $param := 
     copy $d := $param
     modify insert node attribute xml:id {$id} into $d/*
     return $d
-  return insert node $param into $db
+  return insert node $param into $db/expertises
 };
 
 declare
