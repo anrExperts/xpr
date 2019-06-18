@@ -736,10 +736,11 @@ $name as xs:string
 };
 
 (:~
- : this function 
+ : this function call a wrapper
  :
- : @param $data the result of the query
- : @return an updated document and instantiate pattern
+ : @param $content the content to serialize
+ : @param $outputParams the output params
+ : @return an updated document and instantiated pattern
  :)
 declare function wrapper($content as map(*), $outputParams as map(*)) as node()* {
   let $layout := file:base-dir() || "files/" || map:get($outputParams, 'layout')
@@ -758,14 +759,15 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
 (:~
  : this function dispatch the content with the data
  :
- : @param $data the result of the query to dispacth (meta or content)
+ : @param $content the content to serialize
  : @param $outputParams the serialization params
  : @return an updated node with the data
+ : @bug the behavior is not complete
  :) 
-declare %updating function associate($data as map(*), $outputParams as map(*), $node as node()) {
+declare %updating function associate($content as map(*), $outputParams as map(*), $node as node()) {
   let $regex := '\{(.+?)\}'
   let $keys := fn:analyze-string($node, $regex)//fn:group/text()
-  let $values := map:get($data, $keys)
+  let $values := map:get($content, $keys)
     return typeswitch ($values)
     case document-node() return replace node $node with $values
     case empty-sequence() return ()
@@ -798,9 +800,11 @@ declare %updating function associate($data as map(*), $outputParams as map(*), $
 
 (:~
  : this function get the model
- : @param $model
+ :
+ : @param $content the content params
+ : @return the default model or its instance version
  :)
-declare function getModel($content){
+declare function getModel($content as map(*)){
   let $instance := map:get($content, 'instance')
   let $model := map:get($content, 'model')
   return if ($instance) then
