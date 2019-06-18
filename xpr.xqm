@@ -21,6 +21,9 @@ declare namespace web = "http://basex.org/modules/web";
 declare namespace update = "http://basex.org/modules/update";
 declare namespace db = "http://basex.org/modules/db";
 
+declare namespace xf = "http://www.w3.org/2002/xforms";
+declare namespace ev = "http://www.w3.org/2001/xml-events";
+
 declare default element namespace "xpr";
 declare default function namespace "xpr";
 
@@ -69,15 +72,36 @@ function home() {
   web:redirect("/xpr/expertises") 
 };
 
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+  %rest:path("/xpr/list")
+  %output:method("html")
+function listExpertisesHTML() {
+  let $expertises := db:open("xpr")//*:expertise
+  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
+  let $xprFormPath := file:base-dir() || "files/xprList.xml"
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    fn:doc($xprFormPath)
+    )
+};
+
 (:~
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
 declare 
 %rest:path("xpr/expertises")
-%output:method("html")
+%output:method("xml")
 function listExpertises() {
-  let $expertises := db:open("xpr")//*:expertise
+  <xml xmlns="xpr">
+  {db:open('xpr')//*:expertise}</xml>
+  (: let $expertises := db:open("xpr")//*:expertise
   let $content := for $expertise in $expertises return <p><a href="{$expertise/xml:id}">{$expertise}</a></p>
   return 
     <html>
@@ -102,7 +126,7 @@ function listExpertises() {
         }</ul>
         <button onclick="location.href='/xpr/expertises/new'">Ajouter une expertise</button>
       </body>
-    </html>
+    </html> :)
 };
 
 (:~
@@ -120,7 +144,7 @@ function showExpertise($id) {
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
-declare 
+(: declare 
 %rest:path("xpr/expertises/{$id}/modify")
 %output:method("xml")
 function modifyExpertise($id) {
@@ -132,6 +156,32 @@ function modifyExpertise($id) {
     (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     fn:doc($xprFormPath)
+    )
+}; :)
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("xpr/expertises/{$id}/modify")
+%output:method("xml")
+function test($id) {
+  let $expertises := db:open("xpr")//*:expertise
+  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
+  let $content := map {
+    'instance' : $id,
+    'model' : 'xprExpertiseModel.xml',
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprExpertiseTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprExpertiseForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
     )
 };
 
@@ -698,7 +748,10 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
   return
     $wrap/* update (
       for $node in .//*[fn:matches(text(), $regex)] | .//@*[fn:matches(., $regex)]
-      return associate($content, $outputParams, $node)
+      let $key := fn:analyze-string($node, $regex)//fn:group/text()
+      return if ($key = 'model') 
+        then replace node $node with getModel($content)
+        else associate($content, $outputParams, $node)
       )
 };
 
@@ -711,7 +764,6 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
  :) 
 declare %updating function associate($data as map(*), $outputParams as map(*), $node as node()) {
   let $regex := '\{(.+?)\}'
-  let $data := $data
   let $keys := fn:analyze-string($node, $regex)//fn:group/text()
   let $values := map:get($data, $keys)
     return typeswitch ($values)
@@ -745,26 +797,15 @@ declare %updating function associate($data as map(*), $outputParams as map(*), $
 };
 
 (:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : this function get the model
+ : @param $model
  :)
-declare 
-%rest:path("xpr/test/{$id}")
-%output:method("xml")
-function test($id) {
-  let $expertises := db:open("xpr")//*:expertise
-  let $xsltformsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl"
-  let $content := map {
-    'model' : fn:doc(file:base-dir() || "files/" || "xprExpertiseModel.xml"),
-    'trigger' : fn:doc(file:base-dir() || "files/" || "xprExpertiseTrigger.xml"),
-    'form' : fn:doc(file:base-dir() || "files/" || "xprExpertiseForm.xml")
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xsltformsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    wrapper($content, $outputParam)
-    )
+declare function getModel($content){
+  let $instance := map:get($content, 'instance')
+  let $model := map:get($content, 'model')
+  return if ($instance) then
+    copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+    modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
+    return $doc
+    else fn:doc(file:base-dir() || "files/" || $model)
 };
