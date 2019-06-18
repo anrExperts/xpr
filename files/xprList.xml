@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xf:input ref="//xpr:expertise[1]/xpr:sourceDesc/xpr:idno[@type='id']" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms"/>
-<!--<xf:repeat nodeset="xpr:expertise" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
-    <xf:input ref="@xml:id"><xf:label>Intitulé</xf:label></xf:input>
-</xf:repeat>-->
+<xf:repeat nodeset="xpr:expertise/xpr:sourceDesc" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
+    <xf:input ref="xpr:idno[@type='item']"><xf:label>Intitulé</xf:label></xf:input>
+</xf:repeat>
