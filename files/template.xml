@@ -7,26 +7,29 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
-    
-       <instance>{model}</instance>
-    
+
+    <!--<instance>{model}</instance>-->
+    <xf:model>
+      <xf:instance src="/xpr/expertises"/>
+    </xf:model>
+
   </head>
   <body onload="repeat()">
-        <nav id="navigation">
-            <ul>
-                <li><a href="/xpr">¡xpr!</a></li>
-                <li><a href="/xpr/expertises">pv</a></li>
-                <li><a href="/xpr">prosopo</a></li>
-                <li><a href="/xpr/about">?</a></li>
-            </ul>
-        </nav>
-        <nav id="navForm">
-          <trigger>{trigger}</trigger>
-        </nav>
-        <main>
-          <form>{form}</form>
-        </main>
-        <script>
+    <nav id="navigation">
+      <ul>
+        <li><a href="/xpr">¡xpr!</a></li>
+        <li><a href="/xpr/expertises">pv</a></li>
+        <li><a href="/xpr">prosopo</a></li>
+        <li><a href="/xpr/about">?</a></li>
+      </ul>
+    </nav>
+    <nav id="navForm">
+      <trigger>{trigger}</trigger>
+    </nav>
+    <main>
+      <form>{form}</form>
+    </main>
+    <script>
 /*function repeat() {
   var element = document.querySelectorAll('div.xforms-group-content');
   for (var i = 0; i &lt; element.length; i++) {
@@ -44,7 +47,7 @@ function repeat() {
     }
   }
         </script>
-        <script>
+    <script>
 // Sticky navigation
 const nav = document.querySelector('#navigation');
 const navTop = nav.offsetTop;
