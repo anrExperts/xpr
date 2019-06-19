@@ -234,11 +234,15 @@ function xformResult($param) {
   let $id := $param/expertise/sourceDesc/idno[@type="unitid"] || '-' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
   let $id := fn:replace($id, '/', '-')
   let $db := db:open("xpr")
-  let $param := 
-    copy $d := $param
-    modify insert node attribute xml:id {$id} into $d/*
-    return $d
-  return insert node $param into $db/expertises
+  return 
+    if ($db/expertise[@xml:id='id'])
+    then insert node $param into $db
+    else
+      let $param := 
+        copy $d := $param
+        modify insert node attribute xml:id {$id} into $d/*
+        return $d
+    return insert node $param into $db/expertises
 };
 
 declare
