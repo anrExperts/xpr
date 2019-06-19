@@ -1,0 +1,2292 @@
+<expertises xmlns="xpr">
+  <expertise xml:id="Z1J123">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J123</idno>
+        <idno type="item">23</idno>
+        <facsimile from="1" to="234"/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch="true">23</extent>
+            <!--@sketch="true/false"-->
+            <appendices>
+                <appendice>
+                    <type type="plan">Plan</type>
+            <type type="sketch">Croquis</type>
+                    <!--@type
+                    - drawing = Dessin
+                    - plan = Plan
+                    - sketch = Croquis
+                    - rough = Brouillon
+                    - proxyPA = Pouvoir/procuration (acte sous seing privé) @rmq private agreement
+                    - proxyNA = Pouvoir/procuration (acte notarié) @rmq notarial act
+                    - petition = Requête
+                    - other = autre-->
+                    <extent>2</extent>
+                    <desc>Texte de description</desc>
+                    <note>Commentaire </note>
+                </appendice>
+            </appendices>
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1790-01-02" type="suburbs"/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber>21</buildingNumber>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric="true"/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="b1">Requête auprès du lieutenant civil pour qu’il demande une expertise</framework>
+            <!--Origine de l'expertise-->
+            <origination type="parties">Les parties</origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName>ea</orgName>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date/>
+            <date/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects>
+          <object type="territory">Domaine, terres, fief</object>
+          <object type="plot">Terrain</object>
+        </objects>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="xpr0004" context="primary" appointment="appointed">
+                    <title>ea</title>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="petitioner" presence="true" intervention="true">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status>limited-partner</status>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref="xpr0005"/>
+                    <!-- @rmq représentant/procureur sont répétables-->
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="22" d="22" s="22"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="false">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="Z1J025">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J025</idno>
+        <idno type="item">21</idno>
+        <facsimile from="1" to="230"/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch="false">2</extent>
+            <!--@sketch="true/false"-->
+            <appendices>
+                <appendice>
+                    <type type="drawing">Dessin</type>
+                    <!--@type
+                    - drawing = Dessin
+                    - plan = Plan
+                    - sketch = Croquis
+                    - rough = Brouillon
+                    - proxyPA = Pouvoir/procuration (acte sous seing privé) @rmq private agreement
+                    - proxyNA = Pouvoir/procuration (acte notarié) @rmq notarial act
+                    - petition = Requête
+                    - other = autre-->
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1763-02-21" type="paris"/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street>Rue de Paris</street>
+                    <buildingNumber>23</buildingNumber>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="b2a">Le lieutenant civil est saisi dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</framework>
+            <!--Origine de l'expertise-->
+            <origination type="parties">Les parties</origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1790-02-21"/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects>
+          <object type="buildings">Ensemble de bâtiments</object>
+          <object type="plot">Terrain</object>
+          <object type="house">Maison</object>
+        </objects>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="xpr0001" context="primary" appointment="unknown">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="petitioner" presence="false" intervention="true">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname>Henri</surname>
+                            <forename>James</forename>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation>Tailleur</occupation>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status>owner</status>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                    <!-- @rmq représentant/procureur sont répétables-->
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="23" d="23" s="23"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="false">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="Z1J642">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J642</idno>
+        <idno type="item">23</idno>
+        <facsimile from="2" to="23"/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch="true">2</extent>
+        <appendices>
+    <appendice>
+        <type type="rough">Brouillon</type>
+        <extent>23</extent>
+        <desc>eaea</desc>
+        <note/>
+    </appendice>
+</appendices>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1726-12-12" type="suburbs"/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street>Rue de Picardie</street>
+                    <buildingNumber>23</buildingNumber>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric="false"/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="b2a">Le lieutenant civil est saisi dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</framework>
+            <!--Origine de l'expertise-->
+            <origination type="parties">Les parties</origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1722-01-03"/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects>
+          <object type="wall">Mur</object>
+          <object type="plot">Terrain</object>
+          <object type="house">Maison</object>
+        </objects>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="xpr0243" context="third-party" appointment="appointed">
+                    <title/>
+                </expert>
+          <expert ref="xpr0008" context="unknown" appointment="appointed">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="opponent" presence="true" intervention="true">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status>joint-owner</status>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref="xpr0243"/>
+                    <!-- @rmq représentant/procureur sont répétables-->
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type="noConclusion">Sans conclusion</agreement>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="23" d="23" s="23"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="Z1J30">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J30</idno>
+        <idno type="item">22</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1732-10-13" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber>3</buildingNumber>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1729-10-30"/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                    <!-- @rmq représentant/procureur sont répétables-->
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="3" d="3" s="3"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="Z1J00028">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J000</idno>
+        <idno type="item">28</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1736-12-03" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber>2</buildingNumber>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1749-02-23"/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                    <!-- @rmq représentant/procureur sont répétables-->
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="2" d="3" s="4"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="Z1J33033">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J33</idno>
+        <idno type="item">33</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1783-02-21" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber>2</buildingNumber>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1723-02-12"/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                    <!-- @rmq représentant/procureur sont répétables-->
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="2" d="2" s="2"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="F/21/2199-029">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">F/21/2199</idno>
+        <idno type="item">29</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="" type="paris"/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when=""/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="F21-033">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">F21</idno>
+        <idno type="item">33</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when=""/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="F-22-2999-088">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">F/22/2999</idno>
+        <idno type="item">88</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when=""/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="Z1J-4000-099">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">Z1J/4000</idno>
+        <idno type="item">99</idno>
+        <facsimile from="200" to="201"/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch="true">4 f.</extent>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="1776-02-20" type="paris"/>
+        <date when="1776-02-23" type="suburbs"/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street> rue Charlot</street>
+                    <buildingNumber>22</buildingNumber>
+                </address>
+                <complement>à l’enseigne de Gersaint</complement>
+                <parish>Saint-Gervais</parish>
+                
+                
+                <owner>Devalan</owner>
+            </place>
+        <place type="suburbs">
+                <address>
+                    
+                    
+                </address>
+                <complement/>
+                
+                <city>Ville-Marie</city>
+                <district>Loire</district>
+                <owner>Truc</owner>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric="true">Partage</designation>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="b1">Requête auprès du lieutenant civil pour qu’il demande une expertise</framework>
+            <!--Origine de l'expertise-->
+            <origination type="parties">Les parties</origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName>Cour d’appel</orgName>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1728-02-29"/>
+            <date/>
+                </sentence>
+          <sentence>
+                    <orgName>Châtelet</orgName>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when="1727-02-17"/>
+            <date/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case>Froissage</case>
+            <!--Objet de l'expertise-->
+            <objects>
+          <object type="buildings">Ensemble de bâtiments</object>
+          <object type="plot">Terrain</object>
+          <object type="house">Maison</object>
+        </objects>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="xpr0011" context="primary" appointment="appointed">
+                    <title/>
+                </expert>
+          <expert ref="xpr0003" context="primary" appointment="appointed">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname>Gertrude</surname>
+                        <forename>Truc</forename>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="petitioner" presence="true" intervention="false">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname>Michu</surname>
+                            <forename>Françoise</forename>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation>Boulangère</occupation>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status>owner</status>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref="xpr0011"/>
+                </party>
+          <party role="opponent" presence="" intervention="false">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname>Big</surname>
+                            <forename>Mama</forename>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation>Tripière</occupation>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status>neighbour</status>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref="xpr0011"/>
+            <representative>
+        <persName>
+            <surname>Chose</surname>
+            <forename>Machin</forename>
+        </persName>
+        <occupation>Gagnepain</occupation>
+    </representative>
+            <prosecutor>
+        <persName>
+            <surname>Proc</surname>
+            <forename>ureur</forename>
+        </persName>
+    </prosecutor>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname>François</surname>
+                        <forename>Charles</forename>
+                    </persName>
+                    <occupation>architecte du roi</occupation>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type="agreement">Accord</agreement>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>Tout va bien</opinion>
+        <opinion>Autre conclusion</opinion>
+            <!--montant global-->
+            <estimate>2889</estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="true">
+          <fee type="expert" l="22" s="22" d="22"/>
+          <fee type="clerk" l="224" s="21" d=""/>
+          <fee type="rolls" l="" s="" d=""/>
+          <fee type="papers" l="" s="" d=""/>
+          <fee type="plans" l="" s="" d=""/>
+          <fee type="prosecutors" l="" s="" d=""/>
+          <fee type="help" l="" s="" d=""/>
+                <!--@detail="true/false"-->
+                <total l="290" d="2000" s="200"/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="true">
+          <expense type="clerk" l="33" s="22" d="22"/>
+          <expense type="expert" l="32" s="221" d="22"/>
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term>Franc</term>
+        <term>Puits</term>
+        </keywords>
+        <keywords type="tools">
+            <term>fil à plomb</term>
+        <term>canne à pêche</term>
+        </keywords>
+        <keywords type="estimation">
+            <term>truc</term>
+        <term>bidule</term>
+        </keywords>
+        <keywords type="law">
+            <term>lignagé</term>
+        <term>usufruit</term>
+        </keywords>
+        <analysis>Très intéressant</analysis>
+        <noteworthy>Pas remarquable</noteworthy>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="F122020-023">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">F122020</idno>
+        <idno type="item">23</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="assessment">Évaluer les coûts à venir</category>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when=""/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="F132000-099">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">F132000</idno>
+        <idno type="item">99</idno>
+        <facsimile from="21" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when=""/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects/>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+  <expertise xml:id="F111111-111">
+    <meta/>
+    <sourceDesc>
+        <!--Réferences-->
+        <idno type="unitid">F111111</idno>
+        <idno type="item">111</idno>
+        <facsimile from="" to=""/>
+        <!--Description physique du pv et des annexes-->
+        <physDesc>
+            <extent sketch=""/>
+            <!--@sketch="true/false"-->
+            <!--<appendices>
+                <appendice>
+                    <type type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>-->
+        </physDesc>
+    </sourceDesc>
+    <description>
+        <sessions>
+            <!--@todo comment indiquer la durée de la vacation (demi-journée pour Paris, faubourgs et banlieue, journée en campagne-->
+            <!--Dates de l'expertise -->
+            <date when="" type=""/>
+            <!--@type="paris/suburbs/province"/>-->
+        </sessions>
+        <places>
+            <place type="paris">
+                <address>
+                    <street/>
+                    <buildingNumber/>
+                </address>
+                <complement/>
+                <parish/>
+                
+                
+                <owner/>
+            </place>
+        </places>
+        <!--Type d'expertise-->
+        <categories>
+        <category type="registration">Enregistrer</category>
+        <category type="estimation">Estimer la valeur des biens</category>
+            <!--xprCategories-->
+            <!--non répétable-->
+            <designation rubric=""/>
+        </categories>
+        <!--Procedure encadrant l'expertise-->
+        <procedure>
+            <framework type="">
+          <!--Valeur textuel de la procédure-->
+        </framework>
+            <!--Origine de l'expertise-->
+            <origination type="">
+          <!--Valeur textuel de la procédure-->
+        </origination>
+            <!--Intervention d'une institution-->
+            <sentences>
+                <sentence>
+                    <orgName/>
+                    <!--@rmq date est répétable pour toutes les sentences d'une institution-->
+                    <date when=""/>
+                </sentence>
+            </sentences>
+            <!--Cause de l'expertise-->
+            <case/>
+            <!--Objet de l'expertise-->
+            <objects>
+          <object type="well">Puits</object>
+        </objects>
+        </procedure>
+        <participants>
+            <experts>
+                <!-- @todo trouver une solution pour se passer des @ref (en toute logique on ne peut faire référence qu'à quelque chose qui est déjà déclaré). -->
+                <expert ref="" context="" appointment="">
+                    <title/>
+                </expert>
+            </experts>
+            <clerks>
+                <clerk>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                </clerk>
+            </clerks>
+            <parties>
+                <!-- @todo partie Opposante/requérante-->
+                <!-- @todo partie présente on non (on reste visiblement au niveau de la partie et non des personnes)-->
+                <!---->
+                <party role="" presence="" intervention="">
+                    <!--@role="opponent/petitioner"-->
+                    <!--@presence="true/false"-->
+                    <!--@intervention="true/false"-->
+                    <!--@rmq person est répétable pour chaque personne d'une même partie-->
+                    <person>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <!--@quest On veut décrire la qualité et la profession d'une personne. En anglais "occupation" peut regrouper les deux. Utiliser le même et le répéter si besoin ? Utiliser profession ? state ?-->
+                        <occupation/>
+                        <!--<profession></profession>-->
+                    </person>
+                    <!--qualification individuelle-->
+                    <status/>
+                    <!-- Qualification individuelle-->
+                    <!-- @quest la qualification individuelle ne doit-elle pas être rattachée à une personne plutôt qu'à une partie ? (dans le mesure où une parte peut regrouper plusieurs personnes ?)-->
+                    <!-- Expert agissant pour cette partie -->
+                    <expert ref=""/>
+                </party>
+            </parties>
+            <!--Entrepreneur, architecte ou maître d’œuvre-->
+            <craftmen>
+                <craftman>
+                    <persName>
+                        <surname/>
+                        <forename/>
+                    </persName>
+                    <occupation/>
+                </craftman>
+            </craftmen>
+        </participants>
+        <conclusions>
+            <!--accord-->
+            <!--@type="agreement/disagreement/noConclusion"-->
+            <agreement type=""/>
+            <!--conclusions d'expert-->
+            <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
+            <opinion>
+          <!--répétable-->
+        </opinion>
+            <!--montant global-->
+            <estimate>
+          <!--sumTotal = montant total ?-->
+        </estimate>
+            <!--coût de l'expertise => frais d'expertise = consultancy fees-->
+            <fees detail="">
+                <!--@detail="true/false"-->
+                <total l="" d="" s=""/>
+            </fees>
+            <!--bourse commune = (to share expenses)-->
+            <expenses mentioned="">
+                <!--@mentioned = true/false-->
+            </expenses>
+        </conclusions>
+        <keywords type="technical">
+            <term/>
+        </keywords>
+        <keywords type="tools">
+            <term/>
+        </keywords>
+        <keywords type="estimation">
+            <term/>
+        </keywords>
+        <keywords type="law">
+            <term/>
+        </keywords>
+        <analysis/>
+        <noteworthy/>
+    </description>
+    <!-- TODO intégrer dans le formulaire une zone de texte libre pour y indiquer les problèmes rencontrés lors de la saisie et qui nécessiteraient de le reprendre plus en détail. Il nous permettra également de collecter des retours sur le formulaire. -->
+</expertise>
+</expertises>

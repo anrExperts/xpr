@@ -30,7 +30,7 @@ function renew() {
   let $content := clean()
   return 
   if ( db:open('xpr')/expertise ) then (
-    file:write(file:base-dir() || sauvegarde || '.xml', $content),
+    file:write(file:base-dir() || 'sauvegarde' || '.xml', $content),
     db:drop('xpr'),
     db:create( "xpr", $content, "z1j.xml", map {"chop" : fn:false()} )
   )
