@@ -8,10 +8,7 @@
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
 
-    <!--<instance>{model}</instance>-->
-    <xf:model>
-      <xf:instance src="/xpr/expertises"/>
-    </xf:model>
+    <instance>{model}</instance>
 
   </head>
   <body onload="repeat()">

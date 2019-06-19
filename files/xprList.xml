@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xf:repeat nodeset="xpr:expertise/xpr:sourceDesc" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
-    <xf:input ref="xpr:idno[@type='item']"><xf:label>Intitulé</xf:label></xf:input>
+    <xf:label>
+        <xf:output ref="xpr:idno[@type='unitid']"/>, dossier n° <xf:output ref="xpr:idno[@type='item']"/>
+    </xf:label>
+    <xf:trigger>
+        <xf:label>Modifier</xf:label>
+        <xf:action ev:event="DOMActivate">
+            <xf:setvalue ref="instance('url')" value="concat(instance('list')/xpr:expertise/@xml:id, '/modify')"/>
+            <xf:load ref="instance('url')"/>
+        </xf:action>
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Voir</xf:label>
+        <xf:action ev:event="DOMActivate">
+            <xf:load ref="../@xml:id"/>
+        </xf:action>
+    </xf:trigger>
 </xf:repeat>

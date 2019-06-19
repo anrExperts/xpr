@@ -3,7 +3,7 @@ module namespace xpr = "xpr";
 (:~
  : This xquery module is an application for the Z1J expertises called xpr
  :
- : @author emchateau et sardinecan (ANR Experts)
+ : @author emchateau & sardinecan (ANR Experts)
  : @since 2019-01
  : @licence GNU http://www.gnu.org/licenses
  :
@@ -66,6 +66,8 @@ function install() {
  : @return redirect to the expertises list
  :)
 declare 
+
+
   %rest:path("/xpr/home")
   %output:method("xml")
 function home() {
@@ -83,7 +85,7 @@ declare
 function listHtml() {
   let $content := map {
     'instance' : '',
-    'model' : 'xprExpertiseModel.xml',
+    'model' : 'xprListModel.xml',
     'trigger' : '',
     'form' : fn:doc(file:base-dir() || "files/" || "xprList.xml")
   }
@@ -817,6 +819,7 @@ declare %updating function associate($content as map(*), $outputParams as map(*)
  :
  : @param $content the content params
  : @return the default model or its instance version
+ : @bug not generic enough
  :)
 declare function getModel($content as map(*)){
   let $instance := map:get($content, 'instance')
