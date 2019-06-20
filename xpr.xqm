@@ -223,7 +223,7 @@ function modify($id) {
 (:~
  : This function consumes new expertises 
  : @param $param content
- : @bug solve the xml namespace in xforms
+ : @bug change of cote and dossier doesn’t work
  :)
 declare
 %rest:path("xpr/expertises/put")
@@ -234,16 +234,22 @@ declare
 function xformResult($param, $referer) {
   let $db := db:open("xpr")
   return 
-    if ( fn:ends-with($referer, 'modify') )
-    then insert node <expertise><toto>encore</toto></expertise> into $db/expertises
+    if (fn:ends-with($referer, 'modify'))
+    then 
+      let $location := fn:analyze-string($referer, 'xpr/expertises/(.+?)/modify')//fn:group[@nr='1']
+      let $id := fn:replace($param/expertise/sourceDesc/idno[@type="unitid"], '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
+      (: let $param := 
+        copy $d := $param
+        modify replace value of node $d/@xml:id with $id
+        return $d :)
+      return replace node $db/expertises/expertise[@xml:id = $location] with $param
     else
-      let $id := $param/expertise/sourceDesc/idno[@type="unitid"] || '-' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
-      let $id := fn:replace($id, '/', '-')
+      let $id := fn:replace($param/expertise/sourceDesc/idno[@type="unitid"], '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
       let $param := 
         copy $d := $param
         modify insert node attribute xml:id {$id} into $d/*
         return $d
-    return insert node $param into $db/expertises
+      return insert node $param into $db/expertises
 };
 
 (:~
