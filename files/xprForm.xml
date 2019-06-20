@@ -9,7 +9,7 @@
         <link href="/xpr/files/css/main.css" rel="stylesheet" />
         <!-- XForms data models -->
         <xf:model>
-            
+
             <xf:action ev:event="xforms-ready">
                 <xf:setvalue ref="instance('xprCategories')/xpr:category[not(@type)]" value="concat(
                     instance('xprModel')/xpr:description/xpr:categories/xpr:category[1]/@type, ' ',
@@ -29,9 +29,9 @@
                     instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
                     )"/>
             </xf:action>
-            
+
             <!--Instance principale-->
-            <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/> 
+            <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
             <!--<xf:instance id="xprModel" src="/xpr/expertises/Z1J-4000-099"/>-->
 
             <!--Instances secondaires-->
@@ -44,13 +44,13 @@
             <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml"/>
             <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
             <!--<xf:submission id="submit" resource="put" method="PUT"/>-->
-            
+
             <xf:submission id="submit" resource="put" method="put">
-                <xf:action ev:event="xforms-submit-done" >
+                <xf:action ev:event="xforms-submit-done">
                     <xf:message level="ephemeral">So Good !</xf:message>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
-                    <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corrigez les erreurs</xf:message>
+                    <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
                 </xf:action>
             </xf:submission>
 
@@ -127,7 +127,7 @@
             <xf:bind id="categoryType" nodeset="xpr:description/xpr:categories/xpr:category/@type"/>
             <xf:bind id="designation" nodeset="xpr:description/xpr:categories/xpr:designation"/>
             <xf:bind id="designationRubric" nodeset="xpr:description/xpr:categories/xpr:designation/@rubric"/>
-            
+
             <!--procedure encadrant l'expertise-->
             <xf:bind id="procedure" nodeset="xpr:description/xpr:procedure"/>
 

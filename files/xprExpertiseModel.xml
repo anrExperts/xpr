@@ -1,15 +1,13 @@
 <xf:model xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <xf:action ev:event="xforms-ready">
-                <xf:setvalue ref="instance('xprCategories')/xpr:category[not(@type)]"
-                        value="concat(
+                <xf:setvalue ref="instance('xprCategories')/xpr:category[not(@type)]" value="concat(
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[1]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[2]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[3]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[4]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[5]/@type
-                                )" />
-                <xf:setvalue ref="instance('xprObjects')/xpr:object[not(@type)]"
-                        value="concat(
+                                )"/>
+                <xf:setvalue ref="instance('xprObjects')/xpr:object[not(@type)]" value="concat(
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[1]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[2]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[3]/@type, ' ',
@@ -18,229 +16,175 @@
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[6]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
-                                )"
-                 />
+                                )"/>
         </xf:action>
         <!--Instance principale-->
-        <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml" />
+        <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
         <!--<xf:instance id="xprModel" src="/xpr/expertises/Z1J-4000-099" />-->
         <!--Instances secondaires-->
-        <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml" />
-        <xf:instance id="xprAppendices" src="/xpr/files/_xprAppendices.xml" />
-        <xf:instance id="xprCategories" src="/xpr/files/_xprCategories.xml" />
-        <xf:instance id="xprObjects" src="/xpr/files/_xprObjects.xml" />
-        <xf:instance id="xprExpenses" src="/xpr/files/_xprExpenses.xml" />
-        <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml" />
-        <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml" />
-        <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml" />
-        <xf:submission id="submit" resource="put" method="put">
-          <xf:action ev:event="xforms-submit-done">
-            <xf:message level="ephemeral">So Good !</xf:message>
-          </xf:action>
-          <xf:action ev:event="xforms-submit-error">
-            <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corrigez les erreurs</xf:message>
-          </xf:action>
+        <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
+        <xf:instance id="xprAppendices" src="/xpr/files/_xprAppendices.xml"/>
+        <xf:instance id="xprCategories" src="/xpr/files/_xprCategories.xml"/>
+        <xf:instance id="xprObjects" src="/xpr/files/_xprObjects.xml"/>
+        <xf:instance id="xprExpenses" src="/xpr/files/_xprExpenses.xml"/>
+        <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml"/>
+        <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml"/>
+        <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
+        <xf:submission id="submit" resource="put" method="put" replace="instance" instance="xprModel">
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral">So Good !</xf:message>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                </xf:action>
         </xf:submission>
         <!--**sourceDesc**-->
-        <xf:bind id="sourceDesc" nodeset="xpr:sourceDesc" />
+        <xf:bind id="sourceDesc" nodeset="xpr:sourceDesc"/>
         <!--référence-->
-        <xf:bind id="unitid" nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()" />
-        <xf:bind id="item" nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()" />
-        <xf:bind id="facsimileFrom" nodeset="xpr:sourceDesc/xpr:facsimile/@from" />
-        <xf:bind id="facsimileTo" nodeset="xpr:sourceDesc/xpr:facsimile/@to" />
+        <xf:bind id="unitid" nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()"/>
+        <xf:bind id="item" nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()"/>
+        <xf:bind id="facsimileFrom" nodeset="xpr:sourceDesc/xpr:facsimile/@from"/>
+        <xf:bind id="facsimileTo" nodeset="xpr:sourceDesc/xpr:facsimile/@to"/>
         <!--physDesc-->
-        <xf:bind id="physDesc" nodeset="xpr:physDesc" />
-        <xf:bind id="extent" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent" />
-        <xf:bind id="sketch" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch" />
-        <xf:bind id="addAppendice" nodeset="instance('xprSupplement')/xpr:appendices"
-                relevant="not(instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)" />
-        <xf:bind id="appendice" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice" />
-        <xf:bind id="appendiceType"
-                nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type" />
-        <xf:bind id="appendiceExtent"
-                nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:extent" />
-        <xf:bind id="appendiceDesc" nodeset="xpr:sourceDesc/physDesc/appendices/appendice/desc" />
-        <xf:bind id="appendiceNote"
-                nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:note" />
+        <xf:bind id="physDesc" nodeset="xpr:physDesc"/>
+        <xf:bind id="extent" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent"/>
+        <xf:bind id="sketch" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/>
+        <xf:bind id="addAppendice" nodeset="instance('xprSupplement')/xpr:appendices" relevant="not(instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)"/>
+        <xf:bind id="appendice" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice"/>
+        <xf:bind id="appendiceType" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type"/>
+        <xf:bind id="appendiceExtent" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:extent"/>
+        <xf:bind id="appendiceDesc" nodeset="xpr:sourceDesc/physDesc/appendices/appendice/desc"/>
+        <xf:bind id="appendiceNote" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:note"/>
         <!--<xf:bind
                     nodeset="sourceDesc/physDesc/appendices/appendice/@subtype"
                     relevant="./parent::appendice[contains(@type, 'other')]"/>-->
         <!--**description**-->
-        <xf:bind id="description" nodeset="xpr:description" />
+        <xf:bind id="description" nodeset="xpr:description"/>
         <!--sessions-->
-        <xf:bind id="sessions" nodeset="xpr:description/xpr:sessions" />
-        <xf:bind id="sessionsDate" nodeset="xpr:description/xpr:sessions/xpr:date" />
-        <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when"
-                type="xf:date"
-                constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))" />
+        <xf:bind id="sessions" nodeset="xpr:description/xpr:sessions"/>
+        <xf:bind id="sessionsDate" nodeset="xpr:description/xpr:sessions/xpr:date"/>
+        <xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))"/>
         <!--<xf:bind id="sessionsWhen" nodeset="xpr:description/xpr:sessions/xpr:date/@when"/>-->
-        <xf:bind id="sessionsType" nodeset="xpr:description/xpr:sessions/xpr:date/@type" />
+        <xf:bind id="sessionsType" nodeset="xpr:description/xpr:sessions/xpr:date/@type"/>
         <!--places-->
-        <xf:bind id="places" nodeset="xpr:description/xpr:places" />
-        <xf:bind id="place" nodeset="xpr:description/xpr:places/xpr:place" />
-        <xf:bind id="placeAddresse" nodeset="xpr:description/xpr:places/xpr:place/xpr:address" />
-        <xf:bind id="placeStreet"
-                nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street"
-                relevant="../../@type='paris'
+        <xf:bind id="places" nodeset="xpr:description/xpr:places"/>
+        <xf:bind id="place" nodeset="xpr:description/xpr:places/xpr:place"/>
+        <xf:bind id="placeAddresse" nodeset="xpr:description/xpr:places/xpr:place/xpr:address"/>
+        <xf:bind id="placeStreet" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris'
                         or ../@type='suburbs'
                         or ../@type='province'
-                        or ../@type='indeterminate'" />
+                        or ../@type='indeterminate'"/>
         <!--<xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
                 or ../@type='suburbs'
                 or ../@type='province'
                 or ../@type='indeterminate'" type="xs:integer"/>-->
-        <xf:bind id="placeBuildingNumber"
-                nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber"
-                relevant="../../@type='paris'
+        <xf:bind id="placeBuildingNumber" nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
                         or ../@type='suburbs'
                         or ../@type='province'
-                        or ../@type='indeterminate'" />
-        <xf:bind id="placeComplement" nodeset="xpr:description/xpr:places/xpr:place/xpr:complement"
-                relevant="../@type='paris'
+                        or ../@type='indeterminate'"/>
+        <xf:bind id="placeComplement" nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris'
                         or ../@type='suburbs'
                         or ../@type='province'
-                        or ../@type='indeterminate'" />
-        <xf:bind id="placeParish" nodeset="xpr:description/xpr:places/xpr:place/xpr:parish"
-                relevant="../@type='paris'" />
-        <xf:bind id="placeCity" nodeset="xpr:description/xpr:places/xpr:place/xpr:city"
-                relevant="../@type='suburbs'
-                        or ../@type='province'" />
-        <xf:bind id="placeDistrict" nodeset="xpr:description/xpr:places/xpr:place/xpr:district"
-                relevant="../@type='suburbs'
-                        or ../@type='province'" />
-        <xf:bind id="placeOwner" nodeset="xpr:description/xpr:places/xpr:place/xpr:owner"
-                relevant="../@type='paris'
+                        or ../@type='indeterminate'"/>
+        <xf:bind id="placeParish" nodeset="xpr:description/xpr:places/xpr:place/xpr:parish" relevant="../@type='paris'"/>
+        <xf:bind id="placeCity" nodeset="xpr:description/xpr:places/xpr:place/xpr:city" relevant="../@type='suburbs'
+                        or ../@type='province'"/>
+        <xf:bind id="placeDistrict" nodeset="xpr:description/xpr:places/xpr:place/xpr:district" relevant="../@type='suburbs'
+                        or ../@type='province'"/>
+        <xf:bind id="placeOwner" nodeset="xpr:description/xpr:places/xpr:place/xpr:owner" relevant="../@type='paris'
                         or ../@type='suburbs'
                         or ../@type='province'
-                        or ../@type='indeterminate'" />
+                        or ../@type='indeterminate'"/>
         <!--Categories-->
-        <xf:bind id="categories" nodeset="xpr:description/xpr:categories" />
-        <xf:bind id="category" nodeset="xpr:description/xpr:categories/xpr:category" />
-        <xf:bind id="categoryType" nodeset="xpr:description/xpr:categories/xpr:category/@type" />
-        <xf:bind id="designation" nodeset="xpr:description/xpr:categories/xpr:designation" />
-        <xf:bind id="designationRubric"
-                nodeset="xpr:description/xpr:categories/xpr:designation/@rubric" />
+        <xf:bind id="categories" nodeset="xpr:description/xpr:categories"/>
+        <xf:bind id="category" nodeset="xpr:description/xpr:categories/xpr:category"/>
+        <xf:bind id="categoryType" nodeset="xpr:description/xpr:categories/xpr:category/@type"/>
+        <xf:bind id="designation" nodeset="xpr:description/xpr:categories/xpr:designation"/>
+        <xf:bind id="designationRubric" nodeset="xpr:description/xpr:categories/xpr:designation/@rubric"/>
         <!--procedure encadrant l'expertise-->
-        <xf:bind id="procedure" nodeset="xpr:description/xpr:procedure" />
+        <xf:bind id="procedure" nodeset="xpr:description/xpr:procedure"/>
         <!--cadre-->
-        <xf:bind id="framework" nodeset="xpr:description/xpr:procedure/xpr:framework" />
-        <xf:bind id="frameworkType" nodeset="xpr:description/xpr:procedure/xpr:framework/@type" />
+        <xf:bind id="framework" nodeset="xpr:description/xpr:procedure/xpr:framework"/>
+        <xf:bind id="frameworkType" nodeset="xpr:description/xpr:procedure/xpr:framework/@type"/>
         <!--Origine de l'expertise-->
-        <xf:bind id="origination" nodeset="xpr:description/xpr:procedure/xpr:origination" />
-        <xf:bind id="originationType" nodeset="xpr:description/xpr:procedure/xpr:origination/@type" />
+        <xf:bind id="origination" nodeset="xpr:description/xpr:procedure/xpr:origination"/>
+        <xf:bind id="originationType" nodeset="xpr:description/xpr:procedure/xpr:origination/@type"/>
         <!--intervention d'une institution-->
-        <xf:bind id="sentences" nodeset="xpr:description/xpr:procedure/xpr:sentences" />
-        <xf:bind id="sentence" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence" />
-        <xf:bind id="sentenceOrg"
-                nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:orgName" />
-        <xf:bind id="sentenceDate"
-                nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date" />
+        <xf:bind id="sentences" nodeset="xpr:description/xpr:procedure/xpr:sentences"/>
+        <xf:bind id="sentence" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence"/>
+        <xf:bind id="sentenceOrg" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:orgName"/>
+        <xf:bind id="sentenceDate" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date"/>
         <!--<xf:bind id="sentenceWhen" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date/@when" type="xs:date"/>-->
-        <xf:bind id="sentenceWhen"
-                nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date/@when" />
+        <xf:bind id="sentenceWhen" nodeset="xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date/@when"/>
         <!--Cause de l'expertise-->
-        <xf:bind id="case" nodeset="xpr:description/xpr:procedure/xpr:case" />
+        <xf:bind id="case" nodeset="xpr:description/xpr:procedure/xpr:case"/>
         <!--Objets de l'expertise-->
-        <xf:bind id="objectOther"
-                nodeset="xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"
-                relevant="." />
+        <xf:bind id="objectOther" nodeset="xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']" relevant="."/>
         <!--Acteurs de l'expertise-->
-        <xf:bind id="participants" nodeset="xpr:description/xpr:participants" />
+        <xf:bind id="participants" nodeset="xpr:description/xpr:participants"/>
         <!--Les experts-->
-        <xf:bind id="experts" nodeset="xpr:description/xpr:participants/xpr:experts" />
-        <xf:bind id="expert" nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert" />
-        <xf:bind id="expertRef"
-                nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref" />
-        <xf:bind id="expertTitle"
-                nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert/xpr:title" />
+        <xf:bind id="experts" nodeset="xpr:description/xpr:participants/xpr:experts"/>
+        <xf:bind id="expert" nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert"/>
+        <xf:bind id="expertRef" nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref"/>
+        <xf:bind id="expertTitle" nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert/xpr:title"/>
         <!--Les greffiers-->
-        <xf:bind id="clerks" nodeset="xpr:description/xpr:participants/xpr:clerks" />
-        <xf:bind id="clerk" nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk" />
-        <xf:bind id="clerkName"
-                nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk/xpr:persName" />
-        <xf:bind id="clerkSurname"
-                nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk/xpr:persName/xpr:surname" />
-        <xf:bind id="clerkForename"
-                nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk/xpr:persName/xpr:forename" />
+        <xf:bind id="clerks" nodeset="xpr:description/xpr:participants/xpr:clerks"/>
+        <xf:bind id="clerk" nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk"/>
+        <xf:bind id="clerkName" nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk/xpr:persName"/>
+        <xf:bind id="clerkSurname" nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk/xpr:persName/xpr:surname"/>
+        <xf:bind id="clerkForename" nodeset="xpr:description/xpr:participants/xpr:clerks/xpr:clerk/xpr:persName/xpr:forename"/>
         <!--Les parties-->
-        <xf:bind id="parties" nodeset="xpr:description/xpr:participants/xpr:parties" />
-        <xf:bind id="party" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party" />
-        <xf:bind id="person"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person" />
-        <xf:bind id="personName"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName" />
-        <xf:bind id="personSurname"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName/xpr:surname" />
-        <xf:bind id="personForename"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName/xpr:forename" />
-        <xf:bind id="personOccupation"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:occupation" />
-        <xf:bind id="partyExpert"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:expert" />
-        <xf:bind id="addRepresentative" nodeset="instance('xprSupplement')/xpr:representative" />
-        <xf:bind id="representative"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative" />
-        <xf:bind id="representativeName"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName" />
-        <xf:bind id="representativeSurname"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:surname" />
-        <xf:bind id="representativeForename"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:forename" />
-        <xf:bind id="representativeOccupation"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:occupation" />
-        <xf:bind id="addProsecutor" nodeset="instance('xprSupplement')/xpr:prosecutor" />
-        <xf:bind id="prosecutor"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor" />
-        <xf:bind id="prosecutorName"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName" />
-        <xf:bind id="prosecutorSurname"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName/xpr:surname" />
-        <xf:bind id="prosecutorForename"
-                nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName/xpr:forename" />
+        <xf:bind id="parties" nodeset="xpr:description/xpr:participants/xpr:parties"/>
+        <xf:bind id="party" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party"/>
+        <xf:bind id="person" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person"/>
+        <xf:bind id="personName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName"/>
+        <xf:bind id="personSurname" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName/xpr:surname"/>
+        <xf:bind id="personForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:persName/xpr:forename"/>
+        <xf:bind id="personOccupation" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:person/xpr:occupation"/>
+        <xf:bind id="partyExpert" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:expert"/>
+        <xf:bind id="addRepresentative" nodeset="instance('xprSupplement')/xpr:representative"/>
+        <xf:bind id="representative" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative"/>
+        <xf:bind id="representativeName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName"/>
+        <xf:bind id="representativeSurname" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:surname"/>
+        <xf:bind id="representativeForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:persName/xpr:forename"/>
+        <xf:bind id="representativeOccupation" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative/xpr:occupation"/>
+        <xf:bind id="addProsecutor" nodeset="instance('xprSupplement')/xpr:prosecutor"/>
+        <xf:bind id="prosecutor" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor"/>
+        <xf:bind id="prosecutorName" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName"/>
+        <xf:bind id="prosecutorSurname" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName/xpr:surname"/>
+        <xf:bind id="prosecutorForename" nodeset="xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor/xpr:persName/xpr:forename"/>
         <!--Entrepreneur, architecte ou maître d’œuvre-->
-        <xf:bind id="craftmen" nodeset="xpr:description/xpr:participants/xpr:craftmen" />
-        <xf:bind id="craftman" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman" />
-        <xf:bind id="craftmanName"
-                nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:persName" />
-        <xf:bind id="craftmanSurname"
-                nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:persName/xpr:surname" />
-        <xf:bind id="craftmanForename"
-                nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:persName/xpr:forename" />
-        <xf:bind id="craftmanOccupation"
-                nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:occupation" />
+        <xf:bind id="craftmen" nodeset="xpr:description/xpr:participants/xpr:craftmen"/>
+        <xf:bind id="craftman" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman"/>
+        <xf:bind id="craftmanName" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:persName"/>
+        <xf:bind id="craftmanSurname" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:persName/xpr:surname"/>
+        <xf:bind id="craftmanForename" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:persName/xpr:forename"/>
+        <xf:bind id="craftmanOccupation" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:occupation"/>
         <!--Conclusions-->
-        <xf:bind id="conclusions" nodeset="xpr:description/xpr:conclusions" />
-        <xf:bind id="agreement" nodeset="xpr:description/xpr:conclusions/xpr:agreement" />
-        <xf:bind id="agreementType" nodeset="xpr:description/xpr:conclusions/xpr:agreement/@type" />
-        <xf:bind id="opinion" nodeset="xpr:description/xpr:conclusions/xpr:opinion" />
-        <xf:bind id="estimate" nodeset="xpr:description/xpr:conclusions/xpr:estimate" />
-        <xf:bind id="fees" nodeset="xpr:description/xpr:conclusions/xpr:fees" />
-        <xf:bind id="feesDetail" nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail" />
-        <xf:bind id="fee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee"
-                relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']" />
-        <xf:bind id="addOtherFee"
-                nodeset="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']"
-                relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']" />
-        <xf:bind id="feesTotal" nodeset="xpr:description/xpr:conclusions/xpr:fees/xpr:total" />
+        <xf:bind id="conclusions" nodeset="xpr:description/xpr:conclusions"/>
+        <xf:bind id="agreement" nodeset="xpr:description/xpr:conclusions/xpr:agreement"/>
+        <xf:bind id="agreementType" nodeset="xpr:description/xpr:conclusions/xpr:agreement/@type"/>
+        <xf:bind id="opinion" nodeset="xpr:description/xpr:conclusions/xpr:opinion"/>
+        <xf:bind id="estimate" nodeset="xpr:description/xpr:conclusions/xpr:estimate"/>
+        <xf:bind id="fees" nodeset="xpr:description/xpr:conclusions/xpr:fees"/>
+        <xf:bind id="feesDetail" nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail"/>
+        <xf:bind id="fee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+        <xf:bind id="addOtherFee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+        <xf:bind id="feesTotal" nodeset="xpr:description/xpr:conclusions/xpr:fees/xpr:total"/>
         <!--            <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" type="xs:decimal"/>-->
-        <xf:bind id="feesMoney"
-                nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s" />
-        <xf:bind id="expenses" nodeset="xpr:description/xpr:conclusions/xpr:expenses" />
-        <xf:bind id="expensesMentioned"
-                nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned" />
-        <xf:bind id="expenseType" nodeset="instance('xprSupplement')/xpr:expenses/xpr:expense"
-                relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']" />
+        <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprFees')//@l | instance('xprFees')//@d |instance('xprFees')//@s"/>
+        <xf:bind id="expenses" nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>
+        <xf:bind id="expensesMentioned" nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>
+        <xf:bind id="expenseType" nodeset="instance('xprSupplement')/xpr:expenses/xpr:expense" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
         <!--Mots-clés et commentaires-->
-        <xf:bind id="keywordsTechnical" nodeset="xpr:description/xpr:keywords[@type='technical']" />
-        <xf:bind id="technicalTerm"
-                nodeset="xpr:description/xpr:keywords[@type='technical']/xpr:term" />
-        <xf:bind id="keywordsTools" nodeset="xpr:description/xpr:keywords[@type='tools']" />
-        <xf:bind id="toolsTerm" nodeset="xpr:description/xpr:keywords[@type='tools']/xpr:term" />
-        <xf:bind id="keywordsEstimation" nodeset="xpr:description/xpr:keywords[@type='estimation']" />
-        <xf:bind id="estimationTerm"
-                nodeset="xpr:description/xpr:keywords[@type='estimation']/xpr:term" />
-        <xf:bind id="keywordsLaw" nodeset="xpr:description/xpr:keywords[@type='law']" />
-        <xf:bind id="lawTerm" nodeset="xpr:description/xpr:keywords[@type='law']/xpr:term" />
-        <xf:bind id="analysis" nodeset="xpr:description/xpr:analysis" />
-        <xf:bind id="noteworthy" nodeset="xpr:description/xpr:noteworthy" />
+        <xf:bind id="keywordsTechnical" nodeset="xpr:description/xpr:keywords[@type='technical']"/>
+        <xf:bind id="technicalTerm" nodeset="xpr:description/xpr:keywords[@type='technical']/xpr:term"/>
+        <xf:bind id="keywordsTools" nodeset="xpr:description/xpr:keywords[@type='tools']"/>
+        <xf:bind id="toolsTerm" nodeset="xpr:description/xpr:keywords[@type='tools']/xpr:term"/>
+        <xf:bind id="keywordsEstimation" nodeset="xpr:description/xpr:keywords[@type='estimation']"/>
+        <xf:bind id="estimationTerm" nodeset="xpr:description/xpr:keywords[@type='estimation']/xpr:term"/>
+        <xf:bind id="keywordsLaw" nodeset="xpr:description/xpr:keywords[@type='law']"/>
+        <xf:bind id="lawTerm" nodeset="xpr:description/xpr:keywords[@type='law']/xpr:term"/>
+        <xf:bind id="analysis" nodeset="xpr:description/xpr:analysis"/>
+        <xf:bind id="noteworthy" nodeset="xpr:description/xpr:noteworthy"/>
 </xf:model>
