@@ -34,12 +34,12 @@
         <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml" />
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml" />
         <xf:submission id="submit" resource="put" method="put">
-                <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">So Good !</xf:message>
-                </xf:action>
-                <xf:action ev:event="xforms-submit-error">
-                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corrigez les erreurs</xf:message>
-                </xf:action>
+          <xf:action ev:event="xforms-submit-done">
+            <xf:message level="ephemeral">So Good !</xf:message>
+          </xf:action>
+          <xf:action ev:event="xforms-submit-error">
+            <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corrigez les erreurs</xf:message>
+          </xf:action>
         </xf:submission>
         <!--**sourceDesc**-->
         <xf:bind id="sourceDesc" nodeset="xpr:sourceDesc" />
