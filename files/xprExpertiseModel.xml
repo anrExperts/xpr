@@ -30,9 +30,14 @@
         <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml"/>
         <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml"/>
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
-        <xf:submission id="submit" resource="put" method="put" replace="instance" instance="xprModel">
+        <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">So Good !</xf:message>
+                        <xf:message level="ephemeral">
+                                So Good !
+                        </xf:message>
+                        <xf:load show="replace">
+                                <xf:resource value="'/xpr/expertises/list'"/>
+                        </xf:load>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
                         <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
