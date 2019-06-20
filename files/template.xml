@@ -8,17 +8,14 @@
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
 
-    <!--<instance>{model}</instance>-->
-    <xf:model>
-      <xf:instance src="/xpr/expertises"/>
-    </xf:model>
+    <instance>{model}</instance>
 
   </head>
   <body onload="repeat()">
     <nav id="navigation">
       <ul>
         <li><a href="/xpr">¡xpr!</a></li>
-        <li><a href="/xpr/expertises">pv</a></li>
+        <li><a href="/xpr/expertises/list">pv</a></li>
         <li><a href="/xpr">prosopo</a></li>
         <li><a href="/xpr/about">?</a></li>
       </ul>
