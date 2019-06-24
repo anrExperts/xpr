@@ -289,11 +289,11 @@
                             <xf:help>Supprimer un propriétaire.</xf:help>
                         </xf:trigger>
                     </xf:repeat>
-                    <xf:trigger bind="placeOwner" class="insert">
+                    <xf:trigger class="insert">
                         <xf:label>Ajouter un propriétaire</xf:label>
                         <xf:action ev:event="DOMActivate">
-                            <xf:insert nodeset="." at="index('repeatOwner')" position="after" ev:event="DOMActivate"/>
-                            <xf:setvalue ref="xpr:place/xpr:owner[index('repeatOwner')]" value=""/>
+                            <xf:insert nodeset="xpr:owner" at="index('repeatOwner')" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="xpr:owner[index('repeatOwner')]" value=""/>
                         </xf:action>
                         <xf:help>Ajouter un propriétaire.</xf:help>
                     </xf:trigger>
@@ -307,7 +307,7 @@
                     <xf:label>Ajouter un lieu</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="xpr:place" at="index('repeatPlace')" position="after" ev:event="DOMActivate"/>
-                        <xf:setvalue ref="xpr:place[index('repeatPlace')]/@type" value=""/>
+                        <!--<xf:setvalue ref="xpr:place[index('repeatPlace')]/@type" value=""/>-->
                         <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:address/xpr:street" value=""/>
                         <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:address/xpr:buildingNumber" value=""/>
                         <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:complement" value=""/>
@@ -315,6 +315,7 @@
                         <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:city" value=""/>
                         <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:province" value=""/>
                         <xf:setvalue ref="xpr:place[index('repeatPlace')]/xpr:owner" value=""/>
+                        <xf:delete ref="xpr:place[index('repeatPlace')]/xpr:owner[position() &gt; 1]"/>
                     </xf:action>
                     <xf:help>Ajouter un lieu.</xf:help>
                 </xf:trigger>
