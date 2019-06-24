@@ -327,8 +327,6 @@
         <xf:case id="procedurePanel" selected="false">
             <xf:group ref="instance('xprCategories')">
                 <xf:label>Types d’expertise</xf:label>
-                <xf:output value="serialize(instance('xprModel')//xpr:description/xpr:categories, 'yes')"/>
-                <xf:output value="serialize(instance('xprCategories'), yes)"/>
                 <xf:select ref="xpr:category" appearance="full">
                     <xf:label>Catégories d’expertise</xf:label>
                     <xf:item>
