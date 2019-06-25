@@ -18,7 +18,7 @@ declare function newId() {
     for $expertise in $db//expertise
     
     let $expertiseId := $expertise/@xml:id
-    let $newId := fn:replace(fn:replace(fn:upper-case($expertise/sourceDesc/idno[@type="unitid"]), '/', '-'),' ','') || 'd' || fn:format-integer($expertise/sourceDesc/idno[@type="item"], '000')
+    let $newId := fn:replace(fn:replace(fn:lower-case($expertise/sourceDesc/idno[@type="unitid"]), '/', '-'),' ','') || 'd' || fn:format-integer($expertise/sourceDesc/idno[@type="item"], '000')
     
     let $unitid := $expertise/sourceDesc/idno[@type="unitid"]
     let $newUnitid := fn:replace(fn:replace(fn:upper-case($expertise/sourceDesc/idno[@type="unitid"]), '/', '-'),' ','')
