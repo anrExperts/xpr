@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<person xmlns="xpr">
+    <meta/>
+    <persName type="full">
+        <forename></forename>
+        <namelink></namelink>
+        <surname></surname>
+    </persName>
+    <birth>
+        <placeName></placeName>
+        <date when=""></date>
+        <bibl></bibl>
+    </birth>
+    <death>
+        <placeName></placeName>
+        <date when=""></date>
+        <source></source>
+    </death>
+    <event type="">
+        <label></label>
+        <desc></desc>
+        <date></date>
+        <placeName></placeName>
+        <ref></ref>
+        <bibl></bibl>
+    </event>
+    <relation name="spouse" mutual="#WM #JBM"/>
+    <relation name="parent" active="#RB" passive="#JBM"/>
+</person>
