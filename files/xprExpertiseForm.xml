@@ -1425,6 +1425,26 @@
             <pre>
                         <xf:output value="serialize(xpr:description/xpr:noteworthy, 'yes')"/>
                     </pre>
+            <xf:trigger bind="addComment">
+                <xf:label>Ajouter un commentaire sur ce formulaire</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <!--<xf:delete nodeset="instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"/>-->
+                    <xf:insert origin="instance('xprSupplement')/xpr:comment" nodeset="instance('xprModel')/*" at="last()" position="after"/>
+                    <!--<xf:insert nodeset="instance('xprAppendices')"/>-->
+                </xf:action>
+                <xf:help>Ajouter un commentaire sur ce formulaire.</xf:help>
+            </xf:trigger>
+            <xf:group ref="xpr:comment">
+                <xf:label>Commentaire sur ce formulaire</xf:label>
+                <xf:textarea ref=".">
+                    <xf:label/>
+                </xf:textarea>
+                <xf:trigger class="delete">
+                    <xf:label>&#10007;</xf:label>
+                    <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                    <xf:help>Supprimer le commentaire.</xf:help>
+                </xf:trigger>
+            </xf:group>
         </xf:case>
     </xf:switch>
     <xf:submit submission="submit">
