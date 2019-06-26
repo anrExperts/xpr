@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<expenses xmlns="xpr">
-    <expense/>
-    <expense type="clerk" l="" s="" d=""/>
-    <expense type="expert" l="" s="" d=""/>
-</expenses>
