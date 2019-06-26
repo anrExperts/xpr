@@ -1,13 +1,13 @@
 <xf:model xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <xf:action ev:event="xforms-ready">
-                <xf:setvalue ref="instance('xprCategories')/xpr:category[not(@type)]" value="concat(
+                <xf:setvalue ref="instance('xprSupplement')/xpr:categories/xpr:category[not(@type)]" value="concat(
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[1]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[2]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[3]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[4]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:categories/xpr:category[5]/@type
                                 )"/>
-                <xf:setvalue ref="instance('xprObjects')/xpr:object[not(@type)]" value="concat(
+                <xf:setvalue ref="instance('xprSupplement')/xpr:objects/xpr:object[not(@type)]" value="concat(
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[1]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[2]/@type, ' ',
                                 instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[3]/@type, ' ',
@@ -24,7 +24,7 @@
         <!--Instances secondaires-->
         <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
         <xf:instance id="xprAppendices" src="/xpr/files/_xprAppendices.xml"/>
-        <xf:instance id="xprCategories" src="/xpr/files/_xprCategories.xml"/>
+        <!--<xf:instance id="xprCategories" src="/xpr/files/_xprCategories.xml"/>-->
         <xf:instance id="xprObjects" src="/xpr/files/_xprObjects.xml"/>
         <xf:instance id="xprExpenses" src="/xpr/files/_xprExpenses.xml"/>
         <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml"/>
@@ -32,9 +32,7 @@
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
         <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral">
-                                So Good !
-                        </xf:message>
+                        <xf:message level="ephemeral"> So Good ! </xf:message>
                         <xf:load show="replace">
                                 <xf:resource value="'/xpr/expertises/list'"/>
                         </xf:load>
@@ -46,7 +44,7 @@
         <!--**sourceDesc**-->
         <xf:bind id="sourceDesc" nodeset="xpr:sourceDesc"/>
         <!--référence-->
-        <xf:bind id="unitid" nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()"/>
+        <xf:bind id="unitid" nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()" constraint=""/>
         <xf:bind id="item" nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()"/>
         <xf:bind id="facsimileFrom" nodeset="xpr:sourceDesc/xpr:facsimile/@from"/>
         <xf:bind id="facsimileTo" nodeset="xpr:sourceDesc/xpr:facsimile/@to"/>

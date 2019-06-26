@@ -326,7 +326,7 @@
                         </pre>
         </xf:case>
         <xf:case id="procedurePanel" selected="false">
-            <xf:group ref="instance('xprCategories')">
+            <xf:group ref="instance('xprSupplement')/xpr:categories">
                 <xf:label>Types d’expertise</xf:label>
                 <xf:select ref="xpr:category" appearance="full">
                     <xf:label>Catégories d’expertise</xf:label>
@@ -334,7 +334,7 @@
                         <xf:label>Estimer la valeur des biens</xf:label>
                         <xf:value>estimation</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprCategories')/xpr:category[@type='estimation']"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='estimation']"/>
                         </xf:action>
                         <xf:action ev:event="xforms-deselect">
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:categories/xpr:category[@type='estimation']"/>
@@ -344,7 +344,7 @@
                         <xf:label>Recevoir et évaluer le travail réalisé</xf:label>
                         <xf:value>acceptation</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprCategories')/xpr:category[@type='acceptation']"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='acceptation']"/>
                         </xf:action>
                         <xf:action ev:event="xforms-deselect">
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:categories/xpr:category[@type='acceptation']"/>
@@ -354,7 +354,7 @@
                         <xf:label>Enregistrer</xf:label>
                         <xf:value>registration</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprCategories')/xpr:category[@type='registration']"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='registration']"/>
                         </xf:action>
                         <xf:action ev:event="xforms-deselect">
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:categories/xpr:category[@type='registration']"/>
@@ -364,7 +364,7 @@
                         <xf:label>Départager</xf:label>
                         <xf:value>settlement</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprCategories')/xpr:category[@type='settlement']"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='settlement']"/>
                         </xf:action>
                         <xf:action ev:event="xforms-deselect">
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:categories/xpr:category[@type='settlement']"/>
@@ -374,7 +374,7 @@
                         <xf:label>Évaluer les coûts à venir</xf:label>
                         <xf:value>assessment</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprCategories')/xpr:category[@type='assessment']"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='assessment']"/>
                         </xf:action>
                         <xf:action ev:event="xforms-deselect">
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:categories/xpr:category[@type='assessment']"/>
@@ -521,7 +521,7 @@
                         <xf:label>Cause de l’expertise</xf:label>
                     </xf:input>
                 </xf:group>
-                <xf:group ref="instance('xprObjects')">
+                <xf:group ref="instance('xprSupplement')/xpr:objects">
                     <xf:select ref="xpr:object" appearance="full">
                         <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
                         <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
@@ -530,7 +530,7 @@
                             <xf:label>Maison</xf:label>
                             <xf:value>house</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='house']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='house']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='house']"/>
@@ -540,7 +540,7 @@
                             <xf:label>Terrain</xf:label>
                             <xf:value>plot</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='plot']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='plot']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='plot']"/>
@@ -550,7 +550,7 @@
                             <xf:label>Ensemble de bâtiments</xf:label>
                             <xf:value>buildings</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='buildings']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='buildings']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='buildings']"/>
@@ -560,7 +560,7 @@
                             <xf:label>Domaine, terres, fief</xf:label>
                             <xf:value>territory</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='territory']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='territory']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='territory']"/>
@@ -570,7 +570,7 @@
                             <xf:label>Mur</xf:label>
                             <xf:value>wall</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='wall']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='wall']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='wall']"/>
@@ -580,7 +580,7 @@
                             <xf:label>Fosse d’aisance</xf:label>
                             <xf:value>cesspool</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='cesspool']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='cesspool']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='cesspool']"/>
@@ -590,7 +590,7 @@
                             <xf:label>Puits</xf:label>
                             <xf:value>well</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='well']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='well']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='well']"/>
@@ -600,7 +600,7 @@
                             <xf:label>Autre</xf:label>
                             <xf:value>other</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprObjects')/xpr:object[@type='other']"/>
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects" origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='other']"/>
                             </xf:action>
                             <xf:action ev:event="xforms-deselect">
                                 <xf:delete ref="instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"/>

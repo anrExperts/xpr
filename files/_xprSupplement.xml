@@ -26,7 +26,27 @@
             <forename/>
         </persName>
     </prosecutor>
+    
+    <categories>
+        <category/>
+        <category type="estimation">Estimer la valeur des biens</category>
+        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category type="registration">Enregistrer</category>
+        <category type="settlement">Départager</category>
+        <category type="assessment">Évaluer les coûts à venir</category>
+    </categories>
 
+    <objects >
+        <object/>
+        <object type="house">Maison</object>
+        <object type="plot">Terrain</object>
+        <object type="buildings">Ensemble de bâtiments</object>
+        <object type="territory">Domaine, terres, fief</object>
+        <object type="wall">Mur</object>
+        <object type="cesspool">Fosse d'aisance</object>
+        <object type="well">Puits</object>
+        <object type="other"/>
+    </objects>
 
     <expenses>
         <expense/>
