@@ -591,3 +591,8 @@ xforms-group-content xforms-group {
 .xforms-item .xforms-input {
     grid-column: inherit;
 }
+
+.xforms-choices {
+    font-weight: normal;
+    font-style: normal;
+}
