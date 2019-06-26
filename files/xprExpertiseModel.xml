@@ -20,15 +20,8 @@
         </xf:action>
         <!--Instance principale-->
         <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
-        <!--<xf:instance id="xprModel" src="/xpr/expertises/Z1J-4000-099" />-->
         <!--Instances secondaires-->
         <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
-        <xf:instance id="xprAppendices" src="/xpr/files/_xprAppendices.xml"/>
-        <!--<xf:instance id="xprCategories" src="/xpr/files/_xprCategories.xml"/>-->
-        <xf:instance id="xprObjects" src="/xpr/files/_xprObjects.xml"/>
-        <xf:instance id="xprExpenses" src="/xpr/files/_xprExpenses.xml"/>
-        <xf:instance id="xprFees" src="/xpr/files/_xprFees.xml"/>
-        <xf:instance id="xprRanges" src="/xpr/files/_xprRanges.xml"/>
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
         <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
@@ -41,7 +34,7 @@
                         <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
                 </xf:action>
         </xf:submission>
-        <!--**sourceDesc**-->
+        <!--sourceDesc-->
         <xf:bind id="sourceDesc" nodeset="xpr:sourceDesc"/>
         <!--référence-->
         <xf:bind id="unitid" nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()" constraint=""/>

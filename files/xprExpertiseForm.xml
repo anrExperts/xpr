@@ -720,9 +720,6 @@
             <pre>
                             <xf:output value="serialize(xpr:description/xpr:participants/xpr:clerks, 'yes')"/>
                         </pre>
-            <pre>
-                        <xf:output value="serialize(instance('xprRanges'), yes)"/>
-                    </pre>
             <xf:group ref="xpr:description/xpr:participants/xpr:parties">
                 <xf:label>Parties</xf:label>
                 <xf:repeat id="repeatParty" bind="party" appearance="full">
