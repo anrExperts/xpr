@@ -929,7 +929,6 @@
                     <xf:label>Ajouter une partie</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="xpr:party" at="index('repeatParty')" position="after" ev:event="DOMActivate"/>
-                        <xf:insert nodeset="instance('xprRanges')/xpr:range[@type='role']" position="after" ev:event="DOMActivate"/>
                         <!--@todo set value-->
                         <xf:setvalue ref="xpr:party[index('repeatParty')]/@role" value=""/>
                         <xf:setvalue ref="xpr:party[index('repeatParty')]/@presence" value=""/>
