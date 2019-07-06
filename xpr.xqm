@@ -165,17 +165,6 @@ function showExpertise($id) {
  : @param an expertise id
  : @return an xforms for the expertise
 :)
-(: declare
-%rest:path("xpr/expertises/new")
-%output:method("xml")
-function xform() {
-  let $xprFormPath := file:base-dir() || "files/xprForm.xml"
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    fn:doc($xprFormPath)
-    )
-}; :)
 declare
   %rest:path("xpr/expertises/new")
   %output:method("xml")
@@ -251,6 +240,32 @@ function xformResult($param, $referer) {
         return $d
       return insert node $param into $db/expertises
 };
+
+
+(:~
+ : This resource function edits an prosopo
+ : @return an xforms for the expertise
+:)
+declare
+  %rest:path("xpr/bio/new")
+  %output:method("xml")
+function newBio() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprProsopoModel.xml',
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprProsopoTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprProsopoForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
+};
+
 
 (:~
  : Utilities 
