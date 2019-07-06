@@ -289,7 +289,7 @@
                             <xf:help>Supprimer un propriétaire.</xf:help>
                         </xf:trigger>
                     </xf:repeat>
-                    <xf:trigger class="insert" ref="xpr:place[index('repeatPlace')][../@type='paris' or ../@type='suburbs' or ../@type='province' or ../@type='indeterminate']">
+                    <xf:trigger class="insert" ref="//xpr:place[index('repeatPlace')][@type='paris' or @type='suburbs' or @type='province' or @type='indeterminate']">
                         <xf:label>Ajouter un propriétaire</xf:label>
                         <xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="xpr:owner" at="index('repeatOwner')" position="after" ev:event="DOMActivate"/>
