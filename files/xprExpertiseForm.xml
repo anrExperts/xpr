@@ -371,7 +371,7 @@
                         </xf:action>
                     </xf:item>
                     <xf:item>
-                        <xf:label>Évaluer les coûts à venir</xf:label>
+                        <xf:label>Décrire et évaluer les travaux à venir</xf:label>
                         <xf:value>assessment</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:insert context="instance('xprModel')/xpr:description/xpr:categories" origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='assessment']"/>
