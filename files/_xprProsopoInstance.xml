@@ -1,29 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<person xmlns="xpr">
+<person xmlns="xpr" xml:id="">
     <meta/>
-    <persName type="full">
-        <forename></forename>
-        <namelink></namelink>
-        <surname></surname>
+    <!--@quest regrouper les différentes formes du nom dans un <name/> ?-->
+    <persName type="">
+        <!-- @ quest @type = full/alternative -->
+        <forename/>
+        <namelink/>
+        <surname/>
     </persName>
     <birth>
-        <placeName></placeName>
-        <date when=""></date>
-        <bibl></bibl>
+        <date when=""/>
+        <placeName/>
+        <bibl/>
     </birth>
     <death>
-        <placeName></placeName>
-        <date when=""></date>
-        <source></source>
+        <date when=""/>
+        <placeName/>
+        <bibl/>
     </death>
-    <event type="">
-        <label></label>
-        <desc></desc>
-        <date></date>
-        <placeName></placeName>
-        <ref></ref>
-        <bibl></bibl>
-    </event>
+    <events>
+        <event type="">
+            <label><!-- @quest le compléter avec le @ type ? --></label>
+            <desc/>
+            <date/>
+            <placeName/>
+            <!--@quest ref et bibl répétables ? -->
+            <ref/>
+            <bibl/>
+        </event>
+    </events>
     <relation name="spouse" mutual="#WM #JBM"/>
     <relation name="parent" active="#RB" passive="#JBM"/>
 </person>

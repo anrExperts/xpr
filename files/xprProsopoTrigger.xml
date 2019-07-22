@@ -1,27 +1,14 @@
-<nav id="navForm" xmlns:xf="http://www.w3.org/2002/xforms"
-    xmlns:ev="http://www.w3.org/2001/xml-events">
+<nav id="navForm" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:trigger>
-        <xf:label>Références</xf:label>
-        <xf:toggle case="referencesPanel" ev:event="DOMActivate" />
+        <xf:label>État civil</xf:label>
+        <xf:toggle case="civilStatusPanel" ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Lieux de l’expertise</xf:label>
-        <xf:toggle case="sessionsPanel" ev:event="DOMActivate" />
+        <xf:label>Évènements</xf:label>
+        <xf:toggle case="eventsPanel" ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Acteurs de l’expertise</xf:label>
-        <xf:toggle case="participantsPanel" ev:event="DOMActivate" />
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label>Procédure et cadre de l’expertise</xf:label>
-        <xf:toggle case="procedurePanel" ev:event="DOMActivate" />
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label>Conclusions ou dispositifs de l’expertise</xf:label>
-        <xf:toggle case="conclusionsPanel" ev:event="DOMActivate" />
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label>Mots-clés et commentaires</xf:label>
-        <xf:toggle case="keywordsPanel" ev:event="DOMActivate" />
+        <xf:label>Relations</xf:label>
+        <xf:toggle case="relationsPanel" ev:event="DOMActivate"/>
     </xf:trigger>
 </nav>
