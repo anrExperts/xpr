@@ -444,6 +444,15 @@
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
+                        <xf:choices>
+                            <xf:item>
+                                <xf:label>B3/ Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:label>
+                                <xf:value>b3</xf:value>
+                                <xf:action ev:event="xforms-select">
+                                    <xf:setvalue ref="parent::xpr:framework">Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:setvalue>
+                                </xf:action>
+                            </xf:item>
+                        </xf:choices>
                         <!--@todo comment faire pour préciser si ce n'est pas le LC ?-->
                         <xf:item>
                             <xf:label>C/ Cas problématique</xf:label>
