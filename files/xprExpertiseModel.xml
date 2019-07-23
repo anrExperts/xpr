@@ -23,6 +23,9 @@
         <!--Instances secondaires-->
         <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
+        <xf:instance id="iterator">
+                <iterator xmlns=""></iterator>
+        </xf:instance>
         <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
                         <xf:message level="ephemeral"> So Good ! </xf:message>
@@ -158,7 +161,8 @@
         <xf:bind id="craftmanOccupation" nodeset="xpr:description/xpr:participants/xpr:craftmen/xpr:craftman/xpr:occupation"/>
         <!--Conclusions-->
         <xf:bind id="conclusions" nodeset="xpr:description/xpr:conclusions"/>
-        <xf:bind id="agreement" nodeset="xpr:description/xpr:conclusions/xpr:agreement"/>
+        <xf:bind id="agreement1" nodeset="xpr:description[count(xpr:participants/xpr:experts//xpr:expert) = 1]/xpr:conclusions/xpr:agreement"/>
+        <xf:bind id="agreement2" nodeset="xpr:description[count(xpr:participants/xpr:experts//xpr:expert) &gt; 1]/xpr:conclusions/xpr:agreement"/>
         <xf:bind id="agreementType" nodeset="xpr:description/xpr:conclusions/xpr:agreement/@type"/>
         <xf:bind id="opinion" nodeset="xpr:description/xpr:conclusions/xpr:opinion"/>
         <xf:bind id="estimate" nodeset="xpr:description/xpr:conclusions/xpr:estimate"/>
@@ -183,6 +187,6 @@
         <xf:bind id="lawTerm" nodeset="xpr:description/xpr:keywords[@type='law']/xpr:term"/>
         <xf:bind id="analysis" nodeset="xpr:description/xpr:analysis"/>
         <xf:bind id="noteworthy" nodeset="xpr:description/xpr:noteworthy"/>
-        
+
         <xf:bind id="addComment" nodeset="instance('xprSupplement')/xpr:comment" relevant="not(instance('xprModel')/xpr:comment)"/>
 </xf:model>
