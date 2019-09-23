@@ -45,6 +45,8 @@ function index() {
 (:~
  : This resource function install
  : @return create the db
+ :
+ : @todo create the prosopo db
  :)
 declare 
   %rest:path("/xpr/install")
@@ -241,13 +243,55 @@ function xformResult($param, $referer) {
       return insert node $param into $db/expertises
 };
 
+(:~
+ : This function export the z1j database into the base-dir
+ : @return redirect to the expertises list
+ :
+ : @todo change the export path 
+ :)
+declare 
+  %rest:path("/xpr/expertises/export")
+  function z1jExport(){
+    db:export("xpr", file:base-dir(), map { 'method': 'xml' }),
+    web:redirect("/xpr/expertises/list")
+};
+
+(:~
+ : This resource function lists all the biographies
+ : @return an ordered list of persons/corporate bodies
+ :)
+declare 
+%rest:path("/xpr/biographies")
+%rest:produces('application/xml')
+%output:method("xml")
+function biographies() {
+  db:open('xprBio')
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("/xpr/biographies/list")
+%rest:produces('text/html')
+%output:method("html")
+function listBio() {
+  <html>
+    <head>Expertises</head>
+    <body>
+      <h1>xpr Biographies</h1>
+      <p><a href="/xpr/biographies/new">Nouvelle fiche</a></p>
+    </body>
+  </html>
+};
 
 (:~
  : This resource function edits an prosopo
  : @return an xforms for the expertise
 :)
 declare
-  %rest:path("xpr/bio/new")
+  %rest:path("xpr/biographies/new")
   %output:method("xml")
 function newBio() {
   let $content := map {
@@ -266,6 +310,21 @@ function newBio() {
     )
 };
 
+(:~
+ : This function consumes new prosopo 
+ : @param $param content
+ : @todo modify
+ :)
+declare
+%rest:path("xpr/biographies/put")
+%output:method("xml")
+%rest:header-param("Referer", "{$referer}", "none")
+%rest:PUT("{$param}")
+%updating
+function xformBioResult($param, $referer) {
+  let $db := db:open("xprBio")
+  return insert node $param into $db/*:bio
+};
 
 (:~
  : Utilities 
