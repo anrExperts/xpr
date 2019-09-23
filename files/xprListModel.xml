@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xf:model xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
   <xf:instance id="list" src="/xpr/expertises"/>
-  
+  <xf:instance id="listBio" src="/xpr/biographies"/>
 </xf:model>
