@@ -1,14 +1,2 @@
 <nav id="navForm" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
-    <xf:trigger>
-        <xf:label>État civil</xf:label>
-        <xf:toggle case="civilStatusPanel" ev:event="DOMActivate"/>
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label>Évènements</xf:label>
-        <xf:toggle case="eventsPanel" ev:event="DOMActivate"/>
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label>Relations</xf:label>
-        <xf:toggle case="relationsPanel" ev:event="DOMActivate"/>
-    </xf:trigger>
 </nav>

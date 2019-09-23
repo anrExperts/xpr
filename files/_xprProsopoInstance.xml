@@ -1,34 +1,69 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<person xmlns="xpr" xml:id="">
-    <meta/>
-    <!--@quest regrouper les différentes formes du nom dans un <name/> ?-->
-    <persName type="">
-        <!-- @ quest @type = full/alternative -->
-        <forename/>
-        <namelink/>
-        <surname/>
-    </persName>
-    <birth>
-        <date when=""/>
-        <placeName/>
-        <bibl/>
-    </birth>
-    <death>
-        <date when=""/>
-        <placeName/>
-        <bibl/>
-    </death>
-    <events>
-        <event type="">
-            <label><!-- @quest le compléter avec le @ type ? --></label>
-            <desc/>
-            <date/>
-            <placeName/>
-            <!--@quest ref et bibl répétables ? -->
-            <ref/>
-            <bibl/>
-        </event>
-    </events>
-    <relation name="spouse" mutual="#WM #JBM"/>
-    <relation name="parent" active="#RB" passive="#JBM"/>
-</person>
+<eac-cpf 
+    xmlns="eac"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xpr="xpr"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:rico="rico">
+    <!--xmlns="urn:isbn:1-931666-33-4"-->
+    <control/>
+    <cpfDescription>
+        <identity>
+            <entityId/>
+            <entityType/>
+            <nameEntry>
+                <part localType="surname"/>
+                <part localType="forename"/>
+                <part localType="particle"/>
+            </nameEntry>
+        </identity>
+        <description>
+            <existDates>
+                <dateRange>
+                    <fromDate/>
+                    <toDate/>
+                </dateRange>
+            </existDates>
+            <functions>
+                <function>
+                    <term/>
+                    <date standardDate="" notBefore="" notAfter=""/>
+                    <!-- or -->
+                    <dateRange>
+                        <fromDate standardDate="" notBefore="" notAfter=""/>
+                        <toDate standardDate="" notBefore="" notAfter=""/>
+                    </dateRange>
+                    <descriptiveNote>
+                        <p/>
+                    </descriptiveNote>
+                </function>
+            </functions>
+            <occupations>
+                <occupation>
+                    <term/>
+                    <date standardDate="" notBefore="" notAfter=""/>
+                    <!-- or -->
+                    <dateRange>
+                        <fromDate standardDate="" notBefore="" notAfter=""/>
+                        <toDate standardDate="" notBefore="" notAfter=""></toDate>
+                    </dateRange>
+                    <descriptiveNote>
+                        <p/>
+                    </descriptiveNote>
+                </occupation>
+            </occupations>
+            <biogHist>
+                <chronList>
+                    <chronItem localType="">
+                        <date/>
+                        <placeEntry/>
+                        <event/>
+                        <rico:participant/>
+                        <rico:involve/>
+                        <xpr:source xlink:href=""/>
+                    </chronItem>
+                </chronList>
+            </biogHist>
+        </description>
+    </cpfDescription>
+</eac-cpf>

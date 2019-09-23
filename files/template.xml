@@ -1,4 +1,4 @@
-<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xpr:bogus="fix Firefox namespace issue">
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xmlns:eac="eac" xmlns:rico="rico" xpr:bogus="fix Firefox namespace issue" eac:bogus="fix Firefox namespace issue" rico:bogus="fix Firefox namespace issue">
   <head>
     <title>xpr</title>
     <meta charset="utf-8" />
@@ -16,7 +16,7 @@
       <ul>
         <li><a href="/xpr">¡xpr!</a></li>
         <li><a href="/xpr/expertises/list">pv</a></li>
-        <li><a href="/xpr/bio/new">prosopo</a></li>
+        <li><a href="/xpr/biographies/list">prosopo</a></li>
         <li><a href="/xpr/about">?</a></li>
       </ul>
     </nav>

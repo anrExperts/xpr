@@ -1,42 +1,30 @@
 <xf:model xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <!--Instance principale-->
         <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
-        
-        <!--<xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
+
+        <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
+
+        <xf:submission id="submitBio" resource="/xpr/bio/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
                         <xf:message level="ephemeral"> So Good ! </xf:message>
                         <xf:load show="replace">
-                                <xf:resource value="'/xpr/expertises/list'"/>
+                                <xf:resource value="'/xpr/bio/new'"/>
                         </xf:load>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
                         <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
                 </xf:action>
-        </xf:submission>-->
+        </xf:submission>
         
-        <!-- État civil -->
-        <xf:bind id="persName" nodeset="xpr:persName"/>
-        <xf:bind id="persNameType" nodeset="xpr:persName/@type"/>
-        <xf:bind id="forename" nodeset="xpr:persName/xpr:forename"/>
-        <xf:bind id="namelink" nodeset="xpr:persName/xpr:namelink"/>
-        <xf:bind id="surname" nodeset="xpr:persName/xpr:surname"/>
+        <xf:bind id="entityType" nodeset="eac:cpfDescription/eac:identity/eac:entityType"/>
+        <xf:bind id="nameEntry" nodeset="eac:cpfDescription/eac:identity/eac:nameEntry"/>
         
-        <xf:bind id="birth" nodeset="xpr:birth"/>
-        <xf:bind id="birthDate" nodeset="xpr:birth/xpr:date/@when" type="xf:date"/>
-        <xf:bind id="birthPlace" nodeset="xpr:birth/xpr:placeName"/>
-        
-        <xf:bind id="death" nodeset="xpr:death"/>
-        <xf:bind id="deathDate" nodeset="xpr:death/xpr:date/@when" type="xf:date"/>
-        <xf:bind id="deathPlace" nodeset="xpr:death/xpr:placeName"/>
-        
-        <!-- Évènements -->
-        <xf:bind id="events" nodeset="xpr:events"/>
-        <xf:bind id="event" nodeset="xpr:events/xpr:event"/>
-        <xf:bind id="eventType" nodeset="xpr:events/xpr:event/@type"/>
-        <xf:bind id="eventLabel" nodeset="xpr:events/xpr:event/xpr:label"/>
-        <xf:bind id="eventDesc" nodeset="xpr:events/xpr:event/xpr:desc"/>
-        <xf:bind id="eventDate" nodeset="xpr:events/xpr:event/xpr:date" type="xf:date"/>
-        <xf:bind id="eventPlaceName" nodeset="xpr:events/xpr:event/xpr:placeName"/>
-        <xf:bind id="eventRef" nodeset="xpr:events/xpr:event/xpr:ref"/>
-        <xf:bind id="eventBibl" nodeset="xpr:events/xpr:event/xpr:bibl"/>
+        <xf:bind id="chronItem" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"/>
+        <xf:bind id="chronItemType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/@localType"/>
+        <xf:bind id="chronItemDate" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:date"/>
+        <xf:bind id="chronItemPlace" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:placeEntry"/>
+        <xf:bind id="chronItemEvent" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:event"/>
+        <xf:bind id="chronItemParticipant" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant"/>
+        <xf:bind id="chronItemInvolve" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve"/>
+        <xf:bind id="chronItemSource" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/xpr:source"/>
 </xf:model>

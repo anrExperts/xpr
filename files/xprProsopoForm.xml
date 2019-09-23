@@ -1,97 +1,189 @@
 <form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
-    <xf:switch>
-        <xf:case id="civilStatusPanel" selected="true">
-            <xf:label>État civil</xf:label>
-            <xf:group>
-                <xf:label>Patronyme</xf:label>
-                <xf:repeat id="repeatPersName" bind="persName">    
-                    <xf:input ref="xpr:forename"><xf:label>Prénom</xf:label></xf:input>
-                    <xf:input ref="xpr:namelink"><xf:label>Particule</xf:label></xf:input>
-                    <xf:input ref="xpr:surname"><xf:label>Nom de famille</xf:label></xf:input>
-                    <xf:select1 ref="@type" appearance="full">
-                        <xf:label>Forme du nom</xf:label>
-                        <xf:item>
-                            <xf:label>Principale</xf:label>
-                            <xf:value>full</xf:value>
-                        </xf:item>
-                        <xf:item>
-                            <xf:label>Alternative</xf:label>
-                            <xf:value>alternative</xf:value>
-                        </xf:item>
-                    </xf:select1>
-                    
-                    <xf:trigger class="delete">
-                        <xf:label>&#10007;</xf:label>
-                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:persName) > 1"/>
-                        <xf:help>Supprimer une forme du nom.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger class="insert">
-                    <xf:label>Ajouter une forme du nom</xf:label>
-                    <xf:action ev:event="DOMActivate">
-                        <xf:insert nodeset="xpr:persName" at="index('repeatPersName')" position="after" ev:event="DOMActivate"/>
-                        <xf:setvalue ref="xpr:persName[index('repeatPersName')]//*" value=""/>
+    
+    <!-- identity -->
+    <xf:group ref="instance('xprProsopo')//eac:cpfDescription/eac:identity">
+        <xf:label>Identité</xf:label>
+        <xf:select1 bind="entityType" appearance="full">
+            <xf:label>Type d'entité</xf:label>
+            <xf:item>
+                <xf:label>personne</xf:label>
+                <xf:value>person</xf:value>
+            </xf:item>
+            <xf:item>
+                <xf:label>personne morale</xf:label>
+                <xf:value>corporateBody</xf:value>
+            </xf:item>
+            <xf:item>
+                <xf:label>famille</xf:label>
+                <xf:value>family</xf:value>
+            </xf:item>
+        </xf:select1>
+        
+        <xf:repeat id="repeatName" bind="nameEntry" appearance="full">
+            <xf:label>Patronyme</xf:label>
+            <xf:input ref="eac:part[@localType='surname']">
+                <xf:label>Nom</xf:label>
+            </xf:input>
+            <xf:input ref="eac:part[@localType='forename']">
+                <xf:label>Prénom</xf:label>
+            </xf:input>
+            <xf:input ref="eac:part[@localType='particle']">
+                <xf:label>Particule</xf:label>
+            </xf:input>
+            <!-- @todo ajouter vedette/forme alternative -->
+            <!--<authorizedForm/> or <alternativeForm/>-->
+            <xf:trigger class="delete">
+                <xf:label>Supprimer une forme du nom</xf:label>
+                <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:identity/eac:nameEntry) > 1" ev:event="DOMActivate"/>
+                <xf:help>Supprimer une forme du nom</xf:help>
+            </xf:trigger>
+        </xf:repeat>
+        <xf:trigger class="insert">
+            <xf:label>Ajouter une forme du nom</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:insert nodeset="eac:nameEntry" at="index('repeatName')" position="after" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:nameEntry[index('repeatName')]//eac:part" value=""/>
+            </xf:action>
+            <xf:help>Ajouter une forme du nom</xf:help>
+        </xf:trigger>
+    </xf:group>
+    
+    <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange">
+        <xf:label>Existence</xf:label>
+        <xf:group ref="eac:fromDate">
+            <xf:label>Naissance</xf:label>
+            <xf:select1 ref=".">
+                <xf:label>Datation</xf:label>
+                <xf:item>
+                    <xf:label>certaine</xf:label>
+                    <xf:action ev:event="xforms-select">
+                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@standardDate"/>
+                        <xf:delete ref="./@notAfter"/>
+                        <xf:delete ref="./@notBefore"/>
+                    </xf:action> 
+                </xf:item>
+                <xf:item>
+                    <xf:label>avant le</xf:label>
+                    <xf:action ev:event="xforms-select">
+                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notAfter"/>
+                        <xf:delete ref="./@standardDate"/>
+                        <xf:delete ref="./@notBefore"/>
                     </xf:action>
-                    <xf:help>Ajouter une forme du nom.</xf:help>
-                </xf:trigger>
-            </xf:group>
-            
-            <xf:group ref="instance('xprProsopo')/xpr:birth">
-                <xf:label>Naissance</xf:label>
-                <xf:input bind="birthDate" incremental="true"><xf:label>Date</xf:label></xf:input>
-                <xf:input bind="birthPlace" incremental="true"><xf:label>Lieu</xf:label></xf:input>
-                <!--@todo <xf:input><xf:label>Source</xf:label></xf:input>-->
-            </xf:group>
-            
-            <xf:group ref="instance('xprProsopo')/xpr:death">
-                <xf:label>Décès</xf:label>
-                <xf:input bind="deathDate" incremental="true"><xf:label>Date</xf:label></xf:input>
-                <xf:input bind="deathPlace" incremental="true"><xf:label>Lieu</xf:label></xf:input>
-                <!--@ todo <xf:input><xf:label>Source</xf:label></xf:input>-->
-            </xf:group>
-            
-        </xf:case>
-        <xf:case id="eventsPanel" selected="false">
-            <xf:label>Évènements</xf:label>
-            <xf:group ref="xpr:events">
-                <xf:repeat bind="event" id="repeatEvent">
-                    <xf:select1 ref="@type">
-                        <xf:label>Type d'évènements</xf:label>
-                        <xf:item>
-                            <xf:label></xf:label>
-                            <xf:value></xf:value>
-                            <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="parent::xpr:event/xpr:label"></xf:setvalue>
-                            </xf:action>
-                        </xf:item>
-                    </xf:select1>
-                    <xf:input ref="xpr:desc"><xf:label>Description</xf:label></xf:input>
-                    <xf:input ref="xpr:date"><xf:label>Date</xf:label></xf:input>
-                    <xf:input ref="xpr:placeName"><xf:label>Lieu</xf:label></xf:input>
-                    
-                    <xf:input ref="xpr:ref"><xf:label>Référence</xf:label></xf:input>
-                    <xf:input ref="xpr:bibl"><xf:label>source</xf:label></xf:input>
-                    <xf:trigger class="delete">
-                        <xf:label>&#10007;</xf:label>
-                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:event) > 1"/>
-                        <xf:help>Supprimer un évènement.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger class="insert">
-                    <xf:label>Ajouter un évènement</xf:label>
-                    <xf:action ev:event="DOMActivate">
-                        <xf:insert nodeset="xpr:event" at="index('repeatEvent')" position="after" ev:event="DOMActivate"/>
-                        <xf:setvalue ref="xpr:event[index('repeatEvent')]//*" value=""/>
+                </xf:item>
+                <xf:item>
+                    <xf:label>après le</xf:label>
+                    <xf:action ev:event="xforms-select">
+                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notBefore"/>
+                        <xf:delete ref="./@standardDate"/>
+                        <xf:delete ref="./@notAfter"/>
                     </xf:action>
-                    <xf:help>Ajouter un évènement.</xf:help>
+                </xf:item>
+            </xf:select1>
+            <xf:input ref="@*"><xf:label>Date</xf:label></xf:input>
+        </xf:group>
+        <xf:group ref="eac:toDate">
+            <xf:label>Décès</xf:label>
+            <xf:select1 ref=".">
+                <xf:label>Datation</xf:label>
+                <xf:item>
+                    <xf:label>certaine</xf:label>
+                    <xf:action ev:event="xforms-select">
+                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@standardDate"/>
+                        <xf:delete ref="./@notAfter"/>
+                        <xf:delete ref="./@notBefore"/>
+                    </xf:action> 
+                </xf:item>
+                <xf:item>
+                    <xf:label>avant le</xf:label>
+                    <xf:action ev:event="xforms-select">
+                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notAfter"/>
+                        <xf:delete ref="./@standardDate"/>
+                        <xf:delete ref="./@notBefore"/>
+                    </xf:action>
+                </xf:item>
+                <xf:item>
+                    <xf:label>après le</xf:label>
+                    <xf:action ev:event="xforms-select">
+                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notBefore"/>
+                        <xf:delete ref="./@standardDate"/>
+                        <xf:delete ref="./@notAfter"/>
+                    </xf:action>
+                </xf:item>
+            </xf:select1>
+            <xf:input ref="@*"><xf:label>Date</xf:label></xf:input>
+        </xf:group>
+    </xf:group>
+    
+    <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList">
+        <xf:label>Évènements</xf:label>
+        <xf:repeat id="repeatChronItem" bind="chronItem" appearance="full">
+            <xf:label>Évènement</xf:label>
+            <!-- @todo @type d'évènement -->
+            <!-- @todo si intervalle (dateRange) -->
+            <xf:input ref="eac:date">
+                <xf:label>Date</xf:label>
+            </xf:input>
+            <xf:input ref="eac:placeEntry">
+                <xf:label>Lieu</xf:label>
+            </xf:input>
+            <xf:input ref="eac:event">
+                <xf:label>Intitulé</xf:label>
+            </xf:input>
+            
+            <xf:repeat id="repeatParticipant" nodeset="rico:participant">
+                <xf:label>Participant</xf:label>
+                <xf:input ref="."></xf:input>
+                <xf:trigger class="delete">
+                    <xf:label>Supprimer un participant</xf:label>
+                    <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant) > 1" ev:event="DOMActivate"/>
+                    <xf:help>Supprimer un participant</xf:help>
                 </xf:trigger>
-            </xf:group>
-        </xf:case>
-        <xf:case id="relationsPanel" selected="false">
-            <xf:label>Relations<!--@rmq Réseaux ?--></xf:label>
-        </xf:case>
-    </xf:switch>
-    <xf:submit submission="submit">
+            </xf:repeat>
+            <xf:trigger class="insert">
+                <xf:label>Ajouter un participant</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert nodeset="rico:participant" at="index('repeatParticipant')" position="after" ev:event="DOMActivate"/>
+                </xf:action>
+                <xf:help>Ajouter un participant</xf:help>
+            </xf:trigger>
+            
+            <xf:repeat id="repeatInvolve" nodeset="rico:involve">
+                <xf:label>Implique<!-- @todo revoir ce label --></xf:label>
+                <xf:input ref="."></xf:input>
+                <xf:trigger class="delete">
+                    <xf:label>Supprimer</xf:label>
+                    <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve) > 1" ev:event="DOMActivate"/>
+                    <xf:help>Supprimer</xf:help>
+                </xf:trigger>
+            </xf:repeat>
+            <xf:trigger class="insert">
+                <xf:label>Ajouter</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert nodeset="rico:involve" at="index('repeatInvolve')" position="after" ev:event="DOMActivate"/>
+                </xf:action>
+                <xf:help>Ajouter</xf:help>
+            </xf:trigger>
+            
+       
+            <!-- @todo source (quand l'app les prendra en charge) -->
+            <xf:trigger class="delete">
+                <xf:label>Supprimer un évènement</xf:label>
+                <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem) > 1" ev:event="DOMActivate"/>
+                <xf:help>Supprimer un évènement</xf:help>
+            </xf:trigger>
+        </xf:repeat>
+        <xf:trigger class="insert">
+            <xf:label>Ajouter un évènement</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:insert nodeset="eac:chronItem" at="index('repeatChronItem')" position="after" ev:event="DOMActivate"/>
+            </xf:action>
+            <xf:help>Ajouter un évènement</xf:help>
+        </xf:trigger>
+    </xf:group>
+    <pre>
+        <xf:output value="serialize(., 'yes')"/>
+    </pre>
+    <xf:submit submission="submitBio">
         <xf:label>Enregistrer</xf:label>
     </xf:submit>
 </form>
