@@ -646,7 +646,7 @@
                     <xf:input ref="xpr:title" incremental="true">
                         <xf:label>Dénomination de l’expert dans l’acte</xf:label>
                     </xf:input>
-                    <xf:select1 ref="@context" appearance="full">
+                    <xf:select1 ref="@context" appearance="minimal">
                         <xf:label>Expert nommé en</xf:label>
                         <xf:item>
                             <xf:label>premier lieu</xf:label>
@@ -661,7 +661,7 @@
                             <xf:value>unknown</xf:value>
                         </xf:item>
                     </xf:select1>
-                    <xf:select1 ref="@appointment" appearance="full">
+                    <xf:select1 ref="@appointment" appearance="minimal">
                         <xf:label>Expert nommé</xf:label>
                         <xf:item>
                             <xf:label>d’office (par le lieutenant civil)</xf:label>
@@ -759,7 +759,7 @@
                         </xf:action>
                         <xf:help>Ajouter une personne.</xf:help>
                     </xf:trigger>
-                    <xf:select1 ref="@role" appearance="full">
+                    <xf:select1 ref="@role">
                         <xf:label>Partie</xf:label>
                         <xf:item>
                             <xf:label>Requérante</xf:label>
@@ -829,14 +829,14 @@
                             <xf:value>contractor</xf:value>
                         </xf:item>
                     </xf:select1>
-                    <xf:select1 ref="xpr:expert/@ref" appearance="full">
+                    <xf:select1 ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
                         <xf:itemset nodeset="instance('xprExperts')/xpr:expert[@xml:id=instance('xprModel')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
                             <xf:label value="concat(xpr:persName/xpr:surname,', ',xpr:persName/xpr:forename, ', ', xpr:provision)"/>
                             <xf:value ref="@xml:id"/>
                         </xf:itemset>
                     </xf:select1>
-                    <xf:select1 ref="@presence" appearance="full">
+                    <xf:select1 ref="@presence">
                         <xf:label>Partie présente</xf:label>
                         <xf:item>
                             <xf:label>oui</xf:label>
@@ -847,7 +847,7 @@
                             <xf:value>false</xf:value>
                         </xf:item>
                     </xf:select1>
-                    <xf:select1 ref="@intervention" appearance="full">
+                    <xf:select1 ref="@intervention">
                         <xf:label>Partie intervenante</xf:label>
                         <xf:item>
                             <xf:label>oui</xf:label>
