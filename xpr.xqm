@@ -59,7 +59,7 @@ function install() {
      )
     else (
       update:output("La base a été créée"),
-      db:create( "xpr", <expertises/>, "z1j.xml", map {"chop" : fn:false()} )
+      db:create( "xpr", <xpr/>, "z1j.xml", map {"chop" : fn:false()} )
       )
 };
 
@@ -85,7 +85,7 @@ declare
 %rest:produces('application/xml')
 %output:method("xml")
 function list() {
-  db:open('xpr')
+  db:open('xpr')/xpr/expertises
 };
 
 (:~
@@ -233,14 +233,14 @@ function xformResult($param, $referer) {
         copy $d := $param
         modify replace value of node $d/@xml:id with $id
         return $d :)
-      return replace node $db/expertises/expertise[@xml:id = $location] with $param
+      return replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param
     else
       let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
       let $param := 
         copy $d := $param
         modify insert node attribute xml:id {$id} into $d/*
         return $d
-      return insert node $param into $db/expertises
+      return insert node $param into $db/xpr/expertises
 };
 
 (:~
@@ -322,8 +322,8 @@ declare
 %rest:PUT("{$param}")
 %updating
 function xformBioResult($param, $referer) {
-  let $db := db:open("xprBio")
-  return insert node $param into $db/*:bio
+  let $db := db:open("xpr")
+  return insert node $param into $db/xpr/bio
 };
 
 (:~
