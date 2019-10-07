@@ -126,13 +126,13 @@
             <agreement type=""/>
             <!--conclusions d'expert-->
             <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
-            
+
             <!--montant global-->
-            <estimate><!--sumTotal = montant total ?--></estimate>
+            <estimate l="" s="" d=""><!--sumTotal = montant total ?--></estimate>
             <!--coût de l'expertise => frais d'expertise = consultancy fees-->
             <fees detail="">
                 <!--@detail="true/false"-->
-                <total l="" d="" s=""/>
+                <total l="" s="" d=""/>
             </fees>
             <!--bourse commune = (to share expenses)-->
             <expenses mentioned="">

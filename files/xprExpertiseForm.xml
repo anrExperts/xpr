@@ -486,16 +486,16 @@
                 <xf:group ref="xpr:sentences">
                     <xf:label>Intervention d’une institution</xf:label>
                     <xf:repeat id="repeatSentence" bind="sentence" appearance="full">
-                        <xf:select1 ref="xpr:orgName">
+                        <!--<xf:select1 ref="xpr:orgName">
                             <xf:itemset nodeset="distinct-values(instance('xprExpertises')//xpr:sentences//xpr:orgName[not(.='')])">
                                 <xf:label value="."/>
                                 <xf:action ev:event="xforms-select">
                                     <xf:setvalue ref="xpr:orgName" value="."/>
                                 </xf:action>
                             </xf:itemset>
-                        </xf:select1>
+                        </xf:select1>-->
                         <xf:input ref="xpr:orgName" incremental="true">
-                            <xf:label>Autre :</xf:label>
+                            <xf:label>Institution :</xf:label>
                         </xf:input>
                         <xf:repeat id="repeatDateSentence" nodeset="xpr:date">
                             <xf:input ref="@when" incremental="true">
@@ -1015,12 +1015,13 @@
             <xf:group ref="xpr:description/xpr:conclusions">
                 <xf:select1 bind="agreement1" appearance="full">
                     <xf:item>
-                        <xf:label>Accord</xf:label>
-                        <xf:value>Accord</xf:value>
+                        <xf:label>Conclusion</xf:label>
+                        <xf:value>Conclusion</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:setvalue bind="agreementType">agreement</xf:setvalue>
+                            <xf:setvalue bind="agreementType">conclusion</xf:setvalue>
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
                             <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions" origin="instance('xprSupplement')/xpr:opinion" position="after"/>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -1040,6 +1041,7 @@
                             <xf:setvalue bind="agreementType">agreement</xf:setvalue>
                             <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
                             <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions" origin="instance('xprSupplement')/xpr:opinion" position="after"/>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -1074,26 +1076,36 @@
                     le @bind ne met pas à jour le repeat-->
                     <xf:label>Transcription de toutes les conclusions ou dispositifs d’experts</xf:label>
                     <xf:textarea ref="." incremental="true">
-                        <!--<xf:label value="concat('Conclusions de ')"/>-->
-                        <xf:label>Conclusions <xf:output value="concat(' (',instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname)"/></xf:label>
+                        <xf:label>
+                            <xf:output value="if(instance('xprExperts')//xpr:expert[@xml:id = current()/@ref], concat('Conlusion (', instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname,')'), 'Conclusion')"/>
+                        </xf:label>
                     </xf:textarea>
-                    <xf:trigger class="delete">
+                    <!--<xf:trigger class="delete">
                         <xf:label>Supprimer une conclusion</xf:label>
                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:conclusions/xpr:opinion) > 1"/>
                         <xf:help>Supprimer une conclusion.</xf:help>
-                    </xf:trigger>
+                    </xf:trigger>-->
                 </xf:repeat>
-                <xf:trigger class="insert">
+                <!--<xf:trigger class="insert">
                     <xf:label>Ajouter une conclusion</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="xpr:opinion" at="index('repeatOpinion')" position="after" ev:event="DOMActivate"/>
                         <xf:setvalue ref="xpr:opinion[index('repeatOpinion')]" value=""/>
                     </xf:action>
                     <xf:help>Ajouter une conclusion.</xf:help>
-                </xf:trigger>
-                <xf:input bind="estimate" incremental="true">
+                </xf:trigger>-->
+                <xf:group ref="xpr:estimate">
                     <xf:label>Montant global (pour les estimations)</xf:label>
-                </xf:input>
+                    <xf:input ref="@l" incremental="true">
+                        <xf:label>livres</xf:label>
+                    </xf:input>
+                    <xf:input ref="@s" incremental="true">
+                        <xf:label>sols</xf:label>
+                    </xf:input>
+                    <xf:input ref="@d" incremental="true">
+                        <xf:label>deniers</xf:label>
+                    </xf:input>
+                </xf:group>
                 <xf:group ref="xpr:fees">
                     <xf:label>Coût de l’expertise</xf:label>
                     <xf:select1 bind="feesDetail" appearance="full">
@@ -1228,57 +1240,6 @@
                         </xf:action>
                         <xf:help>Ajouter d'autres frais.</xf:help>
                     </xf:trigger>
-                    <!--<xf:trigger class="insert">
-                                    <xf:label>Ajouter d'autres frais</xf:label>
-                                    <xf:action ev:event="DOMActivate">
-                                        <xf:insert nodeset="xpr:fee[@type='other']" at="index('repeatOtherFee')" position="after" ev:event="DOMActivate"/>
-                                        <xf:setvalue ref="xpr:fee[@type='other'][index('repeatOtherFee')]" value=""/>
-                                        <xf:setvalue ref="xpr:fee[@type='other'][index('repeatOtherFee')]/@l" value=""/>
-                                        <xf:setvalue ref="xpr:fee[@type='other'][index('repeatOtherFee')]/@s" value=""/>
-                                        <xf:setvalue ref="xpr:fee[@type='other'][index('repeatOtherFee')]/@d" value=""/>
-                                    </xf:action>
-                                    <xf:help>Ajouter d'autres frais.</xf:help>
-                                </xf:trigger>-->
-                    <!--<xf:select ref="instance('xprSupplement')/xpr:fees/xpr:fee" appearance="full">
-                                    <xf:item>
-                                        <xf:label>Autre</xf:label>
-                                        <xf:value>other</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees" origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']"/>
-                                        </xf:action>
-                                        <xf:action ev:event="xforms-deselect">
-                                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='other']"/>
-                                        </xf:action>
-                                        
-                                        <!-\-
-                                            <xf:repeat id="repeatFeeOther" nodeset="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='other']" appearance="full">
-                                            <xf:input ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='other']"><xf:label>Autre, à préciser</xf:label></xf:input>
-                                            <xf:group ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='other']">
-                                                <xf:label>Montant</xf:label>
-                                                <xf:input ref="@l" incremental="true"><xf:label>livres</xf:label></xf:input>
-                                                <xf:input ref="@s" incremental="true"><xf:label>sols</xf:label></xf:input>
-                                                <xf:input ref="@d" incremental="true"><xf:label>deniers</xf:label></xf:input>
-                                            </xf:group>
-                                            <xf:trigger class="delete">
-                                                <xf:label>&#10007;</xf:label>
-                                                <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(instance('xprModel')//xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='other']) > 1"/>
-                                                <xf:help>Supprimer</xf:help>
-                                            </xf:trigger>
-                                        </xf:repeat>
-                                        <xf:trigger class="insert">
-                                            <xf:label>Ajouter</xf:label>
-                                            <xf:action ev:event="DOMActivate">
-                                                <xf:insert nodeset="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='other']" at="index('repeatFeeOther')" position="after" ev:event="DOMActivate"/>
-                                                <xf:setvalue ref="xpr:fee[@type='other'][index('repeatFeeOther')]" value=""/>
-                                                <xf:setvalue ref="xpr:fee[@type='other'][index('repeatFeeOther')]/@l" value=""/>
-                                                <xf:setvalue ref="xpr:fee[@type='other'][index('repeatFeeOther')]/@s" value=""/>
-                                                <xf:setvalue ref="xpr:fee[@type='other'][index('repeatFeeOther')]/@d" value=""/>
-                                            </xf:action>
-                                            <xf:help>Ajouter</xf:help>
-                                        </xf:trigger>
-                                        -\->
-                                    </xf:item>
-                                </xf:select>-->
                     <xf:group ref="xpr:total">
                         <xf:label>Total</xf:label>
                         <xf:input ref="@l" incremental="true">
