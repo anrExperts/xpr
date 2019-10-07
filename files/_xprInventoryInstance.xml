@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<inventory xmlns="xpr">
+    <expert ref=""/>
+    <place>
+        <address>
+            <street/>
+            <buildingNumber/>
+        </address>
+        <complement/>
+        <parish/>
+        <city/>
+        <district/>
+        <owner/>
+    </place>
+    <wealth>
+        <state type=""></state>
+        <possessions>
+            <movables></movables>
+            <estate rooms=""/>
+            <workshop rooms="" equipment=""/>
+            <other rooms="">
+                <place type=""></place>
+            </other>
+        </possessions>
+        <dowry/>
+        <contribution/>
+    </wealth>
+    <knowledge>
+        <books volumes="">
+            <value></value>
+            <bookseller></bookseller>
+        </books>
+        <drawings quantity=""></drawings>
+        <paintings quantity=""></paintings>
+    </knowledge>
+    <tools>
+        <drawing>
+            <drawingBoard></drawingBoard>
+            <desk></desk>
+        </drawing>
+        <mathematical>
+            <compass></compass>
+            <pencilHolder></pencilHolder>
+        </mathematical>
+        <measurement>
+            <heightGauge></heightGauge>
+            <graphometer></graphometer>
+        </measurement>
+        <!--@todo matériel pour écrire ? -->
+        <scientific>
+            <clock>
+                <!--@todo comment distinguer pendule et horloge (même terme en anglais) -->
+                <maker><!-- ou clockmaker : horloger ? --></maker>
+            </clock>
+            <globe></globe>
+            <barometer></barometer>
+            <thermometer></thermometer>
+            <stove></stove>
+        </scientific>
+    </tools>
+    <profession>
+        <transport></transport>
+        <associate></associate>
+    </profession>
+    <comments/>
+</inventory>

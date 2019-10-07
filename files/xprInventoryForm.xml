@@ -1,0 +1,175 @@
+<form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:select1 ref="xpr:expert/@ref" incremental="true">
+        <xf:label>Patronyme</xf:label>
+        <xf:itemset nodeset="instance('xprExperts')/xpr:expert">
+            <xf:label value="concat(xpr:persName/xpr:surname,', ',xpr:persName/xpr:forename, ', ', xpr:provision)"/>
+            <xf:value ref="@xml:id"/>
+        </xf:itemset>
+    </xf:select1>
+    <xf:group ref="xpr:place">
+        <xf:label>Adresse au moment du décès</xf:label>
+        <xf:input ref="xpr:address/xpr:street" incremental="true">
+            <xf:label>Voie</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:address/xpr:buildingNumber" incremental="true">
+            <xf:label>Numéro de la voie</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:complement" incremental="true">
+            <xf:label>Précisions géographiques</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:parish" incremental="true">
+            <xf:label>Paroisse</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:city" incremental="true">
+            <xf:label>Ville</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:district" incremental="true">
+            <xf:label>Département</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:owner" incremental="true">
+            <xf:label>Propriétaire</xf:label>
+        </xf:input>
+    </xf:group>
+    <xf:group ref="xpr:wealth">
+        <xf:label>Fortune</xf:label>
+        <xf:select1 ref="xpr:state" incremental="true">
+            <xf:label>Propriétaire/locataire</xf:label>
+            <xf:item>
+                <xf:label>Propriétaire</xf:label>
+                <xf:value>propriétaire</xf:value>
+                <xf:action ev:event="xforms-select">
+                    <xf:setvalue ref="@type">owner</xf:setvalue>
+                </xf:action>
+            </xf:item>
+            <xf:item>
+                <xf:label>Locataire</xf:label>
+                <xf:value>locataire</xf:value>
+                <xf:action ev:event="xforms-select">
+                    <xf:setvalue ref="@type">occupant</xf:setvalue>
+                </xf:action>
+            </xf:item>
+        </xf:select1>
+        <xf:group ref="xpr:possessions">
+            <xf:label>Biens mobiliers</xf:label>
+            <xf:input ref="xpr:movables">
+                <xf:label>Somme totale</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:possessions">
+            <xf:label>Biens immobiliers</xf:label>
+            <xf:group ref="xpr:estate">
+                <xf:label>Habitation principale</xf:label>
+                <xf:input ref="@rooms">
+                    <xf:label>Nombre de pièces</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group ref="xpr:workshop">
+                <xf:label>Atelier</xf:label>
+                <xf:input ref="@rooms">
+                    <xf:label>Nombre de pièces</xf:label>
+                </xf:input>
+                <xf:input ref="@equipment">
+                    <xf:label>Montant total du matériel</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group>
+                <xf:label>Autres</xf:label>
+                <xf:repeat id="repeatOther" nodeset="xpr:other">
+                    <xf:input ref="@rooms">
+                        <xf:label>Nombre de pièces</xf:label>
+                    </xf:input>
+                    <xf:select1 ref="xpr:place">
+                        <xf:item>
+                            <xf:label>Paris</xf:label>
+                            <xf:value>Paris</xf:value>
+                            <xf:action ev:event="xforms-select">
+                                <xf:setvalue ref="@type">Paris</xf:setvalue>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Banlieue</xf:label>
+                            <xf:value>Banlieue</xf:value>
+                            <xf:action ev:event="xforms-select">
+                                <xf:setvalue ref="@type">suburbs</xf:setvalue>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Province</xf:label>
+                            <xf:value>province</xf:value>
+                            <xf:action ev:event="xforms-select">
+                                <xf:setvalue ref="@type">province</xf:setvalue>
+                            </xf:action>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:trigger class="delete">
+                        <xf:label>&#10007;</xf:label>
+                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:wealth/xpr:possessions/xpr:other) > 1"/>
+                        <xf:help>Supprimer un bien immobilier.</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger class="insert">
+                    <xf:label>Ajouter un bien immobilier</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="xpr:other" at="index('repeatOther')" position="after" ev:event="DOMActivate"/>
+                        <xf:setvalue ref="xpr:other[index('repeatOther')]/@rooms" value=""/>
+                        <xf:setvalue ref="xpr:other[index('repeatOther')]/xpr:place" value=""/>
+                        <xf:setvalue ref="xpr:other[index('repeatOther')]/xpr:place/@type" value=""/>
+                    </xf:action>
+                    <xf:help>Ajouter un bien immobilier.</xf:help>
+                </xf:trigger>
+            </xf:group>
+        </xf:group>
+        <xf:input ref="xpr:dowry">
+            <xf:label>Dot de la femme</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:contribution">
+            <xf:label>Apport de l'expert lors du mariage</xf:label>
+        </xf:input>
+    </xf:group>
+    <xf:group ref="xpr:knowledge">
+        <xf:label>Savoir - culture</xf:label>
+        <xf:group ref="xpr:books">
+            <xf:label>Livres</xf:label>
+            <xf:input ref="@volumes">
+                <xf:label>Nombre de volumes</xf:label>
+            </xf:input>
+            <xf:input ref="xpr:value">
+                <xf:label>Valeur totale des volumes</xf:label>
+            </xf:input>
+            <xf:input ref="xpr:bookseller">
+                <xf:label>Nom de l'expert libraire</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:drawings">
+            <xf:label>Dessins</xf:label>
+            <xf:input ref="@quantity">
+                <xf:label>Quantité</xf:label>
+            </xf:input>
+            <xf:textarea ref=".">
+                <xf:label>Description</xf:label>
+            </xf:textarea>
+        </xf:group>
+        <xf:group ref="xpr:paintings">
+            <xf:label>Peintures</xf:label>
+            <xf:input ref="@quantity">
+                <xf:label>Quantité</xf:label>
+            </xf:input>
+            <xf:textarea ref=".">
+                <xf:label>Description</xf:label>
+            </xf:textarea>
+        </xf:group>
+    </xf:group>
+    <xf:group ref="xpr:comments">
+        <xf:label>Commentaires libres</xf:label>
+        <xf:textarea ref=".">
+            <xf:label>Commentaires</xf:label>
+            <xf:help>Ce champ permet de signaler les collectionneurs ou les aspects remarquables.</xf:help>
+        </xf:textarea>
+    </xf:group>
+    <pre>
+        <xf:output value="serialize(., 'yes')"/>
+    </pre>
+    <xf:submit submission="submitInventory">
+        <xf:label>Enregistrer</xf:label>
+    </xf:submit>
+</form>

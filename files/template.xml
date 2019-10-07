@@ -9,6 +9,7 @@
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
 
     <instance>{model}</instance>
+    <instance>{model2}</instance>
 
   </head>
   <body onload="repeat()">

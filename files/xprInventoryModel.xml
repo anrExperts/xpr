@@ -1,0 +1,21 @@
+<xf:model id="inventory" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+        <!--Instance principale-->
+        <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
+        
+        <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
+        
+        <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
+
+        <xf:submission id="submitInventory" resource="/xpr/inventories/put" method="put" replace="none">
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral"> So Good ! </xf:message>
+                        <xf:load show="replace">
+                                <xf:resource value="'/xpr/inventories/new'"/>
+                        </xf:load>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                </xf:action>
+        </xf:submission>
+
+</xf:model>

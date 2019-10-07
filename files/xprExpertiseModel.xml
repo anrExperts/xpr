@@ -20,6 +20,7 @@
         </xf:action>
         <!--Instance principale-->
         <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
+        <xf:instance id="xprExpertises" src="/xpr/expertises/"/>
         <!--Instances secondaires-->
         <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
@@ -183,6 +184,6 @@
         <xf:bind id="lawTerm" nodeset="xpr:description/xpr:keywords[@type='law']/xpr:term"/>
         <xf:bind id="analysis" nodeset="xpr:description/xpr:analysis"/>
         <xf:bind id="noteworthy" nodeset="xpr:description/xpr:noteworthy"/>
-        
+
         <xf:bind id="addComment" nodeset="instance('xprSupplement')/xpr:comment" relevant="not(instance('xprModel')/xpr:comment)"/>
 </xf:model>

@@ -1,0 +1,14 @@
+<form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:group ref="instance('xprSource')">
+        <xf:label>Sources</xf:label>
+        <xf:input ref="@xml:id">
+            <xf:label>id</xf:label>
+        </xf:input>
+        <xf:input ref=".">
+            <xf:label>référence</xf:label>
+        </xf:input>
+    </xf:group>
+    <xf:submit submission="submitSource">
+        <xf:label>Enregistrer</xf:label>
+    </xf:submit>
+</form>

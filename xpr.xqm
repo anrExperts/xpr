@@ -265,7 +265,7 @@ declare
 %rest:produces('application/xml')
 %output:method("xml")
 function biographies() {
-  db:open('xprBio')
+  db:open('xpr')/xpr/bio
 };
 
 (:~
@@ -297,6 +297,7 @@ function newBio() {
   let $content := map {
     'instance' : '',
     'model' : 'xprProsopoModel.xml',
+    'model2' : fn:doc(file:base-dir() || "files/" || "xprSourceModel.xml"),
     'trigger' : fn:doc(file:base-dir() || "files/" || "xprProsopoTrigger.xml"),
     'form' : fn:doc(file:base-dir() || "files/" || "xprProsopoForm.xml")
   }
@@ -325,6 +326,148 @@ function xformBioResult($param, $referer) {
   let $db := db:open("xpr")
   return insert node $param into $db/xpr/bio
 };
+
+
+(:~
+ : This resource function lists all the posthumous inventories
+ : @return a xml ressource of all the posthumous inventories
+ :)
+declare 
+%rest:path("/xpr/inventories")
+%rest:produces('application/xml')
+%output:method("xml")
+function inventories() {
+  db:open('xpr')/xpr/posthumousInventories
+};
+
+(:~
+ : This resource function lists all the posthumous inventories
+ : @return an ordered list of posthumous inventories
+ :)
+declare 
+%rest:path("/xpr/inventories/list")
+%rest:produces('text/html')
+%output:method("html")
+function listInventories() {
+  <html>
+    <head>Inventaires après-décès</head>
+    <body>
+      <h1>xpr Inventaire après-décès</h1>
+      <p><a href="/xpr/inventories/new">Nouvelle fiche</a></p>
+    </body>
+  </html>
+};
+
+(:~
+ : This resource function edits 
+ : @return an xforms for the expertise
+:)
+declare
+  %rest:path("xpr/inventories/new")
+  %output:method("xml")
+function newInventory() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprInventoryModel.xml',
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprInventoryTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprInventoryForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This function consumes new prosopo 
+ : @param $param content
+ : @todo modify
+ :)
+declare
+%rest:path("xpr/inventories/put")
+%output:method("xml")
+%rest:header-param("Referer", "{$referer}", "none")
+%rest:PUT("{$param}")
+%updating
+function xformInventoryResult($param, $referer) {
+  let $db := db:open("xpr")
+  return insert node $param into $db/xpr/expertises
+};
+
+(:~
+ : This resource function lists all the posthumous inventories
+ : @return a xml ressource of all the posthumous inventories
+ :)
+declare 
+%rest:path("/xpr/sources")
+%rest:produces('application/xml')
+%output:method("xml")
+function sources() {
+  db:open('xpr')/xpr/sources
+};
+
+(:~
+ : This resource function lists all the posthumous inventories
+ : @return an ordered list of posthumous inventories
+ :)
+declare 
+%rest:path("/xpr/sources/list")
+%rest:produces('text/html')
+%output:method("html")
+function listSources() {
+  <html>
+    <head>Source</head>
+    <body>
+      <h1>xpr Source</h1>
+      <p><a href="/xpr/sources/new">Nouvelle fiche</a></p>
+    </body>
+  </html>
+};
+
+(:~
+ : This resource function edits 
+ : @return an xforms for the expertise
+:)
+declare
+  %rest:path("xpr/sources/new")
+  %output:method("xml")
+function newSource() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprSourceModel.xml',
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprSourceTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprSourceForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This function consumes new prosopo 
+ : @param $param content
+ : @todo modify
+ :)
+declare
+%rest:path("xpr/sources/put")
+%output:method("xml")
+%rest:header-param("Referer", "{$referer}", "none")
+%rest:PUT("{$param}")
+%updating
+function xformSourcesResult($param, $referer) {
+  let $db := db:open("xpr")
+  return insert node $param into $db/xpr/sources
+};
+
 
 (:~
  : Utilities 

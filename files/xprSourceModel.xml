@@ -1,0 +1,18 @@
+<xf:model id="sources" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+        <!--Instance principale-->
+        <xf:instance id="xprSource" src="/xpr/files/_xprSourceInstance.xml"/>
+
+        <xf:submission id="submitSource" resource="/xpr/sources/put" method="put" replace="none">
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral"> So Good ! </xf:message>
+                        <xf:rebuild model="prosopo"/>
+                        <xf:revalidate model="prosopo"/>
+                        <xf:recalculate model="prosopo"/>
+                        <xf:refresh model="prosopo"/>
+                        <xf:reset model="prosopo"/>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                </xf:action>
+        </xf:submission>
+</xf:model>
