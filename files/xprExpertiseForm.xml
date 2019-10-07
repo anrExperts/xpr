@@ -1072,9 +1072,6 @@
                     </xf:item>
                 </xf:select1>
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
-                    <!-- @rmq obligation d'utiliser un @nodeset à cause des boucles dans les <select/> juste ci-dessus
-                    le @bind ne met pas à jour le repeat-->
-                    <xf:label>Transcription de toutes les conclusions ou dispositifs d’experts</xf:label>
                     <xf:textarea ref="." incremental="true">
                         <xf:label>
                             <xf:output value="if(instance('xprExperts')//xpr:expert[@xml:id = current()/@ref], concat('Conlusion (', instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname,')'), 'Conclusion')"/>
