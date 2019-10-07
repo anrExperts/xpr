@@ -297,7 +297,6 @@ function newBio() {
   let $content := map {
     'instance' : '',
     'model' : 'xprProsopoModel.xml',
-    'model2' : fn:doc(file:base-dir() || "files/" || "xprSourceModel.xml"),
     'trigger' : fn:doc(file:base-dir() || "files/" || "xprProsopoTrigger.xml"),
     'form' : fn:doc(file:base-dir() || "files/" || "xprProsopoForm.xml")
   }
