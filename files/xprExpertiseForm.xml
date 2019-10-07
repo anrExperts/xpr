@@ -1074,7 +1074,7 @@
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
                     <xf:textarea ref="." incremental="true">
                         <xf:label>
-                            <xf:output value="if(instance('xprExperts')//xpr:expert[@xml:id = current()/@ref], concat('Conlusion (', instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname,')'), 'Conclusion')"/>
+                            <xf:output value="if(instance('xprExperts')//xpr:expert[@xml:id = current()/@ref], concat('Conlusions (', instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname,')'), 'Conclusions')"/>
                         </xf:label>
                     </xf:textarea>
                     <!--<xf:trigger class="delete">
