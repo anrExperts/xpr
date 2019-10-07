@@ -53,6 +53,9 @@
         <expense type="clerk" l="" s="" d=""/>
         <expense type="expert" l="" s="" d=""/>
     </expenses>
+    
+    <iterator/>
+    <opinion ref=""/>
 
     <fees>
         <fee type="expert" l="" s="" d=""/>

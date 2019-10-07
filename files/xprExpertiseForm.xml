@@ -1013,19 +1013,14 @@
         <xf:case id="conclusionsPanel" selected="false">
             <xf:label>Conclusions ou dispositifs de l’expertise</xf:label>
             <xf:group ref="xpr:description/xpr:conclusions">
-                <xf:select1 bind="agreement" appearance="full">
+                <xf:select1 bind="agreement1" appearance="full">
                     <xf:item>
                         <xf:label>Accord</xf:label>
                         <xf:value>Accord</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue bind="agreementType">agreement</xf:setvalue>
-                        </xf:action>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>Désaccord</xf:label>
-                        <xf:value>Désaccord</xf:value>
-                        <xf:action ev:event="xforms-select">
-                            <xf:setvalue bind="agreementType">disagreement</xf:setvalue>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions" origin="instance('xprSupplement')/xpr:opinion" position="after"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -1033,13 +1028,54 @@
                         <xf:value>Sans conclusion</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue bind="agreementType">noConclusion</xf:setvalue>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
                         </xf:action>
                     </xf:item>
                 </xf:select1>
-                <xf:repeat id="repeatOpinion" bind="opinion">
+                <xf:select1 bind="agreement2" appearance="full">
+                    <xf:item>
+                        <xf:label>Accord</xf:label>
+                        <xf:value>Accord</xf:value>
+                        <xf:action ev:event="xforms-select">
+                            <xf:setvalue bind="agreementType">agreement</xf:setvalue>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                            <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions" origin="instance('xprSupplement')/xpr:opinion" position="after"/>
+                        </xf:action>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>Désaccord</xf:label>
+                        <xf:value>Désaccord</xf:value>
+                        <xf:action ev:event="xforms-select">
+                            <xf:setvalue bind="agreementType">disagreement</xf:setvalue>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                            <xf:setvalue ref="instance('xprSupplement')/xpr:iterator" value="1"/>
+                            <xf:action while="instance('xprSupplement')/xpr:iterator &lt;= count(//xpr:expert[parent::xpr:experts])" ev:event="DOMActivate">
+                                <xf:insert context="instance('xprModel')/xpr:description/xpr:conclusions" at="2" position="after" origin="instance('xprSupplement')/xpr:opinion"/>
+                                <xf:setvalue ref="instance('xprSupplement')/xpr:iterator" value="instance('xprSupplement')/xpr:iterator + 1"/>
+                            </xf:action>
+                            <xf:setvalue ref="instance('xprSupplement')/xpr:iterator" value="1"/>
+                            <xf:action while="instance('xprSupplement')/xpr:iterator &lt;= count(//xpr:expert[parent::xpr:experts])" ev:event="DOMActivate">
+                                <xf:setvalue ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion[position() = number(instance('xprSupplement')/xpr:iterator)]/@ref" value="//xpr:expert[parent::xpr:experts][position() = number(instance('xprSupplement')/xpr:iterator)]/@ref"/>
+                                <xf:setvalue ref="instance('xprSupplement')/xpr:iterator" value="instance('xprSupplement')/xpr:iterator + 1"/>
+                            </xf:action>
+                        </xf:action>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>Sans conclusion</xf:label>
+                        <xf:value>Sans conclusion</xf:value>
+                        <xf:action ev:event="xforms-select">
+                            <xf:setvalue bind="agreementType">noConclusion</xf:setvalue>
+                            <xf:delete ref="instance('xprModel')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                        </xf:action>
+                    </xf:item>
+                </xf:select1>
+                <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
+                    <!-- @rmq obligation d'utiliser un @nodeset à cause des boucles dans les <select/> juste ci-dessus
+                    le @bind ne met pas à jour le repeat-->
                     <xf:label>Transcription de toutes les conclusions ou dispositifs d’experts</xf:label>
                     <xf:textarea ref="." incremental="true">
-                        <xf:label>Conclusions</xf:label>
+                        <!--<xf:label value="concat('Conclusions de ')"/>-->
+                        <xf:label>Conclusions <xf:output value="concat(' (',instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname)"/></xf:label>
                     </xf:textarea>
                     <xf:trigger class="delete">
                         <xf:label>Supprimer une conclusion</xf:label>

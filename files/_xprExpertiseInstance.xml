@@ -126,7 +126,7 @@
             <agreement type=""/>
             <!--conclusions d'expert-->
             <!--@quest en cas de désaccord, a-t-on besoin de les relier à un expert ? -->
-            <opinion><!--répétable--></opinion>
+            
             <!--montant global-->
             <estimate><!--sumTotal = montant total ?--></estimate>
             <!--coût de l'expertise => frais d'expertise = consultancy fees-->
