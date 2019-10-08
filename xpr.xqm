@@ -464,6 +464,11 @@ declare
 %updating
 function xformSourcesResult($param, $referer) {
   let $db := db:open("xpr")
+  let $id := 'xprSource' || fn:format-integer(fn:count($db/xpr/sources/source) + 1, '000')
+      let $param := 
+        copy $d := $param
+        modify insert node attribute xml:id {$id} into $d/*
+        return $d
   return insert node $param into $db/xpr/sources
 };
 
