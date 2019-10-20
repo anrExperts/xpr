@@ -20,9 +20,9 @@
         <li><a href="/xpr/about">?</a></li>
       </ul>
     </nav>
-    <nav id="navForm">
-      <trigger>{trigger}</trigger>
-    </nav>
+    
+    <trigger>{trigger}</trigger>
+    
     <main>
       <form>{form}</form>
     </main>

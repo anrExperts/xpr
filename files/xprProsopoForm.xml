@@ -8,44 +8,83 @@
             <xf:item>
                 <xf:label>personne</xf:label>
                 <xf:value>person</xf:value>
+                <xf:action ev:event="xforms-select">
+                    <xf:delete ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry//*"/>
+                    <xf:insert context="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry" origin="instance('xprSupplement')/eac:nameEntry/eac:authorizedForm"/>
+                    <xf:insert context="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry" origin="instance('xprSupplement')/eac:nameEntry//eac:part[not(@localType='officeName')]"/>
+                </xf:action>
             </xf:item>
             <xf:item>
                 <xf:label>office</xf:label>
                 <xf:value>corporateBody</xf:value>
+                <xf:action ev:event="xforms-select">
+                    <xf:delete ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry//*"/>
+                    <xf:insert context="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry" origin="instance('xprSupplement')/eac:nameEntry/eac:authorizedForm"/>
+                    <xf:insert context="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry" origin="instance('xprSupplement')/eac:nameEntry/eac:part[@localType='officeName']"/>
+                </xf:action>
             </xf:item>
             <xf:item>
                 <xf:label>famille</xf:label>
                 <xf:value>family</xf:value>
+                <xf:action ev:event="xforms-select">
+                    <xf:delete ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry//*"/>
+                    <xf:insert context="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry" origin="instance('xprSupplement')/eac:nameEntry/eac:authorizedForm"/>
+                    <xf:insert context="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry" origin="instance('xprSupplement')/eac:nameEntry//eac:part[@localType='surname']"/>
+                </xf:action>
             </xf:item>
         </xf:select1>
 
-        <xf:repeat id="repeatName" bind="nameEntry" appearance="full">
-            <xf:label>Patronyme</xf:label>
-            <xf:input ref="eac:part[@localType='surname']">
-                <xf:label>Nom</xf:label>
-            </xf:input>
-            <xf:input ref="eac:part[@localType='forename']">
-                <xf:label>Prénom</xf:label>
-            </xf:input>
-            <xf:input ref="eac:part[@localType='particle']">
-                <xf:label>Particule</xf:label>
-            </xf:input>
-            <!-- @todo ajouter vedette/forme alternative -->
-            <!--<authorizedForm/> or <alternativeForm/>-->
-            <xf:trigger class="delete">
-                <xf:label>Supprimer une forme du nom</xf:label>
-                <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:identity/eac:nameEntry) > 1" ev:event="DOMActivate"/>
-                <xf:help>Supprimer une forme du nom</xf:help>
+        <xf:group>
+            <xf:repeat id="repeatName" bind="nameEntry" appearance="full">
+                <xf:label>
+                    <xf:output value="if(./eac:authorizedForm,'Identification - forme autorisée','')"/>
+                    <xf:output value="if(./eac:alternativeForm,'Identification - forme alternative','')"/>
+                </xf:label>
+                <xf:input ref="eac:part[@localType='surname']">
+                    <xf:label>Nom</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='forename']">
+                    <xf:label>Prénom</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='particle']">
+                    <xf:label>Particule</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='common']">
+                    <xf:label>Titre d'appel</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='formal']">
+                    <xf:label>Titre institutionnel</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='academic']">
+                    <xf:label>Titre académique</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='religious']">
+                    <xf:label>Titre religieux</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='nobiliary']">
+                    <xf:label>Titre de noblesse</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='officeName']">
+                    <xf:label>Dénomination</xf:label>
+                </xf:input>
+                <xf:trigger ref="self::node()[./eac:alternativeForm]" class="delete">
+                    <xf:label>Supprimer une forme du nom</xf:label>
+                    <xf:delete nodeset="." at="1" if="./eac:alternativeForm" ev:event="DOMActivate"/>
+                    <xf:help>Supprimer une forme du nom</xf:help>
+                </xf:trigger>
+            </xf:repeat>
+            <xf:trigger ref="self::node()[.//eac:part]" class="insert">
+                <xf:label>Nouvelle forme alternative du nom</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert nodeset="eac:nameEntry" at="last()" position="after" ev:event="DOMActivate"/>
+                    <xf:insert nodeset="instance('xprProsopo')//eac:nameEntry[index('repeatName')]/*" origin="instance('xprSupplement')/eac:nameEntry/eac:alternativeForm" at="last()" position="after"/>
+                    <xf:delete ref="instance('xprProsopo')//eac:nameEntry[index('repeatName')]/eac:authorizedForm"/>
+                    <xf:delete ref="instance('xprProsopo')//eac:nameEntry[index('repeatName')]//eac:alternativeForm[position() &gt; 1]"/>
+                    <xf:setvalue ref="eac:nameEntry[index('repeatName')]//eac:part" value=""/>
+                </xf:action>
+                <xf:help>Ajouter une forme alternative du nom</xf:help>
             </xf:trigger>
-        </xf:repeat>
-        <xf:trigger class="insert">
-            <xf:label>Ajouter une forme du nom</xf:label>
-            <xf:action ev:event="DOMActivate">
-                <xf:insert nodeset="eac:nameEntry" at="index('repeatName')" position="after" ev:event="DOMActivate"/>
-                <xf:setvalue ref="eac:nameEntry[index('repeatName')]//eac:part" value=""/>
-            </xf:action>
-            <xf:help>Ajouter une forme du nom</xf:help>
-        </xf:trigger>
+        </xf:group>
     </xf:group>
 
     <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange">
@@ -57,7 +96,7 @@
                 <xf:item>
                     <xf:label>certaine</xf:label>
                     <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@standardDate"/>
+                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@standardDate"/>
                         <xf:delete ref="./@notAfter"/>
                         <xf:delete ref="./@notBefore"/>
                     </xf:action>
@@ -65,7 +104,7 @@
                 <xf:item>
                     <xf:label>avant le</xf:label>
                     <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notAfter"/>
+                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notAfter"/>
                         <xf:delete ref="./@standardDate"/>
                         <xf:delete ref="./@notBefore"/>
                     </xf:action>
@@ -73,7 +112,7 @@
                 <xf:item>
                     <xf:label>après le</xf:label>
                     <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notBefore"/>
+                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notBefore"/>
                         <xf:delete ref="./@standardDate"/>
                         <xf:delete ref="./@notAfter"/>
                     </xf:action>
@@ -90,7 +129,7 @@
                 <xf:item>
                     <xf:label>certaine</xf:label>
                     <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@standardDate"/>
+                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@standardDate"/>
                         <xf:delete ref="./@notAfter"/>
                         <xf:delete ref="./@notBefore"/>
                     </xf:action>
@@ -98,7 +137,7 @@
                 <xf:item>
                     <xf:label>avant le</xf:label>
                     <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notAfter"/>
+                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notAfter"/>
                         <xf:delete ref="./@standardDate"/>
                         <xf:delete ref="./@notBefore"/>
                     </xf:action>
@@ -106,7 +145,7 @@
                 <xf:item>
                     <xf:label>après le</xf:label>
                     <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/xpr:date/@notBefore"/>
+                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notBefore"/>
                         <xf:delete ref="./@standardDate"/>
                         <xf:delete ref="./@notAfter"/>
                     </xf:action>
@@ -116,6 +155,34 @@
                 <xf:label>Date</xf:label>
             </xf:input>
         </xf:group>
+    </xf:group>
+
+    <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:occupations">
+        <xf:label>Occupations</xf:label>
+        <xf:repeat id="repeatOccupation" nodeset="eac:occupation">
+            <xf:input ref="eac:term">
+                <xf:label>Intitulé</xf:label>
+            </xf:input>
+            <xf:input ref="eac:descriptiveNote">
+                <xf:label>Note</xf:label>
+            </xf:input>
+            <xf:trigger class="delete">
+                <xf:label>Supprimer une occupation</xf:label>
+                <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:description/eac:occupations/eac:occupation) > 1" ev:event="DOMActivate"/>
+                <xf:help>Supprimer une occupation</xf:help>
+            </xf:trigger>
+        </xf:repeat>
+        <xf:trigger class="insert">
+            <xf:label>Ajouter une occupation</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:insert nodeset="eac:occupation" at="index('repeatOccupation')" position="after" ev:event="DOMActivate"/>
+            </xf:action>
+            <xf:help>Ajouter une occupation</xf:help>
+        </xf:trigger>
+    </xf:group>
+
+    <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:functions">
+        <xf:label>Fonctions</xf:label>
     </xf:group>
 
     <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList">
@@ -168,7 +235,14 @@
                 <xf:help>Ajouter</xf:help>
             </xf:trigger>
 
-
+            <xf:select1 ref="xpr:source/@*[local-name() = 'href']" appearance="minimal" incremental="true">
+                <xf:label>Source</xf:label>
+                <xf:itemset bind="bindSource">
+                    <xf:label value="."/>
+                    <xf:value ref="@xml:id"/>
+                </xf:itemset>
+            </xf:select1>
+            
             <!-- @todo source (quand l'app les prendra en charge) -->
             <xf:trigger class="delete">
                 <xf:label>Supprimer un évènement</xf:label>
@@ -185,14 +259,6 @@
         </xf:trigger>
     </xf:group>
 
-    <xf:select1 ref="instance('xprProsopo')/eac:bibl" appearance="minimal" incremental="true">
-        <xf:label>Source</xf:label>
-        <xf:itemset bind="bindSource">
-            <xf:label value="concat(@xml:id, '-')"/>
-            <xf:value ref="@xml:id"/>
-        </xf:itemset>
-    </xf:select1>
-    
     <pre>
         <xf:output value="serialize(., 'yes')"/>
     </pre>

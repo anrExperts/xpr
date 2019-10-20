@@ -6,11 +6,7 @@
         <identity>
             <entityId/>
             <entityType/>
-            <nameEntry>
-                <part localType="surname"/>
-                <part localType="forename"/>
-                <part localType="particle"/>
-            </nameEntry>
+            <nameEntry/>
         </identity>
         <description>
             <existDates>

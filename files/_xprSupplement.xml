@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<supplement xmlns="xpr">
+<supplement xmlns="xpr" xmlns:eac="eac">
     <!--Annexes-->
     <appendices>
         <appendice>
@@ -53,7 +53,7 @@
         <expense type="clerk" l="" s="" d=""/>
         <expense type="expert" l="" s="" d=""/>
     </expenses>
-    
+
     <iterator/>
     <opinion ref=""/>
 
@@ -72,7 +72,19 @@
 
 
     <!-- PROSOPOGRAPHY -->
-    <authorizedForm/>
-    <alternativeForm/>
-    <date standardDate="" notBefore="" notAfter=""/>
+    <eac:nameEntry>
+        <eac:part localType="surname"/>
+        <eac:part localType="forename"/>
+        <eac:part localType="particle"/>
+        <eac:part localType="common"/>
+        <eac:part localType="formal"/>
+        <eac:part localType="academic"/>
+        <eac:part localType="religious"/>
+        <eac:part localType="nobiliary"/>
+        <eac:part localType="officeName"/>
+        <eac:authorizedForm/>
+        <eac:alternativeForm/>
+    </eac:nameEntry>
+    
+    <eac:date standardDate="" notBefore="" notAfter=""/>
 </supplement>
