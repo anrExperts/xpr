@@ -1,6 +1,6 @@
 <form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
 
-    <!-- identity -->
+        <!-- identity -->
     <xf:group ref="instance('xprProsopo')//eac:cpfDescription/eac:identity">
         <xf:label>Identité</xf:label>
         <xf:select1 bind="entityType" appearance="full">
@@ -163,6 +163,7 @@
             <xf:input ref="eac:term">
                 <xf:label>Intitulé</xf:label>
             </xf:input>
+            <!--@todo date-->
             <xf:input ref="eac:descriptiveNote">
                 <xf:label>Note</xf:label>
             </xf:input>
@@ -180,16 +181,74 @@
             <xf:help>Ajouter une occupation</xf:help>
         </xf:trigger>
     </xf:group>
-
+    
     <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:functions">
         <xf:label>Fonctions</xf:label>
+        <xf:repeat id="repeatFunction" nodeset="eac:function">
+            <xf:input ref="eac:term">
+                <xf:label>Intitulé</xf:label>
+            </xf:input>
+            <!--@todo date-->
+            <xf:input ref="eac:descriptiveNote">
+                <xf:label>Note</xf:label>
+            </xf:input>
+            <xf:trigger class="delete">
+                <xf:label>Supprimer une fonction</xf:label>
+                <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:description/eac:functions/eac:function) > 1" ev:event="DOMActivate"/>
+                <xf:help>Supprimer une fonction</xf:help>
+            </xf:trigger>
+        </xf:repeat>
+        <xf:trigger class="insert">
+            <xf:label>Ajouter une fonction</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:insert nodeset="eac:function" at="index('repeatFunction')" position="after" ev:event="DOMActivate"/>
+            </xf:action>
+            <xf:help>Ajouter une fonction</xf:help>
+        </xf:trigger>
     </xf:group>
 
     <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList">
         <xf:label>Évènements</xf:label>
         <xf:repeat id="repeatChronItem" bind="chronItem" appearance="full">
             <xf:label>Évènement</xf:label>
-            <!-- @todo @type d'évènement -->
+            <xf:select1 ref="@localType">
+                <xf:item>
+                    <xf:label>Naissance</xf:label>
+                    <xf:value>birth</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Mariage</xf:label>
+                    <xf:value>marriage</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Achat d'office</xf:label>
+                    <xf:value>officePurchase</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Lettre de provision</xf:label>
+                    <xf:value>provision</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Réception</xf:label>
+                    <xf:value>reception</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Résignation</xf:label>
+                    <xf:value>relinquishment</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Suppression des offices</xf:label>
+                    <xf:value>officesEnding</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Dispense d'age</xf:label>
+                    <xf:value>exemption</xf:value>
+                </xf:item>
+                <xf:item>
+                    <xf:label>Saisie réelle</xf:label>
+                    <xf:value>seizure</xf:value>
+                </xf:item>
+            </xf:select1>
             <!-- @todo si intervalle (dateRange) -->
             <xf:input ref="eac:date">
                 <xf:label>Date</xf:label>
@@ -239,10 +298,10 @@
                 <xf:label>Source</xf:label>
                 <xf:itemset bind="bindSource">
                     <xf:label value="."/>
-                    <xf:value ref="@xml:id"/>
+                    <xf:value ref="."/>
                 </xf:itemset>
             </xf:select1>
-            
+
             <!-- @todo source (quand l'app les prendra en charge) -->
             <xf:trigger class="delete">
                 <xf:label>Supprimer un évènement</xf:label>
@@ -268,9 +327,6 @@
 
     <xf:group ref="instance('xprSource')">
         <xf:label>Sources</xf:label>
-        <xf:input ref="@xml:id">
-            <xf:label>id</xf:label>
-        </xf:input>
         <xf:input ref=".">
             <xf:label>référence</xf:label>
         </xf:input>
