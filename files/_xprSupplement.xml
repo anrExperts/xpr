@@ -85,6 +85,10 @@
         <eac:authorizedForm/>
         <eac:alternativeForm/>
     </eac:nameEntry>
-    
+
     <eac:date standardDate="" notBefore="" notAfter=""/>
+    <eac:dateRange>
+        <eac:fromDate standardDate="" notBefore="" notAfter=""/>
+        <eac:toDate standardDate="" notBefore="" notAfter=""/>
+    </eac:dateRange>
 </supplement>

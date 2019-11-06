@@ -1,6 +1,6 @@
 <form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
 
-        <!-- identity -->
+    <!-- identity -->
     <xf:group ref="instance('xprProsopo')//eac:cpfDescription/eac:identity">
         <xf:label>Identité</xf:label>
         <xf:select1 bind="entityType" appearance="full">
@@ -91,68 +91,26 @@
         <xf:label>Existence</xf:label>
         <xf:group ref="eac:fromDate">
             <xf:label>Naissance</xf:label>
-            <xf:select1 ref=".">
-                <xf:label>Datation</xf:label>
-                <xf:item>
-                    <xf:label>certaine</xf:label>
-                    <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:delete ref="./@notAfter"/>
-                        <xf:delete ref="./@notBefore"/>
-                    </xf:action>
-                </xf:item>
-                <xf:item>
-                    <xf:label>avant le</xf:label>
-                    <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:delete ref="./@standardDate"/>
-                        <xf:delete ref="./@notBefore"/>
-                    </xf:action>
-                </xf:item>
-                <xf:item>
-                    <xf:label>après le</xf:label>
-                    <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:delete ref="./@standardDate"/>
-                        <xf:delete ref="./@notAfter"/>
-                    </xf:action>
-                </xf:item>
-            </xf:select1>
-            <xf:input ref="@*">
-                <xf:label>Date</xf:label>
+            <xf:input ref="@standardDate">
+                <xf:label>Certaine</xf:label>
+            </xf:input>
+            <xf:input ref="@notAfter">
+                <xf:label>Avant le</xf:label>
+            </xf:input>
+            <xf:input ref="@notBefore">
+                <xf:label>Après le</xf:label>
             </xf:input>
         </xf:group>
         <xf:group ref="eac:toDate">
             <xf:label>Décès</xf:label>
-            <xf:select1 ref=".">
-                <xf:label>Datation</xf:label>
-                <xf:item>
-                    <xf:label>certaine</xf:label>
-                    <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:delete ref="./@notAfter"/>
-                        <xf:delete ref="./@notBefore"/>
-                    </xf:action>
-                </xf:item>
-                <xf:item>
-                    <xf:label>avant le</xf:label>
-                    <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:delete ref="./@standardDate"/>
-                        <xf:delete ref="./@notBefore"/>
-                    </xf:action>
-                </xf:item>
-                <xf:item>
-                    <xf:label>après le</xf:label>
-                    <xf:action ev:event="xforms-select">
-                        <xf:insert context="." origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:delete ref="./@standardDate"/>
-                        <xf:delete ref="./@notAfter"/>
-                    </xf:action>
-                </xf:item>
-            </xf:select1>
-            <xf:input ref="@*">
-                <xf:label>Date</xf:label>
+            <xf:input ref="@standardDate">
+                <xf:label>Certaine</xf:label>
+            </xf:input>
+            <xf:input ref="@notAfter">
+                <xf:label>Avant le</xf:label>
+            </xf:input>
+            <xf:input ref="@notBefore">
+                <xf:label>Après le</xf:label>
             </xf:input>
         </xf:group>
     </xf:group>
@@ -163,7 +121,69 @@
             <xf:input ref="eac:term">
                 <xf:label>Intitulé</xf:label>
             </xf:input>
-            <!--@todo date-->
+            <xf:group ref="eac:date">
+                <xf:label>Date</xf:label>
+                <xf:trigger>
+                    <xf:label>Intervalle</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate"
+                        if="self::eac:date">
+                        <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:occupation/eac:term" position="after"/>
+                        <xf:setvalue ref="./ancestor::eac:occupation/eac:dateRange/eac:fromDate/@standardDate" value="current()/@standardDate"/>
+                        <xf:setvalue ref="./ancestor::eac:occupation/eac:dateRange/eac:fromDate/@notAfter" value="current()/@notAfter"/>
+                        <xf:setvalue ref="./ancestor::eac:occupation/eac:dateRange/eac:fromDate/@notBefore" value="current()/@notBefore"/>
+                        <xf:delete nodeset="."/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:input ref="@standardDate">
+                    <xf:label>Certaine</xf:label>
+                </xf:input>
+                <xf:input ref="@notAfter">
+                    <xf:label>Avant le</xf:label>
+                </xf:input>
+                <xf:input ref="@notBefore">
+                    <xf:label>Après le</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group ref="eac:dateRange">
+                <xf:label>Intervalle</xf:label>
+                <xf:trigger>
+                    <xf:label>Date unique</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate"
+                        if="self::eac:dateRange">
+                        <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:occupation/eac:term" position="after"/>
+                        <xf:setvalue ref="./ancestor::eac:occupation/eac:date/@standardDate" value="current()/eac:fromDate/@standardDate"/>
+                        <xf:setvalue ref="./ancestor::eac:occupation/eac:date/@notAfter" value="current()/eac:fromDate/@notAfter"/>
+                        <xf:setvalue ref="./ancestor::eac:occupation/eac:date/@notBefore" value="current()/eac:fromDate/@notBefore"/>
+                        <xf:delete nodeset="."/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:group ref="eac:fromDate">
+                    <xf:label>Début</xf:label>
+                    <xf:input ref="@standardDate">
+                        <xf:label>Certaine</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notAfter">
+                        <xf:label>Avant le</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notBefore">
+                        <xf:label>Après le</xf:label>
+                    </xf:input>
+                </xf:group>
+                <xf:group ref="eac:toDate">
+                    <xf:label>Fin</xf:label>
+                    <xf:input ref="@standardDate">
+                        <xf:label>Certaine</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notAfter">
+                        <xf:label>Avant le</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notBefore">
+                        <xf:label>Après le</xf:label>
+                    </xf:input>
+                </xf:group>
+            </xf:group>
             <xf:input ref="eac:descriptiveNote">
                 <xf:label>Note</xf:label>
             </xf:input>
@@ -181,14 +201,76 @@
             <xf:help>Ajouter une occupation</xf:help>
         </xf:trigger>
     </xf:group>
-    
+
     <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:functions">
         <xf:label>Fonctions</xf:label>
         <xf:repeat id="repeatFunction" nodeset="eac:function">
             <xf:input ref="eac:term">
                 <xf:label>Intitulé</xf:label>
             </xf:input>
-            <!--@todo date-->
+            <xf:group ref="eac:date">
+                <xf:label>Date</xf:label>
+                <xf:trigger>
+                    <xf:label>Intervalle</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate"
+                        if="self::eac:date">
+                        <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:function/eac:term" position="after"/>
+                        <xf:setvalue ref="./ancestor::eac:function/eac:dateRange/eac:fromDate/@standardDate" value="current()/@standardDate"/>
+                        <xf:setvalue ref="./ancestor::eac:function/eac:dateRange/eac:fromDate/@notAfter" value="current()/@notAfter"/>
+                        <xf:setvalue ref="./ancestor::eac:function/eac:dateRange/eac:fromDate/@notBefore" value="current()/@notBefore"/>
+                        <xf:delete nodeset="."/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:input ref="@standardDate">
+                    <xf:label>Certaine</xf:label>
+                </xf:input>
+                <xf:input ref="@notAfter">
+                    <xf:label>Avant le</xf:label>
+                </xf:input>
+                <xf:input ref="@notBefore">
+                    <xf:label>Après le</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group ref="eac:dateRange">
+                <xf:label>Intervalle</xf:label>
+                <xf:trigger>
+                    <xf:label>Date unique</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate"
+                        if="self::eac:dateRange">
+                        <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:function/eac:term" position="after"/>
+                        <xf:setvalue ref="./ancestor::eac:function/eac:date/@standardDate" value="current()/eac:fromDate/@standardDate"/>
+                        <xf:setvalue ref="./ancestor::eac:function/eac:date/@notAfter" value="current()/eac:fromDate/@notAfter"/>
+                        <xf:setvalue ref="./ancestor::eac:function/eac:date/@notBefore" value="current()/eac:fromDate/@notBefore"/>
+                        <xf:delete nodeset="."/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:group ref="eac:fromDate">
+                    <xf:label>Début</xf:label>
+                    <xf:input ref="@standardDate">
+                        <xf:label>Certaine</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notAfter">
+                        <xf:label>Avant le</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notBefore">
+                        <xf:label>Après le</xf:label>
+                    </xf:input>
+                </xf:group>
+                <xf:group ref="eac:toDate">
+                    <xf:label>Fin</xf:label>
+                    <xf:input ref="@standardDate">
+                        <xf:label>Certaine</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notAfter">
+                        <xf:label>Avant le</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notBefore">
+                        <xf:label>Après le</xf:label>
+                    </xf:input>
+                </xf:group>
+            </xf:group>
             <xf:input ref="eac:descriptiveNote">
                 <xf:label>Note</xf:label>
             </xf:input>
@@ -249,10 +331,69 @@
                     <xf:value>seizure</xf:value>
                 </xf:item>
             </xf:select1>
-            <!-- @todo si intervalle (dateRange) -->
-            <xf:input ref="eac:date">
+            <xf:group ref="eac:date">
                 <xf:label>Date</xf:label>
-            </xf:input>
+                <xf:trigger>
+                    <xf:label>Intervalle</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate"
+                        if="self::eac:date">
+                        <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:chronItem/*" position="before"/>
+                        <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@standardDate" value="current()/@standardDate"/>
+                        <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@notAfter" value="current()/@notAfter"/>
+                        <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@notBefore" value="current()/@notBefore"/>
+                        <xf:delete nodeset="."/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:input ref="@standardDate">
+                    <xf:label>Certaine</xf:label>
+                </xf:input>
+                <xf:input ref="@notAfter">
+                    <xf:label>Avant le</xf:label>
+                </xf:input>
+                <xf:input ref="@notBefore">
+                    <xf:label>Après le</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:group ref="eac:dateRange">
+                <xf:label>Intervalle</xf:label>
+                <xf:trigger>
+                    <xf:label>Date unique</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate"
+                        if="self::eac:dateRange">
+                        <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:chronItem/*" position="before"/>
+                        <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@standardDate" value="current()/eac:fromDate/@standardDate"/>
+                        <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@notAfter" value="current()/eac:fromDate/@notAfter"/>
+                        <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@notBefore" value="current()/eac:fromDate/@notBefore"/>
+                        <xf:delete nodeset="."/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:group ref="eac:fromDate">
+                    <xf:label>Début</xf:label>
+                    <xf:input ref="@standardDate">
+                        <xf:label>Certaine</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notAfter">
+                        <xf:label>Avant le</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notBefore">
+                        <xf:label>Après le</xf:label>
+                    </xf:input>
+                </xf:group>
+                <xf:group ref="eac:toDate">
+                    <xf:label>Fin</xf:label>
+                    <xf:input ref="@standardDate">
+                        <xf:label>Certaine</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notAfter">
+                        <xf:label>Avant le</xf:label>
+                    </xf:input>
+                    <xf:input ref="@notBefore">
+                        <xf:label>Après le</xf:label>
+                    </xf:input>
+                </xf:group>
+            </xf:group>
             <xf:input ref="eac:placeEntry">
                 <xf:label>Lieu</xf:label>
             </xf:input>
@@ -317,9 +458,12 @@
             <xf:help>Ajouter un évènement</xf:help>
         </xf:trigger>
     </xf:group>
-
+    
     <pre>
         <xf:output value="serialize(., 'yes')"/>
+    </pre>
+    <pre>
+        <xf:output value="serialize(instance('iterator'), 'yes')"/>
     </pre>
     <xf:submit submission="submitBio">
         <xf:label>Enregistrer</xf:label>
