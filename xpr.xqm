@@ -23,6 +23,7 @@ declare namespace db = "http://basex.org/modules/db";
 
 declare namespace xf = "http://www.w3.org/2002/xforms";
 declare namespace ev = "http://www.w3.org/2001/xml-events";
+declare namespace eac = "eac";
 
 declare default element namespace "xpr";
 declare default function namespace "xpr";
@@ -282,13 +283,60 @@ function listBio() {
     <body>
       <h1>xpr Biographies</h1>
       <p><a href="/xpr/biographies/new">Nouvelle fiche</a></p>
+      <ul>
+      {
+        for $entity in db:open('xpr')//bio/eac:eac-cpf
+        let $id := $entity/eac:cpfDescription//eac:entityId
+        let $identity := fn:concat($entity//eac:nameEntry[1]/eac:part[@localType='surname'], ', ', $entity//eac:nameEntry[1]/eac:part[@localType='forename'])
+        return 
+          <li>
+            <a href="/xpr/biographies/{$id}">{$identity}</a> 
+            <a href="/xpr/biographies/{$id}/modify">Modifier</a>
+          </li>
+      }
+      </ul>
     </body>
   </html>
 };
 
 (:~
- : This resource function edits an prosopo
- : @return an xforms for the expertise
+ : This resource function lists all the entities
+ : @return an ordered list of entities
+ :)
+declare 
+%rest:path("xpr/biographies/{$id}")
+%output:method("xml")
+function showBiographie($id) {
+  db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id]
+};
+
+(:~
+ : This resource function lists all entities
+ : @return an ordered list of entities
+ :)
+declare 
+%rest:path("xpr/biographies/{$id}/modify")
+%output:method("xml")
+function modifyEntity($id) {
+  let $content := map {
+    'instance' : $id,
+    'model' : 'xprProsopoModel.xml',
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprProsopoTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprProsopoForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This resource function edits an entity
+ : @return an xforms for the entity
 :)
 declare
   %rest:path("xpr/biographies/new")
@@ -311,9 +359,24 @@ function newBio() {
 };
 
 (:~
- : This function consumes new prosopo 
+ : This function consumes new entity 
  : @param $param content
  : @todo modify
+ :)
+(: declare
+%rest:path("xpr/biographies/put")
+%output:method("xml")
+%rest:header-param("Referer", "{$referer}", "none")
+%rest:PUT("{$param}")
+%updating
+function xformBioResult($param, $referer) {
+  let $db := db:open("xpr")
+  return insert node $param into $db/xpr/bio
+}; :)
+
+(:~
+ : This function consumes new entity 
+ : @param $param content
  :)
 declare
 %rest:path("xpr/biographies/put")
@@ -323,13 +386,24 @@ declare
 %updating
 function xformBioResult($param, $referer) {
   let $db := db:open("xpr")
-  return insert node $param into $db/xpr/bio
+  return 
+    if (fn:ends-with($referer, 'modify'))
+    then 
+      let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
+      let $id := $param//eac:entityId
+      (: let $param := 
+        copy $d := $param
+        modify replace value of node $d/@xml:id with $id
+        return $d :)
+      return replace node $db/xpr/bio/eac:eac-cpf[descendant::eac:entityId = $location] with $param
+    else
+      insert node $param into $db/xpr/bio
 };
 
 
 (:~
- : This resource function lists all the posthumous inventories
- : @return a xml ressource of all the posthumous inventories
+ : This resource function lists all the inventories
+ : @return a xml ressource of all the inventories
  :)
 declare 
 %rest:path("/xpr/inventories")
@@ -340,7 +414,7 @@ function inventories() {
 };
 
 (:~
- : This resource function lists all the posthumous inventories
+ : This resource function lists all the inventories
  : @return an ordered list of posthumous inventories
  :)
 declare 
@@ -358,8 +432,8 @@ function listInventories() {
 };
 
 (:~
- : This resource function edits 
- : @return an xforms for the expertise
+ : This resource function edits new inventory
+ : @return an xforms for the inventory
 :)
 declare
   %rest:path("xpr/inventories/new")
@@ -382,7 +456,7 @@ function newInventory() {
 };
 
 (:~
- : This function consumes new prosopo 
+ : This function consumes new inventory 
  : @param $param content
  : @todo modify
  :)
@@ -398,20 +472,27 @@ function xformInventoryResult($param, $referer) {
 };
 
 (:~
- : This resource function lists all the posthumous inventories
- : @return a xml ressource of all the posthumous inventories
+ : This resource function lists all the sources
+ : @return an ordered xml ressource of all the sources
+ : @todo collation for order by (for accent)
  :)
 declare 
 %rest:path("/xpr/sources")
 %rest:produces('application/xml')
 %output:method("xml")
 function sources() {
-  db:open('xpr')/xpr/sources
+  <sources xmlns="xpr">
+    {
+      for $source in db:open('xpr')/xpr/sources/source
+      order by fn:lower-case($source/text())
+      return $source
+    }
+  </sources>
 };
 
 (:~
- : This resource function lists all the posthumous inventories
- : @return an ordered list of posthumous inventories
+ : This resource function lists all the sources
+ : @return an ordered list of sources
  :)
 declare 
 %rest:path("/xpr/sources/list")
@@ -428,8 +509,8 @@ function listSources() {
 };
 
 (:~
- : This resource function edits 
- : @return an xforms for the expertise
+ : This resource function edits new source
+ : @return an xforms for the source
 :)
 declare
   %rest:path("xpr/sources/new")
@@ -452,7 +533,7 @@ function newSource() {
 };
 
 (:~
- : This function consumes new prosopo 
+ : This function consumes new source 
  : @param $param content
  : @todo mettre en place une routine pour empêcher l'ajout d'une référence si elle est déjà présente
  :)
@@ -464,11 +545,6 @@ declare
 %updating
 function xformSourcesResult($param, $referer) {
   let $db := db:open("xpr")
-  (: let $id := 'xprSource' || fn:format-integer(fn:count($db/xpr/sources/source) + 1, '000')
-      let $param := 
-        copy $d := $param
-        modify insert node attribute xml:id {$id} into $d/*
-        return $d :)
   return insert node $param into $db/xpr/sources
 };
 
@@ -576,12 +652,36 @@ declare %updating function associate($content as map(*), $outputParams as map(*)
  : @return the default model or its instance version
  : @bug not generic enough
  :)
-declare function getModel($content as map(*)){
+(: declare function getModel($content as map(*)){
   let $instance := map:get($content, 'instance')
   let $model := map:get($content, 'model')
   return if ($instance) then
     copy $doc := fn:doc(file:base-dir() || "files/" || $model)
     modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
     return $doc
+    else fn:doc(file:base-dir() || "files/" || $model)
+}; :)
+
+(:~
+ : this function get the model
+ :
+ : @param $content the content params
+ : @return the default model or its instance version
+ : @bug not generic enough
+ :)
+declare function getModel($content as map(*)){
+  let $instance := map:get($content, 'instance')
+  let $model := map:get($content, 'model')
+  return
+    if ($instance) then
+      if ($model = 'xprProsopoModel.xml') then
+        copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+        modify replace value of node $doc/xf:model/xf:instance[@id='xprProsopo']/@src with '/xpr/biographies/' || $instance
+        return $doc
+      else if ($model = 'xprExpertiseModel.xml') then
+        copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+        modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
+        return $doc
+      else fn:doc(file:base-dir() || "files/" || $model)
     else fn:doc(file:base-dir() || "files/" || $model)
 };
