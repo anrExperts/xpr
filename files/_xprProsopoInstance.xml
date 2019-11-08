@@ -11,14 +11,14 @@
         <description>
             <existDates>
                 <dateRange>
-                    <fromDate notBefore="" notAfter=""/>
-                    <toDate notBefore="" notAfter=""/>
+                    <fromDate/>
+                    <toDate/>
                 </dateRange>
             </existDates>
             <functions>
                 <function>
                     <term/>
-                    <date standardDate="" notAfter="" notBefore=""/>
+                    <date standardDate="" notBefore="" notAfter=""/>
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
@@ -27,7 +27,7 @@
             <occupations>
                 <occupation>
                     <term/>
-                    <date standardDate="" notAfter="" notBefore=""/>
+                    <date standardDate="" notBefore="" notAfter=""/>
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
@@ -36,7 +36,7 @@
             <biogHist>
                 <chronList>
                     <chronItem localType="">
-                        <date standardDate="" notAfter="" notBefore=""/>
+                        <date standardDate="" notBefore="" notAfter=""/>
                         <placeEntry/>
                         <event/>
                         <rico:participant/>

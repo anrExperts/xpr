@@ -1,6 +1,41 @@
 <xf:model id="prosopo" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <xf:action ev:event="xforms-ready">
-                <!-- occupation - date -->
+                <xf:action 
+                        while="instance('xprProsopo')//eac:date[not(@standardDate)] 
+                        | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
+                        | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+                        ev:event="xforms-ready">
+                        <xf:insert 
+                                context="instance('xprProsopo')//eac:date[not(@standardDate)] 
+                                | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
+                                | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
+                </xf:action>
+                <xf:action 
+                        while="instance('xprProsopo')//eac:date[not(@notAfter)]
+                        | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                        | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+                        ev:event="xforms-ready">
+                        <xf:insert 
+                                context="instance('xprProsopo')//eac:date[not(@notAfter)]
+                                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                                | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
+                </xf:action>
+                <xf:action 
+                        while="instance('xprProsopo')//eac:date[not(@notBefore)]
+                        | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                        | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+                        ev:event="xforms-ready">
+                        <xf:insert 
+                                context="instance('xprProsopo')//eac:date[not(@notBefore)]
+                                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                                | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
+                </xf:action>
+        </xf:action>
+        <!--<xf:action ev:event="xforms-ready">
+                <!-\- occupation - date -\->
                 <xf:setvalue ref="instance('iterator')/occupation/date/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/occupation/date/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/occupation/date/notBefore" value="1"/>
@@ -44,7 +79,7 @@
                                 value="instance('iterator')/occupation/date/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- occupation - fromDate  -->
+                <!-\- occupation - fromDate  -\->
                 <xf:setvalue ref="instance('iterator')/occupation/fromDate/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/occupation/fromDate/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/occupation/fromDate/notBefore" value="1"/>
@@ -89,7 +124,7 @@
                                 value="instance('iterator')/occupation/fromDate/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- occupation - toDate -->
+                <!-\- occupation - toDate -\->
                 <xf:setvalue ref="instance('iterator')/occupation/toDate/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/occupation/toDate/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/occupation/toDate/notBefore" value="1"/>
@@ -134,7 +169,7 @@
                                 value="instance('iterator')/occupation/toDate/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- function - date -->
+                <!-\- function - date -\->
                 <xf:setvalue ref="instance('iterator')/function/date/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/function/date/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/function/date/notBefore" value="1"/>
@@ -179,7 +214,7 @@
                                 value="instance('iterator')/function/date/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- function - fromDate -->
+                <!-\- function - fromDate -\->
                 <xf:setvalue ref="instance('iterator')/function/fromDate/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/function/fromDate/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/function/fromDate/notBefore" value="1"/>
@@ -224,7 +259,7 @@
                                 value="instance('iterator')/function/fromDate/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- function - toDate -->
+                <!-\- function - toDate -\->
                 <xf:setvalue ref="instance('iterator')/function/toDate/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/function/toDate/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/function/toDate/notBefore" value="1"/>
@@ -269,7 +304,7 @@
                                 value="instance('iterator')/function/toDate/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- chronItem - date -->
+                <!-\- chronItem - date -\->
                 <xf:setvalue ref="instance('iterator')/chronItem/date/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/chronItem/date/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/chronItem/date/notBefore" value="1"/>
@@ -313,7 +348,7 @@
                                 value="instance('iterator')/chronItem/date/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- chronItem - fromDate -->
+                <!-\- chronItem - fromDate -\->
                 <xf:setvalue ref="instance('iterator')/chronItem/fromDate/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/chronItem/fromDate/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/chronItem/fromDate/notBefore" value="1"/>
@@ -357,7 +392,7 @@
                                 value="instance('iterator')/chronItem/fromDate/notBefore + 1"/>
                 </xf:action>
                 
-                <!-- chronItem - toDate -->
+                <!-\- chronItem - toDate -\->
                 <xf:setvalue ref="instance('iterator')/chronItem/toDate/standardDate" value="1"/>
                 <xf:setvalue ref="instance('iterator')/chronItem/toDate/notAfter" value="1"/>
                 <xf:setvalue ref="instance('iterator')/chronItem/toDate/notBefore" value="1"/>
@@ -401,7 +436,7 @@
                                 value="instance('iterator')/chronItem/toDate/notBefore + 1"/>
                 </xf:action>
                 
-                <!--<xf:action 
+                <!-\-<xf:action 
                         while="instance('iterator')/function &lt;= count(instance('xprProsopo')//eac:functions/eac:function)"
                         ev:event="xforms-ready">
                         <xf:insert 
@@ -410,8 +445,8 @@
                         <xf:setvalue
                                 ref="instance('iterator')/function"
                                 value="instance('iterator')/function + 1"/>
-                </xf:action>-->
-        </xf:action>
+                </xf:action>-\->
+        </xf:action>-->
         
         <!--Instance principale-->
         <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>

@@ -197,6 +197,7 @@
             <xf:label>Ajouter une occupation</xf:label>
             <xf:action ev:event="DOMActivate">
                 <xf:insert nodeset="eac:occupation" at="index('repeatOccupation')" position="after" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:occupation[index('repeatOccupation')]//* | eac:occupation[index('repeatOccupation')]//@*" value=""/>
             </xf:action>
             <xf:help>Ajouter une occupation</xf:help>
         </xf:trigger>
@@ -284,6 +285,7 @@
             <xf:label>Ajouter une fonction</xf:label>
             <xf:action ev:event="DOMActivate">
                 <xf:insert nodeset="eac:function" at="index('repeatFunction')" position="after" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:function[index('repeatFunction')]//* | eac:function[index('repeatFunction')]//@*" value=""/>
             </xf:action>
             <xf:help>Ajouter une fonction</xf:help>
         </xf:trigger>
@@ -414,6 +416,7 @@
                 <xf:label>Ajouter un participant</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:insert nodeset="rico:participant" at="index('repeatParticipant')" position="after" ev:event="DOMActivate"/>
+                    <xf:setvalue ref="rico:participant[index('repeatParticipant')]//* | rico:participant[index('repeatParticipant')]//@*" value=""/>
                 </xf:action>
                 <xf:help>Ajouter un participant</xf:help>
             </xf:trigger>
@@ -431,6 +434,7 @@
                 <xf:label>Ajouter</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:insert nodeset="rico:involve" at="index('repeatInvolve')" position="after" ev:event="DOMActivate"/>
+                    <xf:setvalue ref="rico:involve[index('repeatInvolve')]//* | rico:involve[index('repeatInvolve')]//@*" value=""/>
                 </xf:action>
                 <xf:help>Ajouter</xf:help>
             </xf:trigger>
@@ -454,6 +458,7 @@
             <xf:label>Ajouter un évènement</xf:label>
             <xf:action ev:event="DOMActivate">
                 <xf:insert nodeset="eac:chronItem" at="index('repeatChronItem')" position="after" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:chronItem[index('repeatChronItem')]//* | eac:chronItem[index('repeatChronItem')]//@*" value=""/>
             </xf:action>
             <xf:help>Ajouter un évènement</xf:help>
         </xf:trigger>
