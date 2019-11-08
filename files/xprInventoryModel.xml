@@ -1,9 +1,9 @@
 <xf:model id="inventory" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
-        
-        <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
-        
+
+        <xf:instance id="xprExperts" src="/xpr/biographies"/>
+
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
 
         <xf:submission id="submitInventory" resource="/xpr/inventories/put" method="put" replace="none">

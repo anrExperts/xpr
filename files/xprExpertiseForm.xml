@@ -642,13 +642,9 @@
                 <xf:repeat id="repeatExpert" nodeset="xpr:expert" appearance="full">
                     <xf:select1 ref="@ref" incremental="true">
                         <xf:label>Patronyme</xf:label>
-                        <xf:itemset nodeset="instance('xprExperts')/xpr:expert">
-                            <xf:label value="concat(xpr:persName/xpr:surname,', ',xpr:persName/xpr:forename, ', ', xpr:provision)"/>
-                            <xf:value ref="@xml:id"/>
-                            <!--<xf:setvalue ref="instance('xprModel')/description/participants/experts/expert[index('repeatExpert')]/name" value="instance('xprExperts')/expert[@xml:id=./@xml:id]/name/surname" ev:event="xforms-selected"/>-->
-                            <!--<xf:action ev:event="xforms-value-changed">
-                                        <xf:setvalue ref="instance('xprModel')/description/participants/experts/expert[index('repeatExpert')]/name" value="instance('xprExperts')/expert[@xml:id=instance('xprModel')/description/participants/experts/expert[index('repeatExpert')]/@ref]/name/surname"/>
-                                    </xf:action>-->
+                        <xf:itemset nodeset="instance('xprExperts')/eac:eac-cpf[number(substring-after(descendant::eac:entityId, 'xpr0')) &lt;= 266]">
+                            <xf:label value="concat(eac:cpfDescription/eac:identity/eac:nameEntry[1]/eac:part[@localType='surname'], ', ', eac:cpfDescription/eac:identity/eac:nameEntry[1]/eac:part[@localType='forename'])"/>
+                            <xf:value ref=".//eac:entityId"/>
                         </xf:itemset>
                     </xf:select1>
                     <xf:input ref="xpr:title" incremental="true">
@@ -839,9 +835,9 @@
                     </xf:select1>
                     <xf:select1 ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
-                        <xf:itemset nodeset="instance('xprExperts')/xpr:expert[@xml:id=instance('xprModel')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
-                            <xf:label value="concat(xpr:persName/xpr:surname,', ',xpr:persName/xpr:forename, ', ', xpr:provision)"/>
-                            <xf:value ref="@xml:id"/>
+                        <xf:itemset nodeset="instance('xprExperts')/eac:eac-cpf[descendant::eac:entityId = instance('xprModel')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                            <xf:label value="concat(eac:cpfDescription/eac:identity/eac:nameEntry[1]/eac:part[@localType='surname'], ', ', eac:cpfDescription/eac:identity/eac:nameEntry[1]/eac:part[@localType='forename'])"/>
+                            <xf:value ref=".//eac:entityId"/>
                         </xf:itemset>
                     </xf:select1>
                     <xf:select1 ref="@presence">
@@ -1074,23 +1070,12 @@
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
                     <xf:textarea ref="." incremental="true">
                         <xf:label>
-                            <xf:output value="if(instance('xprExperts')//xpr:expert[@xml:id = current()/@ref], concat('Conlusions (', instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname,')'), 'Conclusions')"/>
+                            <!--instance('xprExperts')/eac:eac-cpf[descendant::eac:entityId = instance('xprModel')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]-->
+                            <xf:output value="if(instance('xprExperts')/eac:eac-cpf[descendant::eac:entityId = current()/@ref], concat('Conlusions (', instance('xprExperts')/eac:eac-cpf[descendant::eac:entityId = current()/@ref]//eac:nameEntry[1]/eac:part[@localType='surname'],')'), 'Conclusions')"/>
+                            <!--<xf:output value="if(instance('xprExperts')//xpr:expert[@xml:id = current()/@ref], concat('Conlusions (', instance('xprExperts')//xpr:expert[@xml:id = current()/@ref]/xpr:persName/xpr:surname,')'), 'Conclusions')"/>-->
                         </xf:label>
                     </xf:textarea>
-                    <!--<xf:trigger class="delete">
-                        <xf:label>Supprimer une conclusion</xf:label>
-                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:conclusions/xpr:opinion) > 1"/>
-                        <xf:help>Supprimer une conclusion.</xf:help>
-                    </xf:trigger>-->
                 </xf:repeat>
-                <!--<xf:trigger class="insert">
-                    <xf:label>Ajouter une conclusion</xf:label>
-                    <xf:action ev:event="DOMActivate">
-                        <xf:insert nodeset="xpr:opinion" at="index('repeatOpinion')" position="after" ev:event="DOMActivate"/>
-                        <xf:setvalue ref="xpr:opinion[index('repeatOpinion')]" value=""/>
-                    </xf:action>
-                    <xf:help>Ajouter une conclusion.</xf:help>
-                </xf:trigger>-->
                 <xf:group ref="xpr:estimate">
                     <xf:label>Montant global (pour les estimations)</xf:label>
                     <xf:input ref="@l" incremental="true">

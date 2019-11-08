@@ -21,12 +21,16 @@
         <!--Instance principale-->
         <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
         <xf:instance id="xprExpertises" src="/xpr/expertises/"/>
+        
         <!--Instances secondaires-->
-        <xf:instance id="xprExperts" src="/xpr/files/_xprExperts.xml"/>
+        <xf:instance id="xprExperts" src="/xpr/biographies"/>
+        
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
+        
         <xf:instance id="iterator">
                 <iterator xmlns=""/>
         </xf:instance>
+        
         <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
                         <xf:message level="ephemeral"> So Good ! </xf:message>
