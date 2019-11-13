@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<supplement xmlns="xpr" xmlns:eac="eac">
+<supplement xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--Annexes-->
     <appendices>
         <appendice>
@@ -72,7 +72,10 @@
 
 
     <!-- PROSOPOGRAPHY -->
-    <eac:nameEntry>
+    
+    <eac:identity localType=""/>
+    
+    <eac:nameEntry xml:id="">
         <eac:part localType="surname"/>
         <eac:part localType="forename"/>
         <eac:part localType="particle"/>
@@ -82,8 +85,8 @@
         <eac:part localType="religious"/>
         <eac:part localType="nobiliary"/>
         <eac:part localType="officeName"/>
-        <eac:authorizedForm/>
         <eac:alternativeForm/>
+        <xpr:source xmlns:xpr="xpr" xlink:href=""/>
     </eac:nameEntry>
 
     <eac:date standardDate="" notBefore="" notAfter=""/>

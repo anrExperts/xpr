@@ -1,516 +1,55 @@
 <xf:model id="prosopo" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <xf:action ev:event="xforms-ready">
-                <xf:action 
-                        while="instance('xprProsopo')//eac:date[not(@standardDate)] 
+                <xf:action while="instance('xprProsopo')//eac:date[not(@standardDate)] 
                         | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
-                        | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:date[not(@standardDate)] 
+                        | instance('xprProsopo')//eac:toDate[not(@standardDate)]" ev:event="xforms-ready">
+                        <xf:insert context="instance('xprProsopo')//eac:date[not(@standardDate)] 
                                 | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
-                                | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
+                                | instance('xprProsopo')//eac:toDate[not(@standardDate)]" origin="instance('xprSupplement')/eac:date/@standardDate"/>
                 </xf:action>
-                <xf:action 
-                        while="instance('xprProsopo')//eac:date[not(@notAfter)]
+                <xf:action while="instance('xprProsopo')//eac:date[not(@notAfter)]
                         | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                        | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:date[not(@notAfter)]
+                        | instance('xprProsopo')//eac:toDate[not(@notAfter)]" ev:event="xforms-ready">
+                        <xf:insert context="instance('xprProsopo')//eac:date[not(@notAfter)]
                                 | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                                | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
+                                | instance('xprProsopo')//eac:toDate[not(@notAfter)]" origin="instance('xprSupplement')/eac:date/@notAfter"/>
                 </xf:action>
-                <xf:action 
-                        while="instance('xprProsopo')//eac:date[not(@notBefore)]
+                <xf:action while="instance('xprProsopo')//eac:date[not(@notBefore)]
                         | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                        | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:date[not(@notBefore)]
+                        | instance('xprProsopo')//eac:toDate[not(@notBefore)]" ev:event="xforms-ready">
+                        <xf:insert context="instance('xprProsopo')//eac:date[not(@notBefore)]
                                 | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                                | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
+                                | instance('xprProsopo')//eac:toDate[not(@notBefore)]" origin="instance('xprSupplement')/eac:date/@notBefore"/>
                 </xf:action>
         </xf:action>
-        <!--<xf:action ev:event="xforms-ready">
-                <!-\- occupation - date -\->
-                <xf:setvalue ref="instance('iterator')/occupation/date/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/occupation/date/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/occupation/date/notBefore" value="1"/>
-                <xf:action 
-                        while="instance('iterator')/occupation/date/standardDate &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@standardDate]][position()=instance('iterator')/occupation/date/standardDate]/eac:date[@standardDate]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@standardDate]][position()=instance('iterator')/occupation/date/standardDate]/eac:date[@standardDate]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/date/standardDate"
-                                value="instance('iterator')/occupation/date/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/occupation/date/notAfter &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@notAfter]][position()=instance('iterator')/occupation/date/notAfter]/eac:date[@notAfter]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@notAfter]][position()=instance('iterator')/occupation/date/notAfter]/eac:date[@notAfter]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/date/notAfter"
-                                value="instance('iterator')/occupation/date/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/occupation/date/notBefore &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@notBefore]][position()=instance('iterator')/occupation/date/notBefore]/eac:date[@notBefore]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[child::eac:date[@notBefore]][position()=instance('iterator')/occupation/date/notBefore]/eac:date[@notBefore]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/date/notBefore"
-                                value="instance('iterator')/occupation/date/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- occupation - fromDate  -\->
-                <xf:setvalue ref="instance('iterator')/occupation/fromDate/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/occupation/fromDate/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/occupation/fromDate/notBefore" value="1"/>
-                
-                <xf:action 
-                        while="instance('iterator')/occupation/fromDate/standardDate &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@standardDate]][position()=instance('iterator')/occupation/fromDate/standardDate]/eac:dateRange/eac:fromDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@standardDate]][position()=instance('iterator')/occupation/fromDate/standardDate]/eac:dateRange/eac:fromDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/fromDate/standardDate"
-                                value="instance('iterator')/occupation/fromDate/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/occupation/fromDate/notAfter &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@notAfter]][position()=instance('iterator')/occupation/fromDate/notAfter]/eac:dateRange/eac:fromDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@notAfter]][position()=instance('iterator')/occupation/fromDate/notAfter]/eac:dateRange/eac:fromDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/fromDate/notAfter"
-                                value="instance('iterator')/occupation/fromDate/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/occupation/fromDate/notBefore &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@notBefore]][position()=instance('iterator')/occupation/fromDate/notBefore]/eac:dateRange/eac:fromDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:fromDate[@notBefore]][position()=instance('iterator')/occupation/fromDate/notBefore]/eac:dateRange/eac:fromDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/fromDate/notBefore"
-                                value="instance('iterator')/occupation/fromDate/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- occupation - toDate -\->
-                <xf:setvalue ref="instance('iterator')/occupation/toDate/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/occupation/toDate/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/occupation/toDate/notBefore" value="1"/>
-                
-                <xf:action 
-                        while="instance('iterator')/occupation/toDate/standardDate &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@standardDate]][position()=instance('iterator')/occupation/toDate/standardDate]/eac:dateRange/eac:toDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@standardDate]][position()=instance('iterator')/occupation/toDate/standardDate]/eac:dateRange/eac:toDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/toDate/standardDate"
-                                value="instance('iterator')/occupation/toDate/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/occupation/toDate/notAfter &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@notAfter]][position()=instance('iterator')/occupation/toDate/notAfter]/eac:dateRange/eac:toDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@notAfter]][position()=instance('iterator')/occupation/toDate/notAfter]/eac:dateRange/eac:toDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/toDate/notAfter"
-                                value="instance('iterator')/occupation/toDate/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/occupation/toDate/notBefore &lt;= count(instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@notBefore]][position()=instance('iterator')/occupation/toDate/notBefore]/eac:dateRange/eac:toDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:occupations/eac:occupation[descendant::eac:toDate[@notBefore]][position()=instance('iterator')/occupation/toDate/notBefore]/eac:dateRange/eac:toDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/occupation/toDate/notBefore"
-                                value="instance('iterator')/occupation/toDate/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- function - date -\->
-                <xf:setvalue ref="instance('iterator')/function/date/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/function/date/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/function/date/notBefore" value="1"/>
-                
-                <xf:action 
-                        while="instance('iterator')/function/date/standardDate &lt;= count(instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@standardDate]][position()=instance('iterator')/function/date/standardDate]/eac:date[@standardDate]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@standardDate]][position()=instance('iterator')/function/date/standardDate]/eac:date[@standardDate]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/date/standardDate"
-                                value="instance('iterator')/function/date/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/function/date/notAfter &lt;= count(instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@notAfter]][position()=instance('iterator')/function/date/notAfter]/eac:date[@notAfter]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@notAfter]][position()=instance('iterator')/function/date/notAfter]/eac:date[@notAfter]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/date/notAfter"
-                                value="instance('iterator')/function/date/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/function/date/notBefore &lt;= count(instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@notBefore]][position()=instance('iterator')/function/date/notBefore]/eac:date[@notBefore]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[child::eac:date[@notBefore]][position()=instance('iterator')/function/date/notBefore]/eac:date[@notBefore]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/date/notBefore"
-                                value="instance('iterator')/function/date/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- function - fromDate -\->
-                <xf:setvalue ref="instance('iterator')/function/fromDate/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/function/fromDate/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/function/fromDate/notBefore" value="1"/>
-                
-                <xf:action 
-                        while="instance('iterator')/function/fromDate/standardDate &lt;= count(instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@standardDate]][position()=instance('iterator')/function/fromDate/standardDate]/eac:dateRange/eac:fromDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@standardDate]][position()=instance('iterator')/function/fromDate/standardDate]/eac:dateRange/eac:fromDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/fromDate/standardDate"
-                                value="instance('iterator')/function/fromDate/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/function/fromDate/notAfter &lt;= count(instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@notAfter]][position()=instance('iterator')/function/fromDate/notAfter]/eac:dateRange/eac:fromDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@notAfter]][position()=instance('iterator')/function/fromDate/notAfter]/eac:dateRange/eac:fromDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/fromDate/notAfter"
-                                value="instance('iterator')/function/fromDate/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/function/fromDate/notBefore &lt;= count(instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@notBefore]][position()=instance('iterator')/function/fromDate/notBefore]/eac:dateRange/eac:fromDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:fromDate[@notBefore]][position()=instance('iterator')/function/fromDate/notBefore]/eac:dateRange/eac:fromDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/fromDate/notBefore"
-                                value="instance('iterator')/function/fromDate/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- function - toDate -\->
-                <xf:setvalue ref="instance('iterator')/function/toDate/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/function/toDate/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/function/toDate/notBefore" value="1"/>
-                
-                <xf:action 
-                        while="instance('iterator')/function/toDate/standardDate &lt;= count(instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@standardDate]][position()=instance('iterator')/function/toDate/standardDate]/eac:dateRange/eac:toDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@standardDate]][position()=instance('iterator')/function/toDate/standardDate]/eac:dateRange/eac:toDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/toDate/standardDate"
-                                value="instance('iterator')/function/toDate/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/function/toDate/notAfter &lt;= count(instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@notAfter]][position()=instance('iterator')/function/toDate/notAfter]/eac:dateRange/eac:toDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@notAfter]][position()=instance('iterator')/function/toDate/notAfter]/eac:dateRange/eac:toDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/toDate/notAfter"
-                                value="instance('iterator')/function/toDate/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/function/toDate/notBefore &lt;= count(instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@notBefore]][position()=instance('iterator')/function/toDate/notBefore]/eac:dateRange/eac:toDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[descendant::eac:toDate[@notBefore]][position()=instance('iterator')/function/toDate/notBefore]/eac:dateRange/eac:toDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/function/toDate/notBefore"
-                                value="instance('iterator')/function/toDate/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- chronItem - date -\->
-                <xf:setvalue ref="instance('iterator')/chronItem/date/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/chronItem/date/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/chronItem/date/notBefore" value="1"/>
-                <xf:action 
-                        while="instance('iterator')/chronItem/date/standardDate &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@standardDate]][position()=instance('iterator')/chronItem/date/standardDate]/eac:date[@standardDate]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@standardDate]][position()=instance('iterator')/chronItem/date/standardDate]/eac:date[@standardDate]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/date/standardDate"
-                                value="instance('iterator')/chronItem/date/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/chronItem/date/notAfter &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@notAfter]][position()=instance('iterator')/chronItem/date/notAfter]/eac:date[@notAfter]"
-                                origin="instance('xprSupplement')/eac:date/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@notAfter]][position()=instance('iterator')/chronItem/date/notAfter]/eac:date[@notAfter]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/date/notAfter"
-                                value="instance('iterator')/chronItem/date/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/chronItem/date/notBefore &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@notBefore]][position()=instance('iterator')/chronItem/date/notBefore]/eac:date[@notBefore]"
-                                origin="instance('xprSupplement')/eac:date/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[child::eac:date[@notBefore]][position()=instance('iterator')/chronItem/date/notBefore]/eac:date[@notBefore]"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/date/notBefore"
-                                value="instance('iterator')/chronItem/date/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- chronItem - fromDate -\->
-                <xf:setvalue ref="instance('iterator')/chronItem/fromDate/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/chronItem/fromDate/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/chronItem/fromDate/notBefore" value="1"/>
-                <xf:action 
-                        while="instance('iterator')/chronItem/fromDate/standardDate &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@standardDate]][position()=instance('iterator')/chronItem/fromDate/standardDate]/eac:dateRange/eac:fromDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@standardDate]][position()=instance('iterator')/chronItem/fromDate/standardDate]/eac:dateRange/eac:fromDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/fromDate/standardDate"
-                                value="instance('iterator')/chronItem/fromDate/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/chronItem/fromDate/notAfter &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@notAfter]][position()=instance('iterator')/chronItem/fromDate/notAfter]/eac:dateRange/eac:fromDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@notAfter]][position()=instance('iterator')/chronItem/fromDate/notAfter]/eac:dateRange/eac:fromDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/fromDate/notAfter"
-                                value="instance('iterator')/chronItem/fromDate/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/chronItem/fromDate/notBefore &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@notBefore]][position()=instance('iterator')/chronItem/fromDate/notBefore]/eac:dateRange/eac:fromDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:fromDate[@notBefore]][position()=instance('iterator')/chronItem/fromDate/notBefore]/eac:dateRange/eac:fromDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:fromDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/fromDate/notBefore"
-                                value="instance('iterator')/chronItem/fromDate/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\- chronItem - toDate -\->
-                <xf:setvalue ref="instance('iterator')/chronItem/toDate/standardDate" value="1"/>
-                <xf:setvalue ref="instance('iterator')/chronItem/toDate/notAfter" value="1"/>
-                <xf:setvalue ref="instance('iterator')/chronItem/toDate/notBefore" value="1"/>
-                <xf:action 
-                        while="instance('iterator')/chronItem/toDate/standardDate &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@standardDate]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@standardDate]][position()=instance('iterator')/chronItem/toDate/standardDate]/eac:dateRange/eac:toDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@standardDate]][position()=instance('iterator')/chronItem/toDate/standardDate]/eac:dateRange/eac:toDate[@standardDate]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notBefore"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/toDate/standardDate"
-                                value="instance('iterator')/chronItem/toDate/standardDate + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/chronItem/toDate/notAfter &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@notAfter]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@notAfter]][position()=instance('iterator')/chronItem/toDate/notAfter]/eac:dateRange/eac:toDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notBefore"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@notAfter]][position()=instance('iterator')/chronItem/toDate/notAfter]/eac:dateRange/eac:toDate[@notAfter]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/toDate/notAfter"
-                                value="instance('iterator')/chronItem/toDate/notAfter + 1"/>
-                </xf:action>
-                <xf:action 
-                        while="instance('iterator')/chronItem/toDate/notBefore &lt;= count(instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@notBefore]])"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@notBefore]][position()=instance('iterator')/chronItem/toDate/notBefore]/eac:dateRange/eac:toDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@notAfter"/>
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:chronList/eac:chronItem[descendant::eac:toDate[@notBefore]][position()=instance('iterator')/chronItem/toDate/notBefore]/eac:dateRange/eac:toDate[@notBefore]"
-                                origin="instance('xprSupplement')/eac:dateRange/eac:toDate/@standardDate"/>
-                        <xf:setvalue 
-                                ref="instance('iterator')/chronItem/toDate/notBefore"
-                                value="instance('iterator')/chronItem/toDate/notBefore + 1"/>
-                </xf:action>
-                
-                <!-\-<xf:action 
-                        while="instance('iterator')/function &lt;= count(instance('xprProsopo')//eac:functions/eac:function)"
-                        ev:event="xforms-ready">
-                        <xf:insert 
-                                context="instance('xprProsopo')//eac:functions/eac:function[position()=instance('iterator')/function]/eac:date"
-                                origin="instance('xprSupplement')/eac:date/@standardDate"/>
-                        <xf:setvalue
-                                ref="instance('iterator')/function"
-                                value="instance('iterator')/function + 1"/>
-                </xf:action>-\->
-        </xf:action>-->
-        
+
         <!--Instance principale-->
         <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
+        
+        <xf:instance id="xprNewEntity" src="/xpr/files/_xprProsopoInstance.xml"/>
+        
+        <xf:submission id="submitNewEntity" ref="instance('xprNewEntity')" resource="/xpr/biographies/put" method="put" replace="none">
+                <xf:action ev:event="xforms-submit">
+                        <xf:delete nodeset="instance('xprNewEntity')//@standardDate[. = '']"/>
+                        <xf:delete nodeset="instance('xprNewEntity')//@notBefore[. = '']"/>
+                        <xf:delete nodeset="instance('xprNewEntity')//@notAfter[. = '']"/>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral">So Good !</xf:message>
+                        <xf:send submission="reloadEntities"/>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                </xf:action>
+        </xf:submission>
+        
+        <xf:submission id="reloadEntities" method="get" resource="/xpr/entities" replace="instance" instance="xprEntities"/>
+        
+        <xf:instance id="xprEntities" src="/xpr/entities"/>
 
         <xf:instance id="xprSources" src="/xpr/sources"/>
 
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
-        
-        <xf:instance id="iterator">
-                <iterator xmlns="">
-                        <occupation>
-                                <date>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </date>
-                                <fromDate>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </fromDate>
-                                <toDate>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </toDate>
-                        </occupation>
-                        <function>
-                                <date>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </date>
-                                <fromDate>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </fromDate>
-                                <toDate>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </toDate>
-                        </function>
-                        <chronItem>
-                                <date>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </date>
-                                <fromDate>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </fromDate>
-                                <toDate>
-                                        <standardDate/>
-                                        <notAfter/>
-                                        <notBefore/>
-                                </toDate>
-                        </chronItem>
-                </iterator>
-        </xf:instance>
-        
 
         <xf:submission id="submitBio" resource="/xpr/biographies/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit">
@@ -532,7 +71,7 @@
         <xf:submission id="reloadSources" method="get" resource="/xpr/sources" replace="instance" instance="xprSources"/>
 
         <xf:bind id="entityType" nodeset="eac:cpfDescription/eac:identity/eac:entityType"/>
-        <xf:bind id="nameEntry" nodeset="eac:cpfDescription/eac:identity/eac:nameEntry"/>
+        <xf:bind id="nameEntry" nodeset="eac:cpfDescription/eac:identity/eac:nameEntry[./eac:alternativeForm]"/>
 
         <xf:bind id="chronItem" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"/>
         <xf:bind id="chronItemType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/@localType"/>
@@ -545,6 +84,9 @@
 
 
         <xf:bind id="bindSource" nodeset="instance('xprSources')/*"/>
+        
+        <!--<xf:bind nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]//@xml:id" calculate="concat('name', count(ancestor::eac:nameEntry/preceding-sibling::eac:nameEntry) + 1)"/>-->
+        <!--<xf:bind nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]//@xml:id" calculate="concat(ancestor::eac:nameEntry/eac:part[@localType='surname'], 'toto')"/>-->
 
 
         <xf:instance id="xprSource" src="/xpr/files/_xprSourceInstance.xml"/>

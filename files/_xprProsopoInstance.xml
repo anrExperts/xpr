@@ -3,10 +3,13 @@
     <!--xmlns="urn:isbn:1-931666-33-4"-->
     <control/>
     <cpfDescription>
-        <identity>
+        <identity localType ="">
             <entityId/>
             <entityType/>
-            <nameEntry/>
+            <nameEntry>
+                <part/>
+                <authorizedForm/>
+            </nameEntry>
         </identity>
         <description>
             <existDates>
@@ -39,8 +42,8 @@
                         <date standardDate="" notBefore="" notAfter=""/>
                         <placeEntry/>
                         <event/>
-                        <rico:participant/>
-                        <rico:involve/>
+                        <rico:participant xlink:href=""/>
+                        <rico:involve xlink:href=""/>
                         <xpr:source xlink:href=""/>
                     </chronItem>
                 </chronList>

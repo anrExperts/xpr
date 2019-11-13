@@ -28,6 +28,8 @@ declare namespace eac = "eac";
 declare default element namespace "xpr";
 declare default function namespace "xpr";
 
+declare default collation "http://basex.org/collation?lang=fr";
+
 declare variable $xpr:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl";
 
 (:~
@@ -397,7 +399,16 @@ function xformBioResult($param, $referer) {
         return $d :)
       return replace node $db/xpr/bio/eac:eac-cpf[descendant::eac:entityId = $location] with $param
     else
-      insert node $param into $db/xpr/bio
+      let $id :=
+        for $type in $param//*:identity/@localType
+        return switch ($type)
+          case ($type = 'family') return 'xprFamily' || fn:format-integer(fn:count($db//*:eac-cpf[descendant::*:identity/@localType = 'family']) + 1, '0000')
+          default return 'xxx'
+      let $param := 
+        copy $d := $param
+        modify insert node attribute xml:id {$id} into $d/*
+        return $d
+      return insert node $param into $db/xpr/bio
 };
 
 
@@ -546,6 +557,26 @@ declare
 function xformSourcesResult($param, $referer) {
   let $db := db:open("xpr")
   return insert node $param into $db/xpr/sources
+};
+
+(:~
+ : This resource function lists all the entities
+ : @return an ordered xml ressource of all the entities
+ : @todo collation for order by (for accent)
+ :)
+declare 
+%rest:path("/xpr/entities")
+%rest:produces('application/xml')
+%output:method("xml")
+function entities() {
+  <entities xmlns="xpr">
+    {
+      for $entity in db:open('xpr')/xpr/bio/eac:eac-cpf
+      let $id := $entity/@xml:id
+      order by fn:lower-case($entity//eac:nameEntry[child::eac:authorizedForm])
+      return <entity xml:id="{$id}">{$entity//eac:nameEntry[child::eac:authorizedForm]/eac:part/text()}</entity>
+    }
+  </entities>
 };
 
 
