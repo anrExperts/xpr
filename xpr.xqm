@@ -412,7 +412,11 @@ function xformBioResult($param, $referer) {
           default return 'xprPerson' || fn:format-integer(fn:count($db//*:eac-cpf[descendant::*:identity/@localType = 'person']) + 1, '0000')
       let $param := 
         copy $d := $param
-        modify insert node attribute xml:id {$id} into $d/*
+        modify 
+        (
+          insert node attribute xml:id {$id} into $d/*,
+          replace value of node $d//*:entityId with $id
+        )
         return $d
       return insert node $param into $db/xpr/bio
 };
