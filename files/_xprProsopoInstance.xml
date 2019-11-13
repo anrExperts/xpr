@@ -14,8 +14,8 @@
         <description>
             <existDates>
                 <dateRange>
-                    <fromDate/>
-                    <toDate/>
+                    <fromDate standardDate="" notBefore="" notAfter=""/>
+                    <toDate standardDate="" notBefore="" notAfter=""/>
                 </dateRange>
             </existDates>
             <functions>
