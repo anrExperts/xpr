@@ -9,6 +9,6 @@
     </xf:trigger>
     <xf:trigger>
         <xf:label>Ajouter une source</xf:label>
-        <xf:toggle case="addSource" ev:event="DOMActivate"/>
+        <xf:toggle case="newSource" ev:event="DOMActivate"/>
     </xf:trigger>
 </nav>

@@ -1,4 +1,5 @@
 <xf:model id="prosopo" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+        <!-- xprProsopo -->
         <xf:action ev:event="xforms-ready">
                 <xf:action while="instance('xprProsopo')//eac:date[not(@standardDate)] 
                         | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
@@ -23,9 +24,54 @@
                 </xf:action>
         </xf:action>
 
-        <!--Instance principale-->
+        <!--Instances principales-->
         <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
         
+        <!-- xprSupplement et xprEntitiesTypes servent également à xprNewEntity -->
+        <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
+        <xf:instance id="xprEntitiesTypes">
+                <EntitiesSubTypes xmlns="">
+                        <identity type="person"><label>Expert</label><value>expert</value></identity>
+                        <identity type="person"><label>Maçon</label><value>mason</value></identity>
+                        <identity type="person"><label>Tiers</label><value>person</value></identity>
+                        <identity type="corporateBody"><label>Office</label><value>office</value></identity>
+                        <identity type="corporateBody"><label>Notaire</label><value>notary</value></identity>
+                        <identity type="corporateBody"><label>Autre</label><value>org</value></identity>
+                        <identity type="family"><label>famille</label><value>family</value></identity>
+                </EntitiesSubTypes>
+        </xf:instance>
+        
+        <xf:bind id="entityType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType"/>
+        <xf:bind id="nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[./eac:alternativeForm]"/>        
+        <xf:bind id="chronItem" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"/>
+        <xf:bind id="chronItemType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/@localType"/>
+        <xf:bind id="chronItemDate" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:date"/>
+        <xf:bind id="chronItemPlace" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:placeEntry"/>
+        <xf:bind id="chronItemEvent" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:event"/>
+        <xf:bind id="chronItemParticipant" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant"/>
+        <xf:bind id="chronItemInvolve" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve"/>
+        <xf:bind id="chronItemSource" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/xpr:source"/>
+        
+        <xf:bind id="bindSource" nodeset="instance('xprSources')/*"/>
+        
+        <xf:submission id="submitBio" resource="/xpr/biographies/put" method="put" replace="none">
+                <xf:action ev:event="xforms-submit">
+                        <xf:delete nodeset="instance('xprProsopo')//@standardDate[. = '']"/>
+                        <xf:delete nodeset="instance('xprProsopo')//@notBefore[. = '']"/>
+                        <xf:delete nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="ephemeral"> So Good ! </xf:message>
+                        <xf:load show="replace">
+                                <xf:resource value="'/xpr/biographies/new'"/>
+                        </xf:load>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                </xf:action>
+        </xf:submission>
+        
+        <!-- instance xprNewEntity -->
         <xf:instance id="xprNewEntity" src="/xpr/files/_xprProsopoInstance.xml"/>
         
         <xf:bind id="newEntityType" nodeset="instance('xprNewEntity')/eac:cpfDescription/eac:identity/eac:entityType"/>
@@ -71,66 +117,18 @@
         
         <xf:submission id="reloadEntities" method="get" resource="/xpr/entities" replace="instance" instance="xprEntities"/>
         <xf:submission id="reloadNewEntity" method="get" resource="/xpr/files/_xprProsopoInstance.xml" replace="instance" instance="xprNewEntity"/>
-        
+ 
+        <!-- instance xprEntities (liste des fiches prosopo présentes dans la base (servie par Basex))-->
         <xf:instance id="xprEntities" src="/xpr/entities"/>
 
+        <!-- instance xprSources (liste des sources présentes dans la base)-->
         <xf:instance id="xprSources" src="/xpr/sources"/>
 
-        <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
 
-        <xf:submission id="submitBio" resource="/xpr/biographies/put" method="put" replace="none">
-                <xf:action ev:event="xforms-submit">
-                        <xf:delete nodeset="instance('xprProsopo')//@standardDate[. = '']"/>
-                        <xf:delete nodeset="instance('xprProsopo')//@notBefore[. = '']"/>
-                        <xf:delete nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
-                </xf:action>
-                <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral"> So Good ! </xf:message>
-                        <xf:load show="replace">
-                                <xf:resource value="'/xpr/biographies/new'"/>
-                        </xf:load>
-                </xf:action>
-                <xf:action ev:event="xforms-submit-error">
-                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
-                </xf:action>
-        </xf:submission>
-
-        <xf:submission id="reloadSources" method="get" resource="/xpr/sources" replace="instance" instance="xprSources"/>
-
-        <xf:bind id="entityType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType"/>
-        <xf:bind id="nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[./eac:alternativeForm]"/>
-
-        <xf:bind id="chronItem" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"/>
-        <xf:bind id="chronItemType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/@localType"/>
-        <xf:bind id="chronItemDate" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:date"/>
-        <xf:bind id="chronItemPlace" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:placeEntry"/>
-        <xf:bind id="chronItemEvent" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/eac:event"/>
-        <xf:bind id="chronItemParticipant" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant"/>
-        <xf:bind id="chronItemInvolve" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve"/>
-        <xf:bind id="chronItemSource" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/xpr:source"/>
-
-
-        <xf:bind id="bindSource" nodeset="instance('xprSources')/*"/>
+        <xf:instance id="xprNewSource" src="/xpr/files/_xprSourceInstance.xml"/>
         
-        <!--<xf:bind nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]//@xml:id" calculate="concat('name', count(ancestor::eac:nameEntry/preceding-sibling::eac:nameEntry) + 1)"/>-->
-        <!--<xf:bind nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]//@xml:id" calculate="concat(ancestor::eac:nameEntry/eac:part[@localType='surname'], 'toto')"/>-->
 
-
-        <xf:instance id="xprSource" src="/xpr/files/_xprSourceInstance.xml"/>
-        
-        <xf:instance id="xprEntitiesTypes">
-                <EntitiesSubTypes xmlns="">
-                        <identity type="person"><label>Expert</label><value>expert</value></identity>
-                        <identity type="person"><label>Maçon</label><value>mason</value></identity>
-                        <identity type="person"><label>Tiers</label><value>person</value></identity>
-                        <identity type="corporateBody"><label>Office</label><value>office</value></identity>
-                        <identity type="corporateBody"><label>Notaire</label><value>notary</value></identity>
-                        <identity type="corporateBody"><label>Autre</label><value>org</value></identity>
-                        <identity type="family"><label>famille</label><value>family</value></identity>
-                </EntitiesSubTypes>
-        </xf:instance>
-
-        <xf:submission id="submitSource" ref="instance('xprSource')" resource="/xpr/sources/put" method="put" replace="none">
+        <xf:submission id="submitNewSource" ref="instance('xprNewSource')" resource="/xpr/sources/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
                         <xf:message level="ephemeral">So Good !</xf:message>
                         <xf:send submission="reloadSources"/>
@@ -139,5 +137,6 @@
                         <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
                 </xf:action>
         </xf:submission>
+        <xf:submission id="reloadSources" method="get" resource="/xpr/sources" replace="instance" instance="xprSources"/>
 
 </xf:model>

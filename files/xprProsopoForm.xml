@@ -1073,14 +1073,14 @@
                 <xf:label>Enregistrer</xf:label>
             </xf:submit>
         </xf:case>
-        <xf:case id="addSource">
-            <xf:group ref="instance('xprSource')">
+        <xf:case id="newSource">
+            <xf:group ref="instance('xprNewSource')">
                 <xf:label>Sources</xf:label>
                 <xf:input ref=".">
                     <xf:label>référence</xf:label>
                 </xf:input>
             </xf:group>
-            <xf:submit submission="submitSource">
+            <xf:submit submission="submitNewSource">
                 <xf:label>Enregistrer</xf:label>
             </xf:submit>
         </xf:case>

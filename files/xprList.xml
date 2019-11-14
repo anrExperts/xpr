@@ -1,35 +1,35 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xf:group xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms">
-<xf:trigger>
-  <xf:label>Exporter la base</xf:label>
-  <xf:action ev:event="DOMActivate">
-    <xf:load resource="export"/>
-  </xf:action>
-</xf:trigger>
-<xf:trigger>
-  <xf:label>Ajouter</xf:label>
-  <xf:action ev:event="DOMActivate">
-    <xf:load resource="new"/>
-  </xf:action>
-</xf:trigger>
-<xf:repeat id="repeatExpertises" nodeset="xpr:expertise/xpr:sourceDesc">
-    <xf:label>
-        <xf:output ref="xpr:idno[@type='unitid']"/>, dossier n° <xf:output ref="xpr:idno[@type='item']"/>
-    </xf:label>
     <xf:trigger>
-        <xf:label>Modifier</xf:label>
+        <xf:label>Exporter la base</xf:label>
         <xf:action ev:event="DOMActivate">
-            <!-- @bug xsltforms ? <xf:load resource="{concat(../@xml:id, '/modify')}"/> -->
-            <xf:load show="replace">
-              <xf:resource value="concat(../@xml:id, '/modify')"/>
-            </xf:load>
+            <xf:load resource="export"/>
         </xf:action>
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Voir</xf:label>
+        <xf:label>Ajouter</xf:label>
         <xf:action ev:event="DOMActivate">
-            <xf:load ref="../@xml:id"/>
+            <xf:load resource="new"/>
         </xf:action>
     </xf:trigger>
-</xf:repeat>
+    <xf:repeat id="repeatExpertises" nodeset="xpr:expertise/xpr:sourceDesc">
+        <xf:label>
+            <xf:output ref="xpr:idno[@type='unitid']"/>, dossier n° <xf:output ref="xpr:idno[@type='item']"/>
+        </xf:label>
+        <xf:trigger>
+            <xf:label>Modifier</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <!-- @bug xsltforms ? <xf:load resource="{concat(../@xml:id, '/modify')}"/> -->
+                <xf:load show="replace">
+                    <xf:resource value="concat(../@xml:id, '/modify')"/>
+                </xf:load>
+            </xf:action>
+        </xf:trigger>
+        <xf:trigger>
+            <xf:label>Voir</xf:label>
+            <xf:action ev:event="DOMActivate">
+                <xf:load ref="../@xml:id"/>
+            </xf:action>
+        </xf:trigger>
+    </xf:repeat>
 </xf:group>
