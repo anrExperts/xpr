@@ -289,7 +289,7 @@ function listBio() {
       {
         for $entity in db:open('xpr')//bio/eac:eac-cpf
         let $id := $entity/eac:cpfDescription//eac:entityId
-        let $identity := fn:concat($entity//eac:nameEntry[1]/eac:part[@localType='surname'], ', ', $entity//eac:nameEntry[1]/eac:part[@localType='forename'])
+        let $identity := $entity//eac:nameEntry[child::eac:authorizedForm]/eac:part
         return 
           <li>
             <a href="/xpr/biographies/{$id}">{$identity}</a> 
@@ -421,6 +421,25 @@ function xformBioResult($param, $referer) {
       return insert node $param into $db/xpr/bio
 };
 
+(:~
+ : This resource function lists all the entities
+ : @return an ordered xml ressource of all the entities with @xml:id, @type and an authorized form of the name
+ : @todo collation for order by (for accent)
+ :)
+declare 
+%rest:path("/xpr/entities")
+%rest:produces('application/xml')
+%output:method("xml")
+function entities() {
+  <entities xmlns="xpr">
+    {
+      for $entity in db:open('xpr')/xpr/bio/eac:eac-cpf
+      let $id := $entity/@xml:id
+      order by fn:lower-case($entity//eac:nameEntry[child::eac:authorizedForm])
+      return <entity xml:id="{$id}" type="{$entity//eac:identity/@localType}">{$entity//eac:nameEntry[child::eac:authorizedForm]/eac:part/text()}</entity>
+    }
+  </entities>
+};
 
 (:~
  : This resource function lists all the inventories
@@ -570,27 +589,6 @@ function xformSourcesResult($param, $referer) {
 };
 
 (:~
- : This resource function lists all the entities
- : @return an ordered xml ressource of all the entities
- : @todo collation for order by (for accent)
- :)
-declare 
-%rest:path("/xpr/entities")
-%rest:produces('application/xml')
-%output:method("xml")
-function entities() {
-  <entities xmlns="xpr">
-    {
-      for $entity in db:open('xpr')/xpr/bio/eac:eac-cpf
-      let $id := $entity/@xml:id
-      order by fn:lower-case($entity//eac:nameEntry[child::eac:authorizedForm])
-      return <entity xml:id="{$id}">{$entity//eac:nameEntry[child::eac:authorizedForm]/eac:part/text()}</entity>
-    }
-  </entities>
-};
-
-
-(:~
  : Utilities 
  :)
 
@@ -686,22 +684,6 @@ declare %updating function associate($content as map(*), $outputParams as map(*)
     default return replace value of node $node with 'default'
 };
 
-(:~
- : this function get the model
- :
- : @param $content the content params
- : @return the default model or its instance version
- : @bug not generic enough
- :)
-(: declare function getModel($content as map(*)){
-  let $instance := map:get($content, 'instance')
-  let $model := map:get($content, 'model')
-  return if ($instance) then
-    copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-    modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
-    return $doc
-    else fn:doc(file:base-dir() || "files/" || $model)
-}; :)
 
 (:~
  : this function get the model
@@ -715,14 +697,20 @@ declare function getModel($content as map(*)){
   let $model := map:get($content, 'model')
   return
     if ($instance) then
-      if ($model = 'xprProsopoModel.xml') then
-        copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-        modify replace value of node $doc/xf:model/xf:instance[@id='xprProsopo']/@src with '/xpr/biographies/' || $instance
-        return $doc
-      else if ($model = 'xprExpertiseModel.xml') then
-        copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-        modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
-        return $doc
-      else fn:doc(file:base-dir() || "files/" || $model)
+      for $model in $model
+      return switch ($model)
+        case 'xprProsopoModel.xml' return 
+        (
+          copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+          modify replace value of node $doc/xf:model/xf:instance[@id='xprProsopo']/@src with '/xpr/biographies/' || $instance
+          return $doc
+        )
+        case 'xprExpertiseModel.xml' return 
+        (
+          copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+          modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
+          return $doc
+        )
+        default return fn:doc(file:base-dir() || "files/" || $model)
     else fn:doc(file:base-dir() || "files/" || $model)
 };
