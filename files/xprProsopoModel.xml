@@ -41,6 +41,24 @@
                 </EntitiesSubTypes>
         </xf:instance>
         
+        <xf:instance id="xprEvents">
+                <event xmlns="">
+                        <type><label>Naissance</label><value>birth</value></type>
+                        <type><label>Mariage</label><value>marriage</value></type>
+                        <type><label>Achat d'office</label><value>officePurchase</value></type>
+                        <type><label>Lettre de provision</label><value>provision</value></type>
+                        <type><label>Réception</label><value>reception</value></type>
+                        <type><label>Présence dans les Almanachs</label><value>almanacs</value></type>
+                        <type><label>Honorariat</label><value>honorary</value></type>
+                        <type><label>Résignation</label><value>relinquishment</value></type>
+                        <type><label>Vente d'office</label><value>officeSale</value></type>
+                        <type><label>Suppression des offices</label><value>officesEnding</value></type>
+                        <type><label>Dispense d'age</label><value>exemption</value></type>
+                        <type><label>Saisie réelle</label><value>seizure</value></type>
+                        <type><label>Décès</label><value>death</value></type>
+                </event>
+        </xf:instance>
+        
         <xf:bind id="entityType" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType"/>
         <xf:bind id="nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[./eac:alternativeForm]"/>        
         <xf:bind id="chronItem" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"/>
@@ -68,6 +86,27 @@
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
                         <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                        <xf:action while="instance('xprProsopo')//eac:date[not(@standardDate)] 
+                                | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
+                                | instance('xprProsopo')//eac:toDate[not(@standardDate)]" ev:event="xforms-submit-error">
+                                <xf:insert context="instance('xprProsopo')//eac:date[not(@standardDate)] 
+                                        | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
+                                        | instance('xprProsopo')//eac:toDate[not(@standardDate)]" origin="instance('xprSupplement')/eac:date/@standardDate"/>
+                        </xf:action>
+                        <xf:action while="instance('xprProsopo')//eac:date[not(@notAfter)]
+                                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                                | instance('xprProsopo')//eac:toDate[not(@notAfter)]" ev:event="xforms-submit-error-ready">
+                                <xf:insert context="instance('xprProsopo')//eac:date[not(@notAfter)]
+                                        | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                                        | instance('xprProsopo')//eac:toDate[not(@notAfter)]" origin="instance('xprSupplement')/eac:date/@notAfter"/>
+                        </xf:action>
+                        <xf:action while="instance('xprProsopo')//eac:date[not(@notBefore)]
+                                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                                | instance('xprProsopo')//eac:toDate[not(@notBefore)]" ev:event="xforms-submit-error">
+                                <xf:insert context="instance('xprProsopo')//eac:date[not(@notBefore)]
+                                        | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                                        | instance('xprProsopo')//eac:toDate[not(@notBefore)]" origin="instance('xprSupplement')/eac:date/@notBefore"/>
+                        </xf:action>
                 </xf:action>
         </xf:submission>
         
