@@ -72,11 +72,13 @@
 
 
     <!-- PROSOPOGRAPHY -->
-    
-    <eac:identity localType=""/>
-    <!-- @rmq le second sert à l'instance newEntity -->
-    <eac:identity localType=""/>
-    
+    <eac:source xlink:href="">
+        <eac:sourceEntry></eac:sourceEntry>
+        <eac:descriptiveNote>
+            <eac:p></eac:p>
+        </eac:descriptiveNote>
+    </eac:source>
+
     <eac:nameEntry>
         <eac:part localType="surname"/>
         <eac:part localType="forename"/>
@@ -92,10 +94,11 @@
     </eac:nameEntry>
 
     <eac:date standardDate="" notBefore="" notAfter=""/>
+    
     <eac:dateRange>
         <eac:fromDate standardDate="" notBefore="" notAfter=""/>
         <eac:toDate standardDate="" notBefore="" notAfter=""/>
     </eac:dateRange>
-    
+
     <xpr:cost xmlns:xpr="xpr"/>
 </supplement>

@@ -609,6 +609,17 @@ function listSources() {
     <body>
       <h1>xpr Source</h1>
       <p><a href="/xpr/sources/new">Nouvelle fiche</a></p>
+       <ul>
+      {
+        for $source in db:open('xpr')/xpr/sources/source
+        let $id := fn:replace($source, '[^a-zA-Z0-9]', '-')
+        return 
+          <li>
+            <a href="/xpr/sources/{$id}">{$source}</a> 
+            <a href="/xpr/sources/{$id}/modify">Modifier</a>
+          </li>
+      }
+      </ul>
     </body>
   </html>
 };
@@ -638,6 +649,41 @@ function newSource() {
 };
 
 (:~
+ : This resource function lists all the sources
+ : @return an ordered list of sources
+ :)
+declare 
+%rest:path("xpr/sources/{$id}")
+%output:method("xml")
+function showSource($id) {
+  db:open('xpr')/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $id]
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare 
+%rest:path("xpr/sources/{$id}/modify")
+%output:method("xml")
+function modifySource($id) {
+  let $content := map {
+    'instance' : $id,
+    'model' : 'xprSourceModel.xml',
+    'trigger' : fn:doc(file:base-dir() || "files/" || "xprSourceTrigger.xml"),
+    'form' : fn:doc(file:base-dir() || "files/" || "xprSourceForm.xml")
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
+};
+
+(:~
  : This function consumes new source 
  : @param $param content
  : @todo mettre en place une routine pour empêcher l'ajout d'une référence si elle est déjà présente
@@ -650,8 +696,47 @@ declare
 %updating
 function xformSourcesResult($param, $referer) {
   let $db := db:open("xpr")
-  return insert node $param into $db/xpr/sources
+  let $origin := fn:analyze-string($referer, 'xpr/(.+?)/(.+?)/modify')//fn:group[@nr='1']
+  return
+    if (fn:ends-with($referer, 'modify'))
+    then
+      switch ($origin)
+      case 'biographies' return insert node $param into $db/xpr/sources
+      default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
+      return replace node $db/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $location] with $param 
+    else
+      insert node $param into $db/xpr/sources
 };
+
+(: 
+return switch ($type)
+ :)
+
+
+(: declare
+%rest:path("xpr/expertises/put")
+%output:method("xml")
+%rest:header-param("Referer", "{$referer}", "none")
+%rest:PUT("{$param}")
+%updating
+function xformResult($param, $referer) {
+  let $db := db:open("xpr")
+  return 
+    if (fn:ends-with($referer, 'modify'))
+    then 
+      let $location := fn:analyze-string($referer, 'xpr/expertises/(.+?)/modify')//fn:group[@nr='1']
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
+      
+      return replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param
+    else
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
+      let $param := 
+        copy $d := $param
+        modify insert node attribute xml:id {$id} into $d/*
+        return $d
+      return insert node $param into $db/xpr/expertises
+}; :)
+
 
 (:~
  : Utilities 
@@ -774,6 +859,12 @@ declare function getModel($content as map(*)){
         (
           copy $doc := fn:doc(file:base-dir() || "files/" || $model)
           modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
+          return $doc
+        )
+        case 'xprSourceModel.xml' return 
+        (
+          copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+          modify replace value of node $doc/xf:model/xf:instance[@id='xprSource']/@src with '/xpr/sources/' || $instance
           return $doc
         )
         default return fn:doc(file:base-dir() || "files/" || $model)

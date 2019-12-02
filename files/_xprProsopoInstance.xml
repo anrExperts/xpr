@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <eac-cpf xmlns="eac" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xpr="xpr" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:rico="rico">
     <!--xmlns="urn:isbn:1-931666-33-4"-->
-    <control/>
+    <control>
+        <sources/>
+    </control>
     <cpfDescription>
-        <identity localType ="">
+        <identity localType="">
             <entityId/>
             <entityType/>
             <nameEntry>

@@ -10,6 +10,7 @@
                         <xf:label>personne</xf:label>
                         <xf:value>person</xf:value>
                         <xf:action ev:event="xforms-select">
+                            <xf:setvalue ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/@localType" value=""/>
                             <xf:delete ref="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
                             <xf:delete ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>
@@ -19,6 +20,7 @@
                         <xf:label>office</xf:label>
                         <xf:value>corporateBody</xf:value>
                         <xf:action ev:event="xforms-select">
+                            <xf:setvalue ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/@localType" value=""/>
                             <xf:delete ref="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
                             <xf:delete ref="instance('xprProsopo')//eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
@@ -48,7 +50,7 @@
                     <xf:input ref="eac:nameEntry[child::eac:authorizedForm]eac:part" incremental="true">
                         <xf:label>Forme contrôlée</xf:label>
                     </xf:input>
-                    <xf:select1 ref="instance('xprSupplement')/eac:identity">
+                    <xf:select1 ref="instance('xprIdentities')/eac:identity">
                         <xf:label>Établir la vedette à partir d'une forme attestée</xf:label>
                         <!-- @todo voir avec EC pour le détail, pour l'instant uniquement nom et prénom(s)-->
                         <xf:item>
@@ -56,24 +58,37 @@
                             <xf:value/>
                         </xf:item>
                         <xf:itemset nodeset="instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm]">
-                            <xf:label value="concat(eac:part[@localType='officeName'], eac:part[@localType='surname'], if(ancestor::eac:identity/eac:entityType='person', ', ', ''), eac:part[@localType='forename'])"/>
+                            <!--<xf:label value="concat(eac:part[@localType='officeName'], eac:part[@localType='surname'], if(ancestor::eac:identity/eac:entityType='person', ', ', ''), eac:part[@localType='forename'])"/>-->
+                            <xf:label value="concat(
+                                if(instance('xprProsopo')//eac:entityType[. = 'person'], concat(eac:part[@localType='surname'], ', ', eac:part[@localType='forename'], ' (', if(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
+                                if(instance('xprProsopo')//eac:entityType[. = 'corporateBody'], concat(eac:part[@localType='officeName'], ''), ''),
+                                if(instance('xprProsopo')//eac:entityType[. = 'family'], concat(eac:part[@localType='surname'], ''), '')
+                                )"/>
                             <xf:copy ref="."/>
                         </xf:itemset>
-                        <xf:action ev:event="xforms-value-changed" if="instance('xprProsopo')//eac:entityType[. = 'person'] and instance('xprSupplement')/eac:identity/*:nameEntry//*:part[not(. = '')]">
+                        <xf:action ev:event="xforms-value-changed" if="instance('xprIdentities')/eac:identity/*:nameEntry//*:part[not(. = '')]">
                             <!-- @rmq lors de la copie le préfixe de l'espace de nom saute => utilisation de '*:element' -->
                             <!--
                          @rmq pour récupérer toutes les valeurs, faire une boucle while 
                          avec une itération (faire une instance('xprIterator') pour boucler
                          sur eac:part qui ne sont pas vides et trouver leur position
                     -->
-                            <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="concat(instance('xprSupplement')/eac:identity/*:nameEntry/*:part[@localType='surname'], ', ', instance('xprSupplement')/eac:identity/*:nameEntry/*:part[@localType='forename'])"/>
+                            <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" 
+                                value="concat(
+                                if(instance('xprProsopo')//eac:entityType[. = 'person'], concat(instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='surname'], ', ', instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='forename'], ' (', if(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
+                                if(instance('xprProsopo')//eac:entityType[. = 'corporateBody'], concat(instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='officeName'], ''), ''),
+                                if(instance('xprProsopo')//eac:entityType[. = 'family'], concat(instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='surname'], ''), '')
+                                )"/>
+                            <!--<xf:setvalue 
+                                ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" 
+                                value="concat(instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='surname'], ', ', instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='forename'], ' (', if(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')')"/>-->
                         </xf:action>
-                        <xf:action ev:event="xforms-value-changed" if="instance('xprProsopo')//eac:entityType[. = 'corporateBody'] and instance('xprSupplement')/eac:identity/*:nameEntry//*:part[not(. = '')]">
-                            <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprSupplement')/eac:identity/*:nameEntry/*:part[@localType='officeName']"/>
+                        <!--<xf:action ev:event="xforms-value-changed" if="instance('xprProsopo')//eac:entityType[. = 'corporateBody'] and instance('xprIdentities')/eac:identity/*:nameEntry//*:part[not(. = '')]">
+                            <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='officeName']"/>
                         </xf:action>
-                        <xf:action ev:event="xforms-value-changed" if="instance('xprProsopo')//eac:entityType[. = 'family'] and instance('xprSupplement')/eac:identity/*:nameEntry//*:part[not(. = '')]">
-                            <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprSupplement')/eac:identity/*:nameEntry/*:part[@localType='surname']"/>
-                        </xf:action>
+                        <xf:action ev:event="xforms-value-changed" if="instance('xprProsopo')//eac:entityType[. = 'family'] and instance('xprIdentities')/eac:identity/*:nameEntry//*:part[not(. = '')]">
+                            <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='surname']"/>
+                        </xf:action>-->
                     </xf:select1>
                     <xf:repeat id="repeatName" nodeset="eac:nameEntry[child::eac:alternativeForm]" appearance="full">
                         <xf:label>Forme attestée</xf:label>
@@ -110,6 +125,13 @@
                                 <xf:itemset bind="bindSource">
                                     <xf:label value="."/>
                                     <xf:value ref="."/>
+                                    <!--<xf:action ev:event="xforms-select">
+                                        <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprProsopo')//eac:sources" position="after"/>
+                                        <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/@*[local-name() = 'href']" value="current()"/>
+                                    </xf:action>
+                                    <xf:action ev:event="xforms-deselect">
+                                        <xf:delete ref="instance('xprProsopo')//eac:sources/eac:source[@*[local-name() = 'href'] = current()]"/>
+                                    </xf:action>-->
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref=".">
@@ -123,10 +145,15 @@
                         </xf:repeat>
                         <xf:trigger class="insert">
                             <xf:label>Nouvelle source</xf:label>
-                            <xf:action ev:event="DOMActivate">
+                            <!--<xf:action ev:event="DOMActivate">
                                 <xf:insert nodeset="xpr:source" at="index('repeatNameSource')" position="after" ev:event="DOMActivate"/>
                                 <xf:setvalue ref="xpr:source[index('repeatNameSource')]/@*[local-name() = 'href']" value=""/>
                                 <xf:setvalue ref="xpr:source[index('repeatNameSource')]" value=""/>
+                            </xf:action>-->
+                            <xf:action ev:event="DOMActivate">
+                                <xf:insert nodeset="xpr:source" at="last()" position="after" ev:event="DOMActivate"/>
+                                <xf:setvalue ref="xpr:source[last()]/@*[local-name() = 'href']" value=""/>
+                                <xf:setvalue ref="xpr:source[last()]" value=""/>
                             </xf:action>
                             <xf:help>Ajouter une source</xf:help>
                         </xf:trigger>
@@ -138,12 +165,19 @@
                     </xf:repeat>
                     <xf:trigger ref="self::node()[.//eac:alternativeForm]" class="insert">
                         <xf:label>Nouvelle forme attestée du nom</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="eac:nameEntry[child::eac:alternativeForm]" at="index('repeatName')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][index('repeatName')]//eac:part" value=""/>
                             <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][index('repeatName')]//xpr:source/@*[local-name() = 'href']" value=""/>
                             <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][index('repeatName')]//xpr:source" value=""/>
                             <xf:delete ref="eac:nameEntry[child::eac:alternativeForm][index('repeatName')]//xpr:source[position() &gt; 1]"/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="eac:nameEntry[child::eac:alternativeForm]" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][last()]//eac:part" value=""/>
+                            <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][last()]//xpr:source/@*[local-name() = 'href']" value=""/>
+                            <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][last()]//xpr:source" value=""/>
+                            <xf:delete ref="eac:nameEntry[child::eac:alternativeForm][last()]//xpr:source[position() &gt; 1]"/>
                         </xf:action>
                         <xf:help>Ajouter une forme attestée du nom</xf:help>
                     </xf:trigger>
@@ -253,9 +287,13 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter une occupation</xf:label>
-                    <xf:action ev:event="DOMActivate">
+                    <!--<xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:occupation" at="index('repeatOccupation')" position="after" ev:event="DOMActivate"/>
                         <xf:setvalue ref="eac:occupation[index('repeatOccupation')]//* | eac:occupation[index('repeatOccupation')]//@*" value=""/>
+                    </xf:action>-->
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="eac:occupation" at="last()" position="after" ev:event="DOMActivate"/>
+                        <xf:setvalue ref="eac:occupation[last()]//* | eac:occupation[last()]//@*" value=""/>
                     </xf:action>
                     <xf:help>Ajouter une occupation</xf:help>
                 </xf:trigger>
@@ -337,9 +375,13 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter une fonction</xf:label>
-                    <xf:action ev:event="DOMActivate">
+                    <!--<xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:function" at="index('repeatFunction')" position="after" ev:event="DOMActivate"/>
                         <xf:setvalue ref="eac:function[index('repeatFunction')]//* | eac:function[index('repeatFunction')]//@*" value=""/>
+                    </xf:action>-->
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="eac:function" at="last()" position="after" ev:event="DOMActivate"/>
+                        <xf:setvalue ref="eac:function[last()]//* | eac:function[last()]//@*" value=""/>
                     </xf:action>
                     <xf:help>Ajouter une fonction</xf:help>
                 </xf:trigger>
@@ -366,7 +408,7 @@
                         <xf:trigger>
                             <xf:label>Intervalle</xf:label>
                             <xf:action ev:event="DOMActivate" if="self::eac:date">
-                                <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:chronItem/*" position="before"/>
+                                <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:chronItem/*[1]" position="before"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@standardDate" value="current()/@standardDate"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@notAfter" value="current()/@notAfter"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@notBefore" value="current()/@notBefore"/>
@@ -388,7 +430,7 @@
                         <xf:trigger>
                             <xf:label>Date unique</xf:label>
                             <xf:action ev:event="DOMActivate" if="self::eac:dateRange">
-                                <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:chronItem/*" position="before"/>
+                                <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:chronItem/*[1]" position="before"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@standardDate" value="current()/eac:fromDate/@standardDate"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@notAfter" value="current()/eac:fromDate/@notAfter"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@notBefore" value="current()/eac:fromDate/@notBefore"/>
@@ -431,8 +473,8 @@
                     </xf:input>
                     <xf:repeat id="repeatParticipant" nodeset="rico:participant">
                         <xf:label>Participant</xf:label>
-                        <xf:select1 ref="@*[local-name() = 'href']">
-                            <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
+                        <xf:select1 ref="@*[local-name() = 'href']" incremental="true">
+                            <xf:itemset bind="bindParticipant">
                                 <xf:label ref="."/>
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
@@ -445,17 +487,21 @@
                     </xf:repeat>
                     <xf:trigger class="insert">
                         <xf:label>Ajouter un participant</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="rico:participant" at="index('repeatParticipant')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="rico:participant[index('repeatParticipant')]//* | rico:participant[index('repeatParticipant')]//@*" value=""/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="rico:participant" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="rico:participant[last()]//* | rico:participant[last()]//@*" value=""/>
                         </xf:action>
                         <xf:help>Ajouter un participant</xf:help>
                     </xf:trigger>
 
                     <xf:repeat id="repeatInvolve" nodeset="rico:involve">
                         <xf:label>Implique</xf:label>
-                        <xf:select1 ref="@*[local-name() = 'href']">
-                            <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
+                        <xf:select1 ref="@*[local-name() = 'href']" incremental="true">
+                            <xf:itemset bind="bindParticipant">
                                 <xf:label ref="."/>
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
@@ -468,9 +514,13 @@
                     </xf:repeat>
                     <xf:trigger class="insert">
                         <xf:label>Ajouter</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="rico:involve" at="index('repeatInvolve')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="rico:involve[index('repeatInvolve')]//* | rico:involve[index('repeatInvolve')]//@*" value=""/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="rico:involve" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="rico:involve[last()]//* | rico:involve[last()]//@*" value=""/>
                         </xf:action>
                         <xf:help>Ajouter</xf:help>
                     </xf:trigger>
@@ -493,10 +543,15 @@
                     </xf:repeat>
                     <xf:trigger class="insert">
                         <xf:label>Nouvelle source</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="xpr:source" at="index('repeatEventSource')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="xpr:source[index('repeatEventSource')]/@*[local-name() = 'href']" value=""/>
                             <xf:setvalue ref="xpr:source[index('repeatEventSource')]" value=""/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="xpr:source" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="xpr:source[last()]/@*[local-name() = 'href']" value=""/>
+                            <xf:setvalue ref="xpr:source[last()]" value=""/>
                         </xf:action>
                         <xf:help>Ajouter une source</xf:help>
                     </xf:trigger>
@@ -508,11 +563,17 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter un événement</xf:label>
-                    <xf:action ev:event="DOMActivate">
+                    <!--<xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:chronItem" at="index('repeatChronItem')" position="after" ev:event="DOMActivate"/>
                         <xf:delete ref="eac:chronItem[index('repeatChronItem')]/xpr:source[position() &gt; 1]"/>
                         <xf:delete ref="eac:chronItem[index('repeatChronItem')]/xpr:cost"/>
                         <xf:setvalue ref="eac:chronItem[index('repeatChronItem')]//* | eac:chronItem[index('repeatChronItem')]//@*" value=""/>
+                    </xf:action>-->
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="eac:chronItem" at="last()" position="after" ev:event="DOMActivate"/>
+                        <xf:delete ref="eac:chronItem[last()]/xpr:source[position() &gt; 1]"/>
+                        <xf:delete ref="eac:chronItem[last()]/xpr:cost"/>
+                        <xf:setvalue ref="eac:chronItem[last()]//* | eac:chronItem[last()]//@*" value=""/>
                     </xf:action>
                     <xf:help>Ajouter un événement</xf:help>
                 </xf:trigger>
@@ -532,6 +593,7 @@
                         <xf:label>personne</xf:label>
                         <xf:value>person</xf:value>
                         <xf:action ev:event="xforms-select">
+                            <xf:setvalue ref="instance('xprNewEntity')//eac:cpfDescription/eac:identity/@localType" value=""/>
                             <xf:delete ref="instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
                             <xf:delete ref="instance('xprNewEntity')//eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>
@@ -541,6 +603,7 @@
                         <xf:label>office</xf:label>
                         <xf:value>corporateBody</xf:value>
                         <xf:action ev:event="xforms-select">
+                            <xf:setvalue ref="instance('xprNewEntity')//eac:cpfDescription/eac:identity/@localType" value=""/>
                             <xf:delete ref="instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
                             <xf:delete ref="instance('xprNewEntity')//eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
@@ -570,7 +633,7 @@
                     <xf:input ref="eac:nameEntry[child::eac:authorizedForm]eac:part" incremental="true">
                         <xf:label>Forme contrôlée</xf:label>
                     </xf:input>
-                    <xf:select1 ref="instance('xprSupplement')/eac:identity[2]">
+                    <xf:select1 ref="instance('xprIdentities')/eac:identity[2]">
                         <xf:label>Établir la vedette à partir d'une forme attestée</xf:label>
                         <!-- @todo voir avec EC pour le détail, pour l'instant uniquement nom et prénom(s)-->
                         <xf:item>
@@ -579,24 +642,36 @@
                         </xf:item>
                         <xf:itemset nodeset="instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm]">
                             <!-- @todo -->
-                            <xf:label value="concat(eac:part[@localType='officeName'], eac:part[@localType='surname'], if(ancestor::eac:identity/eac:entityType='person', ', ', ''), eac:part[@localType='forename'])"/>
+                            <!--<xf:label value="concat(eac:part[@localType='officeName'], eac:part[@localType='surname'], if(ancestor::eac:identity/eac:entityType='person', ', ', ''), eac:part[@localType='forename'])"/>
+                            -->
+                            <xf:label value="concat(
+                                if(instance('xprNewEntity')//eac:entityType[. = 'person'], concat(eac:part[@localType='surname'], ', ', eac:part[@localType='forename'], ' (', if(instance('xprNewEntity')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprNewEntity')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprNewEntity')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprNewEntity')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
+                                if(instance('xprNewEntity')//eac:entityType[. = 'corporateBody'], concat(eac:part[@localType='officeName'], ''), ''),
+                                if(instance('xprNewEntity')//eac:entityType[. = 'family'], concat(eac:part[@localType='surname'], ''), '')
+                                )"/>
                             <xf:copy ref="."/>
                         </xf:itemset>
-                        <xf:action ev:event="xforms-value-changed" if="instance('xprNewEntity')//eac:entityType[. = 'person'] and instance('xprSupplement')/eac:identity[2]/*:nameEntry//*:part[not(. = '')]">
+                        <xf:action ev:event="xforms-value-changed" if="instance('xprIdentities')/eac:identity[2]/*:nameEntry//*:part[not(. = '')]">
                             <!-- @rmq lors de la copie le préfixe de l'espace de nom saute => utilisation de '*:element' -->
                             <!--
                          @rmq pour récupérer toutes les valeurs, faire une boucle while 
                          avec une itération (faire une instance('xprIterator') pour boucler
                          sur eac:part qui ne sont pas vides et trouver leur position
                     -->
-                            <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="concat(instance('xprSupplement')/eac:identity[2]/*:nameEntry/*:part[@localType='surname'], ', ', instance('xprSupplement')/eac:identity/*:nameEntry/*:part[@localType='forename'])"/>
+                            <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" 
+                                value="concat(
+                                if(instance('xprNewEntity')//eac:entityType[. = 'person'], concat(instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='surname'], ', ', instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='forename'], ' (', if(instance('xprNewEntity')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprNewEntity')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprNewEntity')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprNewEntity')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
+                                if(instance('xprNewEntity')//eac:entityType[. = 'corporateBody'], concat(instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='officeName'], ''), ''),
+                                if(instance('xprNewEntity')//eac:entityType[. = 'family'], concat(instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='surname'], ''), '')
+                                )"/>
+                            <!--<xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="concat(instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='surname'], ', ', instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='forename'])"/>-->
                         </xf:action>
-                        <xf:action ev:event="xforms-value-changed" if="instance('xprNewEntity')//eac:entityType[. = 'corporateBody'] and instance('xprSupplement')/eac:identity[2]/*:nameEntry//*:part[not(. = '')]">
-                            <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprSupplement')/eac:identity[2]/*:nameEntry/*:part[@localType='officeName']"/>
+                        <!--<xf:action ev:event="xforms-value-changed" if="instance('xprNewEntity')//eac:entityType[. = 'corporateBody'] and instance('xprIdentities')/eac:identity[2]/*:nameEntry//*:part[not(. = '')]">
+                            <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='officeName']"/>
                         </xf:action>
-                        <xf:action ev:event="xforms-value-changed" if="instance('xprNewEntity')//eac:entityType[. = 'family'] and instance('xprSupplement')/eac:identity[2]/*:nameEntry//*:part[not(. = '')]">
-                            <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprSupplement')/eac:identity[2]/*:nameEntry/*:part[@localType='surname']"/>
-                        </xf:action>
+                        <xf:action ev:event="xforms-value-changed" if="instance('xprNewEntity')//eac:entityType[. = 'family'] and instance('xprIdentities')/eac:identity[2]/*:nameEntry//*:part[not(. = '')]">
+                            <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part" value="instance('xprIdentities')/eac:identity[2]/*:nameEntry/*:part[@localType='surname']"/>
+                        </xf:action>-->
                     </xf:select1>
                     <xf:repeat id="newEntity_repeatName" nodeset="eac:nameEntry[child::eac:alternativeForm]" appearance="full">
                         <xf:label>Forme attestée</xf:label>
@@ -646,10 +721,15 @@
                         </xf:repeat>
                         <xf:trigger class="insert">
                             <xf:label>Nouvelle source</xf:label>
-                            <xf:action ev:event="DOMActivate">
+                            <!--<xf:action ev:event="DOMActivate">
                                 <xf:insert nodeset="xpr:source" at="index('newEntity_repeatNameSource')" position="after" ev:event="DOMActivate"/>
                                 <xf:setvalue ref="xpr:source[index('newEntity_repeatNameSource')]/@*[local-name() = 'href']" value=""/>
                                 <xf:setvalue ref="xpr:source[index('newEntity_repeatNameSource')]" value=""/>
+                            </xf:action>-->
+                            <xf:action ev:event="DOMActivate">
+                                <xf:insert nodeset="xpr:source" at="last()" position="after" ev:event="DOMActivate"/>
+                                <xf:setvalue ref="xpr:source[last()]/@*[local-name() = 'href']" value=""/>
+                                <xf:setvalue ref="xpr:source[last()]" value=""/>
                             </xf:action>
                             <xf:help>Ajouter une source</xf:help>
                         </xf:trigger>
@@ -661,12 +741,19 @@
                     </xf:repeat>
                     <xf:trigger ref="self::node()[.//eac:alternativeForm]" class="insert">
                         <xf:label>Nouvelle forme attestée du nom</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="eac:nameEntry[child::eac:alternativeForm]" at="index('newEntity_repeatName')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][index('newEntity_repeatName')]//eac:part" value=""/>
                             <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][index('newEntity_repeatName')]//xpr:source/@*[local-name() = 'href']" value=""/>
                             <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][index('newEntity_repeatName')]//xpr:source" value=""/>
                             <xf:delete ref="eac:nameEntry[child::eac:alternativeForm][index('newEntity_repeatName')]//xpr:source[position() &gt; 1]"/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="eac:nameEntry[child::eac:alternativeForm]" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][last()]//eac:part" value=""/>
+                            <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][last()]//xpr:source/@*[local-name() = 'href']" value=""/>
+                            <xf:setvalue ref="eac:nameEntry[child::eac:alternativeForm][last()]//xpr:source" value=""/>
+                            <xf:delete ref="eac:nameEntry[child::eac:alternativeForm][last()]//xpr:source[position() &gt; 1]"/>
                         </xf:action>
                         <xf:help>Ajouter une forme attestée du nom</xf:help>
                     </xf:trigger>
@@ -776,9 +863,13 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter une occupation</xf:label>
-                    <xf:action ev:event="DOMActivate">
+                    <!--<xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:occupation" at="index('newEntity_repeatOccupation')" position="after" ev:event="DOMActivate"/>
                         <xf:setvalue ref="eac:occupation[index('newEntity_repeatOccupation')]//* | eac:occupation[index('newEntity_repeatOccupation')]//@*" value=""/>
+                    </xf:action>-->
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="eac:occupation" at="last()" position="after" ev:event="DOMActivate"/>
+                        <xf:setvalue ref="eac:occupation[last()]//* | eac:occupation[last()]//@*" value=""/>
                     </xf:action>
                     <xf:help>Ajouter une occupation</xf:help>
                 </xf:trigger>
@@ -860,9 +951,13 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter une fonction</xf:label>
-                    <xf:action ev:event="DOMActivate">
+                    <!--<xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:function" at="index('newEntity_repeatFunction')" position="after" ev:event="DOMActivate"/>
                         <xf:setvalue ref="eac:function[index('newEntity_repeatFunction')]//* | eac:function[index('newEntity_repeatFunction')]//@*" value=""/>
+                    </xf:action>-->
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="eac:function" at="last()" position="after" ev:event="DOMActivate"/>
+                        <xf:setvalue ref="eac:function[last()]//* | eac:function[last()]//@*" value=""/>
                     </xf:action>
                     <xf:help>Ajouter une fonction</xf:help>
                 </xf:trigger>
@@ -889,7 +984,7 @@
                         <xf:trigger>
                             <xf:label>Intervalle</xf:label>
                             <xf:action ev:event="DOMActivate" if="self::eac:date">
-                                <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:chronItem/*" position="before"/>
+                                <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:chronItem/*[1]" position="before"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@standardDate" value="current()/@standardDate"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@notAfter" value="current()/@notAfter"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:dateRange/eac:fromDate/@notBefore" value="current()/@notBefore"/>
@@ -911,7 +1006,7 @@
                         <xf:trigger>
                             <xf:label>Date unique</xf:label>
                             <xf:action ev:event="DOMActivate" if="self::eac:dateRange">
-                                <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:chronItem/*" position="before"/>
+                                <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:chronItem/*[1]" position="before"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@standardDate" value="current()/eac:fromDate/@standardDate"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@notAfter" value="current()/eac:fromDate/@notAfter"/>
                                 <xf:setvalue ref="./ancestor::eac:chronItem/eac:date/@notBefore" value="current()/eac:fromDate/@notBefore"/>
@@ -952,8 +1047,8 @@
 
                     <xf:repeat id="newEntity_repeatParticipant" nodeset="rico:participant">
                         <xf:label>Participant</xf:label>
-                        <xf:select1 ref="@*[local-name() = 'href']">
-                            <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
+                        <xf:select1 ref="@*[local-name() = 'href']" incremental="true">
+                            <xf:itemset bind="bindParticipant">
                                 <xf:label ref="."/>
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
@@ -966,17 +1061,21 @@
                     </xf:repeat>
                     <xf:trigger class="insert">
                         <xf:label>Ajouter un participant</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="rico:participant" at="index('newEntity_repeatParticipant')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="rico:participant[index('newEntity_repeatParticipant')]//* | rico:participant[index('newEntity_repeatParticipant')]//@*" value=""/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="rico:participant" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="rico:participant[last()]//* | rico:participant[last()]//@*" value=""/>
                         </xf:action>
                         <xf:help>Ajouter un participant</xf:help>
                     </xf:trigger>
 
                     <xf:repeat id="newEntity_repeatInvolve" nodeset="rico:involve">
                         <xf:label>Implique</xf:label>
-                        <xf:select1 ref="@*[local-name() = 'href']">
-                            <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
+                        <xf:select1 ref="@*[local-name() = 'href']" incremental="true">
+                            <xf:itemset bind="bindParticipant">
                                 <xf:label ref="."/>
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
@@ -990,9 +1089,13 @@
                     </xf:repeat>
                     <xf:trigger class="insert">
                         <xf:label>Ajouter</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="rico:involve" at="index('newEntity_repeatInvolve')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="rico:involve[index('newEntity_repeatInvolve')]//* | rico:involve[index('newEntity_repeatInvolve')]//@*" value=""/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="rico:involve" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="rico:involve[last()]//* | rico:involve[last()]//@*" value=""/>
                         </xf:action>
                         <xf:help>Ajouter</xf:help>
                     </xf:trigger>
@@ -1015,10 +1118,15 @@
                     </xf:repeat>
                     <xf:trigger class="insert">
                         <xf:label>Nouvelle source</xf:label>
-                        <xf:action ev:event="DOMActivate">
+                        <!--<xf:action ev:event="DOMActivate">
                             <xf:insert nodeset="xpr:source" at="index('newEntity_repeatEventSource')" position="after" ev:event="DOMActivate"/>
                             <xf:setvalue ref="xpr:source[index('newEntity_repeatEventSource')]/@*[local-name() = 'href']" value=""/>
                             <xf:setvalue ref="xpr:source[index('newEntity_repeatEventSource')]" value=""/>
+                        </xf:action>-->
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert nodeset="xpr:source" at="last()" position="after" ev:event="DOMActivate"/>
+                            <xf:setvalue ref="xpr:source[last()]/@*[local-name() = 'href']" value=""/>
+                            <xf:setvalue ref="xpr:source[last()]" value=""/>
                         </xf:action>
                         <xf:help>Ajouter une source</xf:help>
                     </xf:trigger>
@@ -1030,11 +1138,17 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter un événement</xf:label>
-                    <xf:action ev:event="DOMActivate">
+                    <!--<xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:chronItem" at="index('newEntity_repeatChronItem')" position="after" ev:event="DOMActivate"/>
                         <xf:delete ref="eac:chronItem[index('newEntity_repeatChronItem')]/xpr:source[position() &gt; 1]"/>
                         <xf:delete ref="eac:chronItem[index('newEntity_repeatChronItem')]/xpr:cost"/>
                         <xf:setvalue ref="eac:chronItem[index('newEntity_repeatChronItem')]//* | eac:chronItem[index('newEntity_repeatChronItem')]//@*" value=""/>
+                    </xf:action>-->
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert nodeset="eac:chronItem" at="last()" position="after" ev:event="DOMActivate"/>
+                        <xf:delete ref="eac:chronItem[last()]/xpr:source[position() &gt; 1]"/>
+                        <xf:delete ref="eac:chronItem[last()]/xpr:cost"/>
+                        <xf:setvalue ref="eac:chronItem[last()]//* | eac:chronItem[last()]//@*" value=""/>
                     </xf:action>
                     <xf:help>Ajouter un événement</xf:help>
                 </xf:trigger>
@@ -1043,6 +1157,76 @@
             <xf:submit submission="submitNewEntity">
                 <xf:label>Enregistrer</xf:label>
             </xf:submit>
+        </xf:case>
+        <xf:case id="sourcesPanel">
+            <xf:group ref="instance('xprProsopo')/eac:control/eac:sources">
+                <xf:trigger>
+                    <xf:label>Ajouter une source</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprProsopo')//eac:sources"/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:repeat id="repeatControlSource" nodeset="eac:source">
+                    <xf:select1 ref="@*[local-name() = 'href']" appearance="minimal" incremental="true">
+                        <xf:label>Source</xf:label>
+                        <xf:itemset bind="bindSource">
+                            <xf:label value="."/>
+                            <xf:value ref="."/>
+                        </xf:itemset>
+                    </xf:select1>
+                    <xf:input ref="eac:descriptiveNote/eac:p">
+                        <xf:label>commentaire</xf:label>
+                    </xf:input>
+                    <xf:trigger ref="." class="delete">
+                        <xf:label>Supprimer une source</xf:label>
+                        <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                        <xf:help>Supprimer une source</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger>
+                    <xf:label>mise à jour des Sources</xf:label>
+                    <xf:action ev:event="DOMActivate" while="instance('xprProsopo')//xpr:source/@*[local-name() = 'href'][not(. = '')][not(. = instance('xprProsopo')//eac:control//eac:source/@*[local-name() = 'href'])]">
+                        <!-- todo supprimer les éventuelles sources vides dans control source ! -->
+                        <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprProsopo')//eac:sources"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/@*[local-name() = 'href'][. = '']" value="instance('xprProsopo')//xpr:source/@*[local-name() = 'href'][not(. = instance('xprProsopo')//eac:control//eac:source/@*[local-name() = 'href'])]"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/eac:sourceEntry[. = '']" value="ancestor::eac:source/@*[local-name() = 'href']"/>
+                    </xf:action>
+                </xf:trigger>
+            </xf:group>
+            <!--<xf:group ref="instance('xprNewEntity')/eac:control/eac:sources">
+                <xf:trigger>
+                    <xf:label>Ajouter une new source</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprNewEntity')//eac:sources"/>
+                    </xf:action>
+                </xf:trigger>
+                <xf:repeat id="repeatControlNewSource" nodeset="eac:source">
+                    <xf:select1 ref="@*[local-name() = 'href']" appearance="minimal" incremental="true">
+                        <xf:label>Source</xf:label>
+                        <xf:itemset bind="bindSource">
+                            <xf:label value="."/>
+                            <xf:value ref="."/>
+                        </xf:itemset>
+                    </xf:select1>
+                    <xf:input ref="eac:descriptiveNote/eac:p">
+                        <xf:label>commentaire</xf:label>
+                    </xf:input>
+                    <xf:trigger ref="." class="delete">
+                        <xf:label>Supprimer une source</xf:label>
+                        <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                        <xf:help>Supprimer une source</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger>
+                    <xf:label>mise à jour des Sources</xf:label>
+                    <xf:action ev:event="DOMActivate" while="instance('xprNewEntity')//xpr:source/@*[local-name() = 'href'][not(. = '')][not(. = instance('xprNewEntity')//eac:control//eac:source/@*[local-name() = 'href'])]">
+                        <!-\- todo supprimer les éventuelles sources vides dans control source ! -\->
+                        <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprNewEntity')//eac:sources"/>
+                        <xf:setvalue ref="instance('xprNewEntity')//eac:sources/eac:source/@*[local-name() = 'href'][. = '']" value="instance('xprNewEntity')//xpr:source/@*[local-name() = 'href'][not(. = instance('xprNewEntity')//eac:control//eac:source/@*[local-name() = 'href'])]"/>
+                        <xf:setvalue ref="instance('xprNewEntity')//eac:sources/eac:source/eac:sourceEntry[. = '']" value="ancestor::eac:source/@*[local-name() = 'href']"/>
+                    </xf:action>
+                </xf:trigger>
+            </xf:group>-->
         </xf:case>
         <xf:case id="newSource">
             <xf:group ref="instance('xprNewSource')">
@@ -1053,6 +1237,9 @@
             </xf:group>
             <xf:submit submission="submitNewSource">
                 <xf:label>Enregistrer</xf:label>
+            </xf:submit>
+            <xf:submit submission="reloadSources">
+                <xf:label>Mettre à jour les sources</xf:label>
             </xf:submit>
         </xf:case>
     </xf:switch>
