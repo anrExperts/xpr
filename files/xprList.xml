@@ -12,32 +12,14 @@
             <xf:load resource="new"/>
         </xf:action>
     </xf:trigger>
-    <xf:repeat id="repeatExpertises" nodeset="xpr:expertise">
-        <xf:label><xf:output ref="."/></xf:label>
-        <xf:trigger>
-            <xf:label>Modifier</xf:label>
-            <xf:action ev:event="DOMActivate">
-                <!-- @bug xsltforms ? <xf:load resource="{concat(../@xml:id, '/modify')}"/> -->
-                <xf:load show="replace">
-                    <xf:resource value="concat(@xml:id, '/modify')"/>
-                </xf:load>
-            </xf:action>
-        </xf:trigger>
-        <xf:trigger>
-            <xf:label>Voir</xf:label>
-            <xf:action ev:event="DOMActivate">
-                <xf:load ref="@xml:id"/>
-            </xf:action>
-        </xf:trigger>
-    </xf:repeat>
-    <!--<xf:repeat id="repeatExpertises" nodeset="xpr:expertise/xpr:sourceDesc">
+    <xf:repeat id="repeatExpertises" nodeset="xpr:expertise/xpr:sourceDesc">
         <xf:label>
             <xf:output ref="xpr:idno[@type='unitid']"/>, dossier n° <xf:output ref="xpr:idno[@type='item']"/>
         </xf:label>
         <xf:trigger>
             <xf:label>Modifier</xf:label>
             <xf:action ev:event="DOMActivate">
-                <!-\- @bug xsltforms ? <xf:load resource="{concat(../@xml:id, '/modify')}"/> -\->
+                <!-- @bug xsltforms ? <xf:load resource="{concat(../@xml:id, '/modify')}"/> -->
                 <xf:load show="replace">
                     <xf:resource value="concat(../@xml:id, '/modify')"/>
                 </xf:load>
@@ -49,5 +31,5 @@
                 <xf:load ref="../@xml:id"/>
             </xf:action>
         </xf:trigger>
-    </xf:repeat>-->
+    </xf:repeat>
 </xf:group>

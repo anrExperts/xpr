@@ -20,7 +20,6 @@
         </xf:action>
         <!--Instance principale-->
         <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
-        <xf:instance id="xprExpertises" src="/xpr/expertises/"/>
 
         <!--Instances secondaires-->
         <xf:instance id="xprExperts" src="/xpr/entities"/>

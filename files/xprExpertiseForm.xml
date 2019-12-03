@@ -486,14 +486,6 @@
                 <xf:group ref="xpr:sentences">
                     <xf:label>Intervention d’une institution</xf:label>
                     <xf:repeat id="repeatSentence" bind="sentence" appearance="full">
-                        <!--<xf:select1 ref="xpr:orgName">
-                            <xf:itemset nodeset="distinct-values(instance('xprExpertises')//xpr:sentences//xpr:orgName[not(.='')])">
-                                <xf:label value="."/>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="xpr:orgName" value="."/>
-                                </xf:action>
-                            </xf:itemset>
-                        </xf:select1>-->
                         <xf:input ref="xpr:orgName" incremental="true">
                             <xf:label>Institution :</xf:label>
                         </xf:input>

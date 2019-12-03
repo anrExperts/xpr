@@ -83,19 +83,19 @@ function home() {
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
-(: declare 
+declare 
 %rest:path("/xpr/expertises")
 %rest:produces('application/xml')
 %output:method("xml")
 function list() {
   db:open('xpr')/xpr/expertises
-}; :)
+};
 
 (:~
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
-declare 
+(: declare 
 %rest:path("/xpr/expertises")
 %rest:produces('application/xml')
 %output:method("xml")
@@ -108,7 +108,7 @@ function list2() {
       return <expertise xml:id="{$id}">{$expertise//idno[@type="unitid"] || ', dossier n° ' || $expertise//idno[@type="item"]}</expertise>
     }
   </expertises>
-};
+}; :)
 
 
 (:~
