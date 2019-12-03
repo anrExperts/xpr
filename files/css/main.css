@@ -89,9 +89,16 @@ nav ul li:first-child {
 }
 
 /* applied after scroll height reached */
-.fixed-nav nav {
+.fixed-nav #navigation {
     position: fixed;
     top: 0;
+    z-index: 1;
+    /*box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);*/
+}
+
+/* applied after scroll height reached */
+.fixed-nav #navForm {
+    position: fixed;    
     z-index: 1;
     /*box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);*/
 }
