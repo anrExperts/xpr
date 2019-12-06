@@ -20,6 +20,20 @@
                     <toDate standardDate="" notBefore="" notAfter=""/>
                 </dateRange>
             </existDates>
+            <places>
+                <place>
+                    <placeRole>Adresse</placeRole>
+                    <placeEntry/>
+                    <dateSet>
+                        <date standardDate="" notBefore="" notAfter="">
+                            <xpr:source xlink:href=""/>
+                        </date>
+                    </dateSet>
+                    <descriptiveNote>
+                        <p/>
+                    </descriptiveNote>
+                </place>
+            </places>
             <functions>
                 <function>
                     <term/>
@@ -51,6 +65,12 @@
                 </chronList>
             </biogHist>
         </description>
+        <relations>
+            <cpfRelation cpfRelationType="" xlink:arcrole="">
+                <relationEntry/>
+                <xpr:source xlink:href=""/>
+            </cpfRelation>
+        </relations>
     </cpfDescription>
     <bibl/>
 </eac-cpf>

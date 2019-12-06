@@ -62,6 +62,52 @@
                         </identity>
                 </EntitiesSubTypes>
         </xf:instance>
+        
+        <xf:instance id="xprPlaceTypes">
+                <relations xmlns="">
+                        <type>
+                                <label>Naissance</label>
+                                <value>birthPlace</value>
+                        </type>
+                        <type>
+                                <label>Décès</label>
+                                <value>deathPlace</value>
+                        </type>
+                        <type>
+                                <label>Résidence</label>
+                                <value>residence</value>
+                        </type>
+                </relations>
+        </xf:instance>
+
+        <xf:instance id="xprRelationsTypes">
+                <relations xmlns="">
+                        <type>
+                                <label>Maritale</label>
+                                <value>rico:spouseRelationConnects</value>
+                        </type>
+                        <type>
+                                <label>Fratrie</label>
+                                <value>rico:siblingRelationConnects</value>
+                        </type>
+                        <type>
+                                <label>Parentale</label>
+                                <value>rico:childRelationsHasSource</value>
+                        </type>
+                        <type>
+                                <label>Enfant</label>
+                                <value>rico:childRelationsHasTarget</value>
+                        </type>
+                        <type>
+                                <label>Ascendance</label>
+                                <value>rico:descendanceRelationHasSource</value>
+                        </type>
+                        <type>
+                                <label>Descendance</label>
+                                <value>rico:descendanceRelationHaseTarget</value>
+                        </type>
+                </relations>
+        </xf:instance>
 
         <xf:instance id="xprEvents">
                 <event xmlns="">
@@ -154,8 +200,7 @@
                         <xf:delete nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
                 </xf:action>
                 <xf:action ev:event="xforms-submit" if="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']">
-                        <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']" 
-                                value="concat(
+                        <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']" value="concat(
                                 if(instance('xprProsopo')//eac:entityType[. = 'person'], concat(instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='surname'], ', ', instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='forename'], ' (', if(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
                                 if(instance('xprProsopo')//eac:entityType[. = 'corporateBody'], concat(instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='officeName'], ''), ''),
                                 if(instance('xprProsopo')//eac:entityType[. = 'family'], concat(instance('xprProsopo')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='surname'], ''), '')
@@ -221,8 +266,7 @@
                         <xf:setvalue ref="instance('xprNewEntity')//eac:sources/eac:source/eac:sourceEntry[. = '']" value="ancestor::eac:source/@*[local-name() = 'href']"/>
                 </xf:action>
                 <xf:action ev:event="xforms-submit" if="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']">
-                        <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']" 
-                                value="concat(
+                        <xf:setvalue ref="instance('xprNewEntity')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']" value="concat(
                                 if(instance('xprNewEntity')//eac:entityType[. = 'person'], concat(instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='surname'], ', ', instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='forename'], ' (', if(instance('xprNewEntity')//eac:existDates//eac:fromDate/@*[not(. = '')], substring(instance('xprNewEntity')//eac:existDates//eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprNewEntity')//eac:existDates//eac:toDate/@*[not(. = '')], substring(instance('xprNewEntity')//eac:existDates//eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
                                 if(instance('xprNewEntity')//eac:entityType[. = 'corporateBody'], concat(instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='officeName'], ''), ''),
                                 if(instance('xprNewEntity')//eac:entityType[. = 'family'], concat(instance('xprNewEntity')//eac:nameEntry[child::eac:alternativeForm][position() = 1]/eac:part[@localType='surname'], ''), '')

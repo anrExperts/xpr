@@ -73,9 +73,9 @@
 
     <!-- PROSOPOGRAPHY -->
     <eac:source xlink:href="">
-        <eac:sourceEntry></eac:sourceEntry>
+        <eac:sourceEntry/>
         <eac:descriptiveNote>
-            <eac:p></eac:p>
+            <eac:p/>
         </eac:descriptiveNote>
     </eac:source>
 
@@ -94,11 +94,17 @@
     </eac:nameEntry>
 
     <eac:date standardDate="" notBefore="" notAfter=""/>
-    
+
     <eac:dateRange>
         <eac:fromDate standardDate="" notBefore="" notAfter=""/>
         <eac:toDate standardDate="" notBefore="" notAfter=""/>
     </eac:dateRange>
 
     <xpr:cost xmlns:xpr="xpr"/>
+    
+    <bug>
+        <eac:date standardDate="" notBefore="" notAfter="">
+            <xpr:source xmlns:xpr="xpr"/>
+        </eac:date>
+    </bug>
 </supplement>
