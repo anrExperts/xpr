@@ -2,7 +2,8 @@
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
 
-        <xf:instance id="xprExperts" src="/xpr/biographies"/>
+        <!-- instance xprEntities (liste des fiches prosopo présentes dans la base (servie par Basex))-->
+        <xf:instance id="xprEntities" src="/xpr/entities"/>
 
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
 
