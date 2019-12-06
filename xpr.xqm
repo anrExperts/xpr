@@ -348,7 +348,7 @@ declare
 function newBio() {
   let $content := map {
     'instance' : '',
-    'model' : 'xprProsopoModel.xml',
+    'model' : ('xprProsopoModel.xml', 'xprNewEntityModel.xml'),
     'trigger' : fn:doc(file:base-dir() || "files/" || "xprProsopoTrigger.xml"),
     'form' : fn:doc(file:base-dir() || "files/" || "xprProsopoForm.xml")
   }
@@ -846,10 +846,10 @@ declare %updating function associate($content as map(*), $outputParams as map(*)
  :)
 declare function getModel($content as map(*)){
   let $instance := map:get($content, 'instance')
-  let $model := map:get($content, 'model')
+  let $models := map:get($content, 'model')
   return
     if ($instance) then
-      for $model in $model
+      for $model in $models
       return switch ($model)
         case 'xprProsopoModel.xml' return 
         (
@@ -870,5 +870,5 @@ declare function getModel($content as map(*)){
           return $doc
         )
         default return fn:doc(file:base-dir() || "files/" || $model)
-    else fn:doc(file:base-dir() || "files/" || $model)
+    else fn:doc(file:base-dir() || "files/" || $models)
 };
