@@ -238,14 +238,47 @@ function xformResult($param, $referer) {
         copy $d := $param
         modify replace value of node $d/@xml:id with $id
         return $d :)
-      return replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param
+      return (
+        replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param,
+        update:output(
+         (
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>La ressource a été modifiée.</message>
+            <url></url>
+          </result>
+         )
+        )
+      )  
     else
       let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
       let $param := 
         copy $d := $param
         modify insert node attribute xml:id {$id} into $d/*
         return $d
-      return insert node $param into $db/xpr/expertises
+      return (
+        insert node $param into $db/xpr/expertises,
+        update:output(
+         (
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>La ressource a été créée.</message>
+            <url></url>
+          </result>
+         )
+        )
+      )  
 };
 
 (:~
@@ -421,72 +454,23 @@ function xformBioResult($param, $referer) {
           replace value of node $d//eac:entityId with $id
         )
         return $d
-      return insert node $param into $db/xpr/bio
+      return (
+        insert node $param into $db/xpr/bio,
+        update:output(
+          (
+          <rest:response>
+            <http:response status="200" message="">
+              <http:header name="Content-Language" value="fr"/>
+              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+          </result>
+          )
+        )
+      )
 };
- 
-(: declare
-%rest:path("xpr/biographies/put")
-%output:method("xml")
-%rest:header-param("Referer", "{$referer}", "none")
-%rest:PUT("{$param}")
-%updating
-function xformBioResult($param, $referer) {
-  let $db := db:open("xpr")
-  return 
-    if (fn:ends-with($referer, 'modify'))
-    then 
-      if ($param/@xml:id) 
-      then
-        let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
-        let $id := $param//eac:entityId
-      (/: let $param := 
-        copy $d := $param
-        modify replace value of node $d/@xml:id with $id
-        return $d :/)
-        return replace node $db/xpr/bio/eac:eac-cpf[descendant::eac:entityId = $location] with $param
-      else 
-        let $id :=
-        for $type in $param//eac:identity/@localType
-        return switch ($type)
-          case 'expert' return 'xpr' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'expert']) + 1, '0000')
-          case 'mason' return 'mas' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'mason']) + 1, '0000')
-          case 'person' return 'xprPerson' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'person']) + 1, '0000')
-          case 'office' return 'xprOffice' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'office']) + 1, '0000')
-          case 'notary' return 'xprNotary' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'notary']) + 1, '0000')
-          case 'org' return 'xprOrg' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'org']) + 1, '0000')
-          case 'family' return 'xprFamily' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'family']) + 1, '0000')
-          default return 'xprPerson' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'person']) + 1, '0000')
-      let $param := 
-        copy $d := $param
-        modify 
-        (
-          insert node attribute xml:id {$id} into $d/*,
-          replace value of node $d//eac:entityId with $id
-        )
-        return $d
-      return insert node $param into $db/xpr/bio
-    else
-      let $id :=
-        for $type in $param//eac:identity/@localType
-        return switch ($type)
-          case 'expert' return 'xpr' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'expert']) + 1, '0000')
-          case 'mason' return 'mas' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'mason']) + 1, '0000')
-          case 'person' return 'xprPerson' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'person']) + 1, '0000')
-          case 'office' return 'xprOffice' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'office']) + 1, '0000')
-          case 'notary' return 'xprNotary' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'notary']) + 1, '0000')
-          case 'org' return 'xprOrg' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'org']) + 1, '0000')
-          case 'family' return 'xprFamily' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'family']) + 1, '0000')
-          default return 'xprPerson' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'person']) + 1, '0000')
-      let $param := 
-        copy $d := $param
-        modify 
-        (
-          insert node attribute xml:id {$id} into $d/*,
-          replace value of node $d//eac:entityId with $id
-        )
-        return $d
-      return insert node $param into $db/xpr/bio
-}; :)
 
 (:~
  : This resource function lists all the entities
@@ -577,6 +561,26 @@ function xformInventoryResult($param, $referer) {
   let $db := db:open("xpr")
   return insert node $param into $db/xpr/expertises
 };
+
+
+(:~
+ : This function consumes new relations 
+ : @param $param content
+ : @
+ :)
+declare
+%rest:path("xpr/relations/put")
+%output:method("xml")
+%rest:header-param("Referer", "{$referer}", "none")
+%rest:PUT("{$param}")
+%updating
+function xformRelationResult($param, $referer) {
+  let $db := db:open("xpr")
+  let $expert := $param/*:relations/@ref
+  for $relation in $param/*:relations/*:cpfRelation
+  return insert node $relation into $db//*:eac-cpf[@xml:id = $expert]//*:relations
+};
+
 
 (:~
  : This resource function lists all the sources
@@ -846,10 +850,10 @@ declare %updating function associate($content as map(*), $outputParams as map(*)
  :)
 declare function getModel($content as map(*)){
   let $instance := map:get($content, 'instance')
-  let $models := map:get($content, 'model')
+  let $model := map:get($content, 'model')
   return
     if ($instance) then
-      for $model in $models
+      for $model in $model
       return switch ($model)
         case 'xprProsopoModel.xml' return 
         (
@@ -870,5 +874,5 @@ declare function getModel($content as map(*)){
           return $doc
         )
         default return fn:doc(file:base-dir() || "files/" || $model)
-    else fn:doc(file:base-dir() || "files/" || $models)
+    else fn:doc(file:base-dir() || "files/" || $model)
 };
