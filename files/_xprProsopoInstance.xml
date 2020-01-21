@@ -20,6 +20,9 @@
                     <toDate standardDate="" notBefore="" notAfter=""/>
                 </dateRange>
             </existDates>
+            <localDescription localType="sex">
+                <term/>
+            </localDescription>
             <places>
                 <place>
                     <placeRole>Adresse</placeRole>
@@ -66,10 +69,10 @@
             </biogHist>
         </description>
         <relations>
-            <cpfRelation cpfRelationType="" xlink:arcrole="">
+            <!--<cpfRelation xlink:href="" xlink:arcrole="">
                 <relationEntry/>
                 <xpr:source xlink:href=""/>
-            </cpfRelation>
+            </cpfRelation>-->
         </relations>
     </cpfDescription>
     <bibl/>

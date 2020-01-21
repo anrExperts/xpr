@@ -22,6 +22,9 @@
                                 | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
                                 | instance('xprProsopo')//eac:toDate[not(@notBefore)]" origin="instance('xprSupplement')/eac:date/@notBefore"/>
                 </xf:action>
+                <xf:action if="instance('xprProsopo')//eac:relations[not(eac:cpfRelation)]">
+                        <xf:insert context="instance('xprProsopo')//eac:relations" origin="instance('xprSupplement')/eac:cpfRelation"/>
+                </xf:action>
         </xf:action>
 
         <!--Instances principales-->
@@ -62,9 +65,9 @@
                         </identity>
                 </EntitiesSubTypes>
         </xf:instance>
-        
+
         <xf:instance id="xprPlaceTypes">
-                <relations xmlns="">
+                <places xmlns="">
                         <type>
                                 <label>Naissance</label>
                                 <value>birthPlace</value>
@@ -77,7 +80,7 @@
                                 <label>Résidence</label>
                                 <value>residence</value>
                         </type>
-                </relations>
+                </places>
         </xf:instance>
 
         <xf:instance id="xprRelationsTypes">
@@ -198,6 +201,7 @@
                         <xf:delete nodeset="instance('xprProsopo')//@standardDate[. = '']"/>
                         <xf:delete nodeset="instance('xprProsopo')//@notBefore[. = '']"/>
                         <xf:delete nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
+                        <xf:delete nodeset="instance('xprProsopo')//eac:cpfRelation[@*[local-name() = 'href'] = ''][eac:relationEntry = '']"/>
                 </xf:action>
                 <xf:action ev:event="xforms-submit" if="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']">
                         <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']" value="concat(
@@ -246,7 +250,7 @@
 
         <!-- instance xprEntities (liste des fiches prosopo présentes dans la base (servie par Basex))-->
         <xf:instance id="xprEntities" src="/xpr/entities"/>
-<!-- newEntity -->
+        <!-- newEntity -->
 
         <!-- instance xprSources (liste des sources présentes dans la base)-->
         <xf:instance id="xprSources" src="/xpr/sources"/>
