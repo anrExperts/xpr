@@ -30,16 +30,25 @@
                 <iterator xmlns=""/>
         </xf:instance>
 
+        <xf:instance id="test">
+                <return xmlns=""/>
+        </xf:instance>
+
         <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral"> So Good ! </xf:message>
-                        <xf:load show="replace">
+                        <!--<xf:message level="ephemeral">OK (<xf:output value="event('response-status-code')"/> - <xf:output value="event('response-reason-phrase')"/>) </xf:message>-->
+                        <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
+                        </xf:message>
+                        <xf:setvalue value="event('response-body')//*:id" ref="instance('test')"/>
+                        <!--<xf:load show="replace">
                                 <xf:resource value="'/xpr/expertises/list'"/>
-                        </xf:load>
+                        </xf:load>-->
                 </xf:action>
-                <xf:action ev:event="xforms-submit-error">
-                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
-                </xf:action>
+                <xf:message ev:event="xforms-submit-error" level="modal"> Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
+                </xf:message>
+                <!--<xf:action ev:event="xforms-submit-error">
+                        <xf:message>Error (<xf:output value="event('response-status-code')"/> - <xf:output value="event('response-reason-phrase')"/>) </xf:message>
+                </xf:action>-->
         </xf:submission>
         <!--sourceDesc-->
         <xf:bind id="sourceDesc" nodeset="xpr:sourceDesc"/>

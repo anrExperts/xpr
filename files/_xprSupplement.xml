@@ -102,9 +102,15 @@
 
     <xpr:cost xmlns:xpr="xpr"/>
     
+    <eac:cpfRelation xlink:href="" xlink:arcrole="">
+        <eac:relationEntry/>
+        <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+    </eac:cpfRelation>
+
     <bug>
         <eac:date standardDate="" notBefore="" notAfter="">
             <xpr:source xmlns:xpr="xpr"/>
         </eac:date>
     </bug>
+    
 </supplement>
