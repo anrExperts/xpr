@@ -1,4 +1,9 @@
 <xf:model id="inventory" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+        <!--<xf:action ev:event="xforms-ready">
+                <xf:action while="//xpr:relation[not(@href = '')]/xpr:relationEntry[. = '']">
+                        
+                </xf:action>
+        </xf:action>-->
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
 
@@ -7,15 +12,105 @@
 
         <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
 
-        <xf:submission id="submitInventory" resource="/xpr/inventories/put" method="put" replace="none">
+        <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
+
+        <xf:instance id="xprIterate">
+                <iterate xmlns="xpr"/>
+        </xf:instance>
+        
+        <xf:instance id="xprRelations">
+                <relations ref="" xmlns="eac" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xpr="xpr"/>
+        </xf:instance>
+
+        <xf:instance id="xprRelationsTypes">
+                <relations xmlns="">
+                        <type>
+                                <label>Maritale</label>
+                                <value>rico:spouseRelationConnects</value>
+                        </type>
+                        <type>
+                                <label>Fratrie</label>
+                                <value>rico:siblingRelationConnects</value>
+                        </type>
+                        <type>
+                                <label>Parentale</label>
+                                <value>rico:childRelationsHasSource</value>
+                        </type>
+                        <type>
+                                <label>Enfant</label>
+                                <value>rico:childRelationsHasTarget</value>
+                        </type>
+                        <type>
+                                <label>Ascendance</label>
+                                <value>rico:descendanceRelationHasSource</value>
+                        </type>
+                        <type>
+                                <label>Descendance</label>
+                                <value>rico:descendanceRelationHaseTarget</value>
+                        </type>
+                </relations>
+        </xf:instance>
+
+        <xf:submission mode="synchronous" id="submitInventory" resource="/xpr/inventories/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
-                        <xf:message level="ephemeral"> So Good ! </xf:message>
-                        <xf:load show="replace">
-                                <xf:resource value="'/xpr/inventories/new'"/>
-                        </xf:load>
+                        <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/>; Body : <xf:output value="event('response-body')"/>. </xf:message>
+                        <xf:send submission="submitRelations"/>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
-                        <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+                        <xf:message level="modal"> Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>. </xf:message>
+                </xf:action>
+        </xf:submission>
+
+        <xf:submission mode="synchronous" id="submitEntity" ref="instance('xprProsopo')" resource="/xpr/biographies/put" method="put" replace="none">
+                <xf:action ev:event="xforms-submit">
+                        <xf:insert origin="instance('xprSupplement')/eac:cpfRelation" context="instance('xprRelations')" at="last()"/>
+                        <!-- name -->
+                        <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry"/>
+                        <!-- entity type -->
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/@localType" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/@type"/>
+                        <!-- @todo sexe/gender -->
+                        <xf:setvalue ref="instance('xprProsopo')//eac:localDescription[@localType='sex']/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/@sex"/>
+                        <!-- occupation -->
+                        <xf:setvalue ref="instance('xprProsopo')//eac:occupations/eac:occupation/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:occupation"/>
+                        <!-- address -->
+                        <xf:setvalue ref="instance('xprProsopo')//eac:places/eac:place/eac:placeEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:address"/>
+                        <!--source (unitid)  il faut récupérer la référence de la source mais on l'envoi après fiches-->
+                        <xf:setvalue ref="instance('xprProsopo')//eac:places/eac:place/eac:dateSet/eac:date/xpr:source/@*[local-name() = 'href']" value="instance('xprInventory')/xpr:sourceDesc/xpr:idno/@unitid"/>
+                        <!--date -->
+                        <xf:setvalue ref="instance('xprProsopo')//eac:places/eac:place/eac:dateSet/eac:date/@standardDate" value="instance('xprInventory')/xpr:sourceDesc/xpr:date/@when"/>
+                        
+                        <xf:delete nodeset="instance('xprProsopo')//@standardDate[. = '']"/>
+                        <xf:delete nodeset="instance('xprProsopo')//@notBefore[. = '']"/>
+                        <xf:delete nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="modal">La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/>; Body : <xf:output value="event('response-body')"/>. </xf:message>
+                        <xf:setvalue value="event('response-body')//*:id" ref="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/@href"/>
+                        <xf:setvalue ref="instance('xprIterate')" value="instance('xprIterate') + 1"/>
+                        <!--<xf:setvalue ref="instance('xprProsopo')//eac:nameEntry/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]"/>-->
+                </xf:action>
+                
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>. </xf:message>
+                </xf:action>
+        </xf:submission>
+        
+        <xf:submission mode="synchronous" id="submitRelations" ref="instance('xprRelations')" resource="/xpr/relations/put" method="put" replace="none">
+                <xf:action ev:event="xforms-submit">
+                        <xf:setvalue ref="instance('xprIterate')" value="1"/>
+                        <xf:setvalue ref="instance('xprRelations')/@ref" value="instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref"/>
+                        <xf:action while="instance('xprRelations')/eac:cpfRelation[@*[local-name() = 'href'] = '']">
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/eac:relationEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry"/>
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/@*[local-name() = 'href']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/@href"/>
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/@*[local-name() = 'arcrole']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/@arcrole"/>
+                                <xf:setvalue ref="instance('xprIterate')" value="instance('xprIterate') + 1"/>
+                        </xf:action>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-done">
+                        <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/>; Body : <xf:output value="event('response-body')"/>. </xf:message>
+                </xf:action>
+                <xf:action ev:event="xforms-submit-error">
+                        <xf:message level="modal"> Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>. </xf:message>
                 </xf:action>
         </xf:submission>
 

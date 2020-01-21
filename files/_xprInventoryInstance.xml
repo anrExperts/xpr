@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<inventory xmlns="xpr">
-    <expert ref=""/>
+<inventory xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <sourceDesc>
+        <idno unitid=""/>
+        <expert ref=""/>
+        <date when=""/>
+    </sourceDesc>
     <place>
         <address>
             <street/>
@@ -12,14 +16,22 @@
         <district/>
         <owner/>
     </place>
+    <relations>
+        <relation href="" arcrole="">
+            <relationEntry type="" sex=""/>
+            <address/>
+            <occupation/>
+        </relation>
+    </relations>
     <wealth>
-        <state type=""></state>
+        <state type=""/>
         <possessions>
-            <movables></movables>
+            <movables/>
             <estate rooms=""/>
             <workshop rooms="" equipment=""/>
             <other rooms="">
-                <place type=""></place>
+                <desc/>
+                <place type=""/>
             </other>
         </possessions>
         <dowry/>
@@ -27,24 +39,24 @@
     </wealth>
     <knowledge>
         <books volumes="">
-            <value></value>
-            <bookseller></bookseller>
+            <value/>
+            <bookseller/>
         </books>
-        <drawings quantity=""></drawings>
-        <paintings quantity=""></paintings>
+        <drawings quantity=""/>
+        <paintings quantity=""/>
     </knowledge>
     <tools>
         <drawing>
-            <drawingBoard></drawingBoard>
-            <desk></desk>
+            <drawingBoard/>
+            <desk/>
         </drawing>
         <mathematical>
-            <compass></compass>
-            <pencilHolder></pencilHolder>
+            <compass/>
+            <pencilHolder/>
         </mathematical>
         <measurement>
-            <heightGauge></heightGauge>
-            <graphometer></graphometer>
+            <heightGauge/>
+            <graphometer/>
         </measurement>
         <!--@todo matériel pour écrire ? -->
         <scientific>
@@ -52,15 +64,15 @@
                 <!--@todo comment distinguer pendule et horloge (même terme en anglais) -->
                 <maker><!-- ou clockmaker : horloger ? --></maker>
             </clock>
-            <globe></globe>
-            <barometer></barometer>
-            <thermometer></thermometer>
-            <stove></stove>
+            <globe/>
+            <barometer/>
+            <thermometer/>
+            <stove/>
         </scientific>
     </tools>
     <profession>
-        <transport></transport>
-        <associate></associate>
+        <transport/>
+        <associate/>
     </profession>
     <comments/>
 </inventory>
