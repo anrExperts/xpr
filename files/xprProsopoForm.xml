@@ -39,7 +39,7 @@
                 </xf:select1>
                 <xf:select1 ref="@localType" appearance="full">
                     <!-- @todo changer le label -->
-                    <xf:label>Qualité</xf:label>
+                    <xf:label>Répertoire</xf:label>
                     <xf:itemset nodeset="instance('xprEntitiesTypes')/identity[@type = instance('xprProsopo')//eac:entityType]">
                         <xf:label ref="label"/>
                         <xf:value ref="value"/>
@@ -721,12 +721,27 @@
                     </xf:input>
                     <xf:repeat id="repeatParticipant" nodeset="rico:participant">
                         <xf:label>Participant</xf:label>
+                        <xf:select1 ref="@new">
+                            <xf:label>Participant présent dans la BDD</xf:label>
+                            <xf:item>
+                                <xf:label>oui</xf:label>
+                                <xf:value>true</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>non</xf:label>
+                                <xf:value>false</xf:value>
+                            </xf:item>
+                        </xf:select1>
                         <xf:select1 ref="@*[local-name() = 'href']" incremental="true">
                             <xf:itemset bind="bindParticipant">
                                 <xf:label ref="."/>
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
                         </xf:select1>
+                        <xf:group ref="xpr:entity">
+                            <xf:label>Nouvelle entité</xf:label>
+                            
+                        </xf:group>
                         <xf:trigger class="delete">
                             <xf:label>Supprimer un participant</xf:label>
                             <xf:delete nodeset="." at="1" if="count(//eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant) > 1" ev:event="DOMActivate"/>

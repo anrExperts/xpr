@@ -61,7 +61,7 @@
                         <date standardDate="" notBefore="" notAfter=""/>
                         <placeEntry/>
                         <event/>
-                        <rico:participant xlink:href=""/>
+                        <rico:participant xlink:href="" new=""/>
                         <rico:involve xlink:href=""/>
                         <xpr:source xlink:href=""/>
                     </chronItem>
