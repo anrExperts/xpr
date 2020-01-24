@@ -1,7 +1,13 @@
 <form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:group ref="xpr:sourceDesc">
-        <xf:input ref="xpr:idno/@unitid">
+        <xf:input ref="xpr:idno/@unitid" incremental="true">
             <xf:label>Cote</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:date/@when" incremental="true">
+            <xf:label>Date de l'inventaire</xf:label>
+        </xf:input>
+        <xf:input ref="xpr:location" incremental="true">
+            <xf:label>Pages, folios</xf:label>
         </xf:input>
         <xf:select1 ref="xpr:expert/@ref" incremental="true">
             <xf:label>Patronyme</xf:label>
@@ -10,9 +16,6 @@
                 <xf:value ref="@xml:id"/>
             </xf:itemset>
         </xf:select1>
-        <xf:input ref="xpr:date/@when">
-            <xf:label>Date de l'inventaire</xf:label>
-        </xf:input>
     </xf:group>
     <xf:group ref="xpr:place">
         <xf:label>Adresse au moment du décès</xf:label>
@@ -48,9 +51,36 @@
                     <xf:value ref="value"/>
                 </xf:itemset>
             </xf:select1>
-            <xf:input ref="xpr:relationEntry">
-                <xf:label>Nom</xf:label>
+            <xf:input ref="xpr:relationEntry/eac:nameEntry[eac:authorizedForm]/eac:part">
+                <xf:label>Forme contrôlée</xf:label>
             </xf:input>
+            <xf:group ref="xpr:relationEntry/eac:nameEntry[eac:alternativeForm]">
+                <xf:label>Forme attestée</xf:label>
+                <xf:input ref="eac:part[@localType='surname']">
+                    <xf:label>Nom</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='forename']">
+                    <xf:label>Prénom</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='particle']">
+                    <xf:label>Particule</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='common']">
+                    <xf:label>Titre d'appel</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='formal']">
+                    <xf:label>Titre institutionnel</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='academic']">
+                    <xf:label>Titre académique</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='religious']">
+                    <xf:label>Titre religieux</xf:label>
+                </xf:input>
+                <xf:input ref="eac:part[@localType='nobiliary']">
+                    <xf:label>Titre de noblesse</xf:label>
+                </xf:input>
+            </xf:group>
             <xf:select1 ref="xpr:relationEntry/@sex" incremental="true">
                 <xf:label>Sexe</xf:label>
                 <xf:item>
@@ -63,7 +93,7 @@
                 </xf:item>
             </xf:select1>
             <xf:select1 ref="xpr:relationEntry/@type">
-                <xf:label>Type d'entité</xf:label>
+                <xf:label>Répertoire</xf:label>
                 <xf:item>
                     <xf:label>Expert (parisien)</xf:label>
                     <xf:value>expert</xf:value>
@@ -78,7 +108,7 @@
                     <xf:value>mason</xf:value>
                 </xf:item>
                 <xf:item>
-                    <xf:label>Tiers</xf:label>
+                    <xf:label>Autre</xf:label>
                     <xf:value>person</xf:value>
                 </xf:item>
             </xf:select1>
@@ -90,7 +120,7 @@
             </xf:input>
             <xf:trigger class="delete">
                 <xf:label>&#10007;</xf:label>
-                <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:relation) > 1"/>
+                <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:relation) > 1 and @href=''"/>
                 <xf:help>Supprimer une relation.</xf:help>
             </xf:trigger>
         </xf:repeat>
@@ -242,42 +272,15 @@
             <xf:help>Ce champ permet de signaler les collectionneurs ou les aspects remarquables.</xf:help>
         </xf:textarea>
     </xf:group>
-    <pre>
-        <xf:output value="serialize(., 'yes')"/>
-    </pre>
-
-    <!--<xf:trigger>
-        <xf:label>Enregistrer</xf:label>
-        <xf:action ev:event="DOMActivate">
-            <xf:setvalue ref="instance('xprIterate')" value="1"/>
-            <xf:send submission="submitEntity"/>
-        </xf:action>
-    </xf:trigger>-->
-    <xf:trigger>
-        <xf:label>test</xf:label>
-        <xf:action ev:event="DOMActivate">
-            <xf:insert origin="instance('xprSupplement')/eac:cpfRelation" context="instance('xprRelations')"/>
-        </xf:action>
-    </xf:trigger>
     <xf:trigger>
         <xf:label>Enregistrer</xf:label>
         <xf:action ev:event="DOMActivate">
+            <!-- initialisation de l'instance xprIterate pour les ajouts successifs des personnes dans la bdd -->
             <xf:setvalue ref="instance('xprIterate')" value="1"/>
             
-           <!-- <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry"/>
-            <!-\- entity type -\->
-            <xf:setvalue ref="instance('xprProsopo')//eac:identity/@localType" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/@type"/>
-            <!-\- @todo sexe/gender -\->
-            <!-\-<xf:setvalue ref="instance('xprProsopo')//eac:nameEntry/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/"/>-\->
-            <!-\- occupation -\->
-            <xf:setvalue ref="instance('xprProsopo')//eac:occupations/eac:occupation/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:occupation"/>
-            <!-\- address -\->
-            <xf:setvalue ref="instance('xprProsopo')//eac:places/eac:place/eac:placeEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:address"/>
-            <!-\- @todo source (unitid)  il faut récupérer la référence de la source mais on l'envoi après fiches-\->
-            <!-\-<xf:setvalue ref="" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/"/>-\->
-            <!-\- @todo date -\->
-            <!-\-<xf:setvalue ref="instance('xprProsopo')//eac:nameEntry/eac:part" value="instance('xprInventory')/xpr:sourceDesc/xpr:date/@when"/>-\->-->
-            
+            <!-- initialisation de l'instance prosopo -->
+            <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry" at="last()"/>
+            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='officeName']"/>
             
             <xf:action while="count(instance('xprInventory')//xpr:relation) &gt;= instance('xprIterate')">
                 <xf:send submission="submitEntity"/>

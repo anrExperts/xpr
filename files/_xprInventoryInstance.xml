@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<inventory xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink">
+<inventory xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="">
     <sourceDesc>
-        <idno unitid=""/>
-        <expert ref=""/>
-        <date when=""/>
+        <idno unitid="123"/>
+        <location/>
+        <expert ref="xpr0001"/>
+        <date when="1789-01-01"/>
     </sourceDesc>
     <place>
         <address>
@@ -17,10 +18,49 @@
         <owner/>
     </place>
     <relations>
-        <relation href="" arcrole="">
-            <relationEntry type="" sex=""/>
-            <address/>
-            <occupation/>
+        <relation href="" arcrole="rico:siblingRelationConnects">
+            <relationEntry type="person" sex="male">
+                <nameEntry xmlns="eac">
+                    <part>Doe, John</part>
+                    <authorizedForm/>
+                </nameEntry>
+                <nameEntry xmlns="eac">
+                    <part localType="surname">Doe</part>
+                    <part localType="forename">Jack</part>
+                    <part localType="particle"/>
+                    <part localType="common"/>
+                    <part localType="formal"/>
+                    <part localType="academic"/>
+                    <part localType="religious"/>
+                    <part localType="nobiliary"/>
+                    <alternativeForm/>
+                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+                </nameEntry>
+            </relationEntry>
+            <address>route des Andelys</address>
+            <occupation>Charpentier</occupation>
+        </relation>
+        <relation href="" arcrole="rico:siblingRelationConnects">
+            <relationEntry type="person" sex="male">
+                <nameEntry xmlns="eac">
+                    <part>Doe, Maurice</part>
+                    <authorizedForm/>
+                </nameEntry>
+                <nameEntry xmlns="eac">
+                    <part localType="surname">Doe</part>
+                    <part localType="forename">Dylan</part>
+                    <part localType="particle"/>
+                    <part localType="common"/>
+                    <part localType="formal"/>
+                    <part localType="academic"/>
+                    <part localType="religious"/>
+                    <part localType="nobiliary"/>
+                    <alternativeForm/>
+                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+                </nameEntry>
+            </relationEntry>
+            <address>route de Paris</address>
+            <occupation>Plâtrier</occupation>
         </relation>
     </relations>
     <wealth>
