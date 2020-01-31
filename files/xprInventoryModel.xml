@@ -6,6 +6,7 @@
         </xf:action>-->
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
+        <xf:bind id="testOb" nodeset="instance('xprInventory')//xpr:relation/@href"/>
 
         <!-- instance xprEntities (liste des fiches prosopo présentes dans la base (servie par Basex))-->
         <xf:instance id="xprEntities" src="/xpr/entities"/>
@@ -15,6 +16,9 @@
         <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
 
         <xf:instance id="xprIterate">
+                <iterate xmlns="xpr"/>
+        </xf:instance>
+        <xf:instance id="xprIterate2">
                 <iterate xmlns="xpr"/>
         </xf:instance>
 
@@ -54,7 +58,7 @@
         <xf:submission mode="synchronous" id="submitInventory" resource="/xpr/inventories/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit-done">
                         <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/>; Body : <xf:output value="event('response-body')"/>. </xf:message>
-                        <xf:send submission="submitRelations"/>
+                        <!--<xf:send submission="submitRelations"/>-->
                 </xf:action>
                 <xf:action ev:event="xforms-submit-error">
                         <xf:message level="modal"> Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>. </xf:message>
@@ -64,28 +68,27 @@
         <xf:submission mode="synchronous" indent="true" id="submitEntity" ref="instance('xprProsopo')" resource="/xpr/biographies/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit">
                         <xf:insert origin="instance('xprSupplement')/eac:cpfRelation" context="instance('xprRelations')" at="last()"/>
-                        
                         <!-- name -->
                         <!-- vedette -->
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:authorizedForm]/eac:part"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:authorizedForm]/eac:part"/>
                         <!-- forme attestée -->
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='surname']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='surname']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='forename']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='forename']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='particle']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='particle']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='common']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='common']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='formal']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='formal']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='academic']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='academic']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='religious']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='religious']"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='nobiliary']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='nobiliary']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='surname']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='surname']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='forename']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='forename']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='particle']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='particle']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='common']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='common']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='formal']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='formal']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='academic']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='academic']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='religious']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='religious']"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='nobiliary']" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='nobiliary']"/>
                         <!-- entity type -->
                         <xf:setvalue ref="instance('xprProsopo')//eac:identity/eac:entityType" value="'person'"/>
-                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/@localType" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/@type"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:identity/@localType" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/@type"/>
                         <!-- sexe/gender -->
-                        <xf:setvalue ref="instance('xprProsopo')//eac:localDescription[@localType='sex']/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/@sex"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:localDescription[@localType='sex']/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:relationEntry/@sex"/>
                         <!-- occupation -->
-                        <xf:setvalue ref="instance('xprProsopo')//eac:occupations/eac:occupation/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:occupation"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:occupations/eac:occupation/eac:term" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:occupation"/>
                         <!-- address -->
-                        <xf:setvalue ref="instance('xprProsopo')//eac:places/eac:place/eac:placeEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:address"/>
+                        <xf:setvalue ref="instance('xprProsopo')//eac:places/eac:place/eac:placeEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/xpr:address"/>
                         <!-- source (unitid)  il faut récupérer la référence de la source mais on l'envoi après fiches -->
                         <xf:setvalue ref="
                                 instance('xprProsopo')//eac:places/eac:place/eac:dateSet/eac:date/xpr:source/@*[local-name() = 'href']
@@ -99,9 +102,7 @@
                 </xf:action>
                 <xf:action ev:event="xforms-submit-done">
                         <xf:message level="modal">La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/>; Body : <xf:output value="event('response-body')"/>. </xf:message>
-                        <xf:setvalue value="event('response-body')//*:id" ref="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/@href"/>
-                        <xf:setvalue ref="instance('xprIterate')" value="instance('xprIterate') + 1"/>
-                        <!--<xf:setvalue ref="instance('xprProsopo')//eac:nameEntry/eac:part" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]"/>-->
+                        <xf:setvalue value="event('response-body')//*:id" ref="instance('xprInventory')/xpr:relations/xpr:relation[@href = ''][position() = 1]/@href"/>
                 </xf:action>
 
                 <xf:action ev:event="xforms-submit-error">
@@ -111,14 +112,14 @@
 
         <xf:submission mode="synchronous" id="submitRelations" ref="instance('xprRelations')" resource="/xpr/relations/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit">
-                        <xf:setvalue ref="instance('xprIterate')" value="1"/>
                         <xf:setvalue ref="instance('xprRelations')/@ref" value="instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref"/>
                         <xf:action while="instance('xprRelations')/eac:cpfRelation[@*[local-name() = 'href'] = '']">
-                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/eac:relationEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/xpr:relationEntry/eac:nameEntry[eac:authorizedForm]/eac:part"/>
-                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/@*[local-name() = 'href']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/@href"/>
-                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/@*[local-name() = 'arcrole']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate')]/@arcrole"/>
-                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate')]/xpr:source/@*[local-name() = 'href']" value="instance('xprInventory')/xpr:sourceDesc/xpr:idno/@unitid"/>
-                                <xf:setvalue ref="instance('xprIterate')" value="instance('xprIterate') + 1"/>
+                                <!-- @todo renseigner à l'étape prosopo -->
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate2')]/eac:relationEntry" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate2')]/xpr:relationEntry/eac:nameEntry[eac:authorizedForm]/eac:part"/>
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate2')]/@*[local-name() = 'href']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate2')]/@href"/>
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate2')]/@*[local-name() = 'arcrole']" value="instance('xprInventory')/xpr:relations/xpr:relation[position() = instance('xprIterate2')]/@arcrole"/>
+                                <xf:setvalue ref="instance('xprRelations')/eac:cpfRelation[position() = instance('xprIterate2')]/xpr:source/@*[local-name() = 'href']" value="instance('xprInventory')/xpr:sourceDesc/xpr:idno/@unitid"/>
+                                <xf:setvalue ref="instance('xprIterate')" value="instance('xprIterate2') + 1"/>
                         </xf:action>
                 </xf:action>
                 <xf:action ev:event="xforms-submit-done">

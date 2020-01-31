@@ -18,7 +18,7 @@
         <owner/>
     </place>
     <relations>
-        <relation href="" arcrole="rico:siblingRelationConnects">
+        <relation href="toto" arcrole="rico:siblingRelationConnects">
             <relationEntry type="person" sex="male">
                 <nameEntry xmlns="eac">
                     <part>Doe, John</part>
@@ -26,7 +26,7 @@
                 </nameEntry>
                 <nameEntry xmlns="eac">
                     <part localType="surname">Doe</part>
-                    <part localType="forename">Jack</part>
+                    <part localType="forename">John</part>
                     <part localType="particle"/>
                     <part localType="common"/>
                     <part localType="formal"/>
@@ -48,7 +48,51 @@
                 </nameEntry>
                 <nameEntry xmlns="eac">
                     <part localType="surname">Doe</part>
-                    <part localType="forename">Dylan</part>
+                    <part localType="forename">Maurice</part>
+                    <part localType="particle"/>
+                    <part localType="common"/>
+                    <part localType="formal"/>
+                    <part localType="academic"/>
+                    <part localType="religious"/>
+                    <part localType="nobiliary"/>
+                    <alternativeForm/>
+                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+                </nameEntry>
+            </relationEntry>
+            <address>route de Paris</address>
+            <occupation>Plâtrier</occupation>
+        </relation>
+        <relation href="" arcrole="rico:siblingRelationConnects">
+            <relationEntry type="person" sex="male">
+                <nameEntry xmlns="eac">
+                    <part>Doe, Albert</part>
+                    <authorizedForm/>
+                </nameEntry>
+                <nameEntry xmlns="eac">
+                    <part localType="surname">Doe</part>
+                    <part localType="forename">Albert</part>
+                    <part localType="particle"/>
+                    <part localType="common"/>
+                    <part localType="formal"/>
+                    <part localType="academic"/>
+                    <part localType="religious"/>
+                    <part localType="nobiliary"/>
+                    <alternativeForm/>
+                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+                </nameEntry>
+            </relationEntry>
+            <address>route de Paris</address>
+            <occupation>Plâtrier</occupation>
+        </relation>
+        <relation href="" arcrole="rico:siblingRelationConnects">
+            <relationEntry type="person" sex="male">
+                <nameEntry xmlns="eac">
+                    <part>Doe, Wallace</part>
+                    <authorizedForm/>
+                </nameEntry>
+                <nameEntry xmlns="eac">
+                    <part localType="surname">Doe</part>
+                    <part localType="forename">Wallace</part>
                     <part localType="particle"/>
                     <part localType="common"/>
                     <part localType="formal"/>

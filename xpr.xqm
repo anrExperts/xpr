@@ -559,7 +559,7 @@ declare
 %updating
 function xformInventoryResult($param, $referer) {
   let $db := db:open("xpr")
-  return insert node $param into $db/xpr/expertises
+  return insert node $param into $db/xpr/posthumousInventories
 };
 
 

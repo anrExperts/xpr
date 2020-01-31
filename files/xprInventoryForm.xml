@@ -272,21 +272,31 @@
             <xf:help>Ce champ permet de signaler les collectionneurs ou les aspects remarquables.</xf:help>
         </xf:textarea>
     </xf:group>
+    <!--<xf:trigger>
+        <xf:label>Enregistrer</xf:label>
+        <xf:action ev:event="DOMActivate">
+            <!-\- initialisation de l'instance xprIterate pour les ajouts successifs des personnes dans la bdd -\->
+            <xf:setvalue ref="instance('xprIterate')" value="1"/>
+
+            <!-\- initialisation de l'instance prosopo -\->
+            <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry" at="last()"/>
+            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='officeName']"/>
+
+            <xf:action while="count(instance('xprInventory')//xpr:relation[@href = '']) &gt; instance('xprIterate')">
+                <xf:send submission="submitEntity"/>
+            </xf:action>
+        </xf:action>
+    </xf:trigger>-->
     <xf:trigger>
         <xf:label>Enregistrer</xf:label>
         <xf:action ev:event="DOMActivate">
-            <!-- initialisation de l'instance xprIterate pour les ajouts successifs des personnes dans la bdd -->
-            <xf:setvalue ref="instance('xprIterate')" value="1"/>
-            
-            <!-- initialisation de l'instance prosopo -->
-            <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry" at="last()"/>
-            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/eac:part[@localType='officeName']"/>
-            
-            <xf:action while="count(instance('xprInventory')//xpr:relation) &gt;= instance('xprIterate')">
+            <xf:action while="instance('xprInventory')//xpr:relation[@href = '']">
                 <xf:send submission="submitEntity"/>
-                <xf:action if="count(instance('xprInventory')//xpr:relation) &lt; instance('xprIterate')">
-                    <xf:send submission="submitInventory"/>
-                </xf:action>
+            </xf:action>
+            <xf:action ev:event="xforms-value-changed" ev:observer="testOb" if="not(instance('xprInventory')/xpr:relations//xpr:relation[@href = ''])">
+                <!-- @todo créer une instance response pour placer l'observer dessus (pour chaque relation => un element response )-->
+                <!-- OK fonctionne avec un bind => testOb-->
+                <xf:send submission="submitInventory"/>
             </xf:action>
         </xf:action>
     </xf:trigger>
