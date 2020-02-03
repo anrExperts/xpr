@@ -107,10 +107,23 @@
         <xpr:source xmlns:xpr="xpr" xlink:href=""/>
     </eac:cpfRelation>
 
+    <response/>
+
     <bug>
         <eac:date standardDate="" notBefore="" notAfter="">
             <xpr:source xmlns:xpr="xpr"/>
         </eac:date>
     </bug>
+
+    <boolean>
+        <state>
+            <label>oui</label>
+            <value>true</value>
+        </state>
+        <state>
+            <label>non</label>
+            <value>false</value>
+        </state>
+    </boolean>
 
 </supplement>
