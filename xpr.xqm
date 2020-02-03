@@ -202,6 +202,7 @@ declare
 function modify($id) {
   let $content := map {
     'instance' : $id,
+    'path' : 'expertises',
     'model' : 'xprExpertiseModel.xml',
     'trigger' : fn:doc(file:base-dir() || "files/" || "xprExpertiseTrigger.xml"),
     'form' : fn:doc(file:base-dir() || "files/" || "xprExpertiseForm.xml")
@@ -357,6 +358,7 @@ declare
 function modifyEntity($id) {
   let $content := map {
     'instance' : $id,
+    'path' : 'biographies',
     'model' : 'xprProsopoModel.xml',
     'trigger' : fn:doc(file:base-dir() || "files/" || "xprProsopoTrigger.xml"),
     'form' : fn:doc(file:base-dir() || "files/" || "xprProsopoForm.xml")
@@ -850,29 +852,18 @@ declare %updating function associate($content as map(*), $outputParams as map(*)
  :)
 declare function getModel($content as map(*)){
   let $instance := map:get($content, 'instance')
+  let $path := map:get($content, 'path')
   let $model := map:get($content, 'model')
   return
     if ($instance) then
+      for $model at $i in $model
+      return
+        (
+          copy $doc := fn:doc(file:base-dir() || "files/" || $model[$i])
+          modify replace value of node $doc/xf:model/xf:instance[@id=fn:substring-before($model[$i], 'Model.xml')]/@src with '/xpr/' || $path || '/' || $instance
+          return $doc
+        )
+    else 
       for $model in $model
-      return switch ($model)
-        case 'xprProsopoModel.xml' return 
-        (
-          copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-          modify replace value of node $doc/xf:model/xf:instance[@id='xprProsopo']/@src with '/xpr/biographies/' || $instance
-          return $doc
-        )
-        case 'xprExpertiseModel.xml' return 
-        (
-          copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-          modify replace value of node $doc/xf:model/xf:instance[@id='xprModel']/@src with '/xpr/expertises/' || $instance
-          return $doc
-        )
-        case 'xprSourceModel.xml' return 
-        (
-          copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-          modify replace value of node $doc/xf:model/xf:instance[@id='xprSource']/@src with '/xpr/sources/' || $instance
-          return $doc
-        )
-        default return fn:doc(file:base-dir() || "files/" || $model)
-    else fn:doc(file:base-dir() || "files/" || $model)
+        return fn:doc(file:base-dir() || "files/" || $model)
 };
