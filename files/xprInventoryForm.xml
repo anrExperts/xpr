@@ -265,6 +265,226 @@
             </xf:textarea>
         </xf:group>
     </xf:group>
+    <xf:group ref="xpr:tools">
+        <xf:label>Innovation constructive / innovation formelle</xf:label>
+        <xf:group ref="xpr:drawing">
+            <xf:label>Instruments de dessin</xf:label>
+            <xf:select1 ref="xpr:desk/@owned" appearance="full">
+                <xf:label>Table à écrire</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:desk/xpr:desc">
+                <xf:label>Table à écrire</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:drawingBoard/@owned" appearance="full">
+                <xf:label>Table à dessin</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:drawingBoard/xpr:desc">
+                <xf:label>Table à dessin</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:mathematical">
+            <xf:label>Etui de mathématique</xf:label>
+            <xf:select1 ref="xpr:compass/@owned" appearance="full">
+                <xf:label>Compas</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:compass/xpr:desc">
+                <xf:label>Compas</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:protractor/@owned" appearance="full">
+                <xf:label>Rapporteur</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:protractor/xpr:desc">
+                <xf:label>Rapporteur</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:rule/@owned" appearance="full">
+                <xf:label>Règle</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:rule/xpr:desc">
+                <xf:label>Règle</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:pencilHolder/@owned" appearance="full">
+                <xf:label>Porte crayon</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:pencilHolder/xpr:desc">
+                <xf:label>Porte crayon</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:measurement">
+            <xf:label>Instruments de mesure</xf:label>
+            <xf:select1 ref="xpr:heightGauge/@owned" appearance="full">
+                <xf:label>Toise</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:heightGauge/xpr:desc">
+                <xf:label>Toise</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:graphometer/@owned" appearance="full">
+                <xf:label>Graphomètre</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:graphometer/xpr:desc">
+                <xf:label>Graphomètre</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:writing">
+            <xf:label>Matériel pour écrire</xf:label>
+        </xf:group>
+        <xf:group ref="xpr:scientific">
+            <xf:label>Objets scientifiques</xf:label>
+            
+            <xf:select1 ref="xpr:pendulum/@owned" appearance="full">
+                <xf:label>Pendule</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:pendulum/xpr:desc">
+                <xf:label>Pendule</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:clock/@owned" appearance="full">
+                <xf:label>Horloge</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:clock/xpr:desc">
+                <xf:label>Horloge</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:lunette/@owned" appearance="full">
+                <xf:label>Lunette</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:lunette/xpr:desc">
+                <xf:label>Lunette</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:globe/@owned" appearance="full">
+                <xf:label>Mappemonde</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:globe/xpr:desc">
+                <xf:label>Mappemonde</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:barometer/@owned" appearance="full">
+                <xf:label>Baromètre</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:barometer/xpr:desc">
+                <xf:label>Baromètre</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:thermometer/@owned" appearance="full">
+                <xf:label>Thermomètre</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:thermometer/xpr:desc">
+                <xf:label>Thermomètre</xf:label>
+            </xf:input>
+            <xf:select1 ref="xpr:stove/@owned" appearance="full">
+                <xf:label>Poêle</xf:label>
+                <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+                    <xf:label ref="xpr:label"/>
+                    <xf:value ref="xpr:value"/>
+                </xf:itemset>
+            </xf:select1>
+            <xf:input ref="xpr:stove/xpr:desc">
+                <xf:label>Poêle</xf:label>
+            </xf:input>
+        </xf:group>
+        <!--<xf:group ref="xpr:">
+            <xf:label></xf:label>
+        </xf:group>-->
+    </xf:group>
+    <xf:group ref="xpr:objects">
+        <xf:label>Objets artistiques</xf:label>
+        <xf:group ref="xpr:mirror">
+            <xf:label>Glaces</xf:label>
+            <xf:input ref="@n">
+                <xf:label>Nombre</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:painting">
+            <xf:label>Peintures</xf:label>
+            <xf:input ref="@n">
+                <xf:label>Nombre</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:engraving">
+            <xf:label>Gravures</xf:label>
+            <xf:input ref="@n">
+                <xf:label>Nombre</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:tapestry">
+            <xf:label>Tapisserie</xf:label>
+            <xf:input ref="@n">
+                <xf:label>Nombre</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:sculpture">
+            <xf:label>Sculptures</xf:label>
+            <xf:input ref="@n">
+                <xf:label>Nombre</xf:label>
+            </xf:input>
+        </xf:group>
+        <xf:group ref="xpr:vase">
+            <xf:label>Vases</xf:label>
+            <xf:input ref="@n">
+                <xf:label>Nombre</xf:label>
+            </xf:input>
+        </xf:group>
+        <!--<objects>
+                <mirror n=""/>
+                <painting n=""/>
+                <engraving n=""/>
+                <tapestry n=""/>
+                <sculpture n=""/>
+                <vase n=""/>
+            </objects>-->
+    </xf:group>
+
     <xf:group ref="xpr:comments">
         <xf:label>Commentaires libres</xf:label>
         <xf:textarea ref=".">
@@ -294,7 +514,6 @@
                 <xf:send submission="submitEntity"/>
             </xf:action>
             <xf:action ev:event="xforms-value-changed" ev:observer="testOb" if="not(instance('xprInventory')/xpr:relations//xpr:relation[@href = ''])">
-                <!-- @todo créer une instance response pour placer l'observer dessus (pour chaque relation => un element response )-->
                 <!-- OK fonctionne avec un bind => testOb-->
                 <xf:send submission="submitInventory"/>
             </xf:action>

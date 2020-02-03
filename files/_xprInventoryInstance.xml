@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <inventory xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="">
     <sourceDesc>
-        <idno unitid="123"/>
+        <idno unitid=""/>
         <location/>
-        <expert ref="xpr0001"/>
-        <date when="1789-01-01"/>
+        <expert ref=""/>
+        <date when=""/>
     </sourceDesc>
     <place>
         <address>
@@ -18,15 +18,15 @@
         <owner/>
     </place>
     <relations>
-        <relation href="toto" arcrole="rico:siblingRelationConnects">
-            <relationEntry type="person" sex="male">
+        <relation href="" arcrole="">
+            <relationEntry type="" sex="">
                 <nameEntry xmlns="eac">
-                    <part>Doe, John</part>
+                    <part/>
                     <authorizedForm/>
                 </nameEntry>
                 <nameEntry xmlns="eac">
-                    <part localType="surname">Doe</part>
-                    <part localType="forename">John</part>
+                    <part localType="surname"/>
+                    <part localType="forename"/>
                     <part localType="particle"/>
                     <part localType="common"/>
                     <part localType="formal"/>
@@ -37,74 +37,8 @@
                     <xpr:source xmlns:xpr="xpr" xlink:href=""/>
                 </nameEntry>
             </relationEntry>
-            <address>route des Andelys</address>
-            <occupation>Charpentier</occupation>
-        </relation>
-        <relation href="" arcrole="rico:siblingRelationConnects">
-            <relationEntry type="person" sex="male">
-                <nameEntry xmlns="eac">
-                    <part>Doe, Maurice</part>
-                    <authorizedForm/>
-                </nameEntry>
-                <nameEntry xmlns="eac">
-                    <part localType="surname">Doe</part>
-                    <part localType="forename">Maurice</part>
-                    <part localType="particle"/>
-                    <part localType="common"/>
-                    <part localType="formal"/>
-                    <part localType="academic"/>
-                    <part localType="religious"/>
-                    <part localType="nobiliary"/>
-                    <alternativeForm/>
-                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
-                </nameEntry>
-            </relationEntry>
-            <address>route de Paris</address>
-            <occupation>Plâtrier</occupation>
-        </relation>
-        <relation href="" arcrole="rico:siblingRelationConnects">
-            <relationEntry type="person" sex="male">
-                <nameEntry xmlns="eac">
-                    <part>Doe, Albert</part>
-                    <authorizedForm/>
-                </nameEntry>
-                <nameEntry xmlns="eac">
-                    <part localType="surname">Doe</part>
-                    <part localType="forename">Albert</part>
-                    <part localType="particle"/>
-                    <part localType="common"/>
-                    <part localType="formal"/>
-                    <part localType="academic"/>
-                    <part localType="religious"/>
-                    <part localType="nobiliary"/>
-                    <alternativeForm/>
-                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
-                </nameEntry>
-            </relationEntry>
-            <address>route de Paris</address>
-            <occupation>Plâtrier</occupation>
-        </relation>
-        <relation href="" arcrole="rico:siblingRelationConnects">
-            <relationEntry type="person" sex="male">
-                <nameEntry xmlns="eac">
-                    <part>Doe, Wallace</part>
-                    <authorizedForm/>
-                </nameEntry>
-                <nameEntry xmlns="eac">
-                    <part localType="surname">Doe</part>
-                    <part localType="forename">Wallace</part>
-                    <part localType="particle"/>
-                    <part localType="common"/>
-                    <part localType="formal"/>
-                    <part localType="academic"/>
-                    <part localType="religious"/>
-                    <part localType="nobiliary"/>
-                    <alternativeForm/>
-                    <xpr:source xmlns:xpr="xpr" xlink:href=""/>
-                </nameEntry>
-            </relationEntry>
-            <address>route de Paris</address>
-            <occupation>Plâtrier</occupation>
+            <address></address>
+            <occupation></occupation>
         </relation>
     </relations>
     <wealth>
@@ -131,32 +65,73 @@
     </knowledge>
     <tools>
         <drawing>
-            <drawingBoard/>
-            <desk/>
+            <desk owned="">
+                <desc/>
+            </desk>
+            <drawingBoard owned="">
+                <desc/>
+            </drawingBoard>
         </drawing>
         <mathematical>
-            <compass/>
-            <pencilHolder/>
+            <compass owned="">
+                <desc/>
+            </compass>
+            <protractor owned="">
+                <desc/>
+            </protractor>
+            <rule owned="">
+                <desc/>
+            </rule>
+            <pencilHolder owned="">
+                <desc/>
+            </pencilHolder>
         </mathematical>
         <measurement>
-            <heightGauge/>
-            <graphometer/>
+            <heightGauge owned="">
+                <desc/>
+            </heightGauge>
+            <graphometer owned="">
+                <desc/>
+            </graphometer>
         </measurement>
-        <!--@todo matériel pour écrire ? -->
+        <!-- redondant avec desk plus haut ? -->
+        <writing/>
         <scientific>
-            <clock>
-                <!--@todo comment distinguer pendule et horloge (même terme en anglais) -->
-                <maker><!-- ou clockmaker : horloger ? --></maker>
+            <pendulum owned="">
+                <desc/>
+            </pendulum>
+            <clock owned="">
+                <desc/>
+                <clockmaker/>
             </clock>
-            <globe/>
-            <barometer/>
-            <thermometer/>
-            <stove/>
+            <lunette owned="">
+                <desc/>
+            </lunette>
+            <globe owned="">
+                <desc/>
+            </globe>
+            <barometer owned="">
+                <desc/>
+            </barometer>
+            <thermometer owned="">
+                <desc/>
+            </thermometer>
+            <stove owned="">
+                <desc/>
+            </stove>
         </scientific>
     </tools>
-    <profession>
+    <objects>
+        <mirror n=""/>
+        <painting n=""/>
+        <engraving n=""/>
+        <tapestry n=""/>
+        <sculpture n=""/>
+        <vase n=""/>
+    </objects>
+    <!--<profession>
         <transport/>
         <associate/>
-    </profession>
+    </profession>-->
     <comments/>
 </inventory>
