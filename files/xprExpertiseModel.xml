@@ -1,25 +1,25 @@
 <xf:model xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
         <xf:action ev:event="xforms-ready">
                 <xf:setvalue ref="instance('xprSupplement')/xpr:categories/xpr:category[not(@type)]" value="concat(
-                                instance('xprModel')/xpr:description/xpr:categories/xpr:category[1]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:categories/xpr:category[2]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:categories/xpr:category[3]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:categories/xpr:category[4]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:categories/xpr:category[5]/@type
+                                instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[1]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[2]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[3]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[4]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[5]/@type
                                 )"/>
                 <xf:setvalue ref="instance('xprSupplement')/xpr:objects/xpr:object[not(@type)]" value="concat(
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[1]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[2]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[3]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[4]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[5]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[6]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
-                                instance('xprModel')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[1]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[2]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[3]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[4]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[5]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[6]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
                                 )"/>
         </xf:action>
         <!--Instance principale-->
-        <xf:instance id="xprModel" src="/xpr/files/_xprExpertiseInstance.xml"/>
+        <xf:instance id="xprExpertise" src="/xpr/files/_xprExpertiseInstance.xml"/>
 
         <!--Instances secondaires-->
         <xf:instance id="xprExperts" src="/xpr/entities"/>
@@ -61,7 +61,7 @@
         <xf:bind id="physDesc" nodeset="xpr:physDesc"/>
         <xf:bind id="extent" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent"/>
         <xf:bind id="sketch" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/>
-        <xf:bind id="addAppendice" nodeset="instance('xprSupplement')/xpr:appendices" relevant="not(instance('xprModel')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)"/>
+        <xf:bind id="addAppendice" nodeset="instance('xprSupplement')/xpr:appendices" relevant="not(instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)"/>
         <xf:bind id="appendice" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice"/>
         <xf:bind id="appendiceType" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type"/>
         <xf:bind id="appendiceExtent" nodeset="xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:extent"/>
@@ -181,14 +181,14 @@
         <xf:bind id="estimate" nodeset="xpr:description/xpr:conclusions/xpr:estimate"/>
         <xf:bind id="fees" nodeset="xpr:description/xpr:conclusions/xpr:fees"/>
         <xf:bind id="feesDetail" nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail"/>
-        <xf:bind id="fee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
-        <xf:bind id="addOtherFee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+        <xf:bind id="fee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+        <xf:bind id="addOtherFee" nodeset="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
         <xf:bind id="feesTotal" nodeset="xpr:description/xpr:conclusions/xpr:fees/xpr:total"/>
         <!--<xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprSupplement')/xpr:fees//@l | instance('xprSupplement')/xpr:fees//@d |instance('xprSupplement')/xpr:fees//@s" type="xs:decimal"/>-->
         <xf:bind id="feesMoney" nodeset="//@l | //@d | //@s | instance('xprSupplement')/xpr:fees//@l | instance('xprSupplement')/xpr:fees//@d |instance('xprSupplement')/xpr:fees//@s"/>
         <xf:bind id="expenses" nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>
         <xf:bind id="expensesMentioned" nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>
-        <xf:bind id="expenseType" nodeset="instance('xprSupplement')/xpr:expenses/xpr:expense" relevant="instance('xprModel')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
+        <xf:bind id="expenseType" nodeset="instance('xprSupplement')/xpr:expenses/xpr:expense" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
         <!--Mots-clés et commentaires-->
         <xf:bind id="keywordsTechnical" nodeset="xpr:description/xpr:keywords[@type='technical']"/>
         <xf:bind id="technicalTerm" nodeset="xpr:description/xpr:keywords[@type='technical']/xpr:term"/>
@@ -201,5 +201,5 @@
         <xf:bind id="analysis" nodeset="xpr:description/xpr:analysis"/>
         <xf:bind id="noteworthy" nodeset="xpr:description/xpr:noteworthy"/>
 
-        <xf:bind id="addComment" nodeset="instance('xprSupplement')/xpr:comment" relevant="not(instance('xprModel')/xpr:comment)"/>
+        <xf:bind id="addComment" nodeset="instance('xprSupplement')/xpr:comment" relevant="not(instance('xprExpertise')/xpr:comment)"/>
 </xf:model>
