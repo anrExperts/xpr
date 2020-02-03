@@ -22,9 +22,9 @@
                                 | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
                                 | instance('xprProsopo')//eac:toDate[not(@notBefore)]" origin="instance('xprSupplement')/eac:date/@notBefore"/>
                 </xf:action>
-                <xf:action while="instance('xprProsopo')//rico:participant[not(@new)]" ev:event="xforms-ready">
+                <!--<xf:action while="instance('xprProsopo')//rico:participant[not(@new)]" ev:event="xforms-ready">
                         <xf:insert context="instance('xprProsopo')//rico:participant[not(@new)]" origin="instance('xprSupplement')/eac:test/@new"/>
-                </xf:action>
+                </xf:action>-->
                 <xf:action if="instance('xprProsopo')//eac:relations[not(eac:cpfRelation)]">
                         <xf:insert context="instance('xprProsopo')//eac:relations" origin="instance('xprSupplement')/eac:cpfRelation"/>
                 </xf:action>
@@ -32,7 +32,7 @@
 
         <!--Instances principales-->
         <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
-        
+
         <xf:instance id="xprParticipant" src="/xpr/files/_xprProsopoInstance.xml"/>
 
         <!-- xprSupplement et xprEntitiesTypes servent également à xprNewEntity -->
@@ -196,8 +196,8 @@
 
         <xf:bind id="bindSource" nodeset="instance('xprSources')/*"/>
         <xf:bind id="bindParticipant" nodeset="instance('xprEntities')/*"/>
-        
-        <xf:bind nodeset="instance('xprProsopo')//rico:participant/@*[local-name() = 'href']" relevant="parent::rico:participant[@new = 'true']"/>
+
+        <!--<xf:bind nodeset="instance('xprProsopo')//rico:participant/@*[local-name() = 'href']" relevant="parent::rico:participant[@new = 'true']"/>-->
 
         <xf:submission id="submitBio" resource="/xpr/biographies/put" method="put" replace="none">
                 <xf:action ev:event="xforms-submit">
