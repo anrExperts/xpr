@@ -37,9 +37,6 @@
         <xf:input ref="xpr:district" incremental="true">
             <xf:label>Département</xf:label>
         </xf:input>
-        <xf:input ref="xpr:owner" incremental="true">
-            <xf:label>Propriétaire</xf:label>
-        </xf:input>
     </xf:group>
     <xf:group ref="xpr:relations">
         <xf:label>Relations</xf:label>
@@ -361,7 +358,7 @@
         </xf:group>
         <xf:group ref="xpr:scientific">
             <xf:label>Objets scientifiques</xf:label>
-            
+
             <xf:select1 ref="xpr:pendulum/@owned" appearance="full">
                 <xf:label>Pendule</xf:label>
                 <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">

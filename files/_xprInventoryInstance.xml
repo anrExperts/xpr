@@ -15,7 +15,6 @@
         <parish/>
         <city/>
         <district/>
-        <owner/>
     </place>
     <relations>
         <relation href="" arcrole="">
@@ -37,8 +36,8 @@
                     <xpr:source xmlns:xpr="xpr" xlink:href=""/>
                 </nameEntry>
             </relationEntry>
-            <address></address>
-            <occupation></occupation>
+            <address/>
+            <occupation/>
         </relation>
     </relations>
     <wealth>
