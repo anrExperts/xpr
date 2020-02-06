@@ -747,6 +747,206 @@ function xformResult($param, $referer) {
 
 
 (:~
+ : This function consumes 
+ : @param $year content
+ : 
+ :)
+(: declare
+%rest:path("xpr/networks/{$year}")
+%output:method("json")
+%rest:produces('application/json')
+function networks($year) {
+  
+  let $expertises := db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
+  let $experts := fn:distinct-values(db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
+  
+  let $nodes := 
+    for $expert in $experts
+    return map {
+      'id' : $expert,
+      'label' : $expert,
+      'x' : '',
+      'y' : '',
+      'size' : '2'
+    }
+  
+  let $edges := 
+    for $expertise in $expertises
+    return map {
+      'id' : fn:string($expertise/@xml:id),
+      'source' : fn:string($expertise//participants/experts/expert[1]/@ref),
+      'target' : fn:string($expertise//participants/experts/expert[2]/@ref)
+    }
+  
+  return 
+  map {
+    'nodes' : array{$nodes},
+    'edges' : array{$edges}
+  }
+}; :)
+
+(:~
+ : This function consumes 
+ : @param $year content
+ : 
+ :)
+declare
+%rest:path("xpr/networks/{$year}")
+%output:method("json")
+%rest:produces('application/json')
+function networks($year) {
+  
+  let $expertises := db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
+  let $experts := fn:distinct-values(db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
+  
+  let $nodes := 
+    for $expert in $experts
+    return map {
+      'id' : $expert,
+      'group' : 1
+    }
+  
+  let $edges := 
+    for $expertise in $expertises
+    return map {
+      'source' : fn:string($expertise//participants/experts/expert[1]/@ref),
+      'target' : fn:string($expertise//participants/experts/expert[2]/@ref),
+      'value' : 1
+    }
+  
+  return 
+  map {
+    'nodes' : array{$nodes},
+    'links' : array{$edges}
+  }
+};
+
+
+(:~
+ : This function consumes 
+ : @param $year content
+ : 
+ :)
+declare
+%rest:path("xpr/networks/{$year}/viz")
+%output:method("html")
+function networkViz($year) {
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <canvas
+            width="1024"
+            height="768"></canvas>
+        <script
+            src="https://d3js.org/d3.v4.min.js"></script>
+        <script>
+            
+            var canvas = document.querySelector("canvas"),
+            context = canvas.getContext("2d"),
+            width = canvas.width,
+            height = canvas.height;
+            
+            var simulation = d3.forceSimulation()
+            .force("link", d3.forceLink().id(function(d) {{ return d.id; }}))
+            .force("charge", d3.forceManyBody())
+            .force("center", d3.forceCenter());
+            
+            d3.json("/xpr/networks/{$year}", function(error, graph) {{
+            if (error) throw error;
+            
+            simulation
+            .nodes(graph.nodes)
+            .on("tick", ticked);
+            
+            simulation.force("link")
+            .links(graph.links);
+            
+            function ticked() {{
+            context.clearRect(0, 0, width, height);
+            context.save();
+            context.translate(width / 2, height / 2 + 40);
+            
+            context.beginPath();
+            graph.links.forEach(drawLink);
+            context.strokeStyle = "#aaa";
+            context.stroke();
+            
+            context.beginPath();
+            graph.nodes.forEach(drawNode);
+            context.fill();
+            context.strokeStyle = "#fff";
+            context.stroke();
+            
+            context.restore();
+            }}
+            }});
+            
+            function drawLink(d) {{
+            context.moveTo(d.source.x, d.source.y);
+            context.lineTo(d.target.x, d.target.y);
+            }}
+            
+            function drawNode(d) {{
+            context.moveTo(d.x + 3, d.y);
+            context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
+            }}
+        
+        </script>
+    </body>
+</html>
+
+};
+
+(:~
+ : This function consumes 
+ : @param $year content
+ : 
+ :)
+(: declare
+%rest:path("xpr/networks/{$year}/viz")
+%output:method("html")
+function networkViz($year) {
+  <html>
+    <head>
+      <title>Basic sigma.js example</title>
+      <style type="text/css">
+        <![CDATA[body {
+        margin: 0;
+      }
+    #container {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+    }
+    ]]>
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <script src="/xpr/files/js/sigma/build/sigma.require.js"></script>
+  <script src="/xpr/files/js/sigma/build/plugins/sigma.parsers.json.min.js"></script>
+  <script src="/xpr/files/js/sigma/plugins/sigma.layout.forceAtlas2/worker.js"></script>
+  <script src="/xpr/files/js/sigma/plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
+  <script>
+    sigma.parsers.json('/xpr/networks/{$year}', {{
+      container: 
+        'container',
+        settings: {{
+          defaultNodeColor: '#ec5148'
+        }}
+    }});
+    sigma.startForceAtlas2({{linLogMode: true, worker: true, barnesHutOptimize: false}});
+    sigma.graph.nodes();
+    sigma.refresh();
+  </script>
+</body>
+</html>
+
+}; :)
+
+(:~
  : Utilities 
  :)
 
