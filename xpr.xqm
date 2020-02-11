@@ -803,15 +803,14 @@ function networks($year) {
     for $expert in $experts
     return map {
       'id' : $expert,
-      'group' : 1
+      'name' : $expert
     }
   
   let $edges := 
     for $expertise in $expertises
     return map {
-      'source' : fn:string($expertise//participants/experts/expert[1]/@ref),
-      'target' : fn:string($expertise//participants/experts/expert[2]/@ref),
-      'value' : 1
+      'source_id' : fn:string($expertise//participants/experts/expert[1]/@ref),
+      'target_id' : fn:string($expertise//participants/experts/expert[2]/@ref)
     }
   
   return 
@@ -836,64 +835,97 @@ function networkViz($year) {
         <title></title>
     </head>
     <body>
-        <canvas
-            width="1024"
-            height="768"></canvas>
-        <script
-            src="https://d3js.org/d3.v4.min.js"></script>
-        <script>
-            
-            var canvas = document.querySelector("canvas"),
-            context = canvas.getContext("2d"),
-            width = canvas.width,
-            height = canvas.height;
-            
-            var simulation = d3.forceSimulation()
-            .force("link", d3.forceLink().id(function(d) {{ return d.id; }}))
-            .force("charge", d3.forceManyBody())
-            .force("center", d3.forceCenter());
-            
-            d3.json("/xpr/networks/{$year}", function(error, graph) {{
-            if (error) throw error;
-            
-            simulation
-            .nodes(graph.nodes)
-            .on("tick", ticked);
-            
-            simulation.force("link")
-            .links(graph.links);
-            
-            function ticked() {{
-            context.clearRect(0, 0, width, height);
-            context.save();
-            context.translate(width / 2, height / 2 + 40);
-            
-            context.beginPath();
-            graph.links.forEach(drawLink);
-            context.strokeStyle = "#aaa";
-            context.stroke();
-            
-            context.beginPath();
-            graph.nodes.forEach(drawNode);
-            context.fill();
-            context.strokeStyle = "#fff";
-            context.stroke();
-            
-            context.restore();
-            }}
-            }});
-            
-            function drawLink(d) {{
-            context.moveTo(d.source.x, d.source.y);
-            context.lineTo(d.target.x, d.target.y);
-            }}
-            
-            function drawNode(d) {{
-            context.moveTo(d.x + 3, d.y);
-            context.arc(d.x, d.y, 3, 0, 2 * Math.PI);
-            }}
-        
-        </script>
+<svg width="1000" height="1000"></svg>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+
+var svg = d3.select("svg"),
+    width = +svg.attr("width"),
+    height = +svg.attr("height");
+
+var simulation = d3.forceSimulation()
+    .force("link", d3.forceLink().id(function(d) {{ return d.id; }}))
+    .force("charge", d3.forceManyBody().strength(-80))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+
+d3.json("/xpr/networks/{$year}", function(error, graph) {{
+  if (error) throw error;
+  
+  graph.links.forEach(function(d){{
+    d.source = d.source_id;    
+    d.target = d.target_id;
+  }});           
+
+  var link = svg.append("g")
+                .style("stroke", "#aaa")
+                .selectAll("line")
+                .data(graph.links)
+                .enter().append("line");
+
+  var node = svg.append("g")
+            .attr("class", "nodes")
+  .selectAll("circle")
+            .data(graph.nodes)
+  .enter().append("circle")
+          .attr("r", 2)
+          .call(d3.drag()
+              .on("start", dragstarted)
+              .on("drag", dragged)
+              .on("end", dragended));
+  
+  var label = svg.append("g")
+      .attr("class", "labels")
+      .selectAll("text")
+      .data(graph.nodes)
+      .enter().append("text")
+        .attr("class", "label")
+        .text(function(d) {{ return d.name; }});
+
+  simulation
+      .nodes(graph.nodes)
+      .on("tick", ticked);
+
+  simulation.force("link")
+      .links(graph.links);
+
+  function ticked() {{
+    link
+        .attr("x1", function(d) {{ return d.source.x; }})
+        .attr("y1", function(d) {{ return d.source.y; }})
+        .attr("x2", function(d) {{ return d.target.x; }})
+        .attr("y2", function(d) {{ return d.target.y; }});
+
+    node
+         .attr("r", 10)
+         .style("fill", "#d9d9d9")
+         .style("stroke", "#969696")
+         .style("stroke-width", "1px")
+         .attr("cx", function (d) {{ return d.x+6; }})
+         .attr("cy", function(d) {{ return d.y-6; }});
+    
+    label
+    		.attr("x", function(d) {{ return d.x; }})
+            .attr("y", function (d) {{ return d.y; }})
+            .style("font-size", "10px").style("fill", "#4393c3");
+  }}
+}});
+
+function dragstarted(d) {{
+  if (!d3.event.active) simulation.alphaTarget(0.3).restart()
+  simulation.fix(d);
+}}
+
+function dragged(d) {{
+  simulation.fix(d, d3.event.x, d3.event.y);
+}}
+
+function dragended(d) {{
+  if (!d3.event.active) simulation.alphaTarget(0);
+  simulation.unfix(d);
+}}
+
+</script>
     </body>
 </html>
 
