@@ -79,6 +79,8 @@
         </eac:descriptiveNote>
     </eac:source>
 
+    <rico:participant xmlns:rico="rico" localType="new"/>
+
     <eac:nameEntry>
         <eac:part localType="surname"/>
         <eac:part localType="forename"/>
@@ -125,5 +127,7 @@
             <value>false</value>
         </state>
     </boolean>
+    
+    <entity type="new" db="" xml:id=""/>
 
 </supplement>

@@ -37,6 +37,15 @@
                     </descriptiveNote>
                 </place>
             </places>
+            <occupations>
+                <occupation>
+                    <term/>
+                    <date standardDate="" notBefore="" notAfter=""/>
+                    <descriptiveNote>
+                        <p/>
+                    </descriptiveNote>
+                </occupation>
+            </occupations>
             <functions>
                 <function>
                     <term/>
@@ -47,22 +56,13 @@
                     <xpr:source xlink:href=""/>
                 </function>
             </functions>
-            <occupations>
-                <occupation>
-                    <term/>
-                    <date standardDate="" notBefore="" notAfter=""/>
-                    <descriptiveNote>
-                        <p/>
-                    </descriptiveNote>
-                </occupation>
-            </occupations>
             <biogHist>
                 <chronList>
                     <chronItem localType="">
                         <date standardDate="" notBefore="" notAfter=""/>
                         <placeEntry/>
                         <event/>
-                        <rico:participant xlink:href="" new=""/>
+                        <rico:participant xlink:href=""/>
                         <rico:involve xlink:href=""/>
                         <xpr:source xlink:href=""/>
                     </chronItem>
