@@ -108,8 +108,23 @@
         <eac:relationEntry/>
         <xpr:source xmlns:xpr="xpr" xlink:href=""/>
     </eac:cpfRelation>
+    
+    <biogHist xmlns="eac">
+        <chronList>
+            <chronItem localType="">
+                <date standardDate="" notBefore="" notAfter=""/>
+                <placeEntry/>
+                <event/>
+                <rico:participant xmlns:rico="rico" xlink:href=""/>
+                <rico:involve xmlns:rico="rico" xlink:href=""/>
+                <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+            </chronItem>
+        </chronList>
+    </biogHist>
 
     <response/>
+    
+    <entity type="new" db="" xml:id=""/>
 
     <bug>
         <eac:date standardDate="" notBefore="" notAfter="">
@@ -128,6 +143,6 @@
         </state>
     </boolean>
     
-    <entity type="new" db="" xml:id=""/>
+    
 
 </supplement>

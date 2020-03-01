@@ -6,7 +6,7 @@
         <expert ref=""/>
         <date when=""/>
     </sourceDesc>
-    <place>
+    <deathPlace type="">
         <address>
             <street/>
             <buildingNumber/>
@@ -15,7 +15,7 @@
         <parish/>
         <city/>
         <district/>
-    </place>
+    </deathPlace>
     <relations>
         <relation href="" arcrole="">
             <relationEntry type="" sex="">
@@ -36,6 +36,12 @@
                     <xpr:source xmlns:xpr="xpr" xlink:href=""/>
                 </nameEntry>
             </relationEntry>
+            <existDates xmlns="eac">
+                <dateRange>
+                    <fromDate standardDate=""/>
+                    <toDate standardDate=""/>
+                </dateRange>
+            </existDates>
             <address/>
             <occupation/>
         </relation>
@@ -43,15 +49,165 @@
     <wealth>
         <state type=""/>
         <possessions>
-            <movables/>
-            <estate rooms=""/>
-            <workshop rooms="" equipment=""/>
-            <other rooms="">
-                <desc/>
-                <place type=""/>
-            </other>
+            <movables l="" s="" d=""/>
+            <estate>
+                <residences>
+                    <residence type="main">
+                        <address>
+                            <place type=""/>
+                            <street/>
+                            <buildingNumber/>
+                        </address>
+                        <layout>
+                            <part n="">
+                                <label>Cour</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Jardin</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Serre</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Ecurie</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Remise / Hangard</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Loge du portier</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Cave</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Cuisine</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Office</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Garde à manger</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Pièce</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Antichambre</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Salle à manger</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Salle / salon / salon de compagnie</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Chambre</label>
+                                <noteworthy/>
+                            </part> 
+                            <part n="">
+                                <label>Chambre de domestique </label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Cabinet</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Cabinet ou bureau désigné comme celui de l’expert</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Bureau</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Boudoir</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Alcove</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Cabinet de toilette-Cabinet d’aisance</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Garde robe </label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Grenier</label>
+                                <noteworthy/>
+                            </part>
+                        </layout>
+                        <noteworthy/>
+                    </residence>
+                </residences>
+                <workshops>
+                    <workshop>
+                        <address>
+                            <place type=""/>
+                            <street/>
+                            <buildingNumber/>
+                        </address>
+                        <layout>
+                            <part n="">
+                                <label>Cour</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Remise </label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Magasin </label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Grenier</label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Hangard </label>
+                                <noteworthy/>
+                            </part>
+                            <part n="">
+                                <label>Boutique </label>
+                                <noteworthy/>
+                            </part>
+                        </layout>
+                        <noteworthy/>
+                    </workshop>
+                </workshops>
+                <buildingSites>
+                    <buildingSite>
+                        <address>
+                            <place type=""/>
+                            <street/>
+                            <buildingNumber/>
+                        </address>
+                        <noteworthy/>
+                    </buildingSite>
+                </buildingSites>
+            </estate>
         </possessions>
-        <dowry/>
+        <dowry l="" s="" d="" privateIncome=""/>
         <contribution/>
     </wealth>
     <knowledge>
@@ -63,6 +219,18 @@
         <paintings quantity=""/>
     </knowledge>
     <tools>
+        Instruments scientifiques :
+         - Globe - Sphère
+        - Mappe monde 
+        - Cadran solaire
+         - Boussole
+         - Microscope
+         - Lorgnette / lunette
+        - Boussole
+        - Baromètre/thermomètre
+        - Echantillons (minéraux, coquillages)
+        - Plantes et animaux
+        - Eléments remarquables
         <drawing>
             <desk owned="">
                 <desc/>
