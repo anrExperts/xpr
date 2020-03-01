@@ -86,15 +86,15 @@
                             <part n="">
                                 <label>Cave</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Cuisine</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Office</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Garde à manger</label>
                                 <noteworthy/>
@@ -102,23 +102,23 @@
                             <part n="">
                                 <label>Pièce</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Antichambre</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Salle à manger</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Salle / salon / salon de compagnie</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Chambre</label>
                                 <noteworthy/>
-                            </part> 
+                            </part>
                             <part n="">
                                 <label>Chambre de domestique </label>
                                 <noteworthy/>
@@ -211,94 +211,49 @@
         <contribution/>
     </wealth>
     <knowledge>
-        <books volumes="">
-            <value/>
-            <bookseller/>
-        </books>
+        <books quantity="" l="" s="" d="" bookseller=""/>
+        <maps/>
+        <portraits>
+            <family quantity=""/>
+            <expert quantity=""/>
+        </portraits>
         <drawings quantity=""/>
         <paintings quantity=""/>
     </knowledge>
     <tools>
-        Instruments scientifiques :
-         - Globe - Sphère
-        - Mappe monde 
-        - Cadran solaire
-         - Boussole
-         - Microscope
-         - Lorgnette / lunette
-        - Boussole
-        - Baromètre/thermomètre
-        - Echantillons (minéraux, coquillages)
-        - Plantes et animaux
-        - Eléments remarquables
-        <drawing>
-            <desk owned="">
-                <desc/>
-            </desk>
-            <drawingBoard owned="">
-                <desc/>
-            </drawingBoard>
-        </drawing>
-        <mathematical>
-            <compass owned="">
-                <desc/>
-            </compass>
-            <protractor owned="">
-                <desc/>
-            </protractor>
-            <rule owned="">
-                <desc/>
-            </rule>
-            <pencilHolder owned="">
-                <desc/>
-            </pencilHolder>
-        </mathematical>
-        <measurement>
-            <heightGauge owned="">
-                <desc/>
-            </heightGauge>
-            <graphometer owned="">
-                <desc/>
-            </graphometer>
-        </measurement>
-        <!-- redondant avec desk plus haut ? -->
-        <writing/>
-        <scientific>
-            <pendulum owned="">
-                <desc/>
-            </pendulum>
-            <clock owned="">
-                <desc/>
-                <clockmaker/>
-            </clock>
-            <lunette owned="">
-                <desc/>
-            </lunette>
-            <globe owned="">
-                <desc/>
-            </globe>
-            <barometer owned="">
-                <desc/>
-            </barometer>
-            <thermometer owned="">
-                <desc/>
-            </thermometer>
-            <stove owned="">
-                <desc/>
-            </stove>
+        <drawing owned=""/>
+        <measurement/>
+        <scientific> 
+            <globe owned="">Globe</globe>
+            <sphere owned="">Sphère</sphere>
+            <worldMap owned="">Mappemonde</worldMap>
+            <sundial owned="">Cadran solaire</sundial> 
+            <compass owned="">Boussole</compass>
+            <microscope owned="">Microscope</microscope>
+            <glasses owned="">Lorgnette / lunette</glasses>
+            <barometer owned="">Baromètre</barometer>
+            <thermometer owned="">Thermomètre</thermometer>
+            <samples owned="">Echantillons (minéraux, coquillages)</samples>
+            <plants owned="">Plantes</plants>
+            <animals owned="">animaux</animals>
+            <noteworthy/>
         </scientific>
     </tools>
     <objects>
-        <mirror n=""/>
-        <painting n=""/>
-        <engraving n=""/>
-        <tapestry n=""/>
-        <sculpture n=""/>
-        <vase n=""/>
+        <artistic/>
+        <religious/>
     </objects>
-    <!--<profession>
-        <transport/>
-        <associate/>
-    </profession>-->
+    <buildingWorks>
+        <work>
+            <client/>
+            <type/>
+            <date when=""/>
+            <address>
+                <street/>
+                <buildingNumber/>
+            </address>
+            <cost l="" s="" d=""/>
+        </work>
+    </buildingWorks>
     <comments/>
 </inventory>
