@@ -494,6 +494,7 @@
         <xf:group ref="xpr:drawing">
             <xf:label>Instruments à déssiner</xf:label>
             <xf:select1 ref="@owned">
+                <xf:label>mention</xf:label>
                 <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
                     <xf:label ref="xpr:label"/>
                     <xf:value ref="xpr:value"/>
@@ -509,10 +510,10 @@
         <xf:group ref="xpr:scientific">
             <xf:label>Objets scientifiques</xf:label>
             <xf:repeat nodeset="*[not(self::xpr:noteworthy)]">
-                <xf:label>
-                    <xf:output ref="."/>
-                </xf:label>
                 <xf:select1 ref="@owned">
+                    <xf:label>
+                        <xf:output ref="parent::*"/>
+                    </xf:label>
                     <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
                         <xf:label ref="xpr:label"/>
                         <xf:value ref="xpr:value"/>
@@ -595,8 +596,14 @@
                 </buildingWorks>
             </xf:action>
         </xf:trigger>
-        
     </xf:group>
+    <xf:select1 ref="xpr:report">
+        <xf:label>Expertise z1j</xf:label>
+        <xf:itemset nodeset="instance('xprSupplement')/xpr:boolean/xpr:state">
+            <xf:label ref="xpr:label"/>
+            <xf:value ref="xpr:value"/>
+        </xf:itemset>
+    </xf:select1>
     <xf:group ref="xpr:comments">
         <xf:label>Commentaires libres</xf:label>
         <xf:textarea ref=".">
