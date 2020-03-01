@@ -4,13 +4,9 @@
         <xf:toggle case="prosopoPanel" ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Ajouter une entité</xf:label>
-        <xf:toggle case="newEntity" ev:event="DOMActivate"/>
-    </xf:trigger>
-    <xf:trigger>
         <xf:label>Contrôle des sources</xf:label>
         <xf:action ev:event="DOMActivate" while="instance('xprProsopo')//xpr:source/@*[local-name() = 'href'][not(. = '')][not(. = instance('xprProsopo')//eac:control//eac:source/@*[local-name() = 'href'])]">
-            <!-- todo supprimer les éventuelles sources vides dans control source ! -->
+            <!-- @todo supprimer les éventuelles sources vides dans control source ! -->
             <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprProsopo')//eac:sources"/>
             <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/@*[local-name() = 'href'][. = '']" value="instance('xprProsopo')//xpr:source/@*[local-name() = 'href'][not(. = instance('xprProsopo')//eac:control//eac:source/@*[local-name() = 'href'])]"/>
             <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/eac:sourceEntry[. = '']" value="ancestor::eac:source/@*[local-name() = 'href']"/>
