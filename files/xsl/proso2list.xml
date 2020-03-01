@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://ns.saxonica.com/xslt/export" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vv="http://saxon.sf.net/generated-variable" xmlns:java-type="http://saxon.sf.net/java-type" version="31" packageVersion="1" saxonVersion="9.8.0.12" target="JS" targetVersion="1" relocatable="false">
+ <co id="0" binds="">
+  <mode name="Q{}sort" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="3" flags="s" line="64" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl">
+    <p.nodeTest role="match" test="element(Q{}table)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='table';"/>
+    <sequence role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="65">
+     <param name="Q{}colNr" slot="0" flags="r" as="xs:integer">
+      <treat role="conversion" as="xs:integer" jsTest="return SaxonJS.U.Atomic.integer.matches(item);" diag="8|0|XTTE0590|colNr">
+       <check card="1" diag="8|0|XTTE0590|colNr">
+        <cvUntyped to="xs:integer">
+         <data>
+          <supplied slot="0"/>
+         </data>
+        </cvUntyped>
+       </check>
+      </treat>
+     </param>
+     <param line="66" name="Q{}dataType" slot="1" flags="r" as="xs:string">
+      <treat role="conversion" as="xs:string" jsTest="return SaxonJS.U.Atomic.string.matches(item);" diag="8|0|XTTE0590|dataType">
+       <check card="1" diag="8|0|XTTE0590|dataType">
+        <cvUntyped to="xs:string">
+         <data>
+          <supplied slot="1"/>
+         </data>
+        </cvUntyped>
+       </check>
+      </treat>
+     </param>
+     <param line="67" name="Q{}ascending" slot="2" flags="r" as="xs:boolean">
+      <treat role="conversion" as="xs:boolean" jsTest="return SaxonJS.U.Atomic.boolean.matches(item);" diag="8|0|XTTE0590|ascending">
+       <check card="1" diag="8|0|XTTE0590|ascending">
+        <cvUntyped to="xs:boolean">
+         <data>
+          <supplied slot="2"/>
+         </data>
+        </cvUntyped>
+       </check>
+      </treat>
+     </param>
+     <resultDoc line="68" global="#&#xA;#Sun Mar 01 18:24:53 CET 2020&#xA;" local="#&#xA;#Sun Mar 01 18:24:53 CET 2020&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
+      <fn role="href" name="concat">
+       <str val="#"/>
+       <fn name="string">
+        <convert from="xs:untypedAtomic" to="xs:string">
+         <attVal name="Q{}id" chk="0"/>
+        </convert>
+       </fn>
+      </fn>
+      <sequence role="content" line="69">
+       <elem name="thead" nsuri="" namespaces="xpr eac">
+        <sequence>
+         <att name="data-order" flags="l">
+          <convert from="xs:integer" to="xs:string">
+           <choose>
+            <varRef name="ascending" slot="2"/>
+            <varRef name="colNr" slot="0"/>
+            <true/>
+            <minus>
+             <varRef name="colNr" slot="0"/>
+            </minus>
+           </choose>
+          </convert>
+         </att>
+         <copyOf line="70" flags="vc">
+          <slash>
+           <axis name="child" nodeTest="element(Q{}thead)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='thead';"/>
+           <axis name="child" nodeTest="element(Q{}tr)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tr';"/>
+          </slash>
+         </copyOf>
+        </sequence>
+       </elem>
+       <elem line="73" name="tbody" nsuri="" namespaces="xpr eac">
+        <sort>
+         <slash role="select">
+          <axis name="child" nodeTest="element(Q{}tbody)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tbody';"/>
+          <axis name="child" nodeTest="element(Q{}tr)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tr';"/>
+         </slash>
+         <sortKey line="76">
+          <data role="select">
+           <subscript>
+            <axis name="child" nodeTest="element(Q{}td)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='td';"/>
+            <varRef name="colNr" slot="0"/>
+           </subscript>
+          </data>
+          <fn role="order" name="string-join">
+           <choose>
+            <varRef name="ascending" slot="2"/>
+            <str val="ascending"/>
+            <true/>
+            <str val="descending"/>
+           </choose>
+           <str val=" "/>
+          </fn>
+          <fn role="dataType" name="string-join">
+           <varRef name="dataType" slot="1"/>
+           <str val=" "/>
+          </fn>
+          <str role="lang" val=""/>
+          <str role="caseOrder" val="#default"/>
+          <str role="stable" val="yes"/>
+          <str role="collation" val="http://www.w3.org/2005/xpath-functions/collation/codepoint"/>
+         </sortKey>
+        </sort>
+       </elem>
+      </sequence>
+     </resultDoc>
+    </sequence>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="1" binds="">
+  <mode name="Q{http://saxonica.com/ns/interactiveXSLT}onmouseover" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="0" flags="s" line="93" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl">
+    <p.nodeTest role="match" test="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+    <forEach role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="94">
+     <fn name="key">
+      <str val="Q{http://saxon.sf.net/}kk101"/>
+      <str val="sortToolTip"/>
+      <root/>
+     </fn>
+     <sequence line="95">
+      <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+       <str val="left"/>
+       <fn name="concat">
+        <arith op="+" calc="a+a">
+         <cvUntyped to="xs:double">
+          <atomSing card="?" diag="1|0||+">
+           <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}get" type="item()*">
+            <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}event" type="item()?"/>
+            <str val="clientX"/>
+           </ifCall>
+          </atomSing>
+         </cvUntyped>
+         <int val="30"/>
+        </arith>
+        <str val="px"/>
+       </fn>
+       <dot type="element(Q{}div)"/>
+      </ifCall>
+      <ifCall line="96" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+       <str val="top"/>
+       <fn name="concat">
+        <arith op="-" calc="a-a">
+         <cvUntyped to="xs:double">
+          <atomSing card="?" diag="1|0||-">
+           <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}get" type="item()*">
+            <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}event" type="item()?"/>
+            <str val="clientY"/>
+           </ifCall>
+          </atomSing>
+         </cvUntyped>
+         <int val="15"/>
+        </arith>
+        <str val="px"/>
+       </fn>
+       <dot type="element(Q{}div)"/>
+      </ifCall>
+      <ifCall line="97" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+       <str val="visibility"/>
+       <str val="visible"/>
+       <dot type="element(Q{}div)"/>
+      </ifCall>
+     </sequence>
+    </forEach>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="2" binds="3">
+  <template name="Q{}handle-response" cxt="map(*)" jsTest="return SaxonJS.U.isMap(item)" flags="s" line="118" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" slots="0">
+   <forEach role="body" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="120">
+    <ifCall name="Q{http://www.w3.org/2005/xpath-functions/map}get" type="item()*">
+     <dot type="map(*)"/>
+     <str val="body"/>
+    </ifCall>
+    <callT line="121" name="process-response-body" bSlot="0"/>
+   </forEach>
+  </template>
+ </co>
+ <co id="4" binds="0">
+  <mode name="Q{http://saxonica.com/ns/interactiveXSLT}onclick" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.5" seq="1" rank="1" minImp="0" slots="2" flags="s" line="82" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl">
+    <p.withPredicate role="match">
+     <p.withPredicate>
+      <p.nodeTest test="element(Q{}input)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='input';"/>
+      <gc baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="82" op="=" card="1:1" comp="CCC">
+       <attVal name="Q{}type" chk="0"/>
+       <str val="checkbox"/>
+      </gc>
+     </p.withPredicate>
+     <gc baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="82" op="=" card="1:1" comp="CCC">
+      <attVal name="Q{}name" chk="0"/>
+      <str val="genre"/>
+     </gc>
+    </p.withPredicate>
+    <let role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="83" var="this" as="element(Q{}input)" slot="0" eval="7">
+     <dot type="element(Q{}input)"/>
+     <let line="85" var="vv:v0" as="xs:untypedAtomic?" slot="1" eval="13">
+      <data>
+       <slash simple="1">
+        <varRef name="this" slot="0"/>
+        <axis name="attribute" nodeTest="attribute(Q{}value)" jsTest="return item.name==='value'"/>
+       </slash>
+      </data>
+      <forEach>
+       <docOrder intra="1">
+        <filter flags="b">
+         <slash>
+          <fn name="key">
+           <str val="Q{http://saxon.sf.net/}kk101"/>
+           <str val="books"/>
+           <root/>
+          </fn>
+          <axis name="descendant" nodeTest="element(Q{}tr)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tr';"/>
+         </slash>
+         <gc op="=" card="1:1" comp="CCC">
+          <attVal name="Q{}data-genre" chk="0"/>
+          <varRef name="vv:v0" slot="1"/>
+         </gc>
+        </filter>
+       </docOrder>
+       <ifCall line="89" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+        <str val="display"/>
+        <choose>
+         <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}get" type="item()*">
+          <varRef name="this" slot="0"/>
+          <str val="checked"/>
+         </ifCall>
+         <str val="table-row"/>
+         <true/>
+         <str val="none"/>
+        </choose>
+        <dot type="element(Q{}tr)"/>
+       </ifCall>
+      </forEach>
+     </let>
+    </let>
+   </templateRule>
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="1" flags="s" line="55" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl">
+    <p.nodeTest role="match" test="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+    <let role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="56" var="colNr" as="xs:integer" slot="0" eval="7">
+     <arith op="+" calc="i+i">
+      <fn name="count">
+       <slash simple="1">
+        <dot type="element(Q{}th)"/>
+        <axis name="preceding-sibling" nodeTest="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+       </slash>
+      </fn>
+      <int val="1"/>
+     </arith>
+     <applyT line="57" mode="Q{}sort" flags="t" bSlot="0">
+      <first role="select">
+       <slash simple="1">
+        <dot type="element(Q{}th)"/>
+        <axis name="ancestor" nodeTest="element(Q{}table)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='table';"/>
+       </slash>
+      </first>
+      <withParam name="Q{}colNr" as="xs:integer">
+       <varRef line="58" name="colNr" slot="0"/>
+      </withParam>
+      <withParam name="Q{}dataType" as="xs:string">
+       <choose line="59">
+        <gc op="=" card="1:1" comp="CCC">
+         <attVal name="Q{}data-type" chk="0"/>
+         <str val="number"/>
+        </gc>
+        <str val="number"/>
+        <true/>
+        <str val="text"/>
+       </choose>
+      </withParam>
+      <withParam name="Q{}ascending" as="xs:boolean">
+       <fn line="60" name="not">
+        <gc op="=" card="N:1" comp="GAC|http://www.w3.org/2005/xpath-functions/collation/codepoint">
+         <data>
+          <slash>
+           <slash>
+            <axis name="parent" nodeTest="(element()|document-node())" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11||item.nodeType===1);"/>
+            <axis name="parent" nodeTest="(element()|document-node())" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11||item.nodeType===1);"/>
+           </slash>
+           <axis name="attribute" nodeTest="attribute(Q{}data-order)" jsTest="return item.name==='data-order'"/>
+          </slash>
+         </data>
+         <varRef name="colNr" slot="0"/>
+        </gc>
+       </fn>
+      </withParam>
+     </applyT>
+    </let>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="3" binds="">
+  <template name="Q{}process-response-body" flags="os" line="125" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" slots="0">
+   <elem role="body" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="126" name="h2" nsuri="" namespaces="xpr eac">
+    <valueOf flags="Sl">
+     <str val="Hello"/>
+    </valueOf>
+   </elem>
+  </template>
+ </co>
+ <co id="5" binds="2">
+  <template name="Q{}send-request" flags="os" line="107" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" slots="0">
+   <ifCall role="body" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="114" name="Q{http://saxonica.com/ns/interactiveXSLT}schedule-action" type="item()*">
+    <int val="0"/>
+    <empty/>
+    <callT name="handle-response" bSlot="0"/>
+    <map size="2">
+     <str val="method"/>
+     <str val="GET"/>
+     <str val="href"/>
+     <str val="http://localhost:8984/xpr/expertises/z1j828d011"/>
+    </map>
+   </ifCall>
+  </template>
+ </co>
+ <co id="6" binds="">
+  <mode name="Q{http://saxonica.com/ns/interactiveXSLT}onmouseout" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="0" flags="s" line="101" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl">
+    <p.nodeTest role="match" test="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+    <forEach role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="102">
+     <fn name="key">
+      <str val="Q{http://saxon.sf.net/}kk101"/>
+      <str val="sortToolTip"/>
+      <root/>
+     </fn>
+     <ifCall line="103" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+      <str val="visibility"/>
+      <str val="hidden"/>
+      <dot type="element(Q{}div)"/>
+     </ifCall>
+    </forEach>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="7" binds="">
+  <mode onNo="TC" flags="dW" patternSlots="0">
+   <templateRule prec="0" prio="-0.5" seq="0" rank="0" minImp="0" slots="0" flags="s" line="16" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl">
+    <p.nodeTest role="match" test="document-node()" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11);"/>
+    <sequence role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="18">
+     <resultDoc global="#&#xA;#Sun Mar 01 18:24:53 CET 2020&#xA;" local="#&#xA;#Sun Mar 01 18:24:53 CET 2020&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
+      <str role="href" val="#title"/>
+      <sequence role="content" line="20">
+       <valueOf>
+        <str val="Liste des entités prosopographiques (n=&#34;"/>
+       </valueOf>
+       <valueOf>
+        <convert from="xs:integer" to="xs:string">
+         <fn name="count">
+          <axis name="descendant" nodeTest="element(Q{eac}eac-cpf)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';"/>
+         </fn>
+        </convert>
+       </valueOf>
+       <valueOf flags="S">
+        <str val="&#34;)"/>
+       </valueOf>
+      </sequence>
+     </resultDoc>
+     <resultDoc line="24" global="#&#xA;#Sun Mar 01 18:24:53 CET 2020&#xA;method=xml&#xA;" local="#&#xA;#Sun Mar 01 18:24:53 CET 2020&#xA;">
+      <str role="href" val="#experts"/>
+      <elem role="content" line="25" name="table" nsuri="" namespaces="xpr eac">
+       <sequence>
+        <att name="id" flags="l">
+         <str val="experts-table"/>
+        </att>
+        <elem line="27" name="thead" nsuri="" flags="l">
+         <elem name="tr" nsuri="" flags="l">
+          <sequence>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="Sl">
+             <str val="Id"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="Sl">
+             <str val="Nom"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="Sl">
+             <str val="Naissance"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="l">
+             <str val="Décès"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="l">
+             <str val="Catégorie"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="Sl">
+             <str val="Actions"/>
+            </valueOf>
+           </elem>
+          </sequence>
+         </elem>
+        </elem>
+        <elem line="30" name="tbody" nsuri="" flags="l">
+         <forEach>
+          <axis name="descendant" nodeTest="element(Q{eac}eac-cpf)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';"/>
+          <elem line="33" name="tr" nsuri="" flags="l" namespaces="xpr eac">
+           <sequence>
+            <elem name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="normalize-space">
+               <check card="?" diag="0|0||fn:normalize-space">
+                <cvUntyped to="xs:string">
+                 <data>
+                  <slash>
+                   <slash>
+                    <axis name="child" nodeTest="element(Q{eac}cpfDescription)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='cpfDescription';"/>
+                    <axis name="child" nodeTest="element(Q{eac}identity)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='identity';"/>
+                   </slash>
+                   <axis name="child" nodeTest="element(Q{eac}entityId)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='entityId';"/>
+                  </slash>
+                 </data>
+                </cvUntyped>
+               </check>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="36" name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="normalize-space">
+               <check card="?" diag="0|0||fn:normalize-space">
+                <cvUntyped to="xs:string">
+                 <data>
+                  <slash>
+                   <slash>
+                    <slash>
+                     <axis name="child" nodeTest="element(Q{eac}cpfDescription)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='cpfDescription';"/>
+                     <axis name="child" nodeTest="element(Q{eac}identity)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='identity';"/>
+                    </slash>
+                    <first>
+                     <axis name="child" nodeTest="element(Q{eac}nameEntry)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='nameEntry';"/>
+                    </first>
+                   </slash>
+                   <first>
+                    <axis name="child" nodeTest="element(Q{eac}part)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='part';"/>
+                   </first>
+                  </slash>
+                 </data>
+                </cvUntyped>
+               </check>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="39" name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="normalize-space">
+               <check card="?" diag="0|0||fn:normalize-space">
+                <cvUntyped to="xs:string">
+                 <data>
+                  <slash>
+                   <slash>
+                    <slash>
+                     <slash>
+                      <slash>
+                       <axis name="child" nodeTest="element(Q{eac}cpfDescription)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='cpfDescription';"/>
+                       <axis name="child" nodeTest="element(Q{eac}description)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='description';"/>
+                      </slash>
+                      <axis name="child" nodeTest="element(Q{eac}existDates)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='existDates';"/>
+                     </slash>
+                     <axis name="child" nodeTest="element(Q{eac}dateRange)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='dateRange';"/>
+                    </slash>
+                    <axis name="child" nodeTest="element(Q{eac}fromDate)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='fromDate';"/>
+                   </slash>
+                   <axis name="attribute" nodeTest="attribute(Q{}standardDate)" jsTest="return item.name==='standardDate'"/>
+                  </slash>
+                 </data>
+                </cvUntyped>
+               </check>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="41" name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="normalize-space">
+               <check card="?" diag="0|0||fn:normalize-space">
+                <cvUntyped to="xs:string">
+                 <data>
+                  <slash>
+                   <slash>
+                    <slash>
+                     <slash>
+                      <slash>
+                       <axis name="child" nodeTest="element(Q{eac}cpfDescription)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='cpfDescription';"/>
+                       <axis name="child" nodeTest="element(Q{eac}description)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='description';"/>
+                      </slash>
+                      <axis name="child" nodeTest="element(Q{eac}existDates)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='existDates';"/>
+                     </slash>
+                     <axis name="child" nodeTest="element(Q{eac}dateRange)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='dateRange';"/>
+                    </slash>
+                    <axis name="child" nodeTest="element(Q{eac}toDate)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='toDate';"/>
+                   </slash>
+                   <axis name="attribute" nodeTest="attribute(Q{}standardDate)" jsTest="return item.name==='standardDate'"/>
+                  </slash>
+                 </data>
+                </cvUntyped>
+               </check>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="43" name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="normalize-space">
+               <check card="?" diag="0|0||fn:normalize-space">
+                <cvUntyped to="xs:string">
+                 <data>
+                  <slash>
+                   <slash>
+                    <axis name="child" nodeTest="element(Q{eac}cpfDescription)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='cpfDescription';"/>
+                    <axis name="child" nodeTest="element(Q{eac}identity)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='identity';"/>
+                   </slash>
+                   <axis name="child" nodeTest="element(Q{eac}entityType)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='entityType';"/>
+                  </slash>
+                 </data>
+                </cvUntyped>
+               </check>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="45" name="td" nsuri="" flags="l">
+             <sequence>
+              <elem name="a" nsuri="" flags="l">
+               <sequence>
+                <att name="href" flags="l">
+                 <fn name="concat">
+                  <str val="/xpr/biographies/"/>
+                  <attVal name="Q{http://www.w3.org/XML/1998/namespace}id" chk="0"/>
+                  <str val="/view"/>
+                 </fn>
+                </att>
+                <valueOf flags="Sl">
+                 <str val="Voir"/>
+                </valueOf>
+               </sequence>
+              </elem>
+              <valueOf flags="l">
+               <str val=" | "/>
+              </valueOf>
+              <elem name="a" nsuri="" flags="l">
+               <sequence>
+                <att name="href" flags="l">
+                 <fn name="concat">
+                  <str val="/xpr/biographies/"/>
+                  <attVal name="Q{http://www.w3.org/XML/1998/namespace}id" chk="0"/>
+                  <str val="/modify"/>
+                 </fn>
+                </att>
+                <valueOf flags="Sl">
+                 <str val="Modifier"/>
+                </valueOf>
+               </sequence>
+              </elem>
+             </sequence>
+            </elem>
+           </sequence>
+          </elem>
+         </forEach>
+        </elem>
+       </sequence>
+      </elem>
+     </resultDoc>
+    </sequence>
+   </templateRule>
+  </mode>
+ </co>
+ <overridden/>
+ <key name="Q{http://saxon.sf.net/}kk101" line="0" binds="" flags="u">
+  <p.nodeSet type="element(Q{}div)">
+   <axis baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="85" name="descendant" nodeTest="element(Q{}div)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='div';"/>
+  </p.nodeSet>
+  <attVal baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2list.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="-1" name="Q{}id" chk="0"/>
+ </key>
+ <output>
+  <property name="{http://saxon.sf.net/}stylesheet-version" value="31"/>
+ </output>
+ <decimalFormat/>
+</package>
+<?Σ bdf955cf?>

@@ -7,11 +7,19 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
+    <script type="text/javascript" src="/xpr/files/lib/Saxon-JS-1.2.0/SaxonJS.min.js"></script>
+    <script>window.onload = function() {
+        SaxonJS.transform({
+           stylesheetLocation: "http://localhost:8984/xpr/files/xsl/xpr2list.xml",
+           sourceLocation: "http://localhost:8984/xpr/expertises"
+           });
+      }   
+      </script>
 
     <instance>{model}</instance>
 
   </head>
-  <body onload="repeat()">
+  <body>
     <nav id="navigation">
       <ul>
         <li><a href="/xpr">¡xpr!</a></li>
@@ -22,12 +30,16 @@
         <li><a href="/xpr/about">?</a></li>
       </ul>
     </nav>
-    
-    <trigger>{trigger}</trigger>
-    
     <main>
-      <form>{form}</form>
-      <section>{data}</section>
+    <section>
+      <h2 id="toto">Alors ?</h2>
+    </section>
+    <section class="alternate">
+      <h2 id="title">Liste des expertises</h2>
+      <div id="expertises"/>
+      <div id="sortToolTip" class="tooltip" style="position:fixed; visibility:hidden; left:0px; top:0px">Click to sort on this column</div>
+    </section>
+    <section>{data}</section>
     </main>
     <script>
 /*function repeat() {
