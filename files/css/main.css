@@ -603,3 +603,9 @@ xforms-group-content xforms-group {
     font-weight: normal;
     font-style: normal;
 }
+
+table {
+  table-layout: fixed;
+  width: 100%;
+  /*  white-space: nowrap; */
+}

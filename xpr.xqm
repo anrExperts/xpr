@@ -14,23 +14,25 @@ module namespace xpr = "xpr";
  :
  :)
 
-declare namespace rest = "http://exquery.org/ns/restxq";
-declare namespace file = "http://expath.org/ns/file";
-declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization";
-declare namespace web = "http://basex.org/modules/web";
-declare namespace update = "http://basex.org/modules/update";
-declare namespace db = "http://basex.org/modules/db";
+declare namespace rest = "http://exquery.org/ns/restxq" ;
+declare namespace file = "http://expath.org/ns/file" ;
+declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization" ;
+declare namespace db = "http://basex.org/modules/db" ;
+declare namespace web = "http://basex.org/modules/web" ;
+declare namespace update = "http://basex.org/modules/update" ;
+declare namespace perm = "http://basex.org/modules/perm" ;
+declare namespace user = "http://basex.org/modules/user" ;
 
-declare namespace xf = "http://www.w3.org/2002/xforms";
-declare namespace ev = "http://www.w3.org/2001/xml-events";
-declare namespace eac = "eac";
+declare namespace xf = "http://www.w3.org/2002/xforms" ;
+declare namespace ev = "http://www.w3.org/2001/xml-events" ;
+declare namespace eac = "eac" ;
 
-declare default element namespace "xpr";
-declare default function namespace "xpr";
+declare default element namespace "xpr" ;
+declare default function namespace "xpr" ;
 
-declare default collation "http://basex.org/collation?lang=fr";
+declare default collation "http://basex.org/collation?lang=fr" ;
 
-declare variable $xpr:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl";
+declare variable $xpr:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl" ;
 
 (:~
  : This resource function defines the application root
@@ -85,7 +87,7 @@ declare
   %rest:path("/xpr/expertises")
   %rest:produces('application/xml')
   %output:method("xml")
-function list() {
+function getExpertises() {
   db:open('xpr')/xpr/expertises
 };
 
@@ -118,54 +120,88 @@ function listHtml() {
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
-(: declare 
-%rest:path("xpr/expertises")
-%output:method("xml")
-function listExpertises() {
-  <xml xmlns="xpr">
-  {db:open('xpr')//*:expertise}</xml>
-  (: let $expertises := db:open("xpr")//*:expertise
-  let $content := for $expertise in $expertises return <p><a href="{$expertise/xml:id}">{$expertise}</a></p>
-  return 
-    <html>
-      <head>
-        <title>Expertises</title>
-      </head>
-      <body>
-        <h1>Liste des expertises</h1>
-        <ul>{
-          for $expertise in $expertises 
-          let $cote := $expertise/sourceDesc/idno[@type="unitid"]
-          let $dossier := $expertise/sourceDesc/idno[@type="item"]
-          let $date := $expertise/description/sessions/date[1]/@when
-          let $id := $expertise/@xml:id
-          return 
-            <li>
-              <span>{$cote || ' n° ' || $dossier}</span>
-              <span>{fn:string($date)}</span>
-              <button onclick="location.href='/xpr/expertises/{$id}'">voir</button>
-              <button onclick="location.href='/xpr/expertises/{$id}/modify'">Modifier</button>
-            </li>
-        }</ul>
-        <button onclick="location.href='/xpr/expertises/new'">Ajouter une expertise</button>
-      </body>
-    </html> :)
-}; :)
+declare 
+  %rest:path("/xpr/expertises/list/json")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function jsonExpertises() {
+  let $content := db:open('xpr')//expertise
+  return map{'test' : 1}
+};
 
 (:~
  : This resource function lists all the expertises
  : @return an ordered list of expertises
  :)
 declare 
+  %rest:path("/xpr/expertises/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function viexExpertises() {
+  let $content := map {
+    'data' : db:open('xpr')//expertise,
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : @return an xml representation of an expertise item
+ : @return an xml representation of an expertise
+ :)
+declare 
   %rest:path("xpr/expertises/{$id}")
   %output:method("xml")
-function showExpertise($id) {
+function getExpertise($id) {
   db:open('xpr')//expertise[@xml:id=$id]
 };
 
 (:~
- : This resource function edits an exertise
- : @param an expertise id
+ : This resource function shows an expertise item
+ : @return an html representation of an expertise
+ :)
+declare 
+  %rest:path("xpr/expertises/{$id}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function viewExpertise($id) {
+  let $content := map {
+    'data' : db:open('xpr')//expertise[@xml:id=$id],
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheExpertise.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function shows an expertise item
+ : @return an json representation of an expertise
+ :)
+declare 
+  %rest:path("xpr/expertises/json/{$id}")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function jsonExpertise($id) {
+  let $expertise := db:open('xpr')//expertise[@xml:id=$id]
+  return array{
+    map{
+    'type' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
+    'date' : $expertise/description/sessions/date/@when => fn:string()
+    }
+  }
+};
+
+(:~
+ : This resource function creates a new exertise
  : @return an xforms for the expertise
 :)
 declare
@@ -189,8 +225,9 @@ function new() {
 };
 
 (:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : This resource function modify an expertise item
+ : @param $id an expertise id
+ : @return the expertise item in xforms
  :)
 declare 
   %rest:path("xpr/expertises/{$id}/modify")
@@ -293,7 +330,7 @@ function z1jExport(){
 
 (:~
  : This resource function lists all the biographies
- : @return an ordered list of persons/corporate bodies
+ : @return an xml list of persons/corporate bodies
  :)
 declare 
   %rest:path("/xpr/biographies")
@@ -304,8 +341,8 @@ function biographies() {
 };
 
 (:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : This resource function lists all the biographies
+ : @return an html list of persons/corporate bodies
  :)
 declare 
   %rest:path("/xpr/biographies/list")
@@ -338,15 +375,55 @@ function listBio() {
  : @return an ordered list of entities
  :)
 declare 
+  %rest:path("/xpr/biographies/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function viexEntities() {
+  let $content := map {
+    'data' : db:open('xpr')//bio,
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "listeProsopo.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function get an entity
+ : @return an xml representation of an entitu
+ :)
+declare 
   %rest:path("xpr/biographies/{$id}")
   %output:method("xml")
-function showBiographie($id) {
+function getBiography($id) {
   db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id]
 };
 
 (:~
- : This resource function lists all entities
- : @return an ordered list of entities
+ : This resource function show an entity
+ : @return an html view of an entity
+ :)
+declare 
+  %rest:path("/xpr/biographies/{$id}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function viewBiography($id) {
+  let $content := map {
+    'data' : db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id],
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheProsopo.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function modify an entity
+ : @return an xforms to modify an entity
  :)
 declare 
   %rest:path("xpr/biographies/{$id}/modify")
@@ -370,7 +447,7 @@ function modifyEntity($id) {
 };
 
 (:~
- : This resource function edits an entity
+ : This resource function creates an new entity
  : @return an xforms for the entity
 :)
 declare
@@ -392,22 +469,6 @@ function newBio() {
     wrapper($content, $outputParam)
     )
 };
-
-(:~
- : This function consumes new entity 
- : @param $param content
- : @todo modify
- :)
-(: declare
-  %rest:path("xpr/biographies/put")
-  %output:method("xml")
-  %rest:header-param("Referer", "{$referer}", "none")
-  %rest:PUT("{$param}")
-  %updating
-function xformBioResult($param, $referer) {
-  let $db := db:open("xpr")
-  return insert node $param into $db/xpr/bio
-}; :)
 
 (:~
  : This function consumes new entity 
@@ -941,7 +1002,9 @@ function networkViz($year) {
 }; :)
 
 (:~
- : Utilities 
+ : ~:~:~:~:~:~:~:~:~
+ : utilities 
+ : ~:~:~:~:~:~:~:~:~
  :)
 
 (:~
@@ -990,6 +1053,7 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
         case 'model' return replace node $node with getModels($content)
         case 'trigger' return replace node $node with getTriggers($content)
         case 'form' return replace node $node with getForms($content)
+        case 'data' return replace node $node with $content?data
         default return associate($content, $outputParams, $node)
       )
 };
@@ -1055,7 +1119,9 @@ declare function getForms($content as map(*)){
  : @return an updated node with the data
  : @bug the behavior is not complete
  :) 
-declare %updating function associate($content as map(*), $outputParams as map(*), $node as node()) {
+declare 
+  %updating 
+function associate($content as map(*), $outputParams as map(*), $node as node()) {
   let $regex := '\{(.+?)\}'
   let $keys := fn:analyze-string($node, $regex)//fn:group/text()
   let $values := map:get($content, $keys)

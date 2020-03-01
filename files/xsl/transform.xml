@@ -1,0 +1,509 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://ns.saxonica.com/xslt/export" xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:vv="http://saxon.sf.net/generated-variable" xmlns:java-type="http://saxon.sf.net/java-type" version="20" packageVersion="1" saxonVersion="9.8.0.12" target="JS" targetVersion="1" relocatable="false">
+ <co id="0" binds="">
+  <mode name="Q{}sort" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="3" flags="s" line="65" module="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl">
+    <p.nodeTest role="match" test="element(Q{}table)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='table';"/>
+    <sequence role="action" baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="66">
+     <param name="Q{}colNr" slot="0" flags="r" as="xs:integer">
+      <treat role="conversion" as="xs:integer" jsTest="return SaxonJS.U.Atomic.integer.matches(item);" diag="8|0|XTTE0590|colNr">
+       <check card="1" diag="8|0|XTTE0590|colNr">
+        <cvUntyped to="xs:integer">
+         <data>
+          <supplied slot="0"/>
+         </data>
+        </cvUntyped>
+       </check>
+      </treat>
+     </param>
+     <param line="67" name="Q{}dataType" slot="1" flags="r" as="xs:string">
+      <treat role="conversion" as="xs:string" jsTest="return SaxonJS.U.Atomic.string.matches(item);" diag="8|0|XTTE0590|dataType">
+       <check card="1" diag="8|0|XTTE0590|dataType">
+        <cvUntyped to="xs:string">
+         <data>
+          <supplied slot="1"/>
+         </data>
+        </cvUntyped>
+       </check>
+      </treat>
+     </param>
+     <param line="68" name="Q{}ascending" slot="2" flags="r" as="xs:boolean">
+      <treat role="conversion" as="xs:boolean" jsTest="return SaxonJS.U.Atomic.boolean.matches(item);" diag="8|0|XTTE0590|ascending">
+       <check card="1" diag="8|0|XTTE0590|ascending">
+        <cvUntyped to="xs:boolean">
+         <data>
+          <supplied slot="2"/>
+         </data>
+        </cvUntyped>
+       </check>
+      </treat>
+     </param>
+     <resultDoc line="69" global="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;" local="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
+      <fn role="href" name="concat">
+       <str val="#"/>
+       <fn name="string">
+        <convert from="xs:untypedAtomic" to="xs:string">
+         <attVal name="Q{}id" chk="0"/>
+        </convert>
+       </fn>
+      </fn>
+      <sequence role="content" line="70">
+       <elem name="thead" nsuri="">
+        <sequence>
+         <att name="data-order" flags="l">
+          <convert from="xs:integer" to="xs:string">
+           <choose>
+            <varRef name="ascending" slot="2"/>
+            <varRef name="colNr" slot="0"/>
+            <true/>
+            <minus>
+             <varRef name="colNr" slot="0"/>
+            </minus>
+           </choose>
+          </convert>
+         </att>
+         <copyOf line="71" flags="vc">
+          <slash>
+           <axis name="child" nodeTest="element(Q{}thead)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='thead';"/>
+           <axis name="child" nodeTest="element(Q{}tr)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tr';"/>
+          </slash>
+         </copyOf>
+        </sequence>
+       </elem>
+       <elem line="74" name="tbody" nsuri="">
+        <sort>
+         <slash role="select">
+          <axis name="child" nodeTest="element(Q{}tbody)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tbody';"/>
+          <axis name="child" nodeTest="element(Q{}tr)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tr';"/>
+         </slash>
+         <sortKey line="77">
+          <data role="select">
+           <subscript>
+            <axis name="child" nodeTest="element(Q{}td)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='td';"/>
+            <varRef name="colNr" slot="0"/>
+           </subscript>
+          </data>
+          <fn role="order" name="string-join">
+           <choose>
+            <varRef name="ascending" slot="2"/>
+            <str val="ascending"/>
+            <true/>
+            <str val="descending"/>
+           </choose>
+           <str val=" "/>
+          </fn>
+          <fn role="dataType" name="string-join">
+           <varRef name="dataType" slot="1"/>
+           <str val=" "/>
+          </fn>
+          <str role="lang" val=""/>
+          <str role="caseOrder" val="#default"/>
+          <str role="stable" val="yes"/>
+          <str role="collation" val="http://www.w3.org/2005/xpath-functions/collation/codepoint"/>
+         </sortKey>
+        </sort>
+       </elem>
+      </sequence>
+     </resultDoc>
+    </sequence>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="1" binds="">
+  <mode name="Q{http://saxonica.com/ns/interactiveXSLT}onmouseover" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="0" flags="s" line="94" module="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl">
+    <p.nodeTest role="match" test="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+    <forEach role="action" baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="95">
+     <fn name="key">
+      <str val="Q{http://saxon.sf.net/}kk101"/>
+      <str val="sortToolTip"/>
+      <root/>
+     </fn>
+     <sequence line="96">
+      <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+       <str val="left"/>
+       <fn name="concat">
+        <arith op="+" calc="a+a">
+         <cvUntyped to="xs:double">
+          <atomSing card="?" diag="1|0||+">
+           <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}get" type="item()*">
+            <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}event" type="item()?"/>
+            <str val="clientX"/>
+           </ifCall>
+          </atomSing>
+         </cvUntyped>
+         <int val="30"/>
+        </arith>
+        <str val="px"/>
+       </fn>
+       <dot type="element(Q{}div)"/>
+      </ifCall>
+      <ifCall line="97" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+       <str val="top"/>
+       <fn name="concat">
+        <arith op="-" calc="a-a">
+         <cvUntyped to="xs:double">
+          <atomSing card="?" diag="1|0||-">
+           <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}get" type="item()*">
+            <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}event" type="item()?"/>
+            <str val="clientY"/>
+           </ifCall>
+          </atomSing>
+         </cvUntyped>
+         <int val="15"/>
+        </arith>
+        <str val="px"/>
+       </fn>
+       <dot type="element(Q{}div)"/>
+      </ifCall>
+      <ifCall line="98" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+       <str val="visibility"/>
+       <str val="visible"/>
+       <dot type="element(Q{}div)"/>
+      </ifCall>
+     </sequence>
+    </forEach>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="2" binds="0">
+  <mode name="Q{http://saxonica.com/ns/interactiveXSLT}onclick" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.5" seq="1" rank="1" minImp="0" slots="2" flags="s" line="83" module="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl">
+    <p.withPredicate role="match">
+     <p.withPredicate>
+      <p.nodeTest test="element(Q{}input)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='input';"/>
+      <gc baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="83" op="=" card="1:1" comp="CCC">
+       <attVal name="Q{}type" chk="0"/>
+       <str val="checkbox"/>
+      </gc>
+     </p.withPredicate>
+     <gc baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="83" op="=" card="1:1" comp="CCC">
+      <attVal name="Q{}name" chk="0"/>
+      <str val="genre"/>
+     </gc>
+    </p.withPredicate>
+    <let role="action" baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="84" var="this" as="element(Q{}input)" slot="0" eval="7">
+     <dot type="element(Q{}input)"/>
+     <let line="86" var="vv:v0" as="xs:untypedAtomic?" slot="1" eval="13">
+      <data>
+       <slash simple="1">
+        <varRef name="this" slot="0"/>
+        <axis name="attribute" nodeTest="attribute(Q{}value)" jsTest="return item.name==='value'"/>
+       </slash>
+      </data>
+      <forEach>
+       <docOrder intra="1">
+        <filter flags="b">
+         <slash>
+          <fn name="key">
+           <str val="Q{http://saxon.sf.net/}kk101"/>
+           <str val="books"/>
+           <root/>
+          </fn>
+          <axis name="descendant" nodeTest="element(Q{}tr)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='tr';"/>
+         </slash>
+         <gc op="=" card="1:1" comp="CCC">
+          <attVal name="Q{}data-genre" chk="0"/>
+          <varRef name="vv:v0" slot="1"/>
+         </gc>
+        </filter>
+       </docOrder>
+       <ifCall line="90" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+        <str val="display"/>
+        <choose>
+         <ifCall name="Q{http://saxonica.com/ns/interactiveXSLT}get" type="item()*">
+          <varRef name="this" slot="0"/>
+          <str val="checked"/>
+         </ifCall>
+         <str val="table-row"/>
+         <true/>
+         <str val="none"/>
+        </choose>
+        <dot type="element(Q{}tr)"/>
+       </ifCall>
+      </forEach>
+     </let>
+    </let>
+   </templateRule>
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="1" flags="s" line="56" module="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl">
+    <p.nodeTest role="match" test="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+    <let role="action" baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="57" var="colNr" as="xs:integer" slot="0" eval="7">
+     <arith op="+" calc="i+i">
+      <fn name="count">
+       <slash simple="1">
+        <dot type="element(Q{}th)"/>
+        <axis name="preceding-sibling" nodeTest="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+       </slash>
+      </fn>
+      <int val="1"/>
+     </arith>
+     <applyT line="58" mode="Q{}sort" flags="t" bSlot="0">
+      <first role="select">
+       <slash simple="1">
+        <dot type="element(Q{}th)"/>
+        <axis name="ancestor" nodeTest="element(Q{}table)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='table';"/>
+       </slash>
+      </first>
+      <withParam name="Q{}colNr" as="xs:integer">
+       <varRef line="59" name="colNr" slot="0"/>
+      </withParam>
+      <withParam name="Q{}dataType" as="xs:string">
+       <choose line="60">
+        <gc op="=" card="1:1" comp="CCC">
+         <attVal name="Q{}data-type" chk="0"/>
+         <str val="number"/>
+        </gc>
+        <str val="number"/>
+        <true/>
+        <str val="text"/>
+       </choose>
+      </withParam>
+      <withParam name="Q{}ascending" as="xs:boolean">
+       <fn line="61" name="not">
+        <gc op="=" card="N:1" comp="GAC|http://www.w3.org/2005/xpath-functions/collation/codepoint">
+         <data>
+          <slash>
+           <slash>
+            <axis name="parent" nodeTest="(document-node()|element())" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11||item.nodeType===1);"/>
+            <axis name="parent" nodeTest="(document-node()|element())" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11||item.nodeType===1);"/>
+           </slash>
+           <axis name="attribute" nodeTest="attribute(Q{}data-order)" jsTest="return item.name==='data-order'"/>
+          </slash>
+         </data>
+         <varRef name="colNr" slot="0"/>
+        </gc>
+       </fn>
+      </withParam>
+     </applyT>
+    </let>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="3" binds="">
+  <mode name="Q{http://saxonica.com/ns/interactiveXSLT}onmouseout" onNo="TC" flags="W" patternSlots="0">
+   <templateRule prec="0" prio="0.0" seq="0" rank="0" minImp="0" slots="0" flags="s" line="102" module="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl">
+    <p.nodeTest role="match" test="element(Q{}th)" jsTest="var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='th';"/>
+    <forEach role="action" baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="103">
+     <fn name="key">
+      <str val="Q{http://saxon.sf.net/}kk101"/>
+      <str val="sortToolTip"/>
+      <root/>
+     </fn>
+     <ifCall line="104" name="Q{http://saxonica.com/ns/interactiveXSLT}set-style" type="item()?">
+      <str val="visibility"/>
+      <str val="hidden"/>
+      <dot type="element(Q{}div)"/>
+     </ifCall>
+    </forEach>
+   </templateRule>
+  </mode>
+ </co>
+ <co id="4" binds="">
+  <mode onNo="TC" flags="dW" patternSlots="0">
+   <templateRule prec="0" prio="-0.5" seq="0" rank="0" minImp="0" slots="0" flags="s" line="14" module="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl">
+    <p.nodeTest role="match" test="document-node()" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11);"/>
+    <sequence role="action" baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="16">
+     <resultDoc global="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;" local="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
+      <str role="href" val="#title"/>
+      <valueOf role="content" line="17">
+       <fn name="string-join">
+        <convert from="xs:untypedAtomic" to="xs:string">
+         <data>
+          <mergeAdj>
+           <sequence>
+            <valueOf>
+             <str val="Books available at "/>
+            </valueOf>
+            <valueOf>
+             <fn name="format-date">
+              <fn name="current-date"/>
+              <str val="[D] [MNn] [Y]"/>
+             </fn>
+            </valueOf>
+           </sequence>
+          </mergeAdj>
+         </data>
+        </convert>
+        <str val=""/>
+       </fn>
+      </valueOf>
+     </resultDoc>
+     <resultDoc line="20" global="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;method=xml&#xA;" local="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;">
+      <str role="href" val="#books"/>
+      <elem role="content" line="21" name="table" nsuri="">
+       <sequence>
+        <att name="id" flags="l">
+         <str val="book-table"/>
+        </att>
+        <elem line="22" name="thead" nsuri="" flags="l">
+         <elem name="tr" nsuri="" flags="l">
+          <sequence>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="Sl">
+             <str val="Author"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <valueOf flags="Sl">
+             <str val="Title"/>
+            </valueOf>
+           </elem>
+           <elem name="th" nsuri="" flags="l">
+            <sequence>
+             <att name="data-type" flags="l">
+              <str val="number"/>
+             </att>
+             <valueOf flags="Sl">
+              <str val="Price"/>
+             </valueOf>
+            </sequence>
+           </elem>
+          </sequence>
+         </elem>
+        </elem>
+        <elem line="24" name="tbody" nsuri="" flags="l">
+         <forEach>
+          <axis name="descendant" nodeTest="element(Q{}ITEM)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='ITEM';"/>
+          <elem line="25" name="tr" nsuri="" flags="l">
+           <sequence>
+            <att name="data-genre" flags="l">
+             <convert from="xs:untypedAtomic" to="xs:string">
+              <attVal name="Q{}CAT" chk="0"/>
+             </convert>
+            </att>
+            <elem line="26" name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="string-join">
+               <convert from="xs:untypedAtomic" to="xs:string">
+                <data>
+                 <axis name="child" nodeTest="element(Q{}AUTHOR)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='AUTHOR';"/>
+                </data>
+               </convert>
+               <str val=" "/>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="27" name="td" nsuri="" flags="l">
+             <valueOf flags="l">
+              <fn name="string-join">
+               <convert from="xs:untypedAtomic" to="xs:string">
+                <data>
+                 <axis name="child" nodeTest="element(Q{}TITLE)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='TITLE';"/>
+                </data>
+               </convert>
+               <str val=" "/>
+              </fn>
+             </valueOf>
+            </elem>
+            <elem line="28" name="td" nsuri="" flags="l">
+             <sequence>
+              <att name="align" flags="l">
+               <str val="right"/>
+              </att>
+              <valueOf flags="l">
+               <fn name="string-join">
+                <convert from="xs:untypedAtomic" to="xs:string">
+                 <data>
+                  <axis name="child" nodeTest="element(Q{}PRICE)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='PRICE';"/>
+                 </data>
+                </convert>
+                <str val=" "/>
+               </fn>
+              </valueOf>
+             </sequence>
+            </elem>
+           </sequence>
+          </elem>
+         </forEach>
+        </elem>
+       </sequence>
+      </elem>
+     </resultDoc>
+     <resultDoc line="35" global="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;method=xml&#xA;" local="#&#xA;#Sat Dec 07 01:35:09 EST 2019&#xA;">
+      <str role="href" val="#genres"/>
+      <elem role="content" line="37" name="form" nsuri="">
+       <elem name="table" nsuri="" flags="l">
+        <sequence>
+         <att name="id" flags="l">
+          <str val="genre-table"/>
+         </att>
+         <elem line="39" name="thead" nsuri="" flags="l">
+          <elem name="tr" nsuri="" flags="l">
+           <sequence>
+            <elem name="th" nsuri="" flags="l">
+             <valueOf flags="Sl">
+              <str val="Code"/>
+             </valueOf>
+            </elem>
+            <elem name="th" nsuri="" flags="l">
+             <valueOf flags="Sl">
+              <str val="Description"/>
+             </valueOf>
+            </elem>
+           </sequence>
+          </elem>
+         </elem>
+         <elem line="42" name="tbody" nsuri="" flags="l">
+          <forEach>
+           <axis name="descendant" nodeTest="element(Q{}CATEGORY)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='CATEGORY';"/>
+           <elem line="44" name="tr" nsuri="" flags="l">
+            <sequence>
+             <elem name="td" nsuri="" flags="l">
+              <valueOf flags="l">
+               <convert from="xs:untypedAtomic" to="xs:string">
+                <attVal name="Q{}CODE" chk="0"/>
+               </convert>
+              </valueOf>
+             </elem>
+             <elem line="45" name="td" nsuri="" flags="l">
+              <valueOf flags="l">
+               <convert from="xs:untypedAtomic" to="xs:string">
+                <attVal name="Q{}DESC" chk="0"/>
+               </convert>
+              </valueOf>
+             </elem>
+             <elem line="46" name="td" nsuri="" flags="l">
+              <elem name="input" nsuri="" flags="l">
+               <sequence>
+                <att name="type" flags="l">
+                 <str val="checkbox"/>
+                </att>
+                <att name="name" flags="l">
+                 <str val="genre"/>
+                </att>
+                <att name="value" flags="l">
+                 <convert from="xs:untypedAtomic" to="xs:string">
+                  <attVal name="Q{}CODE" chk="0"/>
+                 </convert>
+                </att>
+                <att name="checked" flags="l">
+                 <str val="checked"/>
+                </att>
+               </sequence>
+              </elem>
+             </elem>
+            </sequence>
+           </elem>
+          </forEach>
+         </elem>
+        </sequence>
+       </elem>
+      </elem>
+     </resultDoc>
+    </sequence>
+   </templateRule>
+  </mode>
+ </co>
+ <overridden/>
+ <key name="Q{http://saxon.sf.net/}kk101" line="0" binds="" flags="u">
+  <p.nodeSet type="element(Q{}div)">
+   <axis baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="86" name="descendant" nodeTest="element(Q{}div)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri===''&amp;&amp;q.local==='div';"/>
+  </p.nodeSet>
+  <attVal baseUri="file:/Users/emmanuelchateau/Sites/saxonJS/xsl/transform.xsl" ns="xsl=~ ixsl=~ xs=~" line="-1" name="Q{}id" chk="0"/>
+ </key>
+ <output>
+  <property name="{http://saxon.sf.net/}stylesheet-version" value="20"/>
+ </output>
+ <decimalFormat/>
+</package>
+<?Σ 59c75b94?>
