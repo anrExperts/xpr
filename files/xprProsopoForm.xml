@@ -77,7 +77,7 @@
                                 if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'corporateBody'], concat(instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='officeName'], ''), ''),
                                 if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'family'], concat(instance('xprIdentities')/eac:identity/*:nameEntry/*:part[@localType='surname'], ''), '')
                                 )"/>
-
+                            <xf:refresh/>
                         </xf:action>
                     </xf:select1>
                     <xf:repeat id="repeatName" nodeset="eac:nameEntry[child::eac:alternativeForm]" appearance="full">
@@ -621,15 +621,8 @@
                         </xf:trigger>
 
                         <xf:select1 ref="@*[local-name() = 'href']" incremental="true">
-                            <!-- two itemset -->
-                            <!-- for the new entities (if this new participant is declared, we can call him) -->
-                            <!--<xf:itemset nodeset="instance('xprProsopo')//rico:participant[@localType = 'new']">
-                                <xf:label ref=".//eac:entityId"/>
-                                <xf:value ref=".//eac:entityId"/>
-                            </xf:itemset>-->
-                            <!-- for all the participants in the database -->
                             <xf:itemset bind="bindParticipant">
-                                <xf:label ref="@xml:id"/>
+                                <xf:label ref="."/>
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
                         </xf:select1>
@@ -642,30 +635,30 @@
                                     <xf:label>personne</xf:label>
                                     <xf:value>person</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:cpfDescription/eac:identity/@localType" value=""/>
-                                        <xf:delete ref="ancestor::eac:cpfDescription//eac:nameEntry[child::eac:alternativeForm]"/>
+                                        <xf:setvalue ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                        <xf:delete ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[child::eac:alternativeForm]"/>
                                         <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="ancestor::eac:cpfDescription//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
-                                        <xf:delete ref="ancestor::eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>
+                                        <xf:delete ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>
                                     </xf:action>
                                 </xf:item>
                                 <xf:item>
                                     <xf:label>office</xf:label>
                                     <xf:value>corporateBody</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:cpfDescription/eac:identity/@localType" value=""/>
-                                        <xf:delete ref="ancestor::eac:cpfDescription//eac:nameEntry[child::eac:alternativeForm]"/>
-                                        <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="ancestor::eac:cpfDescription//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
-                                        <xf:delete ref="ancestor::eac:cpfDescription//eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
+                                        <xf:setvalue ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                        <xf:delete ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[child::eac:alternativeForm]"/>
+                                        <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
+                                        <xf:delete ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
                                     </xf:action>
                                 </xf:item>
                                 <xf:item>
                                     <xf:label>famille</xf:label>
                                     <xf:value>family</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:cpfDescription//eac:identity/@localType" value="'family'"/>
-                                        <xf:delete ref="ancestor::eac:cpfDescription//eac:nameEntry[child::eac:alternativeForm]"/>
-                                        <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="ancestor::eac:cpfDescription//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
-                                        <xf:delete ref="ancestor::eac:cpfDescription//eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='surname')]"/>
+                                        <xf:setvalue ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:identity/@localType" value="'family'"/>
+                                        <xf:delete ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[child::eac:alternativeForm]"/>
+                                        <xf:insert origin="instance('xprSupplement')/eac:nameEntry" nodeset="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[child::eac:authorizedForm]" position="after"/>
+                                        <xf:delete ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='surname')]"/>
                                     </xf:action>
                                 </xf:item>
                             </xf:select1>
@@ -676,42 +669,10 @@
                                     <xf:value ref="value"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group>
-                                <xf:label>Forme(s) du nom</xf:label>
-                                <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
-                                    <xf:label>Forme contrôlée</xf:label>
-                                </xf:input>
-                                <xf:group ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]">
-                                    <xf:label>Forme attestée</xf:label>
-                                    <xf:input ref="eac:part[@localType='surname']">
-                                        <xf:label>Nom</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='forename']">
-                                        <xf:label>Prénom</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='particle']">
-                                        <xf:label>Particule</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='common']">
-                                        <xf:label>Titre d'appel</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='formal']">
-                                        <xf:label>Titre institutionnel</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='academic']">
-                                        <xf:label>Titre académique</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='religious']">
-                                        <xf:label>Titre religieux</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='nobiliary']">
-                                        <xf:label>Titre de noblesse</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="eac:part[@localType='officeName']">
-                                        <xf:label>Dénomination</xf:label>
-                                    </xf:input>
-                                </xf:group>
-                            </xf:group>
+                            <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
+                                <xf:label>Nom</xf:label>
+                            </xf:input>
+                            
                             <xf:group ref="eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate">
                                 <xf:label>Naissance</xf:label>
                                 <xf:input ref="@standardDate">
@@ -749,139 +710,11 @@
                                     </xf:item>
                                 </xf:select1>
                             </xf:group>
-
-                            <xf:group ref="eac:cpfDescription/eac:description/eac:places/eac:place">
-                                <xf:label>Adresse</xf:label>
-                                <xf:input ref="eac:placeEntry">
-                                    <xf:label>Intitulé</xf:label>
-                                </xf:input>
-                                <xf:group ref="eac:dateSet/*">
-                                    <xf:label>Date</xf:label>
-                                    <xf:trigger>
-                                        <xf:label>
-                                            <xf:output value="if(self::eac:date, 'Intervalle', 'Date Unique')"/>
-                                        </xf:label>
-                                        <xf:action ev:event="DOMActivate" if="self::eac:date">
-                                            <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="ancestor::eac:dateSet/*" position="after"/>
-                                            <xf:insert origin="xpr:source" nodeset="./following-sibling::eac:dateRange[1]/*" position="after"/>
-                                            <xf:setvalue ref="./following-sibling::eac:dateRange[1]/eac:fromDate/@standardDate" value="current()/@standardDate"/>
-                                            <xf:setvalue ref="./following-sibling::eac:dateRange[1]/eac:fromDate/@notAfter" value="current()/@notAfter"/>
-                                            <xf:setvalue ref="./following-sibling::eac:dateRange[1]/eac:fromDate/@notBefore" value="current()/@notBefore"/>
-                                            <xf:delete nodeset="."/>
-                                        </xf:action>
-                                        <xf:action ev:event="DOMActivate" if="self::eac:dateRange">
-                                            <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="ancestor::eac:dateSet/*" position="after"/>
-                                            <!--
-                                        @rmq l'élément <date> n'ayant pas de nœud fils, il faut lui en ajouter avec @context, 
-                                        puis copier les éléments <source/> à partir du <dateRange/> (qu'on veut remplacer)
-                                        et enfin supprimer <source/> ajouter avec context.
-                                    -->
-                                            <xf:insert origin="instance('xprSupplement')/eac:nameEntry/xpr:source" context="./following-sibling::eac:date[1]"/>
-                                            <xf:insert origin="xpr:source" nodeset="./following-sibling::eac:date[1]/*" position="after"/>
-                                            <xf:delete nodeset="./following-sibling::eac:date[1]/xpr:source[1]"/>
-                                            <xf:setvalue ref="./following-sibling::eac:date[1]/@standardDate" value="current()/eac:fromDate/@standardDate"/>
-                                            <xf:setvalue ref="./following-sibling::eac:date[1]/@notAfter" value="current()/eac:fromDate/@notAfter"/>
-                                            <xf:setvalue ref="./following-sibling::eac:date[1]/@notBefore" value="current()/eac:fromDate/@notBefore"/>
-                                            <xf:delete nodeset="."/>
-                                        </xf:action>
-                                    </xf:trigger>
-                                    <xf:group>
-                                        <xf:input ref="@standardDate | eac:fromDate/@standardDate">
-                                            <xf:label>Certaine</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notAfter | eac:fromDate/@notAfter">
-                                            <xf:label>Avant le</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notBefore | eac:fromDate/@notBefore">
-                                            <xf:label>Après le</xf:label>
-                                        </xf:input>
-                                    </xf:group>
-                                    <xf:group ref="eac:toDate">
-                                        <xf:input ref="@standardDate">
-                                            <xf:label>Certaine</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notAfter">
-                                            <xf:label>Avant le</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notBefore">
-                                            <xf:label>Après le</xf:label>
-                                        </xf:input>
-                                    </xf:group>
-                                </xf:group>
-                                <xf:input ref="eac:descriptiveNote">
-                                    <xf:label>Note</xf:label>
-                                </xf:input>
-                            </xf:group>
-                            <xf:group ref="eac:cpfDescription/eac:description/eac:functions/eac:function">
-                                <xf:label>Profession</xf:label>
-                                <xf:input ref="eac:term">
-                                    <xf:label>Intitulé</xf:label>
-                                </xf:input>
-                                <xf:group ref="eac:date">
-                                    <xf:label>Date</xf:label>
-                                    <xf:trigger>
-                                        <xf:label>Intervalle</xf:label>
-                                        <xf:action ev:event="DOMActivate" if="self::eac:date">
-                                            <xf:insert origin="instance('xprSupplement')/eac:dateRange" nodeset="./ancestor::eac:function/eac:term" position="after"/>
-                                            <xf:setvalue ref="./ancestor::eac:function/eac:dateRange/eac:fromDate/@standardDate" value="current()/@standardDate"/>
-                                            <xf:setvalue ref="./ancestor::eac:function/eac:dateRange/eac:fromDate/@notAfter" value="current()/@notAfter"/>
-                                            <xf:setvalue ref="./ancestor::eac:function/eac:dateRange/eac:fromDate/@notBefore" value="current()/@notBefore"/>
-                                            <xf:delete nodeset="."/>
-                                        </xf:action>
-                                    </xf:trigger>
-                                    <xf:input ref="@standardDate">
-                                        <xf:label>Certaine</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="@notAfter">
-                                        <xf:label>Avant le</xf:label>
-                                    </xf:input>
-                                    <xf:input ref="@notBefore">
-                                        <xf:label>Après le</xf:label>
-                                    </xf:input>
-                                </xf:group>
-                                <xf:group ref="eac:dateRange">
-                                    <xf:label>Intervalle</xf:label>
-                                    <xf:trigger>
-                                        <xf:label>Date unique</xf:label>
-                                        <xf:action ev:event="DOMActivate" if="self::eac:dateRange">
-                                            <xf:insert origin="instance('xprSupplement')/eac:date" nodeset="./ancestor::eac:function/eac:term" position="after"/>
-                                            <xf:setvalue ref="./ancestor::eac:function/eac:date/@standardDate" value="current()/eac:fromDate/@standardDate"/>
-                                            <xf:setvalue ref="./ancestor::eac:function/eac:date/@notAfter" value="current()/eac:fromDate/@notAfter"/>
-                                            <xf:setvalue ref="./ancestor::eac:function/eac:date/@notBefore" value="current()/eac:fromDate/@notBefore"/>
-                                            <xf:delete nodeset="."/>
-                                        </xf:action>
-                                    </xf:trigger>
-                                    <xf:group ref="eac:fromDate">
-                                        <xf:label>Début</xf:label>
-                                        <xf:input ref="@standardDate">
-                                            <xf:label>Certaine</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notAfter">
-                                            <xf:label>Avant le</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notBefore">
-                                            <xf:label>Après le</xf:label>
-                                        </xf:input>
-                                    </xf:group>
-                                    <xf:group ref="eac:toDate">
-                                        <xf:label>Fin</xf:label>
-                                        <xf:input ref="@standardDate">
-                                            <xf:label>Certaine</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notAfter">
-                                            <xf:label>Avant le</xf:label>
-                                        </xf:input>
-                                        <xf:input ref="@notBefore">
-                                            <xf:label>Après le</xf:label>
-                                        </xf:input>
-                                    </xf:group>
-                                </xf:group>
-                                <xf:input ref="eac:descriptiveNote">
-                                    <xf:label>Note</xf:label>
-                                </xf:input>
-                            </xf:group>
                         </xf:group>
-
+                        
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@type = 'new'][@xml:id = current()//eac:entityId]" value="current()//eac:nameEntry[eac:authorizedForm]/eac:part"/>
+                        </xf:action>
 
                         <xf:trigger class="delete">
                             <xf:label>Supprimer un participant</xf:label>
@@ -1088,7 +921,7 @@
                 </xf:trigger>
             </xf:group>
         </xf:case>
-        <!--<xf:case id="newSource">
+        <xf:case id="newSource">
             <xf:group ref="instance('xprNewSource')">
                 <xf:label>Sources</xf:label>
                 <xf:input ref=".">
@@ -1101,7 +934,7 @@
             <xf:submit submission="reloadSources">
                 <xf:label>Mettre à jour les sources</xf:label>
             </xf:submit>
-        </xf:case>-->
+        </xf:case>
     </xf:switch>
 
 </form>

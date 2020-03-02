@@ -7,7 +7,9 @@
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
 
-        <xf:bind id="testOb" nodeset="instance('xprInventory')//xpr:relation/@href"/>
+        <xf:bind id="relationHrefOb" nodeset="instance('xprInventory')//xpr:relation/@href"/>
+        
+        <xf:bind id="relationMarriage" nodeset="instance('xprInventory')//xpr:relation/@href"/>
         <xf:bind nodeset="instance('xprInventory')//*[@owned]/xpr:desc" relevant="parent::*/@owned = 'true'"/>
 
         <!-- instance xprEntities (liste des fiches prosopo présentes dans la base (servie par Basex))-->
