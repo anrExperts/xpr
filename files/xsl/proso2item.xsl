@@ -10,37 +10,48 @@
   version="3.1"
   >
   
-  <!-- This style sheet displays the books.xml file.  -->
-  
+  <xsl:variable name="path" select="ixsl:get(ixsl:window(), 'location.href')"/>
+  <xsl:variable name="content" select="doc(substring-before($path, '/view'))"/>
   
   <xsl:template match="/">
         
     <xsl:result-document href="#title" method="ixsl:replace-content">
-      <xsl:value-of>Liste des expertises traitées au <xsl:value-of select="format-date(current-date(), '[D] [MNn] [Y]')"/></xsl:value-of>
+      <xsl:text>Fiche n° </xsl:text>
+      <xsl:value-of select="$content//eac:eac-cpf/@xml:id"/>
     </xsl:result-document> 
     
     <xsl:result-document href="#experts">
-      <table id="experts-table">
-        <thead>
-          <tr><th>Cote</th><th data-type="number">Date</th><th>Voie</th><th>Actions</th></tr>
-        </thead>
-        <tbody>
-          <xsl:for-each select="//xpr:expertise">
-            <tr>
-              <td><xsl:value-of select="
-                xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || xpr:sourceDesc/xpr:idno[@type='item'] "/>
-              </td>
-              <td><xsl:value-of select="string-join(xpr:description/xpr:sessions/xpr:date/@when, ' ; ')"/></td>
-              <td><xsl:value-of select="string-join(xpr:description/xpr:places, ' ; ')"/></td>
-              <td><a href="{'/xpr/expertises/' || @xml:id || '/view'}">Voir</a> | <a href="{'/xpr/expertises/' || @xml:id || '/modify'}">Modifier</a></td>
-            </tr>
-          </xsl:for-each>
-        </tbody>
-      </table>
-    </xsl:result-document>
-    
-    <xsl:result-document href="toto" method="ixsl:replace-content">
-      <xsl:call-template name="send-request"/>
+      <xsl:for-each select="$content//eac:eac-cpf">
+        <header>
+          <h2>
+            <xsl:text>Fiche n° </xsl:text>
+            <xsl:value-of select="$content//eac:eac-cpf/@xml:id"/>
+          </h2>
+        </header>
+        <ul>
+          <li>
+            <xsl:text>Id : </xsl:text>
+            <xsl:value-of select="normalize-space(eac:cpfDescription/eac:identity/eac:entityId)"/>
+          </li>
+          <li>
+            <xsl:text>Nom : </xsl:text>
+            <xsl:value-of select="normalize-space(eac:cpfDescription/eac:identity/eac:nameEntry[1]/eac:part[1])"/>
+          </li>
+          <li>
+            <xsl:text>Date de naissance : </xsl:text>
+            <xsl:value-of select="normalize-space(eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@standardDate)"/>
+           </li>
+            <li>
+              <xsl:text>Date de décès : </xsl:text>
+              <xsl:value-of select="normalize-space(eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@standardDate)"/>
+            </li>
+            <li>
+              <xsl:text>Type d’entité : </xsl:text>
+              <xsl:value-of select="normalize-space(eac:cpfDescription/eac:identity/eac:entityType)"/>
+            </li>
+            <li><a href="{'/xpr/biographies/' || @xml:id || '/view'}">Voir</a> | <a href="{'/xpr/biographies/' || @xml:id || '/modify'}">Modifier</a></li>
+          </ul>
+        </xsl:for-each>
     </xsl:result-document>
     
   </xsl:template>

@@ -23,23 +23,20 @@
     <nav id="navigation">
       <ul>
         <li><a href="/xpr">¡xpr!</a></li>
-        <li><a href="/xpr/expertises/list">pv</a></li>
-        <li><a href="/xpr/biographies/list">prosopo</a></li>
+        <li><a href="/xpr/expertises/view">pv</a></li>
+        <li><a href="/xpr/biographies/view">prosopo</a></li>
         <li><a href="/xpr/inventories/list">iad</a></li>
         <li><a href="/xpr/networks">dataviz</a></li>
         <li><a href="/xpr/about">?</a></li>
       </ul>
     </nav>
     <main>
-    <section>
-      <h2 id="toto">Alors ?</h2>
-    </section>
     <section class="alternate">
       <h2 id="title">Liste des expertises</h2>
       <div id="expertises"/>
       <div id="sortToolTip" class="tooltip" style="position:fixed; visibility:hidden; left:0px; top:0px">Click to sort on this column</div>
     </section>
-    <section>{data}</section>
+    <!-- <section>{data}</section> -->
     </main>
     <script>
 /*function repeat() {

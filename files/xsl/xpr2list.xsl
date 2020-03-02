@@ -15,7 +15,9 @@
   <xsl:template match="/">
         
     <xsl:result-document href="#title" method="ixsl:replace-content">
-      <xsl:value-of>Liste des expertises traitées au <xsl:value-of select="format-date(current-date(), '[D] [MNn] [Y]')"/></xsl:value-of>
+      <xsl:text>Liste des expertises traitées (</xsl:text>
+      <xsl:value-of select="count(//xpr:expertise)"/>
+      <xsl:text>)</xsl:text>
     </xsl:result-document> 
     
     <xsl:result-document href="#expertises">

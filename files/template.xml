@@ -15,8 +15,8 @@
     <nav id="navigation">
       <ul>
         <li><a href="/xpr">¡xpr!</a></li>
-        <li><a href="/xpr/expertises/list">pv</a></li>
-        <li><a href="/xpr/biographies/list">prosopo</a></li>
+        <li><a href="/xpr/expertises/view">pv</a></li>
+        <li><a href="/xpr/biographies/view">prosopo</a></li>
         <li><a href="/xpr/inventories/list">iad</a></li>
         <li><a href="/xpr/networks">dataviz</a></li>
         <li><a href="/xpr/about">?</a></li>

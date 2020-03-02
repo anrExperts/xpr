@@ -76,7 +76,7 @@ declare
   %rest:path("/xpr/home")
   %output:method("xml")
 function home() {
-  web:redirect("/xpr/expertises/list") 
+  web:redirect("/xpr/expertises/view") 
 };
 
 (:~
@@ -325,7 +325,7 @@ declare
   %rest:path("/xpr/expertises/export")
 function z1jExport(){
   db:export("xpr", file:base-dir(), map { 'method': 'xml' }),
-  web:redirect("/xpr/expertises/list")
+  web:redirect("/xpr/expertises/view")
 };
 
 (:~
