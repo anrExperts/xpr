@@ -456,7 +456,7 @@ declare
 function newBio() {
   let $content := map {
     'instance' : '',
-    'model' : ('xprProsopoModel.xml', 'xprNewEntityModel.xml'),
+    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml'),
     'trigger' : 'xprProsopoTrigger.xml',
     'form' : 'xprProsopoForm.xml'
   }
@@ -524,6 +524,7 @@ function xformBioResult($param, $referer) {
           </rest:response>,
           <result>
             <id>{$id}</id>
+            <message>Une nouvelle entité a été ajoutée : {$param//eac:nameEntry[eac:authorizedForm]/eac:part}.</message>
           </result>
           )
         )
@@ -769,7 +770,22 @@ function xformSourcesResult($param, $referer) {
       default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
       return replace node $db/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $location] with $param 
     else
-      insert node $param into $db/xpr/sources
+      insert node $param into $db/xpr/sources,
+      update:output(
+        (
+        <rest:response>
+          <http:response status="200" message="test">
+            <http:header name="Content-Language" value="fr"/>
+            <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+          </http:response>
+        </rest:response>,
+        <result>
+          <id>{$param/source/text()}</id>
+          <message>Une nouvelle source a été ajoutée : {$param/source/text()}.</message>
+          <url></url>
+        </result>
+        )
+      )
 };
 
 (:~
