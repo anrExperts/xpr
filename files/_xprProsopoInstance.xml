@@ -133,9 +133,12 @@
             </biogHist>
         </description>
         <relations>
-            <cpfRelation xlink:href="" xlink:arcrole="">
+            <cpfRelation
+                xlink:href=""
+                xlink:arcrole="">
                 <relationEntry/>
-                <xpr:source xlink:href=""/>
+                <xpr:source
+                    xlink:href=""/>
             </cpfRelation>
         </relations>
     </cpfDescription>

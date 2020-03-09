@@ -7,44 +7,38 @@
     <xf:action
         ev:event="xforms-ready">
         <xf:action
-            while="instance('xprProsopo')//eac:date[not(@standardDate)] 
-                        | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
-                        | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+            while="instance('xprProsopo')//eac:date[not(@standardDate)]
+            | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
+            | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
             ev:event="xforms-ready">
             <xf:insert
-                context="instance('xprProsopo')//eac:date[not(@standardDate)] 
-                                | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
-                                | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
-                origin="instance('xprSupplement')/eac:date/@standardDate"/>
+                context="instance('xprProsopo')//eac:date[not(@standardDate)]
+                | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
+                | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date/@standardDate"/>
         </xf:action>
         <xf:action
             while="instance('xprProsopo')//eac:date[not(@notAfter)]
-                        | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                        | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+            | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+            | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
             ev:event="xforms-ready">
             <xf:insert
                 context="instance('xprProsopo')//eac:date[not(@notAfter)]
-                                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                                | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
                 origin="instance('xprSupplement')/eac:date/@notAfter"/>
         </xf:action>
         <xf:action
             while="instance('xprProsopo')//eac:date[not(@notBefore)]
-                        | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                        | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+            | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+            | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
             ev:event="xforms-ready">
             <xf:insert
                 context="instance('xprProsopo')//eac:date[not(@notBefore)]
-                                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                                | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
                 origin="instance('xprSupplement')/eac:date/@notBefore"/>
         </xf:action>
-        <!--<xf:action
-            if="instance('xprProsopo')//eac:relations[not(eac:cpfRelation)]">
-            <xf:insert
-                context="instance('xprProsopo')//eac:relations"
-                origin="instance('xprSupplement')/eac:cpfRelation"/>
-        </xf:action>-->
         <xf:action
             if="instance('xprProsopo')//eac:identity/eac:nameEntry[eac:alternativeForm]">
             <xf:delete
@@ -348,7 +342,9 @@
             <xf:delete
                 ref="instance('xprProsopo')//rico:participant/eac:eac-cpf"/>
             <xf:delete
-                ref="instance('xprProsopo')//rico:participant[@localType = 'new']/@localType"/>
+                ref="instance('xprProsopo')//rico:involve/eac:eac-cpf"/>
+            <xf:delete
+                ref="instance('xprProsopo')//rico:involve[@localType = 'new']/@localType"/>
         </xf:action>
         <xf:action
             ev:event="xforms-submit"
@@ -371,8 +367,10 @@
             ev:event="xforms-submit"
             while="instance('xprProsopo')//xpr:source/@xlink:href[not(. = '')][not(. = instance('xprProsopo')//eac:control//eac:source/@xlink:href)]">
             <xf:insert
-                origin="instance('xprSupplement')/eac:source"
-                context="instance('xprProsopo')//eac:sources"/>
+                context="instance('xprProsopo')/eac:control/eac:sources"
+                origin="instance('xprProsopoRepeat')/eac:control/eac:sources/eac:source"
+                nodeset="./*[last()]"
+                position="after"/>
             <xf:setvalue
                 ref="instance('xprProsopo')//eac:sources/eac:source/@xlink:href[. = '']"
                 value="instance('xprProsopo')//xpr:source/@xlink:href[not(. = instance('xprProsopo')//eac:control//eac:source/@xlink:href)]"/>
@@ -409,36 +407,36 @@
             ev:event="xforms-submit-error">
             <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
             <xf:action
-                while="instance('xprProsopo')//eac:date[not(@standardDate)] 
-                                | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
-                                | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+                while="instance('xprProsopo')//eac:date[not(@standardDate)]
+                | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
+                | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
                 ev:event="xforms-submit-error">
                 <xf:insert
-                    context="instance('xprProsopo')//eac:date[not(@standardDate)] 
-                                        | instance('xprProsopo')//eac:fromDate[not(@standardDate)] 
-                                        | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+                    context="instance('xprProsopo')//eac:date[not(@standardDate)]
+                    | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
+                    | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
                     origin="instance('xprSupplement')/eac:date/@standardDate"/>
             </xf:action>
             <xf:action
                 while="instance('xprProsopo')//eac:date[not(@notAfter)]
-                                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                                | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
                 ev:event="xforms-submit-error-ready">
                 <xf:insert
                     context="instance('xprProsopo')//eac:date[not(@notAfter)]
-                                        | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                                        | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+                    | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                    | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
                     origin="instance('xprSupplement')/eac:date/@notAfter"/>
             </xf:action>
             <xf:action
                 while="instance('xprProsopo')//eac:date[not(@notBefore)]
-                                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                                | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
                 ev:event="xforms-submit-error">
                 <xf:insert
                     context="instance('xprProsopo')//eac:date[not(@notBefore)]
-                                        | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                                        | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+                    | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                    | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
                     origin="instance('xprSupplement')/eac:date/@notBefore"/>
             </xf:action>
         </xf:action>
@@ -453,8 +451,10 @@
         <xf:action
             ev:event="xforms-submit">
             <xf:insert
-                nodeset="instance('xprParticipant')"
-                origin="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[rico:participant[@*[local-name() = 'href'] = ''][eac:eac-cpf]][1]/rico:participant[@*[local-name() = 'href'] = ''][eac:eac-cpf][1]/eac:eac-cpf"/>
+                context="instance('xprParticipant')"
+                origin="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[*[@xlink:href = ''][eac:eac-cpf]][1]/*[@xlink:href = ''][eac:eac-cpf][1]/eac:eac-cpf"
+                nodeset="."
+                ev:event="DOMActivate"/>
             <xf:delete
                 nodeset="instance('xprParticipant')//@standardDate[. = '']"/>
             <xf:delete
@@ -462,10 +462,7 @@
             <xf:delete
                 nodeset="instance('xprParticipant')//@notAfter[. = '']"/>
             <xf:delete
-                nodeset="instance('xprParticipant')//eac:cpfRelation[@*[local-name() = 'href'] = ''][eac:relationEntry = '']"/>
-            <xf:setvalue
-                ref="instance('xprEntities')/xpr:entity/@xml:id[. = '']"
-                value="instance('xprParticipant')//eac:entityId"/>
+                nodeset="instance('xprParticipant')//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
         </xf:action>
         <xf:action
             ev:event="xforms-submit-done">
@@ -480,13 +477,10 @@
                 ref="instance('xprEntities')/xpr:entity[@xml:id = instance('xprParticipant')//eac:entityId]/@db"
                 value="event('response-body')//*:id"/>
             <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[rico:participant[@*[local-name() = 'href'] = ''][eac:eac-cpf]][1]/rico:participant[@*[local-name() = 'href'] = ''][eac:eac-cpf][1]/@*[local-name() = 'href']"
+                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[*[@xlink:href = ''][eac:eac-cpf]][1]/*[@xlink:href = ''][eac:eac-cpf][1]/@xlink:href"
                 value="event('response-body')//*:id"/>
             <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant[@*[local-name() = 'href'] = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@*[local-name() = 'href']"
-                value="event('response-body')//*:id"/>
-            <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve[@*[local-name() = 'href'] = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@*[local-name() = 'href']"
+                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
                 value="event('response-body')//*:id"/>
         </xf:action>
         <xf:action
@@ -528,97 +522,6 @@
             </xf:action>
         </xf:action>
     </xf:submission>
-    <!--<xf:submission
-        mode="synchronous"
-        id="submitParticipant"
-        ref="instance('xprParticipant')"
-        resource="/xpr/biographies/put"
-        method="put"
-        replace="none">
-        <xf:action
-            ev:event="xforms-submit">
-            <xf:insert
-                nodeset="instance('xprParticipant')"
-                origin="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[rico:participant[1][@xlink:href = ''][eac:eac-cpf]]/rico:participant[1][@xlink:href = ''][eac:eac-cpf]/eac:eac-cpf"/>
-            <xf:delete
-                nodeset="instance('xprParticipant')//@standardDate[. = '']"/>
-            <xf:delete
-                nodeset="instance('xprParticipant')//@notBefore[. = '']"/>
-            <xf:delete
-                nodeset="instance('xprParticipant')//@notAfter[. = '']"/>
-            <xf:delete
-                nodeset="instance('xprParticipant')//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
-            <!-\-<xf:setvalue
-                ref="instance('xprEntities')/xpr:entity/@xml:id[. = '']"
-                value="instance('xprParticipant')//eac:entityId"/>-\->
-        </xf:action>
-        <xf:action
-            ev:event="xforms-submit"
-            if="instance('xprParticipant')/eac:cpfDescription/eac:relations/eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']">
-            <xf:delete 
-                ref="instance('xprParticipant')/eac:cpfDescription/eac:relations//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
-        </xf:action>
-        <xf:action
-            ev:event="xforms-submit-done">
-            <xf:message
-                level="modal"> La ressource a été enregistrée ! Status : <xf:output
-                    value="event('response-status-code')"/>; URI :  <xf:output
-                    value="event('resource-uri')"/>; Headers :  <xf:output
-                    value="event('response-headers')"/>; Reason : <xf:output
-                    value="event('response-reason-phrase')"/>; Body :  <xf:output
-                    value="event('response-body')"/>. </xf:message>
-            <xf:setvalue
-                ref="instance('xprEntities')/xpr:entity[@xml:id = instance('xprParticipant')//eac:entityId]/@db"
-                value="event('response-body')//*:id"/>
-            <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[rico:participant[1][@xlink:href = ''][eac:eac-cpf]]/rico:participant[1][@xlink:href = ''][eac:eac-cpf]/@xlink:href"
-                value="event('response-body')//*:id"/>
-            <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem//rico:participant[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
-                value="event('response-body')//*:id"/>
-            <!-\-<xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem//rico:involve[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
-                value="event('response-body')//*:id"/>-\->
-        </xf:action>
-        <xf:action
-            ev:event="xforms-submit-error">
-            <xf:message
-                level="modal">erreur</xf:message>
-            <xf:action
-                while="instance('xprParticipant')//eac:date[not(@standardDate)] 
-                | instance('xprParticipant')//eac:fromDate[not(@standardDate)] 
-                | instance('xprParticipant')//eac:toDate[not(@standardDate)]"
-                ev:event="xforms-submit-error">
-                <xf:insert
-                    context="instance('xprParticipant')//eac:date[not(@standardDate)] 
-                    | instance('xprParticipant')//eac:fromDate[not(@standardDate)] 
-                    | instance('xprParticipant')//eac:toDate[not(@standardDate)]"
-                    origin="instance('xprSupplement')/eac:date/@standardDate"/>
-            </xf:action>
-            <xf:action
-                while="instance('xprParticipant')//eac:date[not(@notAfter)]
-                | instance('xprParticipant')//eac:fromDate[not(@notAfter)]
-                | instance('xprParticipant')//eac:toDate[not(@notAfter)]"
-                ev:event="xforms-submit-error-ready">
-                <xf:insert
-                    context="instance('xprParticipant')//eac:date[not(@notAfter)]
-                    | instance('xprParticipant')//eac:fromDate[not(@notAfter)]
-                    | instance('xprParticipant')//eac:toDate[not(@notAfter)]"
-                    origin="instance('xprSupplement')/eac:date/@notAfter"/>
-            </xf:action>
-            <xf:action
-                while="instance('xprParticipant')//eac:date[not(@notBefore)]
-                | instance('xprParticipant')//eac:fromDate[not(@notBefore)]
-                | instance('xprParticipant')//eac:toDate[not(@notBefore)]"
-                ev:event="xforms-submit-error">
-                <xf:insert
-                    context="instance('xprParticipant')//eac:date[not(@notBefore)]
-                    | instance('xprParticipant')//eac:fromDate[not(@notBefore)]
-                    | instance('xprParticipant')//eac:toDate[not(@notBefore)]"
-                    origin="instance('xprSupplement')/eac:date/@notBefore"/>
-            </xf:action>
-        </xf:action>
-    </xf:submission>-->
     <xf:instance
         id="xprIdentities">
         <xpr

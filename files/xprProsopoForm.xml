@@ -1488,7 +1488,7 @@
                             <xf:insert
                                 context="."
                                 origin="instance('xprSupplement')/rico:involve/@localType"
-                                nodeset="rico:participant"
+                                nodeset="rico:involve"
                                 ev:event="DOMActivate"/>
                             <xf:insert
                                 context="instance('xprEntities')"
@@ -1504,7 +1504,7 @@
                             <!-- set a temporary value for participant instance -->
                             <xf:setvalue
                                 ref=".//eac:entityId | instance('xprEntities')/xpr:entity[@type = 'new'][@xml:id = '']/@xml:id"
-                                value="concat('local-id-involve', number(count(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant[@localType = 'new'])))"
+                                value="concat('local-id-involve', number(count(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve[@localType = 'new'])))"
                                 ev:event="DOMActivate"/>
                             <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
                             <xf:action
@@ -2034,7 +2034,7 @@
                 <xf:action
                     ev:event="DOMActivate">
                     <xf:action
-                        while="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant[@localType = 'new'][@xlink:href = ''][eac:eac-cpf]">
+                        while="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf]">
                         <xf:send
                             submission="submitParticipant"/>
                     </xf:action>
@@ -2046,12 +2046,20 @@
                     <xf:action
                         ev:event="xforms-value-changed"
                         ev:observer="participantRef"
-                        if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
+                        if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
                         <xf:send
                             submission="submitBio"/>
                     </xf:action>
                 </xf:action>
             </xf:trigger>
+            <!--<xf:trigger>
+                <xf:label>test</xf:label>
+                <xf:insert
+                    context="instance('xprParticipant')"
+                    origin="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[rico:participant[@xlink:href = ''][eac:eac-cpf]][1]/rico:participant[@xlink:href = ''][eac:eac-cpf][1]/eac:eac-cpf"
+                    nodeset="."
+                    ev:event="DOMActivate"/>
+            </xf:trigger>-->
         </xf:case>
         <xf:case
             id="sourcesPanel">

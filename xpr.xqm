@@ -432,7 +432,7 @@ function modifyEntity($id) {
   let $content := map {
     'instance' : $id,
     'path' : 'biographies',
-    'model' : 'xprProsopoModel.xml',
+    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml'),
     'trigger' : 'xprProsopoTrigger.xml',
     'form' : 'xprProsopoForm.xml'
   }
