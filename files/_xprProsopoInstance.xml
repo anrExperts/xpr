@@ -1,26 +1,71 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<eac-cpf xmlns="eac" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xpr="xpr" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:rico="rico">
+<eac-cpf
+    xmlns="eac"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    xmlns:xpr="xpr"
+    xmlns:tei="http://www.tei-c.org/ns/1.0"
+    xmlns:rico="rico">
     <!--xmlns="urn:isbn:1-931666-33-4"-->
     <control>
-        <sources/>
+        <sources>
+            <source
+                xlink:href="">
+                <sourceEntry/>
+                <descriptiveNote>
+                    <p/>
+                </descriptiveNote>
+            </source>
+        </sources>
     </control>
     <cpfDescription>
-        <identity localType="">
+        <identity
+            localType="">
             <entityId/>
             <entityType/>
             <nameEntry>
                 <part/>
                 <authorizedForm/>
             </nameEntry>
+            <nameEntry>
+                <part
+                    localType="surname"/>
+                <part
+                    localType="forename"/>
+                <part
+                    localType="particle"/>
+                <part
+                    localType="common"/>
+                <part
+                    localType="formal"/>
+                <part
+                    localType="academic"/>
+                <part
+                    localType="religious"/>
+                <part
+                    localType="nobiliary"/>
+                <part
+                    localType="officeName"/>
+                <alternativeForm/>
+                <xpr:source
+                    xmlns:xpr="xpr"
+                    xlink:href=""/>
+            </nameEntry>
         </identity>
         <description>
             <existDates>
                 <dateRange>
-                    <fromDate standardDate="" notBefore="" notAfter=""/>
-                    <toDate standardDate="" notBefore="" notAfter=""/>
+                    <fromDate
+                        standardDate=""
+                        notBefore=""
+                        notAfter=""/>
+                    <toDate
+                        standardDate=""
+                        notBefore=""
+                        notAfter=""/>
                 </dateRange>
             </existDates>
-            <localDescription localType="sex">
+            <localDescription
+                localType="sex">
                 <term/>
             </localDescription>
             <places>
@@ -28,8 +73,12 @@
                     <placeRole>Adresse</placeRole>
                     <placeEntry/>
                     <dateSet>
-                        <date standardDate="" notBefore="" notAfter="">
-                            <xpr:source xlink:href=""/>
+                        <date
+                            standardDate=""
+                            notBefore=""
+                            notAfter="">
+                            <xpr:source
+                                xlink:href=""/>
                         </date>
                     </dateSet>
                     <descriptiveNote>
@@ -40,7 +89,10 @@
             <occupations>
                 <occupation>
                     <term/>
-                    <date standardDate="" notBefore="" notAfter=""/>
+                    <date
+                        standardDate=""
+                        notBefore=""
+                        notAfter=""/>
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
@@ -49,31 +101,42 @@
             <functions>
                 <function>
                     <term/>
-                    <date standardDate="" notBefore="" notAfter=""/>
+                    <date
+                        standardDate=""
+                        notBefore=""
+                        notAfter=""/>
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
-                    <xpr:source xlink:href=""/>
+                    <xpr:source
+                        xlink:href=""/>
                 </function>
             </functions>
             <biogHist>
                 <chronList>
-                    <chronItem localType="">
-                        <date standardDate="" notBefore="" notAfter=""/>
+                    <chronItem
+                        localType="">
+                        <date
+                            standardDate=""
+                            notBefore=""
+                            notAfter=""/>
                         <placeEntry/>
                         <event/>
-                        <rico:participant xlink:href=""/>
-                        <rico:involve xlink:href=""/>
-                        <xpr:source xlink:href=""/>
+                        <rico:participant
+                            xlink:href=""/>
+                        <rico:involve
+                            xlink:href=""/>
+                        <xpr:source
+                            xlink:href=""/>
                     </chronItem>
                 </chronList>
             </biogHist>
         </description>
         <relations>
-            <!--<cpfRelation xlink:href="" xlink:arcrole="">
+            <cpfRelation xlink:href="" xlink:arcrole="">
                 <relationEntry/>
                 <xpr:source xlink:href=""/>
-            </cpfRelation>-->
+            </cpfRelation>
         </relations>
     </cpfDescription>
     <bibl/>

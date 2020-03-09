@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<supplement xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink">
+<supplement
+    xmlns="xpr"
+    xmlns:eac="eac"
+    xmlns:xlink="http://www.w3.org/1999/xlink">
     <!--Annexes-->
     <appendices>
         <appendice>
-            <type type=""/>
+            <type
+                type=""/>
             <extent/>
             <desc/>
             <note/>
         </appendice>
     </appendices>
-
     <!--Parties's representative-->
     <representative>
         <persName>
@@ -18,7 +21,6 @@
         </persName>
         <occupation/>
     </representative>
-
     <!--Parties's prosecutor-->
     <prosecutor>
         <persName>
@@ -26,112 +28,209 @@
             <forename/>
         </persName>
     </prosecutor>
-
     <categories>
         <category/>
-        <category type="estimation">Estimer la valeur des biens</category>
-        <category type="acceptation">Recevoir et évaluer le travail réalisé</category>
-        <category type="registration">Enregistrer</category>
-        <category type="settlement">Départager</category>
-        <category type="assessment">Décrire et évaluer les travaux à venir</category>
+        <category
+            type="estimation">Estimer la valeur des biens</category>
+        <category
+            type="acceptation">Recevoir et évaluer le travail réalisé</category>
+        <category
+            type="registration">Enregistrer</category>
+        <category
+            type="settlement">Départager</category>
+        <category
+            type="assessment">Décrire et évaluer les travaux à venir</category>
     </categories>
-
     <objects>
         <object/>
-        <object type="house">Maison</object>
-        <object type="plot">Terrain</object>
-        <object type="buildings">Ensemble de bâtiments</object>
-        <object type="territory">Domaine, terres, fief</object>
-        <object type="wall">Mur</object>
-        <object type="cesspool">Fosse d'aisance</object>
-        <object type="well">Puits</object>
-        <object type="other"/>
+        <object
+            type="house">Maison</object>
+        <object
+            type="plot">Terrain</object>
+        <object
+            type="buildings">Ensemble de bâtiments</object>
+        <object
+            type="territory">Domaine, terres, fief</object>
+        <object
+            type="wall">Mur</object>
+        <object
+            type="cesspool">Fosse d'aisance</object>
+        <object
+            type="well">Puits</object>
+        <object
+            type="other"/>
     </objects>
-
     <expenses>
         <expense/>
-        <expense type="clerk" l="" s="" d=""/>
-        <expense type="expert" l="" s="" d=""/>
+        <expense
+            type="clerk"
+            l=""
+            s=""
+            d=""/>
+        <expense
+            type="expert"
+            l=""
+            s=""
+            d=""/>
     </expenses>
-
     <iterator/>
-    <opinion ref=""/>
-
+    <opinion
+        ref=""/>
     <fees>
-        <fee type="expert" l="" s="" d=""/>
-        <fee type="clerk" l="" s="" d=""/>
-        <fee type="rolls" l="" s="" d=""/>
-        <fee type="papers" l="" s="" d=""/>
-        <fee type="plans" l="" s="" d=""/>
-        <fee type="prosecutors" l="" s="" d=""/>
-        <fee type="help" l="" s="" d=""/>
-        <fee type="other" l="" s="" d=""/>
+        <fee
+            type="expert"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="clerk"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="rolls"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="papers"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="plans"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="prosecutors"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="help"
+            l=""
+            s=""
+            d=""/>
+        <fee
+            type="other"
+            l=""
+            s=""
+            d=""/>
     </fees>
-
     <comment/>
-
-
     <!-- PROSOPOGRAPHY -->
-    <eac:source xlink:href="">
+    <!-- for adding new source in the prosopo form -->
+    <source localType="new" localId="" title="" xlink:href=""/>
+    
+    <eac:source localType="new" localId="" title="" xlink:href="">
         <eac:sourceEntry/>
         <eac:descriptiveNote>
             <eac:p/>
         </eac:descriptiveNote>
     </eac:source>
-
-    <rico:participant xmlns:rico="rico" localType="new"/>
-
-    <eac:nameEntry>
-        <eac:part localType="surname"/>
-        <eac:part localType="forename"/>
-        <eac:part localType="particle"/>
-        <eac:part localType="common"/>
-        <eac:part localType="formal"/>
-        <eac:part localType="academic"/>
-        <eac:part localType="religious"/>
-        <eac:part localType="nobiliary"/>
-        <eac:part localType="officeName"/>
-        <eac:alternativeForm/>
-        <xpr:source xmlns:xpr="xpr" xlink:href=""/>
-    </eac:nameEntry>
-
-    <eac:date standardDate="" notBefore="" notAfter=""/>
-
-    <eac:dateRange>
-        <eac:fromDate standardDate="" notBefore="" notAfter=""/>
-        <eac:toDate standardDate="" notBefore="" notAfter=""/>
-    </eac:dateRange>
-
-    <xpr:cost xmlns:xpr="xpr"/>
-
-    <eac:cpfRelation xlink:href="" xlink:arcrole="">
-        <eac:relationEntry/>
-        <xpr:source xmlns:xpr="xpr" xlink:href=""/>
-    </eac:cpfRelation>
+    <rico:participant
+        xmlns:rico="rico"
+        localType="new"/>
     
-    <biogHist xmlns="eac">
+    <rico:involve
+        xmlns:rico="rico"
+        localType="new"/>
+    <eac:nameEntry>
+        <eac:part
+            localType="surname"/>
+        <eac:part
+            localType="forename"/>
+        <eac:part
+            localType="particle"/>
+        <eac:part
+            localType="common"/>
+        <eac:part
+            localType="formal"/>
+        <eac:part
+            localType="academic"/>
+        <eac:part
+            localType="religious"/>
+        <eac:part
+            localType="nobiliary"/>
+        <eac:part
+            localType="officeName"/>
+        <eac:alternativeForm/>
+        <xpr:source
+            xmlns:xpr="xpr"
+            xlink:href=""/>
+    </eac:nameEntry>
+    <eac:date
+        standardDate=""
+        notBefore=""
+        notAfter=""/>
+    <eac:dateRange>
+        <eac:fromDate
+            standardDate=""
+            notBefore=""
+            notAfter=""/>
+        <eac:toDate
+            standardDate=""
+            notBefore=""
+            notAfter=""/>
+    </eac:dateRange>
+    <xpr:cost
+        xmlns:xpr="xpr"/>
+    <eac:cpfRelation
+        xlink:href=""
+        xlink:arcrole="">
+        <eac:relationEntry/>
+        <xpr:source
+            xmlns:xpr="xpr"
+            xlink:href=""/>
+    </eac:cpfRelation>
+    <biogHist
+        xmlns="eac">
         <chronList>
-            <chronItem localType="">
-                <date standardDate="" notBefore="" notAfter=""/>
+            <chronItem
+                localType="">
+                <date
+                    standardDate=""
+                    notBefore=""
+                    notAfter=""/>
                 <placeEntry/>
                 <event/>
-                <rico:participant xmlns:rico="rico" xlink:href=""/>
-                <rico:involve xmlns:rico="rico" xlink:href=""/>
-                <xpr:source xmlns:xpr="xpr" xlink:href=""/>
+                <rico:participant
+                    xmlns:rico="rico"
+                    xlink:href=""/>
+                <rico:involve
+                    xmlns:rico="rico"
+                    xlink:href=""/>
+                <xpr:source
+                    xmlns:xpr="xpr"
+                    xlink:href=""/>
             </chronItem>
         </chronList>
     </biogHist>
-
     <response/>
-    
-    <entity type="new" db="" xml:id=""/>
-
+    <dateSet xmlns="eac">
+        <date
+            standardDate=""
+            notBefore=""
+            notAfter="">
+            <xpr:source 
+                xmlns:xpr="xpr"
+                xlink:href=""/>
+        </date>
+    </dateSet>
+    <entity
+        type="new"
+        db=""
+        xml:id=""/>
     <bug>
-        <eac:date standardDate="" notBefore="" notAfter="">
-            <xpr:source xmlns:xpr="xpr"/>
+        <eac:date
+            standardDate=""
+            notBefore=""
+            notAfter="">
+            <xpr:source
+                xmlns:xpr="xpr"/>
         </eac:date>
     </bug>
-
     <boolean>
         <state>
             <label>oui</label>
@@ -142,7 +241,4 @@
             <value>false</value>
         </state>
     </boolean>
-    
-    
-
 </supplement>

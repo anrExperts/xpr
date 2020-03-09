@@ -1,20 +1,39 @@
-<nav id="navForm" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+<nav
+    id="navForm"
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:trigger>
         <xf:label>Fiche biographique</xf:label>
-        <xf:toggle case="prosopoPanel" ev:event="DOMActivate"/>
+        <xf:toggle
+            case="prosopoPanel"
+            ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
         <xf:label>Contrôle des sources</xf:label>
-        <xf:action ev:event="DOMActivate" while="instance('xprProsopo')//xpr:source/@*[local-name() = 'href'][not(. = '')][not(. = instance('xprProsopo')//eac:control//eac:source/@*[local-name() = 'href'])]">
+        <xf:action
+            ev:event="DOMActivate"
+            while="instance('xprProsopo')//xpr:source/@xlink:href[not(. = '')][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]">
             <!-- @todo supprimer les éventuelles sources vides dans control source ! -->
-            <xf:insert origin="instance('xprSupplement')/eac:source" context="instance('xprProsopo')//eac:sources"/>
-            <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/@*[local-name() = 'href'][. = '']" value="instance('xprProsopo')//xpr:source/@*[local-name() = 'href'][not(. = instance('xprProsopo')//eac:control//eac:source/@*[local-name() = 'href'])]"/>
-            <xf:setvalue ref="instance('xprProsopo')//eac:sources/eac:source/eac:sourceEntry[. = '']" value="ancestor::eac:source/@*[local-name() = 'href']"/>
+            <xf:insert
+                context="instance('xprProsopo')/eac:control/eac:sources"
+                origin="instance('xprProsopoRepeat')/eac:control/eac:sources/eac:source"
+                nodeset="./*[last()]"
+                position="after"/>
+            <xf:setvalue
+                ref="instance('xprProsopo')//eac:sources/eac:source/@xlink:href[. = '']"
+                value="instance('xprProsopo')//xpr:source/@xlink:href[not(. = instance('xprProsopo')//eac:control//eac:source/@xlink:href)]"/>
+            <xf:setvalue
+                ref="instance('xprProsopo')//eac:sources/eac:source/eac:sourceEntry[. = '']"
+                value="ancestor::eac:source/@xlink:href"/>
         </xf:action>
-        <xf:toggle case="sourcesPanel" ev:event="DOMActivate"/>
+        <xf:toggle
+            case="sourcesPanel"
+            ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
         <xf:label>Ajouter une source</xf:label>
-        <xf:toggle case="newSource" ev:event="DOMActivate"/>
+        <xf:toggle
+            case="newSource"
+            ev:event="DOMActivate"/>
     </xf:trigger>
 </nav>

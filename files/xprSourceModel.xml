@@ -1,16 +1,160 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xf:model id="source" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
-
-    <xf:instance id="xprSource" src="/xpr/files/_xprSourceInstance.xml"/>
-
-
-    <xf:submission id="submitSource" ref="instance('xprSource')" resource="/xpr/sources/put" method="put" replace="none">
-        <xf:action ev:event="xforms-submit-done">
-            <xf:message level="ephemeral">So Good !</xf:message>
+<xf:model
+    id="source"
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events">
+    
+    <xf:instance
+        id="xprSource"
+        src="/xpr/files/_xprSourceInstance.xml"/>
+    
+    <xf:instance
+        id="xprListSource"
+        src="/xpr/sources"/>
+    
+    <xf:bind
+        id="bindListSource"
+        nodeset="instance('xprListSource')/*"/>   
+    <xf:bind
+        id="obsListSource"
+        nodeset="instance('xprListSource')"/>
+    <!-- to update item list in itemset  -->
+    <xf:action
+        ev:event="xforms-value-changed"
+        ev:observer="obsListSource">
+        <xf:refresh ev:event="DOMActivate" model="source"/>
+        <xf:refresh ev:event="DOMActivate" model="prosopo"/>
+    </xf:action>
+    
+    <xf:submission
+        mode="synchronous"
+        id="submitSource"
+        ref="instance('xprSource')"
+        resource="/xpr/sources/put"
+        method="put"
+        replace="none">
+        <xf:action
+            ev:event="xforms-submit-done">
+            <xf:message
+                level="modal">
+                Body : 
+                <xf:output
+                    value="event('response-body')"/> ;
+                Status : 
+                <xf:output
+                    value="event('response-status-code')"/> ;
+                URI :
+                <xf:output
+                    value="event('resource-uri')"/> ;
+                Headers : 
+                <xf:output
+                    value="event('response-headers')"/> ;
+                Reason :
+                <xf:output
+                    value="event('response-reason-phrase')"/>.
+            </xf:message>
+            <xf:send
+                submission="reloadSources"/>
+            <xf:send
+                submission="reloadNewSource"/>
         </xf:action>
-        <xf:action ev:event="xforms-submit-error">
+        <xf:action
+            ev:event="xforms-submit-error">
             <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
         </xf:action>
     </xf:submission>
-
+    
+    <xf:submission
+        id="reloadSources"
+        method="get"
+        resource=""
+        replace="instance"
+        instance="xprListSource"/>
+    
+    <xf:submission
+        id="reloadNewSource"
+        resource="/xpr/files/_xprSourceInstance.xml"
+        replace="instance"
+        instance="xprNewSource">
+        <xf:action
+            ev:event="xforms-submit-done">
+            <xf:insert
+                origin="instance('xprProsopo')/*"
+                context="instance('xprStorage')/eac:eac-cpf[@xml:id]"
+                position="after"/>
+            <xf:setvalue
+                ref="instance('xprStorage')/eac:eac-cpf[@xml:id]/@xml:id"
+                value="instance('xprProsopo')/@xml:id"/>
+            <xf:insert
+                origin="instance('xprStorage')/eac:eac-cpf[@xml:id]"
+                nodeset="instance('xprProsopo')"/>
+            <xf:delete
+                ref="instance('xprStorage')/eac:eac-cpf/*"/>
+        </xf:action>
+    </xf:submission>
+    
+    <xf:submission
+        mode="synchronous"
+        id="submitNewSource"
+        ref="instance('xprSource')"
+        resource="/xpr/sources/put"
+        method="put"
+        replace="none">
+        <xf:action ev:event="xforms-submit">
+            <!--<xf:insert
+                nodeset="instance('xprSource')"
+                origin="(//xpr:source[@localType = 'new'])[position() = 1]"/>-->
+            <xf:insert
+                nodeset="instance('xprSource')"
+                origin="instance('xprListSource')/xpr:source[@localType = 'new'][1]"/>
+            <xf:delete
+                ref="instance('xprSource')/@localType"/>
+            <xf:delete
+                ref="instance('xprSource')/@xlink:href"/>
+            <xf:delete
+                ref="instance('xprSource')/@localId"/>
+            <xf:delete
+                ref="instance('xprSource')/@title"/>
+        </xf:action>
+        <xf:action
+            ev:event="xforms-submit-done">
+            <xf:message
+                level="modal">
+                Body : 
+                <xf:output
+                    value="event('response-body')"/> ;
+                Status : 
+                <xf:output
+                    value="event('response-status-code')"/> ;
+                URI :
+                <xf:output
+                    value="event('resource-uri')"/> ;
+                Headers : 
+                <xf:output
+                    value="event('response-headers')"/> ;
+                Reason :
+                <xf:output
+                    value="event('response-reason-phrase')"/>.
+            </xf:message>
+            
+            <xf:delete 
+                ref="instance('xprListSource')/xpr:source[@localType = 'new'][. = event('response-body')//*:id]/@localType"/>
+            <xf:setvalue 
+                ref="instance('xprProsopo')//xpr:source[@localType = 'new'][@title = event('response-body')//*:id]/@xlink:href" 
+                value="event('response-body')//*:id"/>
+            <xf:setvalue 
+                ref="instance('xprProsopo')//xpr:source[@xlink:href = instance('xprListSource')/xpr:source[. = event('response-body')//*:id]/@localId]/@xlink:href" 
+                value="event('response-body')//*:id"/>
+            <xf:delete 
+                ref="instance('xprProsopo')//xpr:source[@localType = 'new'][@xlink:href = event('response-body')//*:id]/@title"/>
+            <xf:delete 
+                ref="instance('xprProsopo')//xpr:source[@localType = 'new'][@xlink:href = event('response-body')//*:id]/@localId"/>
+            <xf:delete 
+                ref="instance('xprProsopo')//xpr:source[@localType = 'new'][@xlink:href = event('response-body')//*:id]/@localType"/>
+        </xf:action>
+        <xf:action
+            ev:event="xforms-submit-error">
+            <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+        </xf:action>
+    </xf:submission>
 </xf:model>
