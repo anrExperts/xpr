@@ -16,7 +16,7 @@
             <!-- @todo supprimer les éventuelles sources vides dans control source ! -->
             <xf:insert
                 context="instance('xprProsopo')/eac:control/eac:sources"
-                origin="instance('xprProsopoRepeat')/eac:control/eac:sources/eac:source"
+                origin="instance('xprProsopoCopy')/eac:control/eac:sources/eac:source"
                 nodeset="./*[last()]"
                 position="after"/>
             <xf:setvalue

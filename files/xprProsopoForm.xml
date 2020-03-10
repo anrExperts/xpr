@@ -25,7 +25,7 @@
                                 ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert
                                 context="instance('xprProsopo')/eac:cpfDescription/eac:identity"
-                                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                 nodeset="eac:nameEntry[eac:authorizedForm]"
                                 position="after"/>
                             <xf:delete
@@ -44,7 +44,7 @@
                                 ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert
                                 context="instance('xprProsopo')/eac:cpfDescription/eac:identity"
-                                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                 nodeset="eac:nameEntry[eac:authorizedForm]"
                                 position="after"/>
                             <xf:delete
@@ -63,7 +63,7 @@
                                 ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert
                                 context="instance('xprProsopo')/eac:cpfDescription/eac:identity"
-                                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                 nodeset="eac:nameEntry[eac:authorizedForm]"
                                 at="last()"
                                 position="after"/>
@@ -183,7 +183,7 @@
                                     <xf:label>Sélectionner une source dans la base</xf:label>
                                     <!--<xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription//xpr:source[not(@localType = 'new')][@xlink:href = current()/parent::xpr:source/@localId]" value="" ev:event="DOMActivate"/>-->
                                     <xf:delete
-                                        ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                        ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                         ev:event="DOMActivate"/>
                                     <xf:delete
                                         ref="parent::xpr:source/@localId 
@@ -215,12 +215,12 @@
                                         ev:event="DOMActivate"/>
                                     <xf:insert
                                         origin="instance('xprSupplement')/xpr:source"
-                                        context="instance('xprListSource')"
+                                        context="instance('xprSources')"
                                         nodeset="xpr:source[1]"
                                         position="before"
                                         ev:event="DOMActivate"/>
                                     <xf:setvalue
-                                        ref="./@localId | instance('xprListSource')/xpr:source[@localType = 'new'][@localId = '']/@localId"
+                                        ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
                                         value="concat('local-id-source', number(count(instance('xprProsopo')//xpr:source[@localType='new'])))"
                                         ev:event="DOMActivate"/>
                                     <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
@@ -245,7 +245,7 @@
                                     <xf:action
                                         ev:event="xforms-value-changed">
                                         <xf:setvalue
-                                            ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                            ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                             value="current()"/>
                                     </xf:action>
                                 </xf:input>
@@ -256,7 +256,7 @@
                                     <xf:label>Source</xf:label>
                                     <xf:itemset
                                         model="source"
-                                        nodeset="instance('xprListSource')/xpr:source">
+                                        nodeset="instance('xprSources')/xpr:source">
                                         <xf:label
                                             value="."/>
                                         <xf:value
@@ -286,7 +286,7 @@
                                     ev:event="DOMActivate">
                                     <xf:insert
                                         context="."
-                                        origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/xpr:source"
+                                        origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/xpr:source"
                                         nodeset="xpr:source[last()]"
                                         position="after"
                                         ev:event="DOMActivate"/>
@@ -314,7 +314,7 @@
                             ev:event="DOMActivate">
                             <xf:insert
                                 context="."
-                                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                 nodeset="eac:nameEntry[eac:alternativeForm][last()]"
                                 position="after"
                                 ev:event="DOMActivate"/>
@@ -437,7 +437,7 @@
                                     if="self::eac:dateRange">
                                     <xf:insert
                                         context="ancestor::eac:dateSet"
-                                        origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date"
+                                        origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date"
                                         nodeset="*[index('repeatPlaceDate')]"
                                         position="after"/>
                                     <xf:setvalue
@@ -498,7 +498,7 @@
                                         <xf:label>Sélectionner une source dans la base</xf:label>
                                         <!--<xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription//xpr:source[not(@localType = 'new')][@xlink:href = current()/parent::xpr:source/@localId]" value="" ev:event="DOMActivate"/>-->
                                         <xf:delete
-                                            ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                            ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                             ev:event="DOMActivate"/>
                                         <xf:delete
                                             ref="parent::xpr:source/@localId 
@@ -530,12 +530,12 @@
                                             ev:event="DOMActivate"/>
                                         <xf:insert
                                             origin="instance('xprSupplement')/xpr:source"
-                                            context="instance('xprListSource')"
+                                            context="instance('xprSources')"
                                             nodeset="xpr:source[1]"
                                             position="before"
                                             ev:event="DOMActivate"/>
                                         <xf:setvalue
-                                            ref="./@localId | instance('xprListSource')/xpr:source[@localType = 'new'][@localId = '']/@localId"
+                                            ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
                                             value="concat('local-id-source', number(count(instance('xprProsopo')//xpr:source[@localType='new'])))"
                                             ev:event="DOMActivate"/>
                                         <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
@@ -560,7 +560,7 @@
                                         <xf:action
                                             ev:event="xforms-value-changed">
                                             <xf:setvalue
-                                                ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                                ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                                 value="current()"/>
                                         </xf:action>
                                     </xf:input>
@@ -571,7 +571,7 @@
                                         <xf:label>Source</xf:label>
                                         <xf:itemset
                                             model="source"
-                                            nodeset="instance('xprListSource')/xpr:source">
+                                            nodeset="instance('xprSources')/xpr:source">
                                             <xf:label
                                                 value="."/>
                                             <xf:value
@@ -601,7 +601,7 @@
                                         ev:event="DOMActivate">
                                         <xf:insert
                                             context="."
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date/xpr:source"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date/xpr:source"
                                             nodeset="xpr:source[last()]"
                                             position="after"
                                             ev:event="DOMActivate"/>
@@ -627,7 +627,7 @@
                                 ev:event="DOMActivate">
                                 <xf:insert
                                     context="."
-                                    origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:places/eac:place/eac:dateSet/eac:date"
                                     nodeset="*[last()]"
                                     position="after"
                                     ev:event="DOMActivate"/>
@@ -657,7 +657,7 @@
                         ev:event="DOMActivate">
                         <xf:insert
                             context="."
-                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:places/eac:place"
+                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:places/eac:place"
                             nodeset="eac:place[last()]"
                             position="after"
                             ev:event="DOMActivate"/>
@@ -862,7 +862,7 @@
                                 if="self::eac:dateRange">
                                 <xf:insert
                                     context="ancestor::eac:function"
-                                    origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:functions/eac:function/eac:date"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:functions/eac:function/eac:date"
                                     nodeset="eac:term"
                                     position="after"/>
                                 <xf:setvalue
@@ -935,7 +935,7 @@
                                 <xf:label>Sélectionner une source dans la base</xf:label>
                                 <!--<xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription//xpr:source[not(@localType = 'new')][@xlink:href = current()/parent::xpr:source/@localId]" value="" ev:event="DOMActivate"/>-->
                                 <xf:delete
-                                    ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                    ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                     ev:event="DOMActivate"/>
                                 <xf:delete
                                     ref="parent::xpr:source/@localId 
@@ -967,12 +967,12 @@
                                     ev:event="DOMActivate"/>
                                 <xf:insert
                                     origin="instance('xprSupplement')/xpr:source"
-                                    context="instance('xprListSource')"
+                                    context="instance('xprSources')"
                                     nodeset="xpr:source[1]"
                                     position="before"
                                     ev:event="DOMActivate"/>
                                 <xf:setvalue
-                                    ref="./@localId | instance('xprListSource')/xpr:source[@localType = 'new'][@localId = '']/@localId"
+                                    ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
                                     value="concat('local-id-source', number(count(instance('xprProsopo')//xpr:source[@localType='new'])))"
                                     ev:event="DOMActivate"/>
                                 <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
@@ -997,7 +997,7 @@
                                 <xf:action
                                     ev:event="xforms-value-changed">
                                     <xf:setvalue
-                                        ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                        ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                         value="current()"/>
                                 </xf:action>
                             </xf:input>
@@ -1008,7 +1008,7 @@
                                 <xf:label>Source</xf:label>
                                 <xf:itemset
                                     model="source"
-                                    nodeset="instance('xprListSource')/xpr:source">
+                                    nodeset="instance('xprSources')/xpr:source">
                                     <xf:label
                                         value="."/>
                                     <xf:value
@@ -1038,7 +1038,7 @@
                                 ev:event="DOMActivate">
                                 <xf:insert
                                     context="."
-                                    origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:functions/eac:function/xpr:source"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:functions/eac:function/xpr:source"
                                     nodeset="xpr:source[last()]"
                                     position="after"
                                     ev:event="DOMActivate"/>
@@ -1054,7 +1054,7 @@
                         ev:event="DOMActivate">
                         <xf:insert
                             context="."
-                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:functions/eac:function"
+                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:functions/eac:function"
                             nodeset="eac:function[last()]"
                             position="after"
                             ev:event="DOMActivate"/>
@@ -1252,7 +1252,7 @@
                                 ev:event="DOMActivate"/>
                             <xf:insert
                                 context="."
-                                origin="instance('xprParticipant')"
+                                origin="instance('xprNewEntity')"
                                 nodeset="./*"
                                 ev:event="DOMActivate"/>
                             <!-- set a temporary value for participant instance -->
@@ -1306,7 +1306,7 @@
                                             ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert
                                             context="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription/eac:identity"
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                             nodeset="eac:nameEntry[eac:authorizedForm]"
                                             position="after"/>
                                         <xf:delete
@@ -1325,7 +1325,7 @@
                                             ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert
                                             context="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription/eac:identity"
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                             nodeset="eac:nameEntry[eac:authorizedForm]"
                                             position="after"/>
                                         <xf:delete
@@ -1344,7 +1344,7 @@
                                             ref="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert
                                             context="ancestor::rico:participant/eac:eac-cpf/eac:cpfDescription/eac:identity"
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                             nodeset="eac:nameEntry[eac:authorizedForm]"
                                             position="after"/>
                                         <xf:delete
@@ -1444,7 +1444,7 @@
                             ev:event="DOMActivate">
                             <xf:insert
                                 context="."
-                                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant"
+                                origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant"
                                 nodeset="rico:participant[last()]"
                                 position="after"
                                 ev:event="DOMActivate"/>
@@ -1498,7 +1498,7 @@
                                 ev:event="DOMActivate"/>
                             <xf:insert
                                 context="."
-                                origin="instance('xprParticipant')"
+                                origin="instance('xprNewEntity')"
                                 nodeset="./*"
                                 ev:event="DOMActivate"/>
                             <!-- set a temporary value for participant instance -->
@@ -1552,7 +1552,7 @@
                                             ref="ancestor::rico:involve/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert
                                             context="ancestor::rico:involve/eac:eac-cpf/eac:cpfDescription/eac:identity"
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                             nodeset="eac:nameEntry[eac:authorizedForm]"
                                             position="after"/>
                                         <xf:delete
@@ -1571,7 +1571,7 @@
                                             ref="ancestor::rico:involve/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert
                                             context="ancestor::rico:involve/eac:eac-cpf/eac:cpfDescription/eac:identity"
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                             nodeset="eac:nameEntry[eac:authorizedForm]"
                                             position="after"/>
                                         <xf:delete
@@ -1590,7 +1590,7 @@
                                             ref="ancestor::rico:involve/eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert
                                             context="ancestor::rico:involve/eac:eac-cpf/eac:cpfDescription/eac:identity"
-                                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
                                             nodeset="eac:nameEntry[eac:authorizedForm]"
                                             position="after"/>
                                         <xf:delete
@@ -1690,7 +1690,7 @@
                             ev:event="DOMActivate">
                             <xf:insert
                                 context="."
-                                origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve"
+                                origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve"
                                 nodeset="rico:involve[last()]"
                                 position="after"
                                 ev:event="DOMActivate"/>
@@ -1707,7 +1707,7 @@
                                 <xf:label>Sélectionner une source dans la base</xf:label>
                                 <!--<xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription//xpr:source[not(@localType = 'new')][@xlink:href = current()/parent::xpr:source/@localId]" value="" ev:event="DOMActivate"/>-->
                                 <xf:delete
-                                    ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                    ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                     ev:event="DOMActivate"/>
                                 <xf:delete
                                     ref="parent::xpr:source/@localId 
@@ -1739,12 +1739,12 @@
                                     ev:event="DOMActivate"/>
                                 <xf:insert
                                     origin="instance('xprSupplement')/xpr:source"
-                                    context="instance('xprListSource')"
+                                    context="instance('xprSources')"
                                     nodeset="xpr:source[1]"
                                     position="before"
                                     ev:event="DOMActivate"/>
                                 <xf:setvalue
-                                    ref="./@localId | instance('xprListSource')/xpr:source[@localType = 'new'][@localId = '']/@localId"
+                                    ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
                                     value="concat('local-id-source', number(count(instance('xprProsopo')//xpr:source[@localType='new'])))"
                                     ev:event="DOMActivate"/>
                                 <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
@@ -1769,7 +1769,7 @@
                                 <xf:action
                                     ev:event="xforms-value-changed">
                                     <xf:setvalue
-                                        ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                        ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                         value="current()"/>
                                 </xf:action>
                             </xf:input>
@@ -1780,7 +1780,7 @@
                                 <xf:label>Source</xf:label>
                                 <xf:itemset
                                     model="source"
-                                    nodeset="instance('xprListSource')/xpr:source">
+                                    nodeset="instance('xprSources')/xpr:source">
                                     <xf:label
                                         value="."/>
                                     <xf:value
@@ -1810,7 +1810,7 @@
                                 ev:event="DOMActivate">
                                 <xf:insert
                                     context="."
-                                    origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/xpr:source"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/xpr:source"
                                     nodeset="xpr:source[last()]"
                                     position="after"
                                     ev:event="DOMActivate"/>
@@ -1836,7 +1836,7 @@
                         ev:event="DOMActivate">
                         <xf:insert
                             context="."
-                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"
+                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"
                             nodeset="eac:chronItem[last()]"
                             position="after"
                             ev:event="DOMActivate"/>
@@ -1891,7 +1891,7 @@
                                 <xf:label>Sélectionner une source dans la base</xf:label>
                                 <!--<xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription//xpr:source[not(@localType = 'new')][@xlink:href = current()/parent::xpr:source/@localId]" value="" ev:event="DOMActivate"/>-->
                                 <xf:delete
-                                    ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                    ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                     ev:event="DOMActivate"/>
                                 <xf:delete
                                     ref="parent::xpr:source/@localId 
@@ -1923,12 +1923,12 @@
                                     ev:event="DOMActivate"/>
                                 <xf:insert
                                     origin="instance('xprSupplement')/xpr:source"
-                                    context="instance('xprListSource')"
+                                    context="instance('xprSources')"
                                     nodeset="xpr:source[1]"
                                     position="before"
                                     ev:event="DOMActivate"/>
                                 <xf:setvalue
-                                    ref="./@localId | instance('xprListSource')/xpr:source[@localType = 'new'][@localId = '']/@localId"
+                                    ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
                                     value="concat('local-id-source', number(count(instance('xprProsopo')//xpr:source[@localType='new'])))"
                                     ev:event="DOMActivate"/>
                                 <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
@@ -1953,7 +1953,7 @@
                                 <xf:action
                                     ev:event="xforms-value-changed">
                                     <xf:setvalue
-                                        ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                        ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                         value="current()"/>
                                 </xf:action>
                             </xf:input>
@@ -1964,7 +1964,7 @@
                                 <xf:label>Source</xf:label>
                                 <xf:itemset
                                     model="source"
-                                    nodeset="instance('xprListSource')/xpr:source">
+                                    nodeset="instance('xprSources')/xpr:source">
                                     <xf:label
                                         value="."/>
                                     <xf:value
@@ -1994,7 +1994,7 @@
                                 ev:event="DOMActivate">
                                 <xf:insert
                                     context="."
-                                    origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:relations/eac:cpfRelation/xpr:source"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:relations/eac:cpfRelation/xpr:source"
                                     nodeset="xpr:source[last()]"
                                     position="after"
                                     ev:event="DOMActivate"/>
@@ -2021,7 +2021,7 @@
                         ev:event="DOMActivate">
                         <xf:insert
                             context="."
-                            origin="instance('xprProsopoRepeat')/eac:cpfDescription/eac:relations/eac:cpfRelation"
+                            origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:relations/eac:cpfRelation"
                             nodeset="eac:cpfRelation[last()]"
                             position="after"
                             ev:event="DOMActivate"/>
@@ -2039,7 +2039,7 @@
                             submission="submitParticipant"/>
                     </xf:action>
                     <xf:action
-                        while="instance('xprListSource')/xpr:source[@localType = 'new']">
+                        while="instance('xprSources')/xpr:source[@localType = 'new']">
                         <xf:send
                             submission="submitNewSource"/>
                     </xf:action>
@@ -2055,7 +2055,7 @@
             <!--<xf:trigger>
                 <xf:label>test</xf:label>
                 <xf:insert
-                    context="instance('xprParticipant')"
+                    context="instance('xprNewEntity')"
                     origin="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[rico:participant[@xlink:href = ''][eac:eac-cpf]][1]/rico:participant[@xlink:href = ''][eac:eac-cpf][1]/eac:eac-cpf"
                     nodeset="."
                     ev:event="DOMActivate"/>
@@ -2071,7 +2071,7 @@
                         ev:event="DOMActivate">
                         <xf:insert
                             context="instance('xprProsopo')/eac:control/eac:sources"
-                            origin="instance('xprProsopoRepeat')/eac:control/eac:sources/eac:source"
+                            origin="instance('xprProsopoCopy')/eac:control/eac:sources/eac:source"
                             nodeset="./*[last()]"
                             position="after"/>
                     </xf:action>
@@ -2083,7 +2083,7 @@
                         ref="@localType">
                         <xf:label>Source dans la base</xf:label>
                         <xf:delete
-                            ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::eac:source/@localId]"
+                            ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::eac:source/@localId]"
                             ev:event="DOMActivate"/>
                         <xf:delete
                             ref="parent::eac:source/@localId 
@@ -2104,12 +2104,12 @@
                             ev:event="DOMActivate"/>
                         <xf:insert
                             origin="instance('xprSupplement')/xpr:source"
-                            context="instance('xprListSource')"
+                            context="instance('xprSources')"
                             nodeset="xpr:source[1]"
                             position="before"
                             ev:event="DOMActivate"/>
                         <xf:setvalue
-                            ref="./@localId | instance('xprListSource')/xpr:source[@localType = 'new'][@localId = '']/@localId"
+                            ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
                             value="concat('local-id-sourceControl', number(count(instance('xprProsopo')//eac:source[@localType='new'])))"
                             ev:event="DOMActivate"/>
                     </xf:trigger>
@@ -2120,7 +2120,7 @@
                         <xf:action
                             ev:event="xforms-value-changed">
                             <xf:setvalue
-                                ref="instance('xprListSource')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
+                                ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
                                 value="current()"/>
                         </xf:action>
                     </xf:input>
@@ -2131,14 +2131,15 @@
                         <xf:label>Source</xf:label>
                         <xf:itemset
                             model="source"
-                            nodeset="instance('xprListSource')/xpr:source">
+                            nodeset="instance('xprSources')/xpr:source">
                             <xf:label
                                 value="."/>
                             <xf:value
                                 ref="if(@localId, @localId, .)"/>
                         </xf:itemset>
                     </xf:select1>
-                    <xf:input ref="eac:descriptiveNote/eac:p">
+                    <xf:input
+                        ref="eac:descriptiveNote/eac:p">
                         <xf:label>commentaire</xf:label>
                     </xf:input>
                     <xf:trigger
@@ -2162,7 +2163,7 @@
                         <!-- todo supprimer les éventuelles sources vides dans control source ! -->
                         <xf:insert
                             context="instance('xprProsopo')/eac:control/eac:sources"
-                            origin="instance('xprProsopoRepeat')/eac:control/eac:sources/eac:source"
+                            origin="instance('xprProsopoCopy')/eac:control/eac:sources/eac:source"
                             nodeset="./*[last()]"
                             position="after"/>
                         <xf:setvalue
