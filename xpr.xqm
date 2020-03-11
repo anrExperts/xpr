@@ -546,7 +546,7 @@ function entities() {
       for $entity in db:open('xpr')/xpr/bio/eac:eac-cpf
       let $id := $entity/@xml:id
       order by fn:lower-case($entity//eac:nameEntry[child::eac:authorizedForm])
-      return <entity xml:id="{$id}" type="{$entity//eac:identity/@localType}">{$entity//eac:nameEntry[child::eac:authorizedForm]/eac:part/text()}</entity>
+      return <entity xml:id="{$id}" type="{$entity//eac:identity/@localType}"><label>{$entity//eac:nameEntry[child::eac:authorizedForm]/eac:part/text()}</label></entity>
     }
   </entities>
 };

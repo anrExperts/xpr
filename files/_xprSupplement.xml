@@ -121,9 +121,16 @@
     <comment/>
     <!-- PROSOPOGRAPHY -->
     <!-- for adding new source in the prosopo form -->
-    <source localType="new" localId="" title="" xlink:href=""/>
-    
-    <eac:source localType="new" localId="" title="" xlink:href="">
+    <source
+        localType="new"
+        localId=""
+        title=""
+        xlink:href=""/>
+    <eac:source
+        localType="new"
+        localId=""
+        title=""
+        xlink:href="">
         <eac:sourceEntry/>
         <eac:descriptiveNote>
             <eac:p/>
@@ -132,38 +139,14 @@
     <rico:participant
         xmlns:rico="rico"
         localType="new"/>
-    
     <rico:involve
         xmlns:rico="rico"
         localType="new"/>
-    <eac:nameEntry>
-        <eac:part
-            localType="surname"/>
-        <eac:part
-            localType="forename"/>
-        <eac:part
-            localType="particle"/>
-        <eac:part
-            localType="common"/>
-        <eac:part
-            localType="formal"/>
-        <eac:part
-            localType="academic"/>
-        <eac:part
-            localType="religious"/>
-        <eac:part
-            localType="nobiliary"/>
-        <eac:part
-            localType="officeName"/>
-        <eac:alternativeForm/>
-        <xpr:source
-            xmlns:xpr="xpr"
-            xlink:href=""/>
-    </eac:nameEntry>
-    <eac:date
-        standardDate=""
-        notBefore=""
-        notAfter=""/>
+    <eac:cpfRelation
+        xmlns:eac="eac"
+        localType="new"/>
+    
+    
     <eac:dateRange>
         <eac:fromDate
             standardDate=""
@@ -176,14 +159,6 @@
     </eac:dateRange>
     <xpr:cost
         xmlns:xpr="xpr"/>
-    <eac:cpfRelation
-        xlink:href=""
-        xlink:arcrole="">
-        <eac:relationEntry/>
-        <xpr:source
-            xmlns:xpr="xpr"
-            xlink:href=""/>
-    </eac:cpfRelation>
     <biogHist
         xmlns="eac">
         <chronList>
@@ -208,20 +183,23 @@
         </chronList>
     </biogHist>
     <response/>
-    <dateSet xmlns="eac">
+    <dateSet
+        xmlns="eac">
         <date
             standardDate=""
             notBefore=""
             notAfter="">
-            <xpr:source 
+            <xpr:source
                 xmlns:xpr="xpr"
                 xlink:href=""/>
         </date>
     </dateSet>
     <entity
-        type="new"
+        localType="new"
         db=""
-        xml:id=""/>
+        xml:id="">
+        <label/>
+    </entity>
     <bug>
         <eac:date
             standardDate=""

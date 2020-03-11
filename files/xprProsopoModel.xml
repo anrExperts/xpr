@@ -302,17 +302,13 @@
         nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant/@xlink:href"
         relevant="parent::rico:participant[not(@localType = 'new')]"/>
     <xf:bind
-        id="participantDesc"
-        nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:participant//eac:eac-cpf//*"
-        relevant="ancestor::rico:participant[@localType = 'new']"/>
-    <xf:bind
         id="involveRef"
         nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve/@xlink:href"
         relevant="parent::rico:involve[not(@localType = 'new')]"/>
     <xf:bind
-        id="involveDesc"
-        nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve//eac:eac-cpf//*"
-        relevant="ancestor::rico:involve[@localType = 'new']"/>
+        id="relationRef"
+        nodeset="instance('xprProsopo')/eac:cpfDescription/eac:relations/eac:cpfRelation/@xlink:href"
+        relevant="parent::eac:cpfRelation[not(@localType = 'new')]"/>
     <xf:bind
         id="chronItemInvolve"
         nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/rico:involve"/>
@@ -351,13 +347,7 @@
             <xf:delete
                 nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
             <xf:delete
-                nodeset="instance('xprProsopo')//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
-            <xf:delete
-                ref="instance('xprProsopo')//rico:participant/eac:eac-cpf"/>
-            <xf:delete
-                ref="instance('xprProsopo')//rico:involve/eac:eac-cpf"/>
-            <xf:delete
-                ref="instance('xprProsopo')//rico:involve[@localType = 'new']/@localType"/>
+                ref="instance('xprProsopo')//*[@localType = 'new']/@localType"/>
         </xf:action>
         <xf:action
             ev:event="xforms-submit"
@@ -465,7 +455,7 @@
             ev:event="xforms-submit">
             <xf:insert
                 context="instance('xprNewEntity')"
-                origin="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[*[@xlink:href = ''][eac:eac-cpf]][1]/*[@xlink:href = ''][eac:eac-cpf][1]/eac:eac-cpf"
+                origin="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href][1]/eac:eac-cpf"
                 nodeset="."
                 ev:event="DOMActivate"/>
             <xf:delete
@@ -490,10 +480,10 @@
                 ref="instance('xprEntities')/xpr:entity[@xml:id = instance('xprNewEntity')//eac:entityId]/@db"
                 value="event('response-body')//*:id"/>
             <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[*[@xlink:href = ''][eac:eac-cpf]][1]/*[@xlink:href = ''][eac:eac-cpf][1]/@xlink:href"
-                value="event('response-body')//*:id"/>
+                ref="instance('xprEntities')/xpr:entity[@xml:id = instance('xprNewEntity')//eac:entityId]/@localType"
+                value="'stored'"/>
             <xf:setvalue
-                ref="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
+                ref="instance('xprProsopo')//*[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
                 value="event('response-body')//*:id"/>
         </xf:action>
         <xf:action
