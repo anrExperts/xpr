@@ -246,7 +246,6 @@
                                             ref="if(@localId, @localId, .)"/>
                                     </xf:itemset>
                                 </xf:select1>
-                                <xf:output ref="current()/@xlink:href"/>
                                 <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
                                     <xf:label>Nouvelle source</xf:label>
                                     <xf:input
@@ -1189,6 +1188,9 @@
                             <!--<xf:delete
                                 ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/ancestor::rico:participant/@xlink:href]"
                                 ev:event="DOMActivate"/>-->
+                            <xf:setvalue
+                                ref="ancestor::rico:participant/@xlink:href"
+                                value=""/>
                             <xf:delete
                                 ref="ancestor::rico:participant/@localType"
                                 ev:event="DOMActivate"/>
@@ -1432,6 +1434,9 @@
                             <!--<xf:delete
                                 ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/ancestor::rico:involve/@xlink:href]"
                                 ev:event="DOMActivate"/>-->
+                            <xf:setvalue
+                                ref="ancestor::rico:involve/@xlink:href"
+                                value=""/>
                             <xf:delete
                                 ref="ancestor::rico:involve/@localType"
                                 ev:event="DOMActivate"/>
@@ -1813,6 +1818,9 @@
                     <xf:trigger
                         ref="@localType">
                         <xf:label>Personne dans la base</xf:label>
+                        <xf:setvalue
+                            ref="ancestor::rico:cpfRelation/@xlink:href"
+                            value=""/>
                         <xf:delete
                             ref="ancestor::eac:cpfRelation/@localType"
                             ev:event="DOMActivate"/>
@@ -2200,6 +2208,144 @@
             </xf:trigger>
         </xf:case>
         <xf:case
+            id="newEntitiesPanel">
+            <xf:group ref="instance('xprEntities')">
+                <xf:label>Nouvelle(s) entité(s)</xf:label>
+                <xf:repeat nodeset="instance('xprEntities')//eac:eac-cpf">
+                    <xf:label>Nouvelle entrée</xf:label>
+                    <xf:select1
+                        ref="eac:cpfDescription/eac:identity/eac:entityType"
+                        appearance="minimal">
+                        <xf:label>Type d'entité</xf:label>
+                        <xf:item>
+                            <xf:label>personne</xf:label>
+                            <xf:value>person</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType"
+                                    value=""/>
+                                <xf:delete
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
+                                <xf:insert
+                                    context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                    nodeset="eac:nameEntry[eac:authorizedForm]"
+                                    position="after"/>
+                                <xf:delete
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[@localType='officeName']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>office</xf:label>
+                            <xf:value>corporateBody</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType"
+                                    value=""/>
+                                <xf:delete
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
+                                <xf:insert
+                                    context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                    nodeset="eac:nameEntry[eac:authorizedForm]"
+                                    position="after"/>
+                                <xf:delete
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>famille</xf:label>
+                            <xf:value>family</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:identity/@localType"
+                                    value="'family'"/>
+                                <xf:delete
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
+                                <xf:insert
+                                    context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity"
+                                    origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]"
+                                    nodeset="eac:nameEntry[eac:authorizedForm]"
+                                    position="after"/>
+                                <xf:delete
+                                    ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='surname')]"/>
+                            </xf:action>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:select1
+                        ref="eac:cpfDescription/eac:identity/@localType"
+                        appearance="minimal">
+                        <xf:label>Répertoire</xf:label>
+                        <xf:itemset
+                            model="prosopo"
+                            nodeset="instance('xprEntitiesTypes')/identity[@type = current()/ancestor::eac:identity/eac:entityType]">
+                            <xf:label
+                                ref="label"/>
+                            <xf:value
+                                ref="value"/>
+                        </xf:itemset>
+                    </xf:select1>
+                    <xf:input
+                        ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
+                        <xf:label>Nom</xf:label>
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
+                        </xf:action>
+                    </xf:input>
+                    <xf:group
+                        ref="eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate">
+                        <xf:label>Naissance</xf:label>
+                        <xf:input
+                            ref="@standardDate">
+                            <xf:label>Certaine</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@notAfter">
+                            <xf:label>Avant le</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@notBefore">
+                            <xf:label>Après le</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group
+                        ref="eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate">
+                        <xf:label>Décès</xf:label>
+                        <xf:input
+                            ref="@standardDate">
+                            <xf:label>Certaine</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@notAfter">
+                            <xf:label>Avant le</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@notBefore">
+                            <xf:label>Après le</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group
+                        ref="eac:cpfDescription[eac:identity/eac:entityType = 'person']/eac:description/eac:localDescription[@localType='sex']">
+                        <xf:select1
+                            ref="eac:term">
+                            <xf:label>Sexe</xf:label>
+                            <xf:item>
+                                <xf:label>Homme</xf:label>
+                                <xf:value>male</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Femme</xf:label>
+                                <xf:value>female</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                    </xf:group>
+                </xf:repeat>
+            </xf:group>
+        </xf:case>
+        <xf:case
             id="sourcesPanel">
             <xf:group
                 ref="instance('xprProsopo')/eac:control/eac:sources">
@@ -2309,85 +2455,6 @@
                         <xf:help>Supprimer une source</xf:help>
                     </xf:trigger>
                 </xf:repeat>
-                <!--<xf:repeat
-                    id="repeatControlSource"
-                    nodeset="eac:source">
-                    <xf:trigger
-                        ref="@localType">
-                        <xf:label>Source dans la base</xf:label>
-                        <xf:delete
-                            ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::eac:source/@localId]"
-                            ev:event="DOMActivate"/>
-                        <xf:delete
-                            ref="parent::eac:source/@localId 
-                            | parent::eac:source/@localType 
-                            | parent::eac:source/@title"
-                            ev:event="DOMActivate"/>
-                        <xf:refresh
-                            model="source"
-                            ev:event="DOMActivate"/>
-                    </xf:trigger>
-                    <xf:trigger
-                        ref="self::node()[not(@localType)]">
-                        <xf:label>Nouvelle source</xf:label>
-                        <xf:insert
-                            context="."
-                            origin="instance('xprSupplement')/eac:source//@*"
-                            nodeset="eac:source"
-                            ev:event="DOMActivate"/>
-                        <xf:insert
-                            origin="instance('xprSupplement')/xpr:source"
-                            context="instance('xprSources')"
-                            nodeset="xpr:source[1]"
-                            position="before"
-                            ev:event="DOMActivate"/>
-                        <xf:setvalue
-                            ref="./@localId | instance('xprSources')/xpr:source[@localType = 'new'][@localId = '']/@localId"
-                            value="concat('local-id-sourceControl', number(count(instance('xprProsopo')//eac:source[@localType='new'])))"
-                            ev:event="DOMActivate"/>
-                    </xf:trigger>
-                    <xf:input
-                        ref="@title"
-                        incremental="true">
-                        <xf:label>Source</xf:label>
-                        <xf:action
-                            ev:event="xforms-value-changed">
-                            <xf:setvalue
-                                ref="instance('xprSources')/xpr:source[@localType = 'new'][@localId = current()/parent::xpr:source/@localId]"
-                                value="current()"/>
-                        </xf:action>
-                    </xf:input>
-                    <xf:select1
-                        ref="@xlink:href"
-                        appearance="minimal"
-                        incremental="true">
-                        <xf:label>Source</xf:label>
-                        <xf:itemset
-                            model="source"
-                            nodeset="instance('xprSources')/xpr:source">
-                            <xf:label
-                                value="."/>
-                            <xf:value
-                                ref="if(@localId, @localId, .)"/>
-                        </xf:itemset>
-                    </xf:select1>
-                    <xf:input
-                        ref="eac:descriptiveNote/eac:p">
-                        <xf:label>commentaire</xf:label>
-                    </xf:input>
-                    <xf:trigger
-                        ref=".[@xlink:href = ''] 
-                        | .[not(@xlink:href = ancestor::eac:eac-cpf/eac:cpfDescription//xpr:source/@xlink:href)]"
-                        class="delete">
-                        <xf:label>Supprimer une source</xf:label>
-                        <xf:delete
-                            nodeset="."
-                            at="1"
-                            if="count(parent::eac:sources/eac:source) &gt; 1"
-                            ev:event="DOMActivate"/>
-                        <xf:help>Supprimer une source</xf:help>
-                    </xf:trigger>
-                </xf:repeat>-->
                 <xf:trigger>
                     <xf:label>mise à jour des Sources</xf:label>
                     <xf:action
@@ -2407,6 +2474,20 @@
                             value="ancestor::eac:source/@xlink:href"/>
                     </xf:action>
                 </xf:trigger>
+            </xf:group>
+        </xf:case>
+        <xf:case
+            id="newSourcesPanel">
+            <xf:group ref="instance('xprSources')">
+                <xf:label>Nouvelle(s) source(s)</xf:label>
+                <xf:repeat nodeset="instance('xprSources')//xpr:source[@localType = 'new']">
+                    <xf:label>Nouvelle source</xf:label>
+                    <xf:input
+                        ref="."
+                        incremental="true">
+                        <xf:label>Source</xf:label>
+                    </xf:input>
+                </xf:repeat>
             </xf:group>
         </xf:case>
         <xf:case

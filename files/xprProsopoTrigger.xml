@@ -9,6 +9,12 @@
             ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
+        <xf:label>Nouvelle(s) entité(s)</xf:label>
+        <xf:toggle
+            case="newEntitiesPanel"
+            ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
         <xf:label>Contrôle des sources</xf:label>
         <xf:action
             ev:event="DOMActivate"
@@ -28,6 +34,12 @@
         </xf:action>
         <xf:toggle
             case="sourcesPanel"
+            ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Nouvelle(s) source(s)</xf:label>
+        <xf:toggle
+            case="newSourcesPanel"
             ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
