@@ -322,7 +322,7 @@
         relevant="ancestor::xpr:source[not(@localType = 'new')]"/>-->
     <xf:bind
         id="controlSource"
-        nodeset="instance('xprProsopo')/eac:control/eac:sources/eac:source/@xlink:href[not(. = '') and . = instance('xprProsopo')/eac:cpfDescription//xpr:source/@xlink:href]"
+        nodeset="instance('xprProsopo')/eac:control/eac:sources/eac:source/@xlink:href[not(. = '')][. = instance('xprProsopo')/eac:cpfDescription//xpr:source/@xlink:href or . = instance('xprSources')/xpr:source[@xml:id = instance('xprProsopo')/eac:cpfDescription//xpr:source/@xlink:href]]"
         readonly="true()"/>
     <xf:bind
         id="sourceLocalId"

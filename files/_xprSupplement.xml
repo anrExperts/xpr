@@ -123,13 +123,9 @@
     <!-- for adding new source in the prosopo form -->
     <source
         localType="new"
-        localId=""
-        title=""
-        xlink:href=""/>
+        xml:id=""/>
     <eac:source
         localType="new"
-        localId=""
-        title=""
         xlink:href="">
         <eac:sourceEntry/>
         <eac:descriptiveNote>

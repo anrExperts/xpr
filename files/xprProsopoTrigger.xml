@@ -12,7 +12,7 @@
         <xf:label>Contrôle des sources</xf:label>
         <xf:action
             ev:event="DOMActivate"
-            while="instance('xprProsopo')//xpr:source/@xlink:href[not(. = '')][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]">
+            while="instance('xprSources')//xpr:source[@xml:id = instance('xprProsopo')//xpr:source/@xlink:href or . = instance('xprProsopo')//xpr:source/@xlink:href][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]">
             <!-- @todo supprimer les éventuelles sources vides dans control source ! -->
             <xf:insert
                 context="instance('xprProsopo')/eac:control/eac:sources"
@@ -21,7 +21,7 @@
                 position="after"/>
             <xf:setvalue
                 ref="instance('xprProsopo')//eac:sources/eac:source/@xlink:href[. = '']"
-                value="instance('xprProsopo')//xpr:source/@xlink:href[not(. = instance('xprProsopo')//eac:control//eac:source/@xlink:href)]"/>
+                value="instance('xprSources')//xpr:source[@xml:id = instance('xprProsopo')//xpr:source/@xlink:href or . = instance('xprProsopo')//xpr:source/@xlink:href][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]"/>
             <xf:setvalue
                 ref="instance('xprProsopo')//eac:sources/eac:source/eac:sourceEntry[. = '']"
                 value="ancestor::eac:source/@xlink:href"/>
