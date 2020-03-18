@@ -246,13 +246,14 @@
                                             ref="if(@localId, @localId, .)"/>
                                     </xf:itemset>
                                 </xf:select1>
-                                <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                                <xf:group
+                                    ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
                                     <xf:label>Nouvelle source</xf:label>
                                     <xf:input
                                         ref="."
                                         incremental="true">
                                         <xf:label>Source</xf:label>
-                                    </xf:input>    
+                                    </xf:input>
                                 </xf:group>
                                 <xf:input
                                     ref=".">
@@ -552,13 +553,14 @@
                                                 ref="if(@localId, @localId, .)"/>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                                    <xf:group
+                                        ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
                                         <xf:label>Nouvelle source</xf:label>
                                         <xf:input
                                             ref="."
                                             incremental="true">
                                             <xf:label>Source</xf:label>
-                                        </xf:input>    
+                                        </xf:input>
                                     </xf:group>
                                     <xf:input
                                         ref=".">
@@ -980,13 +982,14 @@
                                         ref="if(@localId, @localId, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group
+                                ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input
                                     ref="."
                                     incremental="true">
                                     <xf:label>Source</xf:label>
-                                </xf:input>    
+                                </xf:input>
                             </xf:group>
                             <xf:input
                                 ref=".">
@@ -1344,8 +1347,11 @@
                             <xf:input
                                 ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
                                 <xf:label>Nom</xf:label>
-                                <xf:action ev:event="xforms-value-changed">
-                                    <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
+                                <xf:action
+                                    ev:event="xforms-value-changed">
+                                    <xf:setvalue
+                                        ref="ancestor::xpr:entity/xpr:label"
+                                        value="current()"/>
                                 </xf:action>
                             </xf:input>
                             <xf:group
@@ -1590,8 +1596,11 @@
                             <xf:input
                                 ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
                                 <xf:label>Nom</xf:label>
-                                <xf:action ev:event="xforms-value-changed">
-                                    <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
+                                <xf:action
+                                    ev:event="xforms-value-changed">
+                                    <xf:setvalue
+                                        ref="ancestor::xpr:entity/xpr:label"
+                                        value="current()"/>
                                 </xf:action>
                             </xf:input>
                             <xf:group
@@ -1743,13 +1752,14 @@
                                         ref="if(@localId, @localId, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group
+                                ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input
                                     ref="."
                                     incremental="true">
                                     <xf:label>Source</xf:label>
-                                </xf:input>    
+                                </xf:input>
                             </xf:group>
                             <xf:input
                                 ref=".">
@@ -1979,8 +1989,11 @@
                         <xf:input
                             ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
                             <xf:label>Nom</xf:label>
-                            <xf:action ev:event="xforms-value-changed">
-                                <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
+                            <xf:action
+                                ev:event="xforms-value-changed">
+                                <xf:setvalue
+                                    ref="ancestor::xpr:entity/xpr:label"
+                                    value="current()"/>
                             </xf:action>
                         </xf:input>
                         <xf:group
@@ -2117,13 +2130,14 @@
                                         ref="if(@localId, @localId, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group
+                                ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input
                                     ref="."
                                     incremental="true">
                                     <xf:label>Source</xf:label>
-                                </xf:input>    
+                                </xf:input>
                             </xf:group>
                             <xf:input
                                 ref=".">
@@ -2190,7 +2204,7 @@
                     <xf:action
                         while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
                         <xf:send
-                            submission="submitParticipant"/>
+                            submission="submitNewEntity"/>
                     </xf:action>
                     <xf:action
                         while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
@@ -2209,9 +2223,11 @@
         </xf:case>
         <xf:case
             id="newEntitiesPanel">
-            <xf:group ref="instance('xprEntities')">
+            <xf:group
+                ref="instance('xprEntities')">
                 <xf:label>Nouvelle(s) entité(s)</xf:label>
-                <xf:repeat nodeset="instance('xprEntities')//eac:eac-cpf">
+                <xf:repeat
+                    nodeset="instance('xprEntities')//eac:eac-cpf">
                     <xf:label>Nouvelle entrée</xf:label>
                     <xf:select1
                         ref="eac:cpfDescription/eac:identity/eac:entityType"
@@ -2291,8 +2307,11 @@
                     <xf:input
                         ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
                         <xf:label>Nom</xf:label>
-                        <xf:action ev:event="xforms-value-changed">
-                            <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
+                        <xf:action
+                            ev:event="xforms-value-changed">
+                            <xf:setvalue
+                                ref="ancestor::xpr:entity/xpr:label"
+                                value="current()"/>
                         </xf:action>
                     </xf:input>
                     <xf:group
@@ -2431,13 +2450,14 @@
                                 ref="if(@localId, @localId, .)"/>
                         </xf:itemset>
                     </xf:select1>
-                    <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::eac:source[@localType]]]">
+                    <xf:group
+                        ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::eac:source[@localType]]]">
                         <xf:label>Nouvelle source</xf:label>
                         <xf:input
                             ref="."
                             incremental="true">
                             <xf:label>Source</xf:label>
-                        </xf:input>    
+                        </xf:input>
                     </xf:group>
                     <xf:input
                         ref="eac:descriptiveNote/eac:p">
@@ -2478,9 +2498,11 @@
         </xf:case>
         <xf:case
             id="newSourcesPanel">
-            <xf:group ref="instance('xprSources')">
+            <xf:group
+                ref="instance('xprSources')">
                 <xf:label>Nouvelle(s) source(s)</xf:label>
-                <xf:repeat nodeset="instance('xprSources')//xpr:source[@localType = 'new']">
+                <xf:repeat
+                    nodeset="instance('xprSources')//xpr:source[@localType = 'new']">
                     <xf:label>Nouvelle source</xf:label>
                     <xf:input
                         ref="."
