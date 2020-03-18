@@ -141,7 +141,8 @@
     <eac:cpfRelation
         xmlns:eac="eac"
         localType="new"/>
-    
+    <!-- for IAD form -->
+    <relation href="" arcrole="" localType="new"/>
     
     <eac:dateRange>
         <eac:fromDate

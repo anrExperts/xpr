@@ -23,8 +23,9 @@ declare namespace update = "http://basex.org/modules/update" ;
 declare namespace perm = "http://basex.org/modules/perm" ;
 declare namespace user = "http://basex.org/modules/user" ;
 
-declare namespace xf = "http://www.w3.org/2002/xforms" ;
+declare namespace xlink = "http://www.w3.org/1999/xlink" ;
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
+declare namespace xf = "http://www.w3.org/2002/xforms" ;
 declare namespace eac = "eac" ;
 
 declare default element namespace "xpr" ;
@@ -591,7 +592,7 @@ declare
 function newInventory() {
   let $content := map {
     'instance' : '',
-    'model' : 'xprInventoryModel.xml',
+    'model' : ('xprInventoryModel.xml', 'xprProsopoModel.xml'),
     'trigger' : 'xprInventoryTrigger.xml',
     'form' : 'xprInventoryForm.xml'
   }
@@ -635,9 +636,17 @@ declare
   %updating
 function xformRelationResult($param, $referer) {
   let $db := db:open("xpr")
-  let $expert := $param/*:relations/@ref
-  for $relation in $param/*:relations/*:cpfRelation
-  return insert node $relation into $db//*:eac-cpf[@xml:id = $expert]//*:relations
+  let $expert := $param/inventory/sourceDesc/expert/@ref
+  for $relation in $param//eac:relations/eac:cpfRelation
+  return 
+  if ($db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole])
+  then
+    for $source in $db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]/xpr:source/@xlink:href
+    return switch ($source)
+      case $relation/xpr:source/@xlink:href return ()
+      default return insert node $relation/xpr:source into $db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]
+  else
+    insert node $relation into $db//eac:eac-cpf[@xml:id = $expert]//eac:relations
 };
 
 
@@ -1082,21 +1091,18 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
  : @bug not generic enough
  :)
 declare function getModels($content as map(*)){
-  let $instance := map:get($content, 'instance')
+  let $instances := map:get($content, 'instance')
   let $path := map:get($content, 'path')
   let $models := map:get($content, 'model')
-  return
-    if ($instance) then
-      for $model at $i in $models
-      return
-        (
-          copy $doc := fn:doc(file:base-dir() || "files/" || $model[$i])
-          modify replace value of node $doc/xf:model/xf:instance[@id=fn:substring-before($model[$i], 'Model.xml')]/@src with '/xpr/' || $path || '/' || $instance
-          return $doc
-        )
-    else 
-      for $model in $models
-        return fn:doc(file:base-dir() || "files/" || $model)
+  for $model at $i in $models return
+    if ($instances[$i])
+    then (
+      copy $doc := fn:doc(file:base-dir() || "files/" || $model)
+      modify replace value of node $doc/xf:model/xf:instance[@id=fn:substring-before($model, 'Model.xml')]/@src with '/xpr/' || $path || '/' || $instances[$i]
+      return $doc
+    )
+    else
+    fn:doc(file:base-dir() || "files/" || $model)
 };
 
 (:~
