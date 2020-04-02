@@ -433,7 +433,7 @@ function modifyEntity($id) {
   let $content := map {
     'instance' : $id,
     'path' : 'biographies',
-    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml'),
+    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml', 'xprInventoryModel.xml'),
     'trigger' : 'xprProsopoTrigger.xml',
     'form' : 'xprProsopoForm.xml'
   }
@@ -457,7 +457,7 @@ declare
 function newBio() {
   let $content := map {
     'instance' : '',
-    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml'),
+    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml', 'xprInventoryModel.xml'),
     'trigger' : 'xprProsopoTrigger.xml',
     'form' : 'xprProsopoForm.xml'
   }

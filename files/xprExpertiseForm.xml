@@ -5,283 +5,232 @@
         <xf:case
             id="referencesPanel"
             selected="true">
-            <xf:label>Références</xf:label>
             <xf:group
-                ref="instance('xprExpertise')/xpr:sourceDesc/xpr:idno">
-                <xf:label>Identifiants</xf:label>
-                <xf:input
-                    bind="unitid"
-                    incremental="true">
-                    <xf:label>Cote</xf:label>
-                    <xf:help>La cote doit respecter le format suivant : Z1JXXX</xf:help>
-                    <!--<xf:hint>La cote doit respecter le format suivant : Z1JXXX</xf:hint>-->
-                    <xf:alert>Le champ cote est requis.</xf:alert>
-                </xf:input>
-                <xf:input
-                    bind="item"
-                    incremental="true">
-                    <xf:label>Dossier</xf:label>
-                </xf:input>
-            </xf:group>
-            <xf:group
-                ref="instance('xprExpertise')/xpr:sourceDesc/xpr:facsimile">
-                <xf:label>Identifiants des vues</xf:label>
-                <xf:input
-                    bind="facsimileFrom"
-                    incremental="true">
-                    <xf:label>Première vue</xf:label>
-                </xf:input>
-                <xf:input
-                    bind="facsimileTo"
-                    incremental="true">
-                    <xf:label>Dernière vue</xf:label>
-                </xf:input>
-            </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:sourceDesc, 'yes')"/>
-                        </pre>
-            <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
-            <xf:group>
-                <xf:input
-                    bind="extent"
-                    incremental="true">
-                    <xf:label>Nombre de cahiers et de feuillets</xf:label>
-                </xf:input>
-                <xf:select1
-                    bind="sketch"
-                    appearance="full">
-                    <xf:label>Croquis sur le procès-verbal</xf:label>
-                    <xf:item>
-                        <xf:label>oui</xf:label>
-                        <xf:value>true</xf:value>
-                    </xf:item>
-                    <xf:item>
-                        <xf:label>non</xf:label>
-                        <xf:value>false</xf:value>
-                    </xf:item>
-                    <!--<xf:help>Ceci est un message d'aide</xf:help>-->
-                </xf:select1>
-                <!--<xf:range ref="instance('xprRanges')/xpr:range[@type='sketch']/@n" start="1" end="3" step="1" incremental="true">
-                                <xf:label>Croquis sur le procès-verbal <xf:output value="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/></xf:label>
-                                <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='1'">
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch">true</xf:setvalue>
-                                </xf:action>
-                                <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='2'">
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch"/>
-                                </xf:action>
-                                <xf:action ev:event="xforms-value-changed" if="instance('xprRanges')/xpr:range[@type='sketch']/@n='3'">
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:extent/@sketch">false</xf:setvalue>
-                                </xf:action>
-                            </xf:range>-->
-            </xf:group>
-            <xf:trigger
-                bind="addAppendice">
-                <xf:label>Ajouter une annexe</xf:label>
-                <xf:action
-                    ev:event="DOMActivate">
-                    <xf:delete
-                        nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"/>
-                    <xf:insert
-                        origin="instance('xprSupplement')/xpr:appendices"
-                        nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/*"
-                        at="last()"
-                        position="after"/>
-                    <!--<xf:insert nodeset="instance('xprAppendices')"/>-->
-                </xf:action>
-                <xf:help>Ajouter une annexe.</xf:help>
-            </xf:trigger>
-            <xf:group
-                ref="xpr:sourceDesc/xpr:physDesc/xpr:appendices">
-                <xf:label>Pièces annexes</xf:label>
-                <!--@rmq Pourra servir au contrôle à partir des informations tirées du récolement. -->
-                <xf:output
-                    value="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice)">
-                    <xf:label>Nombre de pièces annexes</xf:label>
-                </xf:output>
-                <xf:repeat
-                    id="repeatAppendice"
-                    bind="appendice"
-                    appearance="full">
-                    <xf:repeat
-                        id="repeatAppendiceType"
-                        nodeset="xpr:type">
-                        <xf:select1
-                            ref="@type">
-                            <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
-                            <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
-                            <xf:label>Type de pièce annexe</xf:label>
-                            <xf:item>
-                                <xf:label>Dessin</xf:label>
-                                <xf:value>drawing</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Dessin</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Plan</xf:label>
-                                <xf:value>plan</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Plan</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Croquis</xf:label>
-                                <xf:value>sketch</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Croquis</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Brouillon</xf:label>
-                                <xf:value>rough</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Brouillon</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Pouvoir/procuration (acte sous seing privé)</xf:label>
-                                <xf:value>proxyPA</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Pouvoir/procuration (acte sous seing privé)</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Pouvoir/procuration (acte notarié)</xf:label>
-                                <xf:value>proxyNA</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Pouvoir/procuration (acte notarié)</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Requête</xf:label>
-                                <xf:value>petition</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">Requête</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>Autre</xf:label>
-                                <xf:value>other</xf:value>
-                                <xf:action
-                                    ev:event="xforms-select">
-                                    <xf:setvalue
-                                        ref="parent::xpr:type">À préciser</xf:setvalue>
-                                </xf:action>
-                            </xf:item>
-                        </xf:select1>
-                        <xf:input
-                            ref=".[@type='other']"
-                            incremental="true"> </xf:input>
-                        <xf:trigger
-                            class="delete">
-                            <xf:label>&#10007;</xf:label>
-                            <xf:delete
-                                nodeset="."
-                                at="1"
-                                ev:event="DOMActivate"
-                                if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type) > 1"/>
-                            <xf:help>Supprimer un type d'annexe.</xf:help>
-                        </xf:trigger>
-                    </xf:repeat>
-                    <xf:trigger
-                        class="insert">
-                        <xf:label>Ajouter un type</xf:label>
-                        <xf:action
-                            ev:event="DOMActivate">
-                            <xf:insert
-                                nodeset="xpr:type"
-                                at="index('repeatAppendiceType')"
-                                position="after"/>
-                            <xf:setvalue
-                                ref="xpr:type[index('repeatAppendiceType')]"
-                                value=""/>
-                            <xf:setvalue
-                                ref="xpr:type[index('repeatAppendiceType')]/@type"
-                                value=""/>
-                        </xf:action>
-                        <xf:help>Ajouter un type d'annexe.</xf:help>
-                    </xf:trigger>
-                    <!--@todo appendice autre-->
+                ref="instance('xprExpertise')/xpr:sourceDesc">
+                <xf:label>Références</xf:label>
+                <xf:group>
+                    <xf:label>Identifiants</xf:label>
+                    <xf:input
+                        ref="xpr:idno[@type='unitid']"
+                        incremental="true">
+                        <xf:label>Cote</xf:label>
+                        <xf:help>La cote doit respecter le format suivant : Z1JXXX</xf:help>
+                        <xf:alert>Le champ "Cote" est requis.</xf:alert>
+                    </xf:input>
+                    <xf:input
+                        ref="xpr:idno[@type = 'item']"
+                        incremental="true">
+                        <xf:label>Dossier</xf:label>
+                        <xf:alert>Le champ "Dossier" est requis.</xf:alert>
+                    </xf:input>
+                </xf:group>
+                <xf:group
+                    ref="xpr:facsimile">
+                    <xf:label>Identifiants des vues</xf:label>
+                    <xf:input
+                        ref="@from"
+                        incremental="true">
+                        <xf:label>Première vue</xf:label>
+                    </xf:input>
+                    <xf:input
+                        ref="@to"
+                        incremental="true">
+                        <xf:label>Dernière vue</xf:label>
+                    </xf:input>
+                </xf:group>
+                <xf:group ref="xpr:physDesc">
+                    <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
                     <xf:input
                         ref="xpr:extent"
                         incremental="true">
-                        <xf:label>Nombre de feuillets</xf:label>
+                        <xf:label>Nombre de cahiers et de feuillets</xf:label>
                     </xf:input>
-                    <xf:textarea
-                        ref="xpr:desc"
-                        incremental="true">
-                        <xf:label>Description physique</xf:label>
-                    </xf:textarea>
-                    <xf:textarea
-                        ref="xpr:note"
-                        incremental="true">
-                        <xf:label>Commentaires</xf:label>
-                    </xf:textarea>
-                    <xf:trigger
-                        class="delete">
-                        <xf:label>Supprimer une annexe</xf:label>
-                        <xf:delete
-                            nodeset="parent::xpr:appendices"
-                            if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice) = 1"
-                            ev:event="DOMActivate"/>
-                        <xf:delete
-                            nodeset="."
-                            at="1"
-                            if="count(//xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice) > 1"
-                            ev:event="DOMActivate"/>
-                        <xf:help>Supprimer une annexe.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger
-                    class="insert">
-                    <xf:label>Ajouter une pièce annexe</xf:label>
-                    <xf:action
-                        ev:event="DOMActivate">
-                        <xf:insert
+                    <xf:select1
+                        ref="xpr:extent/@sketch"
+                        appearance="full">
+                        <xf:label>Croquis sur le procès-verbal</xf:label>
+                        <xf:item>
+                            <xf:label>oui</xf:label>
+                            <xf:value>true</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>non</xf:label>
+                            <xf:value>false</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:group
+                        ref="xpr:appendices">
+                        <xf:label>Pièces annexes</xf:label>
+                        <xf:output
+                            value="count(xpr:appendice)">
+                            <xf:label>Nombre de pièces annexes</xf:label>
+                        </xf:output>
+                        <xf:repeat
                             nodeset="xpr:appendice"
-                            at="index('repeatAppendice')"
+                            appearance="full">
+                            <xf:repeat
+                                nodeset="xpr:type">
+                                <xf:select1
+                                    ref="@type">
+                                    <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
+                                    <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
+                                    <xf:label>Type de pièce annexe</xf:label>
+                                    <xf:item>
+                                        <xf:label>Dessin</xf:label>
+                                        <xf:value>drawing</xf:value>
+                                        <xf:setvalue
+                                            ref="parent::xpr:type"
+                                            ev:event="xforms-select">Dessin</xf:setvalue>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Plan</xf:label>
+                                        <xf:value>plan</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">Plan</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Croquis</xf:label>
+                                        <xf:value>sketch</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">Croquis</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Brouillon</xf:label>
+                                        <xf:value>rough</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">Brouillon</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Pouvoir/procuration (acte sous seing privé)</xf:label>
+                                        <xf:value>proxyPA</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">Pouvoir/procuration (acte sous seing privé)</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Pouvoir/procuration (acte notarié)</xf:label>
+                                        <xf:value>proxyNA</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">Pouvoir/procuration (acte notarié)</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Requête</xf:label>
+                                        <xf:value>petition</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">Requête</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                    <xf:item>
+                                        <xf:label>Autre</xf:label>
+                                        <xf:value>other</xf:value>
+                                        <xf:action
+                                            ev:event="xforms-select">
+                                            <xf:setvalue
+                                                ref="parent::xpr:type">À préciser</xf:setvalue>
+                                        </xf:action>
+                                    </xf:item>
+                                </xf:select1>
+                                <xf:input
+                                    ref="self::node()[@type='other']"
+                                    incremental="true"> </xf:input>
+                                <xf:trigger
+                                    class="delete">
+                                    <xf:label>&#10007;</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        if="count(parent::xpr:appendice/xpr:type) > 1"
+                                        ev:event="DOMActivate"/>
+                                    <xf:help>Supprimer un type d'annexe.</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger
+                                class="insert">
+                                <xf:label>Ajouter un type</xf:label>
+                                <xf:insert
+                                    context="."
+                                    origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type"
+                                    nodeset="xpr:type[last()]"
+                                    position="after"
+                                    ev:event="DOMActivate"/>
+                                <xf:help>Ajouter un type d'annexe</xf:help>
+                            </xf:trigger>
+                            <!--@todo appendice autre-->
+                            <xf:input
+                                ref="xpr:extent"
+                                incremental="true">
+                                <xf:label>Nombre de feuillets</xf:label>
+                            </xf:input>
+                            <xf:textarea
+                                ref="xpr:desc"
+                                incremental="true">
+                                <xf:label>Description physique</xf:label>
+                            </xf:textarea>
+                            <xf:textarea
+                                ref="xpr:note"
+                                incremental="true">
+                                <xf:label>Commentaires</xf:label>
+                            </xf:textarea>
+                            <xf:trigger
+                                class="delete">
+                                <xf:label>Supprimer une annexe</xf:label>
+                                <xf:delete
+                                    nodeset="."
+                                    at="1"
+                                    if="count(parent::xpr:appendices/xpr:appendice) > 1"
+                                    ev:event="DOMActivate"/>
+                                <xf:help>Supprimer une annexe</xf:help>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <xf:trigger
+                            class="insert">
+                            <xf:label>Ajouter une pièce annexe</xf:label>
+                            <xf:insert
+                                context="."
+                                origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice"
+                                nodeset="xpr:appendice[last()]"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:help>Ajouter une pièce annexe</xf:help>
+                        </xf:trigger>
+                    </xf:group>
+                    <xf:trigger
+                        ref="self::node()[not(xpr:appendices)]">
+                        <xf:label>Ajouter des pièces annexes</xf:label>
+                        <xf:insert
+                            context="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc"
+                            origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"
+                            nodeset="xpr:extent"
                             position="after"
                             ev:event="DOMActivate"/>
+                        <xf:help>Ajouter des pièces annexes</xf:help>
+                    </xf:trigger>
+                    <xf:trigger
+                        ref="self::node()[xpr:appendices]">
+                        <xf:label>Supprimer toutes les pièces annexes</xf:label>
                         <xf:delete
-                            ref="xpr:appendice[index('repeatAppendice')]/xpr:type[position() &gt; 1]"/>
-                        <xf:setvalue
-                            ref="xpr:appendice[index('repeatAppendice')]/xpr:type"
-                            value=""/>
-                        <xf:setvalue
-                            ref="xpr:appendice[index('repeatAppendice')]/xpr:type/@type"
-                            value=""/>
-                        <xf:setvalue
-                            ref="xpr:appendice[index('repeatAppendice')]/xpr:extent"
-                            value=""/>
-                        <xf:setvalue
-                            ref="xpr:appendice[index('repeatAppendice')]/xpr:desc"
-                            value=""/>
-                        <xf:setvalue
-                            ref="xpr:appendice[index('repeatAppendice')]/xpr:note"
-                            value=""/>
-                    </xf:action>
-                    <xf:help>Ajouter une pièce annexe.</xf:help>
-                </xf:trigger>
+                            nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"
+                            ev:event="DOMActivate"/>
+                        <xf:help>Supprimer toutes les pièces annexes</xf:help>
+                    </xf:trigger>
+                </xf:group>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:sourceDesc/xpr:physDesc, 'yes')"/>
-                        </pre>
         </xf:case>
         <xf:case
             id="sessionsPanel"

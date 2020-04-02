@@ -3,16 +3,6 @@
     xmlns="xpr"
     xmlns:eac="eac"
     xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--Annexes-->
-    <appendices>
-        <appendice>
-            <type
-                type=""/>
-            <extent/>
-            <desc/>
-            <note/>
-        </appendice>
-    </appendices>
     <!--Parties's representative-->
     <representative>
         <persName>
@@ -142,8 +132,10 @@
         xmlns:eac="eac"
         localType="new"/>
     <!-- for IAD form -->
-    <relation href="" arcrole="" localType="new"/>
-    
+    <relation
+        href=""
+        arcrole=""
+        localType="new"/>
     <eac:dateRange>
         <eac:fromDate
             standardDate=""
