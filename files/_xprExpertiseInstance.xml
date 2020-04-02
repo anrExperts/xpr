@@ -13,6 +13,15 @@
         <physDesc>
             <extent
                 sketch=""/>
+            <appendices>
+                <appendice>
+                    <type
+                        type=""/>
+                    <extent/>
+                    <desc/>
+                    <note/>
+                </appendice>
+            </appendices>
         </physDesc>
     </sourceDesc>
     <description>

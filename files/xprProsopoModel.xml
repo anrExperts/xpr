@@ -453,25 +453,25 @@
                 context="instance('xprNewEntity')"
                 origin="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href][1]/eac:eac-cpf"
                 nodeset="."
-                if="not(instance('xprInventory'))"
+                if="not(instance('xprInventory')/xpr:sourceDesc)"
                 ev:event="DOMActivate"/>
             <xf:insert
                 context="instance('xprNewEntity')"
                 origin="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprInventory')//*/@xlink:href][1]/eac:eac-cpf"
                 nodeset="."
-                if="instance('xprInventory')"
+                if="instance('xprInventory')/xpr:sourceDesc"
                 ev:event="DOMActivate"/>
             <!-- source -->
-            <xf:setvalue 
+            <xf:setvalue
                 ref="instance('xprNewEntity')//eac:places/eac:place/eac:dateSet/eac:date/xpr:source/@xlink:href
-                | instance('xprNewEntity')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/xpr:source/@xlink:href" 
+                | instance('xprNewEntity')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/xpr:source/@xlink:href"
                 value="instance('xprInventory')/xpr:sourceDesc/xpr:idno/@unitid"
-                if="instance('xprInventory')"/>
+                if="instance('xprInventory')/xpr:sourceDesc"/>
             <!-- date -->
-            <xf:setvalue 
-                ref="instance('xprNewEntity')//eac:places/eac:place/eac:dateSet/eac:date/@standardDate" 
+            <xf:setvalue
+                ref="instance('xprNewEntity')//eac:places/eac:place/eac:dateSet/eac:date/@standardDate"
                 value="instance('xprInventory')/xpr:sourceDesc/xpr:date/@standardDate"
-                if="instance('xprInventory')"/>
+                if="instance('xprInventory')/xpr:sourceDesc"/>
             <xf:delete
                 nodeset="instance('xprNewEntity')//@standardDate[. = '']"/>
             <xf:delete
@@ -499,17 +499,17 @@
             <xf:setvalue
                 ref="instance('xprProsopo')//*[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
                 value="event('response-body')//*:id"
-                if="not(instance('xprInventory'))"/>
+                if="not(instance('xprInventory')/xpr:sourceDesc)"/>
             <xf:delete
                 nodeset="instance('xprProsopo')//*[@xlink:href = event('response-body')//*:id]/@localType[. = 'new']"
-                if="not(instance('xprInventory'))"/>
+                if="not(instance('xprInventory')/xpr:sourceDesc)"/>
             <xf:setvalue
                 ref="instance('xprInventory')//*[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
                 value="event('response-body')//*:id"
-                if="instance('xprInventory')"/>
+                if="instance('xprInventory')/xpr:sourceDesc"/>
             <xf:delete
                 nodeset="instance('xprInventory')//*[@xlink:href = event('response-body')//*:id]/@localType[. = 'new']"
-                if="instance('xprInventory')"/>
+                if="instance('xprInventory')/xpr:sourceDesc"/>
         </xf:action>
         <xf:action
             ev:event="xforms-submit-error">
