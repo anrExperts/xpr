@@ -38,7 +38,8 @@
                         <xf:label>Dernière vue</xf:label>
                     </xf:input>
                 </xf:group>
-                <xf:group ref="xpr:physDesc">
+                <xf:group
+                    ref="xpr:physDesc">
                     <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
                     <xf:input
                         ref="xpr:extent"
@@ -296,9 +297,6 @@
                     <xf:help>Ajouter une vacation.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:sessions, 'yes')"/>
-                        </pre>
             <xf:label>Lieux de l’expertise</xf:label>
             <xf:group
                 ref="xpr:description/xpr:places">
@@ -450,10 +448,6 @@
                     <xf:help>Ajouter un lieu.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:places, 'yes')"/>
-                        </pre>
         </xf:case>
         <xf:case
             id="procedurePanel"
@@ -561,10 +555,6 @@
                     </xf:item>
                 </xf:select1>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:categories, 'yes')"/>
-                        </pre>
             <xf:group
                 ref="xpr:description/xpr:procedure">
                 <xf:label>Procédure et cadre de l’expertise</xf:label>
@@ -896,10 +886,6 @@
                     </xf:input>
                 </xf:group>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:procedure, 'yes')"/>
-                        </pre>
         </xf:case>
         <xf:case
             id="participantsPanel"
@@ -1001,10 +987,6 @@
                     <xf:help>Ajouter un expert.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:participants/xpr:experts, 'yes')"/>
-                        </pre>
             <xf:group
                 ref="xpr:description/xpr:participants/xpr:clerks">
                 <!--@todo au pluriel ?-->
@@ -1055,10 +1037,6 @@
                     <xf:help>Ajouter un greffier.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:participants/xpr:clerks, 'yes')"/>
-                        </pre>
             <xf:group
                 ref="xpr:description/xpr:participants/xpr:parties">
                 <xf:label>Parties</xf:label>
@@ -1396,10 +1374,6 @@
                     <xf:help>Ajouter une partie.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:participants/xpr:parties, 'yes')"/>
-                        </pre>
             <xf:group
                 ref="xpr:description/xpr:participants/xpr:craftmen">
                 <!--@quest au pluriel ?-->
@@ -1458,10 +1432,6 @@
                     <xf:help>Ajouter un entrepreneur, architecte ou maître d’œuvre.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <!--control-->
-            <pre>
-                            <xf:output value="serialize(xpr:description/xpr:participants/xpr:craftmen, 'yes')"/>
-                        </pre>
         </xf:case>
         <xf:case
             id="conclusionsPanel"
@@ -1938,10 +1908,6 @@
                     </xf:select>
                 </xf:group>
             </xf:group>
-            <!--control-->
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:conclusions, 'yes')"/>
-                    </pre>
         </xf:case>
         <xf:case
             id="keywordsPanel"
@@ -1987,9 +1953,6 @@
                     <xf:help>Ajouter un mot-clé.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:keywords[@type='technical'], 'yes')"/>
-                    </pre>
             <xf:group
                 ref="xpr:description/xpr:keywords[@type='tools']">
                 <xf:label>Outils et actions de l'expertise</xf:label>
@@ -2030,9 +1993,6 @@
                     <xf:help>Ajouter un mot-clé.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:keywords[@type='tools'], 'yes')"/>
-                    </pre>
             <xf:group
                 ref="xpr:description/xpr:keywords[@type='estimation']">
                 <xf:label>Rubrique spécifique aux estimations</xf:label>
@@ -2073,9 +2033,6 @@
                     <xf:help>Ajouter un mot-clé.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:keywords[@type='estimation'], 'yes')"/>
-                    </pre>
             <xf:group
                 ref="xpr:description/xpr:keywords[@type='law']">
                 <xf:label>Rubrique spécifique au droit</xf:label>
@@ -2116,9 +2073,6 @@
                     <xf:help>Ajouter un mot-clé.</xf:help>
                 </xf:trigger>
             </xf:group>
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:keywords[@type='law'], 'yes')"/>
-                    </pre>
             <xf:group
                 ref="xpr:description/xpr:analysis">
                 <xf:label>Commentaires et première analyse</xf:label>
@@ -2127,9 +2081,6 @@
                     <xf:label>Passages intéressants</xf:label>
                 </xf:textarea>
             </xf:group>
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:analysis, 'yes')"/>
-                    </pre>
             <xf:group
                 ref="xpr:description/xpr:noteworthy">
                 <xf:label>Éléments remarquables</xf:label>
@@ -2138,9 +2089,6 @@
                     <xf:label/>
                 </xf:textarea>
             </xf:group>
-            <pre>
-                        <xf:output value="serialize(xpr:description/xpr:noteworthy, 'yes')"/>
-                    </pre>
             <xf:trigger
                 bind="addComment">
                 <xf:label>Ajouter un commentaire sur ce formulaire</xf:label>
