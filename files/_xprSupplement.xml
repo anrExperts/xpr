@@ -69,6 +69,7 @@
     <fees>
         <fee
             type="expert"
+            ref=""
             l=""
             s=""
             d=""/>

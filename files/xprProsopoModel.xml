@@ -146,6 +146,7 @@
         id="obsListEntity"
         nodeset="instance('xprEntities')"/>
     <!-- to update item list in itemset  -->
+    <!-- @todo verif les DOMActivate ne doivent pas servir à grand chose -->
     <xf:action
         ev:event="xforms-value-changed"
         ev:observer="obsListEntity">

@@ -1,11 +1,12 @@
 <xf:model
+        id="expertise"
         xmlns:xf="http://www.w3.org/2002/xforms"
         xmlns:ev="http://www.w3.org/2001/xml-events">
         <xf:action
                 ev:event="xforms-ready">
                 <!-- delete xpr:appendices if all xpr:appendice are empty -->
                 <xf:delete
-                        nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices[not(xpr:appendice//*[not(. = '')] or xpr:appendice/xpr:type/@type[not(. = '')])]" 
+                        nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices[not(xpr:appendice//*[not(. = '')] or xpr:appendice/xpr:type/@type[not(. = '')])]"
                         ev:event="xforms-ready"/>
                 <xf:setvalue
                         ref="instance('xprSupplement')/xpr:categories/xpr:category[not(@type)]"
@@ -33,6 +34,8 @@
         <xf:instance
                 id="xprExpertise"
                 src="/xpr/files/_xprExpertiseInstance.xml"/>
+        <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()"
+                readonly="true()"/>
         <xf:instance
                 id="xprExpertiseCopy"
                 src="/xpr/files/_xprExpertiseInstance.xml"/>
@@ -275,6 +278,12 @@
         <xf:bind
                 id="expertRef"
                 nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref"/>
+        <!--<xf:action
+                ev:event="xforms-value-changed"
+                ev:observer="expertRef">
+                <xf:refresh
+                        model="expertise"/>
+        </xf:action>-->
         <xf:bind
                 id="expertTitle"
                 nodeset="xpr:description/xpr:participants/xpr:experts/xpr:expert/xpr:title"/>
@@ -390,16 +399,10 @@
         <xf:bind
                 id="estimate"
                 nodeset="xpr:description/xpr:conclusions/xpr:estimate"/>
-        <xf:bind
-                id="fees"
-                nodeset="xpr:description/xpr:conclusions/xpr:fees"/>
-        <xf:bind
-                id="feesDetail"
-                nodeset="xpr:description/xpr:conclusions/xpr:fees/@detail"/>
-        <xf:bind
-                id="fee"
-                nodeset="instance('xprSupplement')/xpr:fees/xpr:fee"
-                relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+        
+        
+        
+        
         <xf:bind
                 id="addOtherFee"
                 nodeset="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']"
