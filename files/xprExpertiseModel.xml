@@ -29,7 +29,6 @@
                                 instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
                                 instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
                                 )"/>
-                
                 <xf:delete
                         if="not(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'])"
                         nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"
@@ -416,16 +415,16 @@
         <xf:bind
                 id="feesMoney"
                 nodeset="//@l | //@d | //@s | instance('xprSupplement')/xpr:fees//@l | instance('xprSupplement')/xpr:fees//@d |instance('xprSupplement')/xpr:fees//@s"/>
-        <xf:bind
+        <!--<xf:bind
                 id="expenses"
-                nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>
-        <xf:bind
+                nodeset="xpr:description/xpr:conclusions/xpr:expenses"/>-->
+        <!--<xf:bind
                 id="expensesMentioned"
-                nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>
-        <xf:bind
+                nodeset="xpr:description/xpr:conclusions/xpr:expenses/@mentioned"/>-->
+        <!--<xf:bind
                 id="expenseType"
                 nodeset="instance('xprSupplement')/xpr:expenses/xpr:expense"
-                relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>
+                relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[@mentioned='true']"/>-->
         <!--Mots-clés et commentaires-->
         <xf:bind
                 id="keywordsTechnical"
