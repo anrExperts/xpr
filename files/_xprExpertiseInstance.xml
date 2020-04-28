@@ -47,7 +47,6 @@
         <categories>
             <designation
                 rubric=""/>
-            <category type="estimation"/>
         </categories>
         <procedure>
             <framework
@@ -118,8 +117,11 @@
                 d=""/>
             <estimates>
                 <place>
-                    <appraisal l="" s="" d="">
-                        <desc></desc>
+                    <appraisal
+                        l=""
+                        s=""
+                        d="">
+                        <desc/>
                     </appraisal>
                 </place>
             </estimates>
