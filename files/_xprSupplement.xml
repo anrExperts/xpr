@@ -64,6 +64,11 @@
             d=""/>
     </expenses>
     <iterator/>
+    <appraisals>
+        <appraisal l="" s="" d="">
+            <desc/>
+        </appraisal>
+    </appraisals>
     <opinion
         ref=""/>
     <fees>
