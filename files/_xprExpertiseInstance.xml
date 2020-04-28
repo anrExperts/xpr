@@ -133,7 +133,7 @@
                     d=""/>
             </fees>
             <expenses
-                mentioned=""/>
+                mentioned="false"/>
         </conclusions>
         <keywords
             type="technical">

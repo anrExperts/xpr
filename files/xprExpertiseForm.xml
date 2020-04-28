@@ -2019,7 +2019,7 @@
                 <xf:group
                     ref="xpr:expenses">
                     <xf:label>Bourse commune</xf:label>
-                    <xf:select1
+                    <!--<xf:select1
                         ref="@mentioned"
                         appearance="full">
                         <xf:label>Mention(s) de la bourse commune (des experts ou greffiers) et détail</xf:label>
@@ -2036,7 +2036,7 @@
                                     ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type]"/>
                             </xf:action>
                         </xf:item>
-                    </xf:select1>
+                    </xf:select1>-->
                     <xf:select
                         ref="instance('xprSupplement')/xpr:expenses/xpr:expense"
                         appearance="full">
@@ -2048,11 +2048,18 @@
                                 <xf:insert
                                     origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='expert']"
                                     context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses"/>
+                                <xf:setvalue
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                    value="'true'"/>
                             </xf:action>
                             <xf:action
                                 ev:event="xforms-deselect">
                                 <xf:delete
                                     ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']"/>
+                                <xf:setvalue
+                                    if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]"
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                    value="'false'"/>
                             </xf:action>
                             <xf:group
                                 ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']">
@@ -2082,11 +2089,18 @@
                                 <xf:insert
                                     origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='clerk']"
                                     context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses"/>
+                                <xf:setvalue 
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" 
+                                    value="'true'"/>
                             </xf:action>
                             <xf:action
                                 ev:event="xforms-deselect">
                                 <xf:delete
                                     ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']"/>
+                                <xf:setvalue
+                                    if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]"
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                    value="'false'"/>
                             </xf:action>
                             <xf:group
                                 ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']">
