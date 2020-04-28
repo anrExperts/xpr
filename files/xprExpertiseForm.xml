@@ -471,9 +471,9 @@
                                 origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates"
                                 nodeset="xpr:estimate"
                                 position="after"/>
-                            <xf:action 
+                            <xf:action
                                 while="count(instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place) &lt; count(instance('xprExpertise')/xpr:description/xpr:places/xpr:place)">
-                                <xf:insert 
+                                <xf:insert
                                     context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"
                                     origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place"
                                     nodeset="xpr:place[last()]"/>
@@ -589,9 +589,11 @@
                                 <xf:setvalue
                                     ref="parent::xpr:framework">Commun accord des parties</xf:setvalue>
                                 <xf:setvalue
-                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Les parties'"/>
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                    value="'Les parties'"/>
                                 <xf:setvalue
-                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'parties'"/>
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                    value="'parties'"/>
                             </xf:action>
                         </xf:item>
                         <xf:choices>
@@ -604,9 +606,11 @@
                                     <xf:setvalue
                                         ref="parent::xpr:framework">Requête auprès du lieutenant civil pour qu’il demande une expertise</xf:setvalue>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Les parties'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                        value="'Les parties'"/>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'parties'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                        value="'parties'"/>
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
@@ -620,9 +624,11 @@
                                     <xf:setvalue
                                         ref="parent::xpr:framework">Le lieutenant civil est saisi dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</xf:setvalue>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                        value="'Une institution'"/>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                        value="'institution'"/>
                                 </xf:action>
                             </xf:item>
                             <xf:item>
@@ -633,9 +639,11 @@
                                     <xf:setvalue
                                         ref="parent::xpr:framework">Le lieutenant civil est saisi dans le cadre d’une procédure (le lieutenant civil nomme un ou deux experts)</xf:setvalue>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                        value="'Une institution'"/>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                        value="'institution'"/>
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
@@ -648,9 +656,11 @@
                                     <xf:setvalue
                                         ref="parent::xpr:framework">Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:setvalue>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                        value="'Une institution'"/>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                        value="'institution'"/>
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
@@ -664,9 +674,11 @@
                                     <xf:setvalue
                                         ref="parent::xpr:framework">Cas problématique</xf:setvalue>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value=""/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                        value=""/>
                                     <xf:setvalue
-                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value=""/>
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                        value=""/>
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
@@ -943,7 +955,7 @@
                         incremental="true">
                         <xf:label>Patronyme</xf:label>
                         <xf:itemset
-                            nodeset="instance('xprExperts')/xpr:entity[@type='expert']">
+                            nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert']">
                             <xf:label
                                 value="xpr:label"/>
                             <xf:value
@@ -1243,7 +1255,7 @@
                         ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
                         <xf:itemset
-                            nodeset="instance('xprExperts')/xpr:entity[@type='expert'][@xml:id = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                            nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert'][@xml:id = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
                             <xf:label
                                 value="."/>
                             <xf:value
@@ -1661,18 +1673,18 @@
                         <xf:label>deniers</xf:label>
                     </xf:input>
                 </xf:group>
-                <xf:group 
+                <xf:group
                     ref="xpr:estimates">
                     <xf:repeat
                         id="estimatesPlace"
                         nodeset="xpr:place">
                         <xf:label>
-                            <xf:output 
+                            <xf:output
                                 value="concat('Estimations pour ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:street, ', ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:buildingNumber)"/>
                         </xf:label>
                         <xf:repeat
                             nodeset="xpr:appraisal">
-                            <xf:input 
+                            <xf:input
                                 ref="xpr:desc"
                                 incremental="true">
                                 <xf:label>Nature du bien</xf:label>
@@ -1692,9 +1704,10 @@
                                 incremental="true">
                                 <xf:label>deniers</xf:label>
                             </xf:input>
-                            <xf:trigger class="delete">
+                            <xf:trigger
+                                class="delete">
                                 <xf:label>Supprimer une estimation</xf:label>
-                                <xf:delete 
+                                <xf:delete
                                     ev:event="DOMActivate"
                                     nodeset="."/>
                                 <xf:help>Supprimer une estimation</xf:help>
