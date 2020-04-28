@@ -47,6 +47,7 @@
         <categories>
             <designation
                 rubric=""/>
+            <category type="estimation"/>
         </categories>
         <procedure>
             <framework
@@ -108,13 +109,20 @@
             </craftmen>
         </participants>
         <conclusions>
-            <arrangement/>
             <agreement
                 type=""/>
+            <arrangement/>
             <estimate
                 l=""
                 s=""
                 d=""/>
+            <estimates>
+                <place>
+                    <appraisal l="" s="" d="">
+                        <desc></desc>
+                    </appraisal>
+                </place>
+            </estimates>
             <fees
                 detail="">
                 <total

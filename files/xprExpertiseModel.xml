@@ -29,12 +29,18 @@
                                 instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
                                 instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
                                 )"/>
+                
+                <xf:delete
+                        if="not(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'])"
+                        nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"
+                        ev:event="xforms-ready"/>
         </xf:action>
         <!--Instance principale-->
         <xf:instance
                 id="xprExpertise"
                 src="/xpr/files/_xprExpertiseInstance.xml"/>
-        <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()"
+        <xf:bind
+                nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()"
                 readonly="true()"/>
         <xf:instance
                 id="xprExpertiseCopy"
@@ -399,10 +405,6 @@
         <xf:bind
                 id="estimate"
                 nodeset="xpr:description/xpr:conclusions/xpr:estimate"/>
-        
-        
-        
-        
         <xf:bind
                 id="addOtherFee"
                 nodeset="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']"
