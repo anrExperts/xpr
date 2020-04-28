@@ -38,7 +38,7 @@
        </check>
       </treat>
      </param>
-     <resultDoc line="72" global="#&#xA;#Sun Mar 01 22:56:22 CET 2020&#xA;" local="#&#xA;#Sun Mar 01 22:56:22 CET 2020&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
+     <resultDoc line="72" global="#&#xA;#Mon Mar 02 11:28:18 CET 2020&#xA;" local="#&#xA;#Mon Mar 02 11:28:18 CET 2020&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
       <fn role="href" name="concat">
        <str val="#"/>
        <fn name="string">
@@ -307,25 +307,7 @@
    </elem>
   </template>
  </co>
- <co id="6" binds="7">
-  <globalVariable name="Q{http://saxon.sf.net/generated-variable}gg1217404810" type="xs:string" line="20" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" visibility="PRIVATE" jsAcceptor="return SaxonJS.U.Atomic.string.cast(val);" jsCardCheck="function c(n) {return n==1;};">
-   <fn baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="20" name="string-join">
-    <convert from="xs:untypedAtomic" to="xs:string">
-     <data>
-      <slash>
-       <slash simple="1">
-        <gVarRef name="Q{}content" bSlot="0"/>
-        <axis name="descendant" nodeTest="element(Q{eac}eac-cpf)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';"/>
-       </slash>
-       <axis name="attribute" nodeTest="attribute(Q{http://www.w3.org/XML/1998/namespace}id)" jsTest="var q=SaxonJS.U.nameOfNode(item); return q.uri==='http://www.w3.org/XML/1998/namespace'&amp;&amp;q.local==='id';"/>
-      </slash>
-     </data>
-    </convert>
-    <str val=" "/>
-   </fn>
-  </globalVariable>
- </co>
- <co id="7" binds="2">
+ <co id="6" binds="2">
   <globalVariable name="Q{}content" type="document-node()" line="14" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" visibility="PRIVATE" jsAcceptor="function test(item) {return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11);};if (test(val)) {return val;} else {throw SaxonJS.XError('Conversion failed', 'XTTE0590');}" jsCardCheck="function c(n) {return n==1;};">
    <fn baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="14" name="doc">
     <fn name="substring-before">
@@ -343,8 +325,26 @@
    </fn>
   </globalVariable>
  </co>
- <co id="8" binds="7">
-  <globalVariable name="Q{http://saxon.sf.net/generated-variable}gg820209892" type="element(Q{eac}eac-cpf)*" line="24" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" visibility="PRIVATE" jsAcceptor="function test(item) {var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';};if (test(val)) {return val;} else {throw SaxonJS.XError('Conversion failed', 'XTTE0590');}" jsCardCheck="function c() {return true;};">
+ <co id="7" binds="6">
+  <globalVariable name="Q{http://saxon.sf.net/generated-variable}gg1863724287" type="xs:string" line="20" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" visibility="PRIVATE" jsAcceptor="return SaxonJS.U.Atomic.string.cast(val);" jsCardCheck="function c(n) {return n==1;};">
+   <fn baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="20" name="string-join">
+    <convert from="xs:untypedAtomic" to="xs:string">
+     <data>
+      <slash>
+       <slash simple="1">
+        <gVarRef name="Q{}content" bSlot="0"/>
+        <axis name="descendant" nodeTest="element(Q{eac}eac-cpf)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';"/>
+       </slash>
+       <axis name="attribute" nodeTest="attribute(Q{http://www.w3.org/XML/1998/namespace}id)" jsTest="var q=SaxonJS.U.nameOfNode(item); return q.uri==='http://www.w3.org/XML/1998/namespace'&amp;&amp;q.local==='id';"/>
+      </slash>
+     </data>
+    </convert>
+    <str val=" "/>
+   </fn>
+  </globalVariable>
+ </co>
+ <co id="8" binds="6">
+  <globalVariable name="Q{http://saxon.sf.net/generated-variable}gg210901680" type="element(Q{eac}eac-cpf)*" line="24" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" visibility="PRIVATE" jsAcceptor="function test(item) {var q=SaxonJS.U.nameOfNode(item); return SaxonJS.U.isNode(item) &amp;&amp; item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';};if (test(val)) {return val;} else {throw SaxonJS.XError('Conversion failed', 'XTTE0590');}" jsCardCheck="function c() {return true;};">
    <slash baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="24" simple="1">
     <gVarRef name="Q{}content" bSlot="0"/>
     <axis name="descendant" nodeTest="element(Q{eac}eac-cpf)" jsTest="var q=SaxonJS.U.nameOfNode(item); return item.nodeType===1 &amp;&amp; q.uri==='eac'&amp;&amp;q.local==='eac-cpf';"/>
@@ -385,26 +385,26 @@
    </templateRule>
   </mode>
  </co>
- <co id="11" binds="6 8 6">
+ <co id="11" binds="7 8 7">
   <mode onNo="TC" flags="dW" patternSlots="0">
    <templateRule prec="0" prio="-0.5" seq="0" rank="0" minImp="0" slots="0" flags="s" line="16" module="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl">
     <p.nodeTest role="match" test="document-node()" jsTest="return SaxonJS.U.isNode(item) &amp;&amp; (item.nodeType===9||item.nodeType===11);"/>
     <sequence role="action" baseUri="file:/Users/emmanuelchateau/Documents/experts/xpr/files/xsl/proso2item.xsl" ns="xsl=~ ixsl=~ xs=~ xpr=xpr eac=eac" line="18">
-     <resultDoc global="#&#xA;#Sun Mar 01 22:56:22 CET 2020&#xA;" local="#&#xA;#Sun Mar 01 22:56:22 CET 2020&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
+     <resultDoc global="#&#xA;#Mon Mar 02 11:28:18 CET 2020&#xA;" local="#&#xA;#Mon Mar 02 11:28:18 CET 2020&#xA;method={http\://saxonica.com/ns/interactiveXSLT}replace-content&#xA;">
       <str role="href" val="#title"/>
       <sequence role="content" line="20">
        <valueOf>
         <str val="Fiche n° "/>
        </valueOf>
        <valueOf>
-        <gVarRef name="Q{http://saxon.sf.net/generated-variable}gg1217404810" bSlot="0"/>
+        <gVarRef name="Q{http://saxon.sf.net/generated-variable}gg1863724287" bSlot="0"/>
        </valueOf>
       </sequence>
      </resultDoc>
-     <resultDoc line="23" global="#&#xA;#Sun Mar 01 22:56:22 CET 2020&#xA;" local="#&#xA;#Sun Mar 01 22:56:22 CET 2020&#xA;">
+     <resultDoc line="23" global="#&#xA;#Mon Mar 02 11:28:18 CET 2020&#xA;" local="#&#xA;#Mon Mar 02 11:28:18 CET 2020&#xA;">
       <str role="href" val="#experts"/>
       <forEach role="content" line="24">
-       <gVarRef name="Q{http://saxon.sf.net/generated-variable}gg820209892" bSlot="1"/>
+       <gVarRef name="Q{http://saxon.sf.net/generated-variable}gg210901680" bSlot="1"/>
        <sequence line="28">
         <elem name="header" nsuri="" namespaces="xpr eac">
          <elem name="h2" nsuri="" flags="l">
@@ -413,7 +413,7 @@
             <str val="Fiche n° "/>
            </valueOf>
            <valueOf flags="l">
-            <gVarRef name="Q{http://saxon.sf.net/generated-variable}gg1217404810" bSlot="2"/>
+            <gVarRef name="Q{http://saxon.sf.net/generated-variable}gg1863724287" bSlot="2"/>
            </valueOf>
           </sequence>
          </elem>
@@ -621,4 +621,4 @@
  </output>
  <decimalFormat/>
 </package>
-<?Σ d61f1f7b?>
+<?Σ 5b34e017?>

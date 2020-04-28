@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<interface xmlns="xpr">
+    <prosopo>
+        <element xml:id="expert">
+            <message xml:lang="fr">Fiche prosopographique d’expert</message>
+        </element>
+        <element xml:id="masson">
+            <message xml:lang="fr">Fiche prosopographique de maçon</message>
+        </element>
+        <!-- @todo add other rubric -->
+        <element xml:id="surname">
+            <message xml:lang="fr">Nom</message>
+        </element>
+        <element xml:id="forename">
+            <message xml:lang="fr">Prénom</message>
+        </element>
+        <element xml:id="particle">
+            <message xml:lang="fr">Particule</message>
+        </element>
+        <element xml:id="common">
+            <message xml:lang="fr">Titre d’appel</message>
+        </element>
+        <element xml:id="formal">
+            <message xml:lang="fr">Titre institutionnel</message>
+        </element>
+        <element xml:id="academic">
+            <message xml:lang="fr">Titre académique</message>
+        </element>
+        <element xml:id="religious">
+            <message xml:lang="fr">Titre religieux</message>
+        </element>
+        <element xml:id="nobiliary">
+            <message xml:lang="fr">Titre nobiliaire</message>
+        </element>
+        <element xml:id="nameEntry">
+            <message xml:lang="fr">Forme attestée du nom</message>
+        </element>
+        <element xml:id="description">
+            <message xml:lang="fr">Description</message>
+        </element>
+        <element xml:id="naissance">
+            <message xml:lang="fr">Date de naissance</message>
+        </element>
+        <element xml:id="décès">
+            <message xml:lang="fr">Date de décès</message>
+        </element>
+        <element xml:id="existance">
+            <message xml:lang="fr">Dates d’existence</message>
+        </element>
+        <element xml:id="male">
+            <message xml:lang="fr">Homme</message>
+        </element>
+        <element xml:id="female">
+            <message xml:lang="fr">Femme</message>
+        </element>
+        <element xml:id="functions">
+            <message xml:lang="fr">Fonctions</message>
+        </element>
+    </prosopo>
+</interface>

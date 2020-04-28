@@ -22,6 +22,8 @@ declare namespace web = "http://basex.org/modules/web" ;
 declare namespace update = "http://basex.org/modules/update" ;
 declare namespace perm = "http://basex.org/modules/perm" ;
 declare namespace user = "http://basex.org/modules/user" ;
+declare namespace http = "http://expath.org/ns/http-client" ;
+declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
 
 declare namespace xlink = "http://www.w3.org/1999/xlink" ;
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
@@ -34,6 +36,8 @@ declare default function namespace "xpr" ;
 declare default collation "http://basex.org/collation?lang=fr" ;
 
 declare variable $xpr:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl" ;
+declare variable $xpr:home := file:base-dir() ;
+declare variable $xpr:interface := fn:doc($xpr:home || "files/interface.xml") ;
 
 (:~
  : This resource function defines the application root
@@ -139,7 +143,7 @@ declare
   %rest:path("/xpr/expertises/view")
   %rest:produces('application/html')
   %output:method("html")
-function viexExpertises() {
+function viewExpertises() {
   let $content := map {
     'data' : db:open('xpr')//expertise,
     'trigger' : '',
@@ -418,6 +422,28 @@ function viewBiography($id) {
   }
   let $outputParam := map {
     'layout' : "ficheProsopo.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function show an entity
+ : @return an html view of an entity with xquery templating
+ :)
+declare 
+  %rest:path("/xpr/biographies/{$id}/view2")
+  %rest:produces('application/html')
+  %output:method("html")
+function viewBiography2($id) {
+  let $content := map {
+    'title' : 'Fiche de ' || $id,
+    'data' : getBiography($id),
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheProsopo2.xml",
+    'mapping' : eac2html(map:get($content, 'data'), map{})
   }
   return wrapper($content, $outputParam)
 };
@@ -1068,6 +1094,7 @@ declare function xpr:mime-type($name as xs:string) as xs:string {
  :)
 declare function wrapper($content as map(*), $outputParams as map(*)) as node()* {
   let $layout := file:base-dir() || "files/" || map:get($outputParams, 'layout')
+  let $mapping := map:get($content, 'mapping')
   let $wrap := fn:doc($layout)
   let $regex := '\{(.+?)\}'
   return
@@ -1079,6 +1106,7 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
         case 'trigger' return replace node $node with getTriggers($content)
         case 'form' return replace node $node with getForms($content)
         case 'data' return replace node $node with $content?data
+        case 'content' return replace node $node with $outputParams?mapping
         default return associate($content, $outputParams, $node)
       )
 };
@@ -1175,4 +1203,152 @@ function associate($content as map(*), $outputParams as map(*), $node as node())
         for $att in $node/@* return $att, "todo"
       }
     default return replace value of node $node with 'default'
+};
+
+
+(:~
+ : this function 
+ :)
+(: declare 
+  %output:indent('no') 
+function entry($node as node()*, $options as map(*)) as item()* {
+  for $i in $node return dispatch($i, $options)
+}; :)
+
+(:~
+ : this function get the interface message
+ :)
+declare function getMessage($id, $lang) {
+  $xpr:interface/xpr:interface/xpr:prosopo/xpr:element[@xml:id=$id]/xpr:message[@xml:lang]/node()
+};
+
+(:~
+ : this function dispatches the treatment of the XML document
+ :)
+declare 
+  %output:indent('no')
+function eac2html($node as node()*, $options as map(*)) as item()* {
+  typeswitch($node)
+    case text() return $node[fn:normalize-space(.)!='']
+    case element(eac:eac-cpf) return eac-cpf($node, $options)
+    case element(eac:cpfDescription) return cpfDescription($node, $options)
+    case element(eac:identity) return identity($node, $options)
+    case element(eac:description) return description($node, $options)
+    case element(eac:existDates) return existDates($node, $options)
+    case element(eac:localDescription) return sex($node, $options)
+    case element(eac:functions) return functions($node, $options)
+    case element(eac:function) return xpr:function($node, $options)
+    case element(eac:control) return ()
+    default return passthru($node, $options)
+};
+
+(:~
+ : This function pass through child nodes (xsl:apply-templates
+ :)
+declare 
+  %output:indent('no') 
+function passthru($nodes as node(), $options as map(*)) as item()* {
+  for $node in $nodes/node()
+  return eac2html($node, $options)
+};
+
+declare function eac-cpf($node, $options){
+  <article>{passthru($node, $options)}</article>
+};
+
+declare function cpfDescription($node, $options){
+  <div>{passthru($node, $options)}</div>
+};
+
+declare function identity($node, $options){
+  <header>{(
+    entityType($node/eac:entityType, $options),
+    nameEntry($node/eac:nameEntry[eac:authorizedForm], $options),
+    entityId($node/eac:entityId, $options),
+    for $nameEntry in$ node/eac:nameEntry[fn:not(eac:authorizedForm)] return nameEntry($nameEntry, $options)
+)}</header>
+};
+
+declare function entityId($node, $options){
+  <span class="id">{passthru($node, $options)}</span>
+};
+declare function entityType($node, $options){
+  (:<h3>{
+    switch ($node)
+    case $node[parent::eac:identity[@localType='expert']] return 'Fiche prosopographique d’expert'
+    case $node[parent::eac:identity[@localType='masson']] return 'Fiche prosopographique de maçon'
+    default return 'Fiche prosopographique'
+  }</h3>:)
+  let $type := $node/parent::eac:identity/@localType
+  return <h3>{getMessage($type,'fr')}</h3>
+  (: @todo add other entry types :)
+};
+
+declare function nameEntry($node, $options){
+  if ($node/eac:authorizedForm) 
+  then <h2>{passthru($node/eac:part, $options)}</h2>
+  else for $nameEntry in $node return <div>
+    <h4>{getMessage('nameEntry', 'fr')}</h4>
+    <ul>{part($node/eac:part, $options)}</ul>
+  </div>
+};
+
+declare function part($node, $options){
+    for $key in ('surname', 'forename', 'particle', 'common', 'formal', 'academic', 'religious', 'nobiliary')
+    let $message := getMessage($key, 'fr')
+    let $part := $node[@localType=$key]
+    where $part[fn:normalize-space(.)!='']
+    return <li>{$message || ' : ' || eac2html($part, $options)}</li>
+};
+
+declare function description($node, $options){
+  <div>
+    <h4>{getMessage('description', 'fr')}</h4>
+    <ul>{
+      eac2html($node/eac:existDates, $options),
+      eac2html($node/eac:localDescription[@localType="sex"], $options)
+    }</ul>
+  </div>,
+  eac2html($node/eac:functions, $options)
+};
+
+declare function existDates($node, $options){
+  <li>{getMessage('existance', 'fr') || ' : ' || getDate($node/eac:dateRange, $options)}</li>
+};
+
+declare function functions($node, $options){
+  <div>
+    <h4>{getMessage($node/fn:name(), 'fr')}</h4>
+    {passthru($node, $options)}
+  </div>
+};
+
+declare function xpr:function($node, $options){
+  <div>
+    <p>{$node/eac:term}</p>
+    <p>{getDate($node/eac:dateRange, $options)}</p>
+  </div>
+  (: @todo prévoir cas où date fixe :)
+};
+
+declare function getDate($node, $options) as xs:string {
+  switch($node)
+  case $node[self::eac:dateRange] return fn:string-join(
+    ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
+    ' à ')
+  default return getPrecision($node/*, $options)
+  (: @todo mettre valeur vide en cas d’abs :)
+};
+
+declare function getPrecision($node, $options) as xs:string* {
+  switch ($node)
+  case $node[@notAfter] return ($node/@notAfter || ' ]')
+  case $node[@notBefore] return ('[ ', $node/@notBefore)
+  case $node[@standardDate] return ($node/@standardDate)
+  default return $node/@*
+};
+
+declare function sex($node, $options){
+  <li>{getMessage($node, 'fr')}</li>
+  (: @todo restreindre l’appel au sex :)
 };
