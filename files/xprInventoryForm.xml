@@ -27,7 +27,7 @@
                     incremental="true">
                     <xf:label>Patronyme</xf:label>
                     <xf:itemset
-                        nodeset="instance('xprEntities')/*[@type='expert']">
+                        nodeset="instance('xprEntities')/*[@type='expert' or @type='altExpert']">
                         <xf:label
                             value="xpr:label"/>
                         <xf:value

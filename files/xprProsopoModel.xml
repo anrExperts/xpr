@@ -181,8 +181,13 @@
             xmlns="">
             <identity
                 type="person">
-                <label>Expert (parisien)</label>
+                <label>Expert (tableau)</label>
                 <value>expert</value>
+            </identity>
+            <identity
+                type="person">
+                <label>Expert (non inscrit)</label>
+                <value>altExpert</value>
             </identity>
             <identity
                 type="person">
