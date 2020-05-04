@@ -135,6 +135,7 @@
             <expenses
                 mentioned="false"/>
         </conclusions>
+        <keywords group=""/>
         <keywords
             type="technical">
             <term/>
