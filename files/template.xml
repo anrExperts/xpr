@@ -58,6 +58,16 @@
       <section>{data}</section>
     </main>
     <script>
+      function openKeywords() {
+  document.getElementById("keywordsControl").style.width = "100%";
+}
+
+/* Set the width of the sidebar to 0 (hide it) */
+function closeKeywords() {
+  document.getElementById("keywordsControl").style.width = "0";
+} 
+    </script>
+    <script>
 /*function repeat() {
   var element = document.querySelectorAll('div.xforms-group-content');
   for (var i = 0; i &lt; element.length; i++) {

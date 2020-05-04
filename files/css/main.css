@@ -371,7 +371,7 @@ input:focus.xforms-valid {
 .xforms-select1,
 .xforms-select,
 .xforms-textarea {
-    display: flex;
+    display: inline;
     flex-wrap: wrap;
     align-content: flex-start;
 }
@@ -608,4 +608,59 @@ table {
   table-layout: fixed;
   width: 100%;
   /*  white-space: nowrap; */
+}
+
+.openKeywords, .closeKeywords {
+    cursor:pointer;
+}
+
+.closeKeywords {
+    float: right
+}
+
+.keywords {
+  height: 100%; /* Specify a height */
+  width: 0; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  display: grid;
+  background-color: var(--colorTint);
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
+}
+
+.keywords > .xforms-group {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.keywords .xforms-group-content {
+    /*margin-left: 1em;
+    display: grid;
+    grid-gap:2em;
+    grid-template-columns :auto auto auto auto;*/
+    display: flex;
+    flex-wrap: wrap;
+}
+
+
+.keywords .xforms-group-content span.xforms-select {
+    /*grid-column-start:inherit;
+    grid-column-end:inherit;*/
+    display: inline;
+    width: 18em;
+    margin-bottom: 1em;
+}
+
+
+.keywords .xforms-label span {
+    font-weight: bold;
+    display:block;
+}
+
+.keywords .xforms-item {
+    margin-top: 0.2em;
 }

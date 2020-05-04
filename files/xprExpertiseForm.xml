@@ -2089,8 +2089,8 @@
                                 <xf:insert
                                     origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='clerk']"
                                     context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses"/>
-                                <xf:setvalue 
-                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" 
+                                <xf:setvalue
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
                                     value="'true'"/>
                             </xf:action>
                             <xf:action
@@ -2131,7 +2131,7 @@
             selected="false">
             <xf:label>Mots-clés et commentaires</xf:label>
             <xf:group
-                ref="xpr:description/xpr:keywords[@type='technical']">
+                ref="xpr:description">
                 <xf:label>Rubrique spécifique aux expertises techniques</xf:label>
                 <xf:repeat
                     id="repeatTechnicalTerm"

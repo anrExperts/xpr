@@ -1,0 +1,3025 @@
+<form
+    xmlns:xf="http://www.w3.org/2002/xforms"
+    xmlns:ev="http://www.w3.org/2001/xml-events">
+    <span class="openKeywords" onclick="openKeywords()">Mots-clefs</span>
+    <xf:switch>
+        <xf:case
+            id="referencesPanel"
+            selected="true">
+            <xf:label>Description de la source</xf:label>
+            <span>
+                <xf:group
+                    ref="xpr:data">
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Pièces ajoutée']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                </xf:group>
+            </span>
+            <span>
+                <xf:group
+                    ref="instance('xprExpertise')/xpr:sourceDesc">
+                    <xf:label>Références</xf:label>
+                    <xf:group>
+                        <xf:label>Identifiants</xf:label>
+                        <xf:input
+                            ref="xpr:idno[@type='unitid']"
+                            incremental="true">
+                            <xf:label>Cote</xf:label>
+                            <xf:help>La cote doit respecter le format suivant : Z1JXXX</xf:help>
+                            <xf:alert>Le champ "Cote" est requis.</xf:alert>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:idno[@type = 'item']"
+                            incremental="true">
+                            <xf:label>Dossier</xf:label>
+                            <xf:alert>Le champ "Dossier" est requis.</xf:alert>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:facsimile">
+                        <xf:label>Identifiants des vues</xf:label>
+                        <xf:input
+                            ref="@from"
+                            incremental="true">
+                            <xf:label>Première vue</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@to"
+                            incremental="true">
+                            <xf:label>Dernière vue</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:physDesc">
+                        <xf:label>Description physique du procès-verbal et des pièces annexes</xf:label>
+                        <xf:input
+                            ref="xpr:extent"
+                            incremental="true">
+                            <xf:label>Nombre de feuillets</xf:label>
+                        </xf:input>
+                        <xf:select1
+                            ref="xpr:extent/@sketch"
+                            appearance="full">
+                            <xf:label>Croquis sur le procès-verbal</xf:label>
+                            <xf:item>
+                                <xf:label>oui</xf:label>
+                                <xf:value>true</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>non</xf:label>
+                                <xf:value>false</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:group
+                            ref="xpr:appendices">
+                            <xf:label>Pièces annexes</xf:label>
+                            <xf:output
+                                value="count(xpr:appendice)">
+                                <xf:label>Nombre de pièces annexes</xf:label>
+                            </xf:output>
+                            <xf:repeat
+                                nodeset="xpr:appendice"
+                                appearance="full">
+                                <xf:repeat
+                                    nodeset="xpr:type">
+                                    <xf:select1
+                                        ref="@type">
+                                        <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
+                                        <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
+                                        <xf:label>Type de pièce annexe</xf:label>
+                                        <xf:item>
+                                            <xf:label>Dessin</xf:label>
+                                            <xf:value>drawing</xf:value>
+                                            <xf:setvalue
+                                                ref="parent::xpr:type"
+                                                ev:event="xforms-select">Dessin</xf:setvalue>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Plan</xf:label>
+                                            <xf:value>plan</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">Plan</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Croquis</xf:label>
+                                            <xf:value>sketch</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">Croquis</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Brouillon</xf:label>
+                                            <xf:value>rough</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">Brouillon</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Pouvoir/procuration (acte sous seing privé)</xf:label>
+                                            <xf:value>proxyPA</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">Pouvoir/procuration (acte sous seing privé)</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Pouvoir/procuration (acte notarié)</xf:label>
+                                            <xf:value>proxyNA</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">Pouvoir/procuration (acte notarié)</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Requête</xf:label>
+                                            <xf:value>petition</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">Requête</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                        <xf:item>
+                                            <xf:label>Autre</xf:label>
+                                            <xf:value>other</xf:value>
+                                            <xf:action
+                                                ev:event="xforms-select">
+                                                <xf:setvalue
+                                                    ref="parent::xpr:type">À préciser</xf:setvalue>
+                                            </xf:action>
+                                        </xf:item>
+                                    </xf:select1>
+                                    <xf:input
+                                        ref="self::node()[@type='other']"
+                                        incremental="true"> </xf:input>
+                                    <xf:trigger
+                                        class="delete">
+                                        <xf:label>&#10007;</xf:label>
+                                        <xf:delete
+                                            nodeset="."
+                                            at="1"
+                                            if="count(parent::xpr:appendice/xpr:type) > 1"
+                                            ev:event="DOMActivate"/>
+                                        <xf:help>Supprimer un type d'annexe.</xf:help>
+                                    </xf:trigger>
+                                </xf:repeat>
+                                <xf:trigger
+                                    class="insert">
+                                    <xf:label>Ajouter un type</xf:label>
+                                    <xf:insert
+                                        context="."
+                                        origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice/xpr:type"
+                                        nodeset="xpr:type[last()]"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:help>Ajouter un type d'annexe</xf:help>
+                                </xf:trigger>
+                                <!--@todo appendice autre-->
+                                <xf:input
+                                    ref="xpr:extent"
+                                    incremental="true">
+                                    <xf:label>Nombre de feuillets</xf:label>
+                                </xf:input>
+                                <xf:textarea
+                                    ref="xpr:desc"
+                                    incremental="true">
+                                    <xf:label>Description physique</xf:label>
+                                </xf:textarea>
+                                <xf:textarea
+                                    ref="xpr:note"
+                                    incremental="true">
+                                    <xf:label>Commentaires</xf:label>
+                                </xf:textarea>
+                                <xf:trigger
+                                    class="delete">
+                                    <xf:label>Supprimer une annexe</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        if="count(parent::xpr:appendices/xpr:appendice) > 1"
+                                        ev:event="DOMActivate"/>
+                                    <xf:help>Supprimer une annexe</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger
+                                class="insert">
+                                <xf:label>Ajouter une pièce annexe</xf:label>
+                                <xf:insert
+                                    context="."
+                                    origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:physDesc/xpr:appendices/xpr:appendice"
+                                    nodeset="xpr:appendice[last()]"
+                                    position="after"
+                                    ev:event="DOMActivate"/>
+                                <xf:help>Ajouter une pièce annexe</xf:help>
+                            </xf:trigger>
+                        </xf:group>
+                        <xf:trigger
+                            ref="self::node()[not(xpr:appendices)]">
+                            <xf:label>Ajouter des pièces annexes</xf:label>
+                            <xf:insert
+                                context="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc"
+                                origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"
+                                nodeset="xpr:extent"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:help>Ajouter des pièces annexes</xf:help>
+                        </xf:trigger>
+                        <xf:trigger
+                            ref="self::node()[xpr:appendices]">
+                            <xf:label>Supprimer toutes les pièces annexes</xf:label>
+                            <xf:delete
+                                nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"
+                                ev:event="DOMActivate"/>
+                            <xf:help>Supprimer toutes les pièces annexes</xf:help>
+                        </xf:trigger>
+                    </xf:group>
+                </xf:group>
+            </span>
+        </xf:case>
+        <xf:case
+            id="sessionsPanel"
+            selected="false">
+            <xf:label>Vacations et lieux de l’expertise</xf:label>
+            <span>
+                <xf:group
+                    ref="xpr:data">
+                    <xf:group
+                        ref="xpr:entry[not(xpr:key)]">
+                        <xf:label>Adresse</xf:label>
+                        <xf:output
+                            value="."/>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:sessions">
+                        <xf:label>Vacations</xf:label>
+                        <xf:output
+                            value="xpr:date"/>
+                    </xf:group>
+                </xf:group>
+            </span>
+            <span>
+                <xf:group
+                    ref="xpr:description/xpr:sessions">
+                    <xf:label>Vacations</xf:label>
+                    <xf:repeat
+                        id="repeatSession"
+                        bind="sessionsDate">
+                        <xf:input
+                            ref="@when"
+                            incremental="true">
+                            <xf:label>Date</xf:label>
+                            <xf:alert>La date indiquée ne respecte pas le format requis.</xf:alert>
+                            <xf:hint>La date indiquée doit respecter les formats suivants : AAAA-MM-JJ ou JJ/MM/AAAA</xf:hint>
+                            <xf:help>Vous pouvez vous aider du calendrier pour sélectionner directement une date.</xf:help>
+                        </xf:input>
+                        <xf:select1
+                            ref="@type">
+                            <xf:label>Lieu</xf:label>
+                            <xf:item>
+                                <xf:label>Paris et faubourgs</xf:label>
+                                <xf:value>paris</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Banlieue</xf:label>
+                                <xf:value>suburbs</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Campagne</xf:label>
+                                <xf:value>province</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:trigger
+                            class="delete">
+                            <xf:label>&#10007;</xf:label>
+                            <xf:delete
+                                nodeset="."
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:sessions/xpr:date) > 1"/>
+                            <xf:help>Supprimer une vacation.</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger
+                        class="insert">
+                        <xf:label>Ajouter une vacation</xf:label>
+                        <xf:action
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                nodeset="xpr:date"
+                                at="index('repeatSession')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:setvalue
+                                ref="xpr:date[index('repeatSession')]/@when"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:date[index('repeatSession')]/@type"
+                                value=""/>
+                        </xf:action>
+                        <xf:help>Ajouter une vacation.</xf:help>
+                    </xf:trigger>
+                </xf:group>
+                <xf:group
+                    ref="xpr:description/xpr:places">
+                    <xf:label>Lieux de l’expertise</xf:label>
+                    <xf:repeat
+                        id="repeatPlace"
+                        bind="place"
+                        appearance="full">
+                        <xf:select1
+                            ref="@type">
+                            <xf:label>Lieux de l’expertise</xf:label>
+                            <xf:item>
+                                <xf:label>Paris</xf:label>
+                                <xf:value>paris</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Banlieue</xf:label>
+                                <xf:value>suburbs</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Campagne</xf:label>
+                                <xf:value>province</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Bureau des experts</xf:label>
+                                <xf:value>office</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Bureau du greffier</xf:label>
+                                <xf:value>clerkOffice</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Indéterminé</xf:label>
+                                <xf:value>indeterminate</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:input
+                            ref="xpr:address/xpr:street"
+                            incremental="true">
+                            <xf:label>Voie</xf:label>
+                            <!--<xf:setvalue
+                            ev:event="DOMFocusOut"
+                            ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimate/xpr:places/xpr:place[position() = index('repeatPlace')]/xpr:address/xpr:street"
+                            value="context()"/>-->
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:address/xpr:buildingNumber"
+                            incremental="true">
+                            <xf:label>Numéro de la voie</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:complement"
+                            incremental="true">
+                            <xf:label>Précisions géographiques</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:parish"
+                            incremental="true">
+                            <xf:label>Paroisse</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:city"
+                            incremental="true">
+                            <xf:label>Ville</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:district"
+                            incremental="true">
+                            <xf:label>Département</xf:label>
+                        </xf:input>
+                        <xf:repeat
+                            id="repeatOwner"
+                            nodeset="xpr:owner"
+                            appearance="full">
+                            <xf:input
+                                ref="."
+                                incremental="true">
+                                <xf:label>Propriétaire</xf:label>
+                            </xf:input>
+                            <xf:trigger
+                                class="delete">
+                                <xf:label>Supprimer un propriétaire</xf:label>
+                                <xf:delete
+                                    nodeset="."
+                                    at="1"
+                                    ev:event="DOMActivate"
+                                    if="count(//xpr:description/xpr:places/xpr:place[index('repeatPlace')]/xpr:owner) > 1"/>
+                                <xf:help>Supprimer un propriétaire.</xf:help>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <xf:trigger
+                            class="insert"
+                            ref="//xpr:place[index('repeatPlace')][@type='paris' or @type='suburbs' or @type='province' or @type='indeterminate']">
+                            <xf:label>Ajouter un propriétaire</xf:label>
+                            <xf:action
+                                ev:event="DOMActivate">
+                                <xf:insert
+                                    nodeset="xpr:owner"
+                                    at="index('repeatOwner')"
+                                    position="after"
+                                    ev:event="DOMActivate"/>
+                                <xf:setvalue
+                                    ref="xpr:owner[index('repeatOwner')]"
+                                    value=""/>
+                            </xf:action>
+                            <xf:help>Ajouter un propriétaire.</xf:help>
+                        </xf:trigger>
+                        <xf:trigger
+                            class="delete">
+                            <xf:label>Supprimer un lieu</xf:label>
+                            <xf:delete
+                                nodeset="."
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:places/xpr:place) > 1"/>
+                            <xf:delete
+                                nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place[position() = index('repeatPlace')]"
+                                ev:event="DOMActivate"
+                                if="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'] and count(//xpr:description/xpr:conclusions/xpr:estimates/xpr:place) > 1"/>
+                            <xf:help>Supprimer un lieu.</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger
+                        class="insert">
+                        <xf:label>Ajouter un lieu</xf:label>
+                        <xf:action
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                context="."
+                                origin="instance('xprExpertiseCopy')/xpr:description/xpr:places/xpr:place"
+                                nodeset="xpr:place"
+                                at="index('repeatPlace')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:insert
+                                if="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation']"
+                                context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"
+                                origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place"
+                                nodeset="xpr:place"
+                                at="index('repeatPlace')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <!--<xf:insert 
+                            if="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'] and instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place[position() = index('repeatPlace')][not(xpr:appraisals)]"
+                            context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place[position() = index('repeatPlace')]"
+                            origin="instance('xprSupplement')/xpr:appraisals"
+                            nodeset="*[last()]"/>-->
+                        </xf:action>
+                        <xf:help>Ajouter un lieu.</xf:help>
+                    </xf:trigger>
+                </xf:group>
+            </span>
+        </xf:case>
+        <xf:case
+            id="procedurePanel"
+            selected="false">
+            <span>
+                <xf:group
+                    ref="xpr:data">
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Type d’acte']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Cause (ou motif) de l’expertise']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Nature de l’expertise']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Institution de nomination']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Institution requérante']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Lieux de l’expertise']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                </xf:group>
+            </span>
+            <span>
+                <xf:group
+                    ref="instance('xprSupplement')/xpr:categories">
+                    <xf:label>Types d’expertise</xf:label>
+                    <xf:select
+                        ref="xpr:category"
+                        appearance="full">
+                        <xf:label>Catégories d’expertise</xf:label>
+                        <xf:item>
+                            <xf:label>Estimer la valeur des biens</xf:label>
+                            <xf:value>estimation</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:categories"
+                                    origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='estimation']"/>
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:conclusions"
+                                    origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates"
+                                    nodeset="xpr:estimate"
+                                    position="after"/>
+                                <xf:action
+                                    while="count(instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place) &lt; count(instance('xprExpertise')/xpr:description/xpr:places/xpr:place)">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"
+                                        origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place"
+                                        nodeset="xpr:place[last()]"/>
+                                </xf:action>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation']"/>
+                                <xf:delete
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Recevoir et évaluer le travail réalisé</xf:label>
+                            <xf:value>acceptation</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:categories"
+                                    origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='acceptation']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='acceptation']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Enregistrer</xf:label>
+                            <xf:value>registration</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:categories"
+                                    origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='registration']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='registration']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Départager</xf:label>
+                            <xf:value>settlement</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:categories"
+                                    origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='settlement']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='settlement']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Décrire et évaluer les travaux à venir</xf:label>
+                            <xf:value>assessment</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:categories"
+                                    origin="instance('xprSupplement')/xpr:categories/xpr:category[@type='assessment']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='assessment']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:help>Plusieurs cases peuvent être cochées.</xf:help>
+                    </xf:select>
+                    <xf:input
+                        bind="designation"
+                        incremental="true">
+                        <xf:label>Désignation</xf:label>
+                    </xf:input>
+                    <xf:select1
+                        bind="designationRubric"
+                        appearance="full">
+                        <xf:label>En rubrique</xf:label>
+                        <xf:item>
+                            <xf:label>oui</xf:label>
+                            <xf:value>true</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>non</xf:label>
+                            <xf:value>false</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                </xf:group>
+                <xf:group
+                    ref="xpr:description/xpr:procedure">
+                    <xf:label>Procédure et cadre de l’expertise</xf:label>
+                    <xf:group
+                        ref="xpr:framework">
+                        <xf:select1
+                            bind="frameworkType"
+                            appearance="full">
+                            <!--@quest je ne suis pas certain qu'il y a besoin de détailler autant ? (juste besoin de A-B1-B2A-B2B-C)-->
+                            <!--@todo ajouter un output pour le texte de framework-->
+                            <!--@rmq voir si on peut passer par un petit modèle de raisonnement pour garder la logique B-B2-B2a-->
+                            <!--@todo à défaut, mettre un message d'alerte si B ou B2 sont cochés-->
+                            <xf:label>Procédure</xf:label>
+                            <xf:item>
+                                <xf:label>A/ Commun accord des parties</xf:label>
+                                <xf:value>a</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:setvalue
+                                        ref="parent::xpr:framework">Commun accord des parties</xf:setvalue>
+                                    <xf:setvalue
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                        value="'Les parties'"/>
+                                    <xf:setvalue
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                        value="'parties'"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:choices>
+                                <xf:label>B/ Saisie du lieutenant civil (ou autre, à préciser)</xf:label>
+                                <xf:item>
+                                    <xf:label>B1/ Requête auprès du LC pour qu’il demande une expertise</xf:label>
+                                    <xf:value>b1</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            ref="parent::xpr:framework">Requête auprès du lieutenant civil pour qu’il demande une expertise</xf:setvalue>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                            value="'Les parties'"/>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                            value="'parties'"/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:label>B2/ Le LC est saisi dans le cadre d’une procédure</xf:label>
+                                <xf:item>
+                                    <xf:label>B2a/ LC saisi dans le cadre d’une procédure (Les parties nomment chacune leur expert ou un expert commun)</xf:label>
+                                    <xf:value>b2a</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            ref="parent::xpr:framework">Le lieutenant civil est saisi dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</xf:setvalue>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                            value="'Une institution'"/>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                            value="'institution'"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>B2b/ LC saisi dans le cadre d’une procédure (Le LC nomme un ou deux experts)</xf:label>
+                                    <xf:value>b2b</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            ref="parent::xpr:framework">Le lieutenant civil est saisi dans le cadre d’une procédure (le lieutenant civil nomme un ou deux experts)</xf:setvalue>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                            value="'Une institution'"/>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                            value="'institution'"/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:item>
+                                    <xf:label>B3/ Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:label>
+                                    <xf:value>b3</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            ref="parent::xpr:framework">Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:setvalue>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                            value="'Une institution'"/>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                            value="'institution'"/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:choices>
+                            <xf:choices>
+                                <!--@todo comment faire pour préciser si ce n'est pas le LC ?-->
+                                <xf:item>
+                                    <xf:label>C/ Cas problématique</xf:label>
+                                    <xf:value>c</xf:value>
+                                    <xf:action
+                                        ev:event="xforms-select">
+                                        <xf:setvalue
+                                            ref="parent::xpr:framework">Cas problématique</xf:setvalue>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination"
+                                            value=""/>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type"
+                                            value=""/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:choices>
+                        </xf:select1>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:origination">
+                        <xf:label>Origine de l’expertise</xf:label>
+                        <xf:select1
+                            bind="originationType"
+                            appearance="full">
+                            <xf:label>Déclenchement de l’expertise</xf:label>
+                            <xf:item>
+                                <xf:label>Les parties</xf:label>
+                                <xf:value>parties</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:setvalue
+                                        ref="ancestor::xpr:origination"
+                                        value="'Les parties'"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Une institution</xf:label>
+                                <xf:value>institution</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:setvalue
+                                        ref="ancestor::xpr:origination"
+                                        value="'Une institution'"/>
+                                </xf:action>
+                            </xf:item>
+                        </xf:select1>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:sentences">
+                        <xf:label>Intervention d’une institution</xf:label>
+                        <xf:repeat
+                            id="repeatSentence"
+                            bind="sentence"
+                            appearance="full">
+                            <xf:input
+                                ref="xpr:orgName"
+                                incremental="true">
+                                <xf:label>Institution :</xf:label>
+                            </xf:input>
+                            <xf:repeat
+                                id="repeatDateSentence"
+                                nodeset="xpr:date">
+                                <xf:input
+                                    ref="@when"
+                                    incremental="true">
+                                    <xf:label>Date</xf:label>
+                                </xf:input>
+                                <xf:trigger
+                                    class="delete">
+                                    <xf:label>Supprimer une date</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"
+                                        if="count(//xpr:description/xpr:procedure/xpr:sentences/xpr:sentence/xpr:date) > 1"/>
+                                    <xf:help>Supprimer une date.</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger
+                                class="insert">
+                                <xf:label>Ajouter une date</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        nodeset="xpr:date"
+                                        at="index('repeatDateSentence')"
+                                        position="after"
+                                        ev:event="DOMActivate"/>
+                                    <xf:setvalue
+                                        ref="xpr:date[index('repeatDateSentence')]/@when"
+                                        value=""/>
+                                </xf:action>
+                                <xf:help>Ajouter une date.</xf:help>
+                            </xf:trigger>
+                            <xf:trigger
+                                class="delete">
+                                <xf:label>Supprimer une institution</xf:label>
+                                <xf:delete
+                                    nodeset="."
+                                    at="1"
+                                    ev:event="DOMActivate"
+                                    if="count(//xpr:description/xpr:procedure/xpr:sentences/xpr:sentence) > 1"/>
+                                <xf:help>Supprimer une institution.</xf:help>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <!--@todo si l'on a renseigné une première institution avec plusieurs sentences, lorsqu'on ajoute une institution, le même nombre de sentence est copié => le remettre à 1-->
+                        <xf:trigger
+                            class="insert">
+                            <xf:label>Ajouter une institution</xf:label>
+                            <xf:action
+                                ev:event="DOMActivate">
+                                <xf:insert
+                                    nodeset="xpr:sentence"
+                                    at="index('repeatSentence')"
+                                    position="after"
+                                    ev:event="DOMActivate"/>
+                                <xf:setvalue
+                                    ref="xpr:sentence[index('repeatSentence')]/xpr:orgName"
+                                    value=""/>
+                                <xf:setvalue
+                                    ref="xpr:sentence[index('repeatSentence')]/xpr:date"
+                                    value=""/>
+                            </xf:action>
+                            <xf:help>Ajouter une institution.</xf:help>
+                        </xf:trigger>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:case">
+                        <xf:input
+                            bind="case"
+                            incremental="true">
+                            <!--@todo mettre une zone de texte ?-->
+                            <xf:label>Cause de l’expertise</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group
+                        ref="instance('xprSupplement')/xpr:objects">
+                        <xf:select
+                            ref="xpr:object"
+                            appearance="full">
+                            <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
+                            <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
+                            <xf:label>Objet de l’expertise</xf:label>
+                            <xf:item>
+                                <xf:label>Maison</xf:label>
+                                <xf:value>house</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='house']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='house']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Terrain</xf:label>
+                                <xf:value>plot</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='plot']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='plot']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Ensemble de bâtiments</xf:label>
+                                <xf:value>buildings</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='buildings']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='buildings']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Domaine, terres, fief</xf:label>
+                                <xf:value>territory</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='territory']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='territory']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Mur</xf:label>
+                                <xf:value>wall</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='wall']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='wall']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Fosse d’aisance</xf:label>
+                                <xf:value>cesspool</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='cesspool']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='cesspool']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Puits</xf:label>
+                                <xf:value>well</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='well']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='well']"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Autre</xf:label>
+                                <xf:value>other</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                        origin="instance('xprSupplement')/xpr:objects/xpr:object[@type='other']"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"/>
+                                </xf:action>
+                            </xf:item>
+                        </xf:select>
+                        <xf:input
+                            ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"
+                            incremental="true">
+                            <xf:label>Autre, à préciser</xf:label>
+                        </xf:input>
+                    </xf:group>
+                </xf:group>
+            </span>
+        </xf:case>
+        <xf:case
+            id="participantsPanel"
+            selected="false">
+            <xf:label>Acteurs de l’expertise</xf:label>
+            <span>
+                <xf:group
+                    ref="xpr:data">
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Expert(s)']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Partie requérante']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Partie opposante']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='(Partie opposante) Autre(s) partie(s)']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Greffier de l’écritoire']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Entrepreneur, maître d’œuvre ou architecte']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                </xf:group>
+            </span>
+            <span>
+                <xf:group
+                    ref="xpr:description/xpr:participants/xpr:experts">
+                    <!--@todo au pluriel ?-->
+                    <xf:label>Expert</xf:label>
+                    <xf:repeat
+                        id="repeatExpert"
+                        nodeset="xpr:expert"
+                        appearance="full">
+                        <xf:select1
+                            ref="@ref"
+                            incremental="true">
+                            <xf:label>Patronyme</xf:label>
+                            <xf:itemset
+                                nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert']">
+                                <xf:label
+                                    value="xpr:label"/>
+                                <xf:value
+                                    ref="@xml:id"/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <!-- set new ref for opinion if disagreement is checked when expert is modified-->
+                        <xf:action
+                            if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'"
+                            ev:event="xforms-value-changed">
+                            <xf:setvalue
+                                ref="instance('xprExpertise')//xpr:opinion[not(@ref = instance('xprExpertise')//xpr:experts/xpr:expert/@ref)]/@ref"
+                                value="current()/@ref"/>
+                        </xf:action>
+                        <xf:action
+                            if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail='true'"
+                            ev:event="xforms-value-changed">
+                            <xf:setvalue
+                                ref="instance('xprExpertise')//xpr:conclusions/xpr:fees/xpr:fee[@type='expert'][not(@ref = instance('xprExpertise')//xpr:experts/xpr:expert/@ref)]/@ref"
+                                value="current()/@ref"/>
+                        </xf:action>
+                        <xf:input
+                            ref="xpr:title"
+                            incremental="true">
+                            <xf:label>Dénomination de l’expert dans l’acte</xf:label>
+                        </xf:input>
+                        <xf:select1
+                            ref="@context"
+                            appearance="minimal">
+                            <xf:label>Expert nommé en</xf:label>
+                            <xf:item>
+                                <xf:label>premier lieu</xf:label>
+                                <xf:value>primary</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>tiers expert</xf:label>
+                                <xf:value>third-party</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>indéterminé</xf:label>
+                                <xf:value>unknown</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:select1
+                            ref="@appointment"
+                            appearance="minimal">
+                            <xf:label>Expert nommé</xf:label>
+                            <xf:item>
+                                <xf:label>d’office (par le lieutenant civil)</xf:label>
+                                <xf:value>court-appointed</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>par les parties</xf:label>
+                                <xf:value>appointed</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>indéterminé</xf:label>
+                                <xf:value>unknown</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:trigger
+                            class="delete">
+                            <xf:label>Supprimer un expert</xf:label>
+                            <xf:delete
+                                nodeset="instance('xprExpertise')//xpr:conclusions/xpr:opinion[@ref = current()/@ref]"
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
+                            <xf:delete
+                                nodeset="instance('xprExpertise')//xpr:conclusions/xpr:fees/xpr:fee[@type='expert'][@ref = current()/@ref]"
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
+                            <xf:delete
+                                nodeset="."
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
+                            <xf:help>Supprimer un expert.</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger
+                        class="insert">
+                        <xf:label>Ajouter un expert</xf:label>
+                        <xf:action
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                nodeset="xpr:expert"
+                                at="index('repeatExpert')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:setvalue
+                                ref="xpr:expert[index('repeatExpert')]/@ref"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:expert[index('repeatExpert')]/@context"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:expert[index('repeatExpert')]/@appointment"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:expert[index('repeatExpert')]/xpr:title"
+                                value=""/>
+                        </xf:action>
+                        <xf:action
+                            if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'"
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                context="instance('xprExpertise')//xpr:conclusions"
+                                origin="instance('xprSupplement')/xpr:opinion"
+                                nodeset="xpr:opinion[last()]"
+                                position="after"/>
+                        </xf:action>
+                        <xf:action
+                            if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail= 'true'"
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                context="instance('xprExpertise')//xpr:conclusions/xpr:fees"
+                                origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='expert']"
+                                nodeset="xpr:fee[@type='expert'][last()]"
+                                position="after"/>
+                        </xf:action>
+                        <xf:help>Ajouter un expert.</xf:help>
+                    </xf:trigger>
+                </xf:group>
+                <xf:group
+                    ref="xpr:description/xpr:participants/xpr:clerks">
+                    <!--@todo au pluriel ?-->
+                    <xf:label>Greffier</xf:label>
+                    <xf:repeat
+                        id="repeatClerk"
+                        bind="clerk"
+                        appearance="full">
+                        <xf:label>Patronyme</xf:label>
+                        <xf:input
+                            ref="xpr:persName/xpr:surname"
+                            incremental="true">
+                            <xf:label>Nom</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:persName/xpr:forename"
+                            incremental="true">
+                            <xf:label>Prénom</xf:label>
+                        </xf:input>
+                        <xf:trigger
+                            class="delete">
+                            <xf:label>Supprimer un greffier</xf:label>
+                            <xf:delete
+                                nodeset="."
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:participants/xpr:clerks/xpr:clerk) > 1"/>
+                            <xf:help>Supprimer un greffier.</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger
+                        class="insert">
+                        <xf:label>Ajouter un greffier</xf:label>
+                        <xf:action
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                nodeset="xpr:clerk"
+                                at="index('repeatClerk')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:setvalue
+                                ref="xpr:clerk[index('repeatClerk')]/xpr:persName/xpr:surname"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:clerk[index('repeatClerk')]/xpr:persName/xpr:forename"
+                                value=""/>
+                        </xf:action>
+                        <xf:help>Ajouter un greffier.</xf:help>
+                    </xf:trigger>
+                </xf:group>
+                <xf:group
+                    ref="xpr:description/xpr:participants/xpr:parties">
+                    <xf:label>Parties</xf:label>
+                    <xf:repeat
+                        id="repeatParty"
+                        bind="party"
+                        appearance="full">
+                        <xf:repeat
+                            id="repeatPerson"
+                            nodeset="xpr:person"
+                            appearance="full">
+                            <xf:label>Patronyme</xf:label>
+                            <xf:input
+                                ref="xpr:persName/xpr:surname"
+                                incremental="true">
+                                <xf:label>Nom</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="xpr:persName/xpr:forename"
+                                incremental="true">
+                                <xf:label>Prénom</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="xpr:occupation"
+                                incremental="true">
+                                <xf:label>Qualité, profession</xf:label>
+                            </xf:input>
+                            <xf:trigger
+                                class="delete">
+                                <xf:label>Supprimer une personne</xf:label>
+                                <xf:delete
+                                    nodeset="."
+                                    at="1"
+                                    ev:event="DOMActivate"
+                                    if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party[index('repeatParty')]/xpr:person) > 1"/>
+                                <xf:help>Supprimer une personne.</xf:help>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <xf:trigger
+                            class="insert">
+                            <xf:label>Ajouter une personne</xf:label>
+                            <xf:action
+                                ev:event="DOMActivate">
+                                <xf:insert
+                                    nodeset="xpr:person"
+                                    at="index('repeatPerson')"
+                                    position="after"
+                                    ev:event="DOMActivate"/>
+                                <xf:setvalue
+                                    ref="xpr:person[index('repeatPerson')]/xpr:persName/xpr:surname"
+                                    value=""/>
+                                <xf:setvalue
+                                    ref="xpr:person[index('repeatPerson')]/xpr:persName/xpr:forename"
+                                    value=""/>
+                                <xf:setvalue
+                                    ref="xpr:person[index('repeatPerson')]/xpr:occupation"
+                                    value=""/>
+                            </xf:action>
+                            <xf:help>Ajouter une personne.</xf:help>
+                        </xf:trigger>
+                        <xf:select1
+                            ref="@role">
+                            <xf:label>Partie</xf:label>
+                            <xf:item>
+                                <xf:label>Requérante</xf:label>
+                                <xf:value>petitioner</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Opposante</xf:label>
+                                <xf:value>opponent</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:select1
+                            ref="xpr:status">
+                            <xf:label>Qualification individuelle</xf:label>
+                            <xf:item>
+                                <xf:label>Entrepreneur</xf:label>
+                                <xf:value>builder</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Propriétaire</xf:label>
+                                <xf:value>owner</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Copropriétaire</xf:label>
+                                <xf:value>joint-owner</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Commanditaire</xf:label>
+                                <xf:value>limited-partner</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Héritier</xf:label>
+                                <xf:value>heir</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Voisin</xf:label>
+                                <xf:value>neighbour</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Locataire</xf:label>
+                                <xf:value>tenant</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Principal locataire</xf:label>
+                                <xf:value>main-tenant</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Créancier</xf:label>
+                                <xf:value>creditor</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Débiteur</xf:label>
+                                <xf:value>mortgagor</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Fermier judiciaire</xf:label>
+                                <xf:value>contractor</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:select1
+                            ref="xpr:expert/@ref">
+                            <xf:label>Expert agissant pour cette partie</xf:label>
+                            <xf:itemset
+                                nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert'][@xml:id = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                                <xf:label
+                                    value="."/>
+                                <xf:value
+                                    ref="@xml:id"/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <xf:select1
+                            ref="@presence">
+                            <xf:label>Partie présente</xf:label>
+                            <xf:item>
+                                <xf:label>oui</xf:label>
+                                <xf:value>true</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>non</xf:label>
+                                <xf:value>false</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:select1
+                            ref="@intervention">
+                            <xf:label>Partie intervenante</xf:label>
+                            <xf:item>
+                                <xf:label>oui</xf:label>
+                                <xf:value>true</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>non</xf:label>
+                                <xf:value>false</xf:value>
+                            </xf:item>
+                        </xf:select1>
+                        <!--<xf:output ref="instance('xprExpert')/expert[@xml:id=instance('xprExpertise')/description/participants/experts/expert/@ref]/name/surname"/>-->
+                        <!--@todo faire un repeat pour les représentants et procureurs ?-->
+                        <xf:group>
+                            <xf:label>Représentants</xf:label>
+                            <xf:repeat
+                                id="repeatRepresentative"
+                                nodeset="xpr:representative"
+                                appearance="full">
+                                <xf:label>Patronyme</xf:label>
+                                <xf:input
+                                    ref="xpr:persName/xpr:surname"
+                                    incremental="true">
+                                    <xf:label>Nom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="xpr:persName/xpr:forename"
+                                    incremental="true">
+                                    <xf:label>Prénom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="xpr:occupation"
+                                    incremental="true">
+                                    <xf:label>Qualité, profession</xf:label>
+                                </xf:input>
+                                <xf:trigger
+                                    class="delete">
+                                    <xf:label>Supprimer un représentant</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"/>
+                                    <xf:help>Supprimer un représentant.</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger
+                                bind="addRepresentative">
+                                <xf:label>Ajouter un representant</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        origin="instance('xprSupplement')/xpr:representative"
+                                        nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party[index('repeatParty')]/*"
+                                        at="last()"
+                                        position="after"/>
+                                </xf:action>
+                                <xf:help>Ajouter un représentant.</xf:help>
+                            </xf:trigger>
+                        </xf:group>
+                        <xf:group>
+                            <xf:label>Procureur</xf:label>
+                            <xf:repeat
+                                id="repeatProsecutor"
+                                nodeset="xpr:prosecutor"
+                                appearance="full">
+                                <xf:label>Patronyme</xf:label>
+                                <xf:input
+                                    ref="xpr:persName/xpr:surname"
+                                    incremental="true">
+                                    <xf:label>Nom</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="xpr:persName/xpr:forename"
+                                    incremental="true">
+                                    <xf:label>Prénom</xf:label>
+                                </xf:input>
+                                <xf:trigger
+                                    class="delete">
+                                    <xf:label>Supprimer un procureur</xf:label>
+                                    <xf:delete
+                                        nodeset="."
+                                        at="1"
+                                        ev:event="DOMActivate"/>
+                                    <xf:help>Supprimer un procureur.</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger
+                                bind="addProsecutor">
+                                <xf:label>Ajouter un procureur</xf:label>
+                                <xf:action
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        origin="instance('xprSupplement')/xpr:prosecutor"
+                                        nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party[index('repeatParty')]/*"
+                                        at="last()"
+                                        position="after"/>
+                                </xf:action>
+                                <xf:help>Ajouter un procureur.</xf:help>
+                            </xf:trigger>
+                        </xf:group>
+                        <xf:trigger
+                            class="delete">
+                            <xf:label>Supprimer une partie</xf:label>
+                            <xf:delete
+                                nodeset="."
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:participants/xpr:parties/xpr:party) > 1"/>
+                            <xf:help>Supprimer une partie.</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger
+                        class="insert">
+                        <xf:label>Ajouter une partie</xf:label>
+                        <xf:action
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                nodeset="xpr:party"
+                                at="index('repeatParty')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <!--@todo set value-->
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/@role"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/@presence"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/@intervention"
+                                value=""/>
+                            <xf:delete
+                                ref="xpr:party[index('repeatParty')]/xpr:person[position() &gt; 1]"/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/xpr:person/xpr:persName/xpr:surname"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/xpr:person/xpr:persName/xpr:forename"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/xpr:person/xpr:occupation"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/xpr:status"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:party[index('repeatParty')]/xpr:expert/@ref"
+                                value=""/>
+                            <xf:delete
+                                ref="xpr:party[index('repeatParty')]/xpr:representative"/>
+                            <xf:delete
+                                ref="xpr:party[index('repeatParty')]/xpr:prosecutor"/>
+                        </xf:action>
+                        <xf:help>Ajouter une partie.</xf:help>
+                    </xf:trigger>
+                </xf:group>
+                <xf:group
+                    ref="xpr:description/xpr:participants/xpr:craftmen">
+                    <!--@quest au pluriel ?-->
+                    <xf:label>Entrepreneur, architecte ou maître d’œuvre</xf:label>
+                    <xf:repeat
+                        id="repeatCraftman"
+                        bind="craftman"
+                        appearance="full">
+                        <xf:label>Patronyme</xf:label>
+                        <xf:input
+                            ref="xpr:persName/xpr:surname"
+                            incremental="true">
+                            <xf:label>Nom</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:persName/xpr:forename"
+                            incremental="true">
+                            <xf:label>Prénom</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="xpr:occupation"
+                            incremental="true">
+                            <xf:label>profession</xf:label>
+                        </xf:input>
+                        <xf:trigger
+                            class="delete">
+                            <xf:label>Supprimer un entrepreneur, architecte ou maître d’œuvre</xf:label>
+                            <xf:delete
+                                nodeset="."
+                                at="1"
+                                ev:event="DOMActivate"
+                                if="count(//xpr:description/xpr:participants/xpr:craftmen/xpr:craftman) > 1"/>
+                            <xf:help>Supprimer un entrepreneur, architecte ou maître d’œuvre.</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger
+                        class="insert">
+                        <xf:label>Ajouter un entrepreneur, architecte ou maître d’œuvre</xf:label>
+                        <xf:action
+                            ev:event="DOMActivate">
+                            <xf:insert
+                                nodeset="xpr:craftman"
+                                at="index('repeatCraftman')"
+                                position="after"
+                                ev:event="DOMActivate"/>
+                            <xf:setvalue
+                                ref="xpr:craftman[index('repeatCraftman')]/xpr:persName/xpr:surname"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:craftman[index('repeatCraftman')]/xpr:persName/xpr:forename"
+                                value=""/>
+                            <xf:setvalue
+                                ref="xpr:craftman[index('repeatCraftman')]/xpr:occupation"
+                                value=""/>
+                        </xf:action>
+                        <xf:help>Ajouter un entrepreneur, architecte ou maître d’œuvre.</xf:help>
+                    </xf:trigger>
+                </xf:group>
+            </span>
+        </xf:case>
+        <xf:case
+            id="conclusionsPanel"
+            selected="false">
+            <xf:label>Conclusions ou dispositifs de l’expertise</xf:label>
+            <span>
+                <xf:group
+                    ref="xpr:data">
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Conclusion ou dispositif de l’expertise']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Coût de l’expertise']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                </xf:group>
+            </span>
+            <span>
+                <xf:group
+                    ref="xpr:description/xpr:conclusions">
+                    <xf:select1
+                        bind="agreement1"
+                        appearance="full">
+                        <xf:label>Dispositif de l’expertise</xf:label>
+                        <xf:item>
+                            <xf:label>Conclusion</xf:label>
+                            <xf:value>Conclusion</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">conclusion</xf:setvalue>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:conclusions"
+                                    origin="instance('xprSupplement')/xpr:opinion"
+                                    position="after"/>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Sans conclusion</xf:label>
+                            <xf:value>Sans conclusion</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">noConclusion</xf:setvalue>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Affaire inachevée</xf:label>
+                            <xf:value>Affaire inachevée</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">unfinished</xf:setvalue>
+                                <!--<xf:delete
+                                ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>-->
+                            </xf:action>
+                        </xf:item>
+                        <xf:help>ex. Sans conclusion : Alignement</xf:help>
+                    </xf:select1>
+                    <xf:select1
+                        bind="agreement2"
+                        appearance="full">
+                        <xf:label>Dispositif de l’expertise</xf:label>
+                        <xf:item>
+                            <xf:label>Accord</xf:label>
+                            <xf:value>Accord</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">agreement</xf:setvalue>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:conclusions"
+                                    origin="instance('xprSupplement')/xpr:opinion"
+                                    position="after"/>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Désaccord</xf:label>
+                            <xf:value>Désaccord</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">disagreement</xf:setvalue>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                                <xf:setvalue
+                                    ref="instance('xprSupplement')/xpr:iterator"
+                                    value="1"/>
+                                <xf:action
+                                    while="instance('xprSupplement')/xpr:iterator &lt;= count(//xpr:expert[parent::xpr:experts])"
+                                    ev:event="DOMActivate">
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions"
+                                        at="2"
+                                        position="after"
+                                        origin="instance('xprSupplement')/xpr:opinion"/>
+                                    <xf:setvalue
+                                        ref="instance('xprSupplement')/xpr:iterator"
+                                        value="instance('xprSupplement')/xpr:iterator + 1"/>
+                                </xf:action>
+                                <xf:setvalue
+                                    ref="instance('xprSupplement')/xpr:iterator"
+                                    value="1"/>
+                                <xf:action
+                                    while="instance('xprSupplement')/xpr:iterator &lt;= count(//xpr:expert[parent::xpr:experts])"
+                                    ev:event="DOMActivate">
+                                    <xf:setvalue
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion[position() = number(instance('xprSupplement')/xpr:iterator)]/@ref"
+                                        value="//xpr:expert[parent::xpr:experts][position() = number(instance('xprSupplement')/xpr:iterator)]/@ref"/>
+                                    <xf:setvalue
+                                        ref="instance('xprSupplement')/xpr:iterator"
+                                        value="instance('xprSupplement')/xpr:iterator + 1"/>
+                                </xf:action>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Sans conclusion</xf:label>
+                            <xf:value>Sans conclusion</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">noConclusion</xf:setvalue>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Affaire inachevée</xf:label>
+                            <xf:value>Affaire inachevée</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:setvalue
+                                    bind="agreementType">unfinished</xf:setvalue>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:conclusions"
+                                    origin="instance('xprSupplement')/xpr:opinion"
+                                    position="after"/>
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:help>ex. Sans conclusion : Alignement</xf:help>
+                    </xf:select1>
+                    <xf:repeat
+                        id="repeatOpinion"
+                        nodeset="xpr:opinion">
+                        <xf:textarea
+                            ref="."
+                            incremental="true">
+                            <xf:label>
+                                <xf:output
+                                    value="if(instance('xprExperts')/xpr:entity[@xml:id = current()/@ref], concat('Conlusions (', instance('xprExperts')/xpr:entity[@xml:id = current()/@ref]/xpr:label, ')'), 'Conclusions')"/>
+                            </xf:label>
+                        </xf:textarea>
+                    </xf:repeat>
+                    <xf:select
+                        ref="xpr:arrangement"
+                        appearance="full">
+                        <xf:label>Accommodement</xf:label>
+                        <xf:item>
+                            <xf:label>Résolution par les parties</xf:label>
+                            <!--@rmq /!\ select ne prend pas d'espace simple (separateur)
+                            l'utilisation d'espace insécable règle le problème.-->
+                            <xf:value>Résolution par les parties</xf:value>
+                        </xf:item>
+                    </xf:select>
+                    <xf:group
+                        ref="xpr:estimate">
+                        <xf:label>Montant global (pour les estimations)</xf:label>
+                        <xf:input
+                            ref="@l"
+                            incremental="true">
+                            <xf:label>livres</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@s"
+                            incremental="true">
+                            <xf:label>sols</xf:label>
+                        </xf:input>
+                        <xf:input
+                            ref="@d"
+                            incremental="true">
+                            <xf:label>deniers</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:estimates">
+                        <xf:repeat
+                            id="estimatesPlace"
+                            nodeset="xpr:place">
+                            <xf:label>
+                                <xf:output
+                                    value="concat('Estimations pour ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:street, ', ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:buildingNumber)"/>
+                            </xf:label>
+                            <xf:repeat
+                                nodeset="xpr:appraisal">
+                                <xf:input
+                                    ref="xpr:desc"
+                                    incremental="true">
+                                    <xf:label>Nature du bien</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="@l"
+                                    incremental="true">
+                                    <xf:label>livres</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="@s"
+                                    incremental="true">
+                                    <xf:label>sols</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="@d"
+                                    incremental="true">
+                                    <xf:label>deniers</xf:label>
+                                </xf:input>
+                                <xf:trigger
+                                    class="delete">
+                                    <xf:label>Supprimer une estimation</xf:label>
+                                    <xf:delete
+                                        ev:event="DOMActivate"
+                                        nodeset="."/>
+                                    <xf:help>Supprimer une estimation</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger>
+                                <xf:label>Ajouter une estimation</xf:label>
+                                <xf:insert
+                                    ev:event="DOMActivate"
+                                    context="."
+                                    origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place/xpr:appraisal"
+                                    nodeset="xpr:appraisal[last()]"
+                                    position="after"/>
+                            </xf:trigger>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:fees">
+                        <xf:label>Coût de l’expertise</xf:label>
+                        <xf:select1
+                            ref="@detail"
+                            appearance="full">
+                            <xf:label>Détail</xf:label>
+                            <xf:item>
+                                <xf:label>oui</xf:label>
+                                <xf:value>true</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:setvalue
+                                        ref="instance('xprSupplement')/xpr:iterator"
+                                        value="1"/>
+                                    <xf:action
+                                        while="count(//xpr:experts/xpr:expert) > count(//xpr:fees/xpr:fee[@type='expert'])"
+                                        ev:event="DOMActivate">
+                                        <xf:insert
+                                            context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                            origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='expert']"
+                                            nodeset="*"
+                                            position="before"/>
+                                        <xf:setvalue
+                                            ref="instance('xprExpertise')//xpr:fees/xpr:fee[@type='expert'][position() = instance('xprSupplement')/xpr:iterator]/@ref"
+                                            value="instance('xprExpertise')//xpr:experts/xpr:expert[position() = instance('xprSupplement')/xpr:iterator]/@ref"/>
+                                        <xf:setvalue
+                                            ref="instance('xprSupplement')/xpr:iterator"
+                                            value="instance('xprSupplement')/xpr:iterator + 1"/>
+                                    </xf:action>
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                        origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='clerk']"
+                                        nodeset="xpr:fee[@type='expert'][last()]"
+                                        position="after"/>
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                        origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='rolls']"
+                                        nodeset="xpr:fee[@type='clerk'][last()]"
+                                        position="after"/>
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                        origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='papers']"
+                                        nodeset="xpr:fee[@type='rolls'][last()]"
+                                        position="after"/>
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                        origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='papers']"
+                                        nodeset="xpr:fee[@type='plans'][last()]"
+                                        position="after"/>
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                        origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='prosecutors']"
+                                        nodeset="xpr:fee[@type='papers'][last()]"
+                                        position="after"/>
+                                    <xf:insert
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees"
+                                        origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='help']"
+                                        nodeset="xpr:fee[@type='prosecutors'][last()]"
+                                        position="after"/>
+                                    <!-- rebuild to set the readonly on inserted/copied elements (for experts fees labels) -->
+                                    <xf:rebuild
+                                        model="expertise"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>non</xf:label>
+                                <xf:value>false</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type]"/>
+                                </xf:action>
+                            </xf:item>
+                        </xf:select1>
+                        <xf:group>
+                            <xf:label>Expert(s)</xf:label>
+                            <xf:repeat
+                                nodeset="xpr:fee[@type='expert']">
+                                <xf:label>
+                                    <xf:output
+                                        value="if(instance('xprExperts')/xpr:entity[@xml:id = current()/@ref], concat('Expert (', instance('xprExperts')/xpr:entity[@xml:id = current()/@ref]/xpr:label, ')'), 'Expert')"/>
+                                </xf:label>
+                                <xf:input
+                                    ref="@l"
+                                    incremental="true">
+                                    <xf:label>livres</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="@s"
+                                    incremental="true">
+                                    <xf:label>sols</xf:label>
+                                </xf:input>
+                                <xf:input
+                                    ref="@d"
+                                    incremental="true">
+                                    <xf:label>deniers</xf:label>
+                                </xf:input>
+                            </xf:repeat>
+                        </xf:group>
+                        <xf:group
+                            ref="xpr:fee[@type='clerk']">
+                            <xf:label>Greffier</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="xpr:fee[@type='rolls']">
+                            <xf:label>Rôles</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="xpr:fee[@type='papers']">
+                            <xf:label>Papier et contrôle</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="xpr:fee[@type='plans']">
+                            <xf:label>Plans</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="xpr:fee[@type='prosecutors']">
+                            <xf:label>Procureur(s)</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:group
+                            ref="xpr:fee[@type='help']">
+                            <xf:label>Aides</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                        <xf:repeat
+                            id="repeatOtherFee"
+                            nodeset="xpr:fee[@type='other']"
+                            appearance="full">
+                            <xf:label>Autres frais</xf:label>
+                            <xf:input
+                                ref=".">
+                                <xf:label>Intitulé</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                            <xf:trigger
+                                class="delete">
+                                <xf:label>Supprimer ces frais</xf:label>
+                                <xf:delete
+                                    nodeset="."
+                                    at="1"
+                                    ev:event="DOMActivate"/>
+                                <xf:help>Supprimer ces frais.</xf:help>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <xf:trigger
+                            bind="addOtherFee">
+                            <xf:label>Ajouter d'autres frais</xf:label>
+                            <xf:action
+                                ev:event="DOMActivate">
+                                <xf:insert
+                                    origin="instance('xprSupplement')/xpr:fees/xpr:fee[@type='other']"
+                                    nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[position() = last()]"
+                                    position="after"/>
+                                <xf:setvalue
+                                    ref="xpr:fee[@type='other'][index('repeatOtherFee')]"
+                                    value=""/>
+                                <xf:setvalue
+                                    ref="xpr:fee[@type='other'][index('repeatOtherFee')]/@l"
+                                    value=""/>
+                                <xf:setvalue
+                                    ref="xpr:fee[@type='other'][index('repeatOtherFee')]/@s"
+                                    value=""/>
+                                <xf:setvalue
+                                    ref="xpr:fee[@type='other'][index('repeatOtherFee')]/@d"
+                                    value=""/>
+                            </xf:action>
+                            <xf:help>Ajouter d'autres frais.</xf:help>
+                        </xf:trigger>
+                        <xf:group
+                            ref="xpr:total">
+                            <xf:label>Total</xf:label>
+                            <xf:input
+                                ref="@l"
+                                incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@s"
+                                incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input
+                                ref="@d"
+                                incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:group>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:expenses">
+                        <xf:label>Bourse commune</xf:label>
+                        <!--<xf:select1
+                        ref="@mentioned"
+                        appearance="full">
+                        <xf:label>Mention(s) de la bourse commune (des experts ou greffiers) et détail</xf:label>
+                        <xf:item>
+                            <xf:label>Oui</xf:label>
+                            <xf:value>true</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Non</xf:label>
+                            <xf:value>false</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type]"/>
+                            </xf:action>
+                        </xf:item>
+                    </xf:select1>-->
+                        <xf:select
+                            ref="instance('xprSupplement')/xpr:expenses/xpr:expense"
+                            appearance="full">
+                            <xf:item>
+                                <xf:label>Bourse commune des experts</xf:label>
+                                <xf:value>expert</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='expert']"
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses"/>
+                                    <xf:setvalue
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                        value="'true'"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']"/>
+                                    <xf:setvalue
+                                        if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]"
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                        value="'false'"/>
+                                </xf:action>
+                                <xf:group
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']">
+                                    <xf:label>Montant</xf:label>
+                                    <xf:input
+                                        ref="@l"
+                                        incremental="true">
+                                        <xf:label>livres</xf:label>
+                                    </xf:input>
+                                    <xf:input
+                                        ref="@s"
+                                        incremental="true">
+                                        <xf:label>sols</xf:label>
+                                    </xf:input>
+                                    <xf:input
+                                        ref="@d"
+                                        incremental="true">
+                                        <xf:label>deniers</xf:label>
+                                    </xf:input>
+                                </xf:group>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Bourse commune des greffiers</xf:label>
+                                <xf:value>clerk</xf:value>
+                                <xf:action
+                                    ev:event="xforms-select">
+                                    <xf:insert
+                                        origin="instance('xprSupplement')/xpr:expenses/xpr:expense[@type='clerk']"
+                                        context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses"/>
+                                    <xf:setvalue
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                        value="'true'"/>
+                                </xf:action>
+                                <xf:action
+                                    ev:event="xforms-deselect">
+                                    <xf:delete
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']"/>
+                                    <xf:setvalue
+                                        if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]"
+                                        ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+                                        value="'false'"/>
+                                </xf:action>
+                                <xf:group
+                                    ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']">
+                                    <xf:label>Montant</xf:label>
+                                    <xf:input
+                                        ref="@l"
+                                        incremental="true">
+                                        <xf:label>livres</xf:label>
+                                    </xf:input>
+                                    <xf:input
+                                        ref="@s"
+                                        incremental="true">
+                                        <xf:label>sols</xf:label>
+                                    </xf:input>
+                                    <xf:input
+                                        ref="@d"
+                                        incremental="true">
+                                        <xf:label>deniers</xf:label>
+                                    </xf:input>
+                                </xf:group>
+                            </xf:item>
+                        </xf:select>
+                    </xf:group>
+                </xf:group>
+            </span>
+        </xf:case>
+        <xf:case
+            id="keywordsPanel"
+            selected="false">
+            <xf:label>Mots-clés et commentaires</xf:label>
+            <span>
+                <xf:group
+                    ref="xpr:data">
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Commentaire libre ou copie d’extraits']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                    <xf:group
+                        ref="xpr:entry[xpr:key='Attachement de la numérisation']">
+                        <xf:label>
+                            <xf:output
+                                value="xpr:key"/>
+                        </xf:label>
+                        <xf:repeat
+                            nodeset="xpr:value">
+                            <xf:output
+                                value="."/>
+                        </xf:repeat>
+                    </xf:group>
+                </xf:group>
+            </span>
+            <span
+                class="index">
+                <xf:group
+                    ref="xpr:description">
+                    <xf:select
+                        ref="xpr:keywords[@group='estates']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='estates']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='estates']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='procedure']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='procedure']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='procedure']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='contract']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='contract']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='contract']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='encumbrance']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='encumbrance']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='encumbrance']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='law']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='law']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='law']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='measurement']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='measurement']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='measurement']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='repairs']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='repairs']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='repairs']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='guarantees']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='guarantees']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='guarantees']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='responsability']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='responsability']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='responsability']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='ownership']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='ownership']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='ownership']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='value']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='value']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='value']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='neighbourhood']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='neighbourhood']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='neighbourhood']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='disorder']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='disorder']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='disorder']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                    <xf:select
+                        ref="xpr:keywords[@group='transformation']"
+                        appearance="full">
+                        <xf:label>
+                            <xf:output
+                                value="instance('xprSupplement')/xpr:index/xpr:group[@type='transformation']/xpr:label"/>
+                        </xf:label>
+                        <xf:itemset
+                            nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='transformation']/xpr:term">
+                            <xf:label
+                                value="."/>
+                            <xf:copy
+                                ref="."/>
+                        </xf:itemset>
+                    </xf:select>
+                </xf:group>
+            </span>
+            <xf:group
+                ref="xpr:description/xpr:keywords[@type='technical']">
+                <xf:label>Rubrique spécifique aux expertises techniques</xf:label>
+                <xf:repeat
+                    id="repeatTechnicalTerm"
+                    bind="technicalTerm"
+                    appearance="full">
+                    <xf:input
+                        ref="."
+                        incremental="true">
+                        <xf:label>Mot-clé</xf:label>
+                    </xf:input>
+                    <xf:trigger
+                        class="delete">
+                        <xf:label>&#10007;</xf:label>
+                        <xf:delete
+                            nodeset="."
+                            at="1"
+                            ev:event="DOMActivate"
+                            if="count(//xpr:description/xpr:keywords[@type='technical']/xpr:term) > 1"/>
+                        <xf:help>Supprimer un mot-clé.</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger
+                    class="insert">
+                    <xf:label>Ajouter un mot-clé</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate">
+                        <xf:insert
+                            nodeset="xpr:term"
+                            at="index('repeatTechnicalTerm')"
+                            position="after"
+                            ev:event="DOMActivate"/>
+                        <xf:setvalue
+                            ref="xpr:term[index('repeatTechnicalTerm')]"
+                            value=""/>
+                    </xf:action>
+                    <xf:help>Ajouter un mot-clé.</xf:help>
+                </xf:trigger>
+            </xf:group>
+            <xf:group
+                ref="xpr:description/xpr:keywords[@type='tools']">
+                <xf:label>Outils et actions de l'expertise</xf:label>
+                <xf:repeat
+                    id="repeatToolsTerm"
+                    bind="toolsTerm"
+                    appearance="full">
+                    <xf:input
+                        ref="."
+                        incremental="true">
+                        <xf:label>Mot-clé</xf:label>
+                    </xf:input>
+                    <xf:trigger
+                        class="delete">
+                        <xf:label>&#10007;</xf:label>
+                        <xf:delete
+                            nodeset="."
+                            at="1"
+                            ev:event="DOMActivate"
+                            if="count(//xpr:description/xpr:keywords[@type='tools']/xpr:term) > 1"/>
+                        <xf:help>Supprimer un mot-clé.</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger
+                    class="insert">
+                    <xf:label>Ajouter un mot-clé</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate">
+                        <xf:insert
+                            nodeset="xpr:term"
+                            at="index('repeatToolsTerm')"
+                            position="after"
+                            ev:event="DOMActivate"/>
+                        <xf:setvalue
+                            ref="xpr:term[index('repeatToolsTerm')]"
+                            value=""/>
+                    </xf:action>
+                    <xf:help>Ajouter un mot-clé.</xf:help>
+                </xf:trigger>
+            </xf:group>
+            <xf:group
+                ref="xpr:description/xpr:keywords[@type='estimation']">
+                <xf:label>Rubrique spécifique aux estimations</xf:label>
+                <xf:repeat
+                    id="repeatEstimationTerm"
+                    bind="estimationTerm"
+                    appearance="full">
+                    <xf:input
+                        ref="."
+                        incremental="true">
+                        <xf:label>Mot-clé</xf:label>
+                    </xf:input>
+                    <xf:trigger
+                        class="delete">
+                        <xf:label>&#10007;</xf:label>
+                        <xf:delete
+                            nodeset="."
+                            at="1"
+                            ev:event="DOMActivate"
+                            if="count(//xpr:description/xpr:keywords[@type='estimation']/xpr:term) > 1"/>
+                        <xf:help>Supprimer un mot-clé.</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger
+                    class="insert">
+                    <xf:label>Ajouter un mot-clé</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate">
+                        <xf:insert
+                            nodeset="xpr:term"
+                            at="index('repeatEstimationTerm')"
+                            position="after"
+                            ev:event="DOMActivate"/>
+                        <xf:setvalue
+                            ref="xpr:term[index('repeatEstimationTerm')]"
+                            value=""/>
+                    </xf:action>
+                    <xf:help>Ajouter un mot-clé.</xf:help>
+                </xf:trigger>
+            </xf:group>
+            <xf:group
+                ref="xpr:description/xpr:keywords[@type='law']">
+                <xf:label>Rubrique spécifique au droit</xf:label>
+                <xf:repeat
+                    id="repeatLawTerm"
+                    bind="lawTerm"
+                    appearance="full">
+                    <xf:input
+                        ref="."
+                        incremental="true">
+                        <xf:label>Mot-clé</xf:label>
+                    </xf:input>
+                    <xf:trigger
+                        class="delete">
+                        <xf:label>&#10007;</xf:label>
+                        <xf:delete
+                            nodeset="."
+                            at="1"
+                            ev:event="DOMActivate"
+                            if="count(//xpr:description/xpr:keywords[@type='law']/xpr:term) > 1"/>
+                        <xf:help>Supprimer un mot-clé.</xf:help>
+                    </xf:trigger>
+                </xf:repeat>
+                <xf:trigger
+                    class="insert">
+                    <xf:label>Ajouter un mot-clé</xf:label>
+                    <xf:action
+                        ev:event="DOMActivate">
+                        <xf:insert
+                            nodeset="xpr:term"
+                            at="index('repeatLawTerm')"
+                            position="after"
+                            ev:event="DOMActivate"/>
+                        <xf:setvalue
+                            ref="xpr:term[index('repeatLawTerm')]"
+                            value=""/>
+                    </xf:action>
+                    <xf:help>Ajouter un mot-clé.</xf:help>
+                </xf:trigger>
+            </xf:group>
+            <xf:group
+                ref="xpr:description/xpr:analysis">
+                <xf:label>Commentaires et première analyse</xf:label>
+                <xf:textarea
+                    ref=".">
+                    <xf:label>Passages intéressants</xf:label>
+                </xf:textarea>
+            </xf:group>
+            <xf:group
+                ref="xpr:description/xpr:noteworthy">
+                <xf:label>Éléments remarquables</xf:label>
+                <xf:textarea
+                    ref=".">
+                    <xf:label/>
+                </xf:textarea>
+            </xf:group>
+            <xf:trigger
+                bind="addComment">
+                <xf:label>Ajouter un commentaire sur ce formulaire</xf:label>
+                <xf:action
+                    ev:event="DOMActivate">
+                    <!--<xf:delete nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices"/>-->
+                    <xf:insert
+                        origin="instance('xprSupplement')/xpr:comment"
+                        nodeset="instance('xprExpertise')/*"
+                        at="last()"
+                        position="after"/>
+                    <!--<xf:insert nodeset="instance('xprAppendices')"/>-->
+                </xf:action>
+                <xf:help>Ajouter un commentaire sur ce formulaire.</xf:help>
+            </xf:trigger>
+            <xf:group
+                ref="xpr:comment">
+                <xf:label>Commentaire sur ce formulaire</xf:label>
+                <xf:textarea
+                    ref=".">
+                    <xf:label/>
+                </xf:textarea>
+                <xf:trigger
+                    class="delete">
+                    <xf:label>&#10007;</xf:label>
+                    <xf:delete
+                        nodeset="."
+                        at="1"
+                        ev:event="DOMActivate"/>
+                    <xf:help>Supprimer le commentaire.</xf:help>
+                </xf:trigger>
+            </xf:group>
+        </xf:case>
+    </xf:switch>
+    <span 
+        id="keywordsControl"
+        class="keywords">
+        <h2>Mots-clefs</h2>
+        <span class="closeKeywords" onclick="closeKeywords()">X</span>
+        <xf:group
+            ref="xpr:description">
+            <xf:select
+                ref="xpr:keywords[@group='estates']"
+                appearance="full">
+                <xf:label>
+                    <span>Biens expertisés</span> (nature juridique et caractères)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='estates']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='procedure']"
+                appearance="full">
+                <xf:label>
+                    <span>Procédure</span> (questions de)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='procedure']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='contract']"
+                appearance="full">
+                <xf:label>
+                    <span>Contrat</span> (type de, concernant le bien expertisé)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='contract']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='encumbrance']"
+                appearance="full">
+                <xf:label>
+                    <span>Servitudes</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='encumbrance']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='law']"
+                appearance="full">
+                <xf:label>
+                    <span>Droit</span> (nature et source du)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='law']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='measurement']"
+                appearance="full">
+                <xf:label>
+                    <span>Mesure</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='measurement']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='repairs']"
+                appearance="full">
+                <xf:label>
+                    <span>Réparations</span> (hors cas d’expertises portant sur des réparations)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='repairs']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='guarantees']"
+                appearance="full">
+                <xf:label>
+                    <span>Sûreté/Garanties</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='guarantees']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='responsability']"
+                appearance="full">
+                <xf:label>
+                    <span>Responsabilité</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='responsability']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='ownership']"
+                appearance="full">
+                <xf:label>
+                    <span>Propriété</span> (transmission de)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='ownership']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='value']"
+                appearance="full">
+                <xf:label>
+                    <span>Valeur</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='value']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='neighbourhood']"
+                appearance="full">
+                <xf:label>
+                    <span>Voisinage</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='neighbourhood']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='disorder']"
+                appearance="full">
+                <xf:label>
+                    <span>Désordres</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='disorder']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='transformation']"
+                appearance="full">
+                <xf:label><span>Transformation du bâti/Travaux</span> (type de)</xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='transformation']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+        </xf:group>
+    </span>
+    <xf:submit
+        submission="submitGip">
+        <xf:label>Enregistrer</xf:label>
+    </xf:submit>
+</form>

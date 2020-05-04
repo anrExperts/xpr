@@ -1205,6 +1205,159 @@ function associate($content as map(*), $outputParams as map(*), $node as node())
     default return replace value of node $node with 'default'
 };
 
+(: ****************************GIP****************************** :)
+
+(:~
+ : This resource function lists all the gip expertises
+ : @return an ordered list of gip expertises
+ :)
+declare 
+  %rest:path("/xpr/gip")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getGipExpertises() {
+  db:open('gip')/xpr/expertises
+};
+
+
+
+(:~
+ : This resource function lists all the gip expertises
+ : @return an ordered list of gip expertises
+ :)
+declare 
+  %rest:path("/xpr/gip/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function viewGipExpertises() {
+  let $content := map {
+    'data' : db:open('gip')//expertise,
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : @return an xml representation of a gip expertise item
+ : @return an xml representation of a gip expertise
+ :)
+declare 
+  %rest:path("xpr/gip/{$id}")
+  %output:method("xml")
+function getGipExpertise($id) {
+  db:open('gip')//expertise[@xml:id=$id]
+};
+
+(:~
+ : This resource function shows a gip expertise item
+ : @return an html representation of a gip expertise
+ :)
+declare 
+  %rest:path("xpr/gip/{$id}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function viewGipExpertise($id) {
+  let $content := map {
+    'data' : db:open('gip')//expertise[@xml:id=$id],
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheExpertise.xml"
+  }
+  return wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function modify an expertise item
+ : @param $id an expertise id
+ : @return the expertise item in xforms
+ :)
+declare 
+  %rest:path("xpr/gip/{$id}/modify")
+  %output:method("xml")
+function modifyGip($id) {
+  let $content := map {
+    'instance' : $id,
+    'path' : 'gip',
+    'model' : 'xprExpertiseModel.xml',
+    'trigger' : 'xprExpertiseTrigger.xml',
+    'form' : 'xprGipExpertiseForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This function consumes new expertises 
+ : @param $param content
+ : @bug change of cote and dossier doesn’t work
+ :)
+declare
+  %rest:path("xpr/gip/put")
+  %output:method("xml")
+  %rest:header-param("Referer", "{$referer}", "none")
+  %rest:PUT("{$param}")
+  %updating
+function xformGipResult($param, $referer) {
+  let $db := db:open('gip')
+  return 
+    if (fn:ends-with($referer, 'modify'))
+    then 
+      let $location := fn:analyze-string($referer, 'xpr/gip/(.+?)/modify')//fn:group[@nr='1']
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
+      return (
+        replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param,
+        update:output(
+         (
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>La ressource a été modifiée.</message>
+            <url></url>
+          </result>
+         )
+        )
+      )  
+    else
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
+      let $param := 
+        copy $d := $param
+        modify insert node attribute xml:id {$id} into $d/*
+        return $d
+      return (
+        insert node $param into $db/xpr/gip,
+        update:output(
+         (
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>La ressource a été créée.</message>
+            <url></url>
+          </result>
+         )
+        )
+      )  
+};
 
 (:~
  : this function 

@@ -33,7 +33,27 @@
                         if="not(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'])"
                         nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"
                         ev:event="xforms-ready"/>
+                <xf:action 
+                        ev:event="xforms-ready"
+                        while="count(instance('xprExpertise')/xpr:description/xpr:keywords[@group]) &lt; count(instance('xprSupplement')/xpr:index/xpr:group)">
+                        <xf:insert
+                                context="instance('xprExpertise')/xpr:description"
+                                origin="instance('xprExpertiseCopy')/xpr:description/xpr:keywords[@group]"
+                                nodeset="xpr:conclusions[not(following-sibling::xpr:keywords[@group])] | xpr:keywords[@group]"
+                                at="last()"
+                                position="after"
+                                ev:event="xforms-ready"/>
+                </xf:action>
+                <xf:action 
+                        ev:event="xforms-ready"
+                        while="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)]">
+                        <xf:setvalue 
+                                ref="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)][1]/@group" 
+                                value="instance('xprSupplement')/xpr:index/xpr:group[not(@type = instance('xprExpertise')/xpr:description/xpr:keywords/@group)]/@type"
+                                ev:event="xforms-ready"/>
+                </xf:action>
         </xf:action>
+        
         <!--Instance principale-->
         <xf:instance
                 id="xprExpertise"
@@ -68,7 +88,6 @@
                 replace="none">
                 <xf:action
                         ev:event="xforms-submit-done">
-                        <!--<xf:message level="ephemeral">OK (<xf:output value="event('response-status-code')"/> - <xf:output value="event('response-reason-phrase')"/>) </xf:message>-->
                         <xf:message
                                 level="modal"> La ressource a été enregistrée ! Status : <xf:output
                                         value="event('response-status-code')"/>; URI : <xf:output
@@ -80,9 +99,6 @@
                         <xf:setvalue
                                 value="event('response-body')//*:id"
                                 ref="instance('test')"/>
-                        <!--<xf:load show="replace">
-                                <xf:resource value="'/xpr/expertises/list'"/>
-                        </xf:load>-->
                 </xf:action>
                 <xf:message
                         ev:event="xforms-submit-error"
@@ -94,10 +110,39 @@
                                 value="event('response-reason-phrase')"/> Body : <xf:output
                                 value="event('response-body')"/>
                 </xf:message>
-                <!--<xf:action ev:event="xforms-submit-error">
-                        <xf:message>Error (<xf:output value="event('response-status-code')"/> - <xf:output value="event('response-reason-phrase')"/>) </xf:message>
-                </xf:action>-->
         </xf:submission>
+        
+        <xf:submission
+                id="submitGip"
+                resource="/xpr/gip/put"
+                method="put"
+                replace="none">
+                <xf:action
+                        ev:event="xforms-submit-done">
+                        <xf:message
+                                level="modal"> La ressource a été enregistrée ! Status : <xf:output
+                                        value="event('response-status-code')"/>; URI : <xf:output
+                                                value="event('resource-uri')"/>; Headers : <xf:output
+                                                        value="event('response-headers')"/>; Reason : <xf:output
+                                                                value="event('response-reason-phrase')"/> Body : <xf:output
+                                                                        value="event('response-body')"/>
+                        </xf:message>
+                        <xf:setvalue
+                                value="event('response-body')//*:id"
+                                ref="instance('test')"/>
+                </xf:action>
+                <xf:message
+                        ev:event="xforms-submit-error"
+                        level="modal"> Une erreur est apparue : <xf:output
+                                value="event('error-type')"/>; Status : <xf:output
+                                        value="event('response-status-code')"/>; URI : <xf:output
+                                                value="event('resource-uri')"/>; Headers : <xf:output
+                                                        value="event('response-headers')"/>; Reason : <xf:output
+                                                                value="event('response-reason-phrase')"/> Body : <xf:output
+                                                                        value="event('response-body')"/>
+                </xf:message>
+        </xf:submission>
+
         <!--sourceDesc-->
         <xf:bind
                 id="sourceDesc"
@@ -415,7 +460,6 @@
         <xf:bind
                 id="feesMoney"
                 nodeset="//@l | //@d | //@s | instance('xprSupplement')/xpr:fees//@l | instance('xprSupplement')/xpr:fees//@d |instance('xprSupplement')/xpr:fees//@s"/>
-        
         <!--Mots-clés et commentaires-->
         <xf:bind
                 id="keywordsTechnical"
