@@ -2129,167 +2129,7 @@
         <xf:case
             id="keywordsPanel"
             selected="false">
-            <xf:label>Mots-clés et commentaires</xf:label>
-            <xf:group
-                ref="xpr:description">
-                <xf:label>Rubrique spécifique aux expertises techniques</xf:label>
-                <xf:repeat
-                    id="repeatTechnicalTerm"
-                    bind="technicalTerm"
-                    appearance="full">
-                    <xf:input
-                        ref="."
-                        incremental="true">
-                        <xf:label>Mot-clé</xf:label>
-                    </xf:input>
-                    <xf:trigger
-                        class="delete">
-                        <xf:label>&#10007;</xf:label>
-                        <xf:delete
-                            nodeset="."
-                            at="1"
-                            ev:event="DOMActivate"
-                            if="count(//xpr:description/xpr:keywords[@type='technical']/xpr:term) > 1"/>
-                        <xf:help>Supprimer un mot-clé.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger
-                    class="insert">
-                    <xf:label>Ajouter un mot-clé</xf:label>
-                    <xf:action
-                        ev:event="DOMActivate">
-                        <xf:insert
-                            nodeset="xpr:term"
-                            at="index('repeatTechnicalTerm')"
-                            position="after"
-                            ev:event="DOMActivate"/>
-                        <xf:setvalue
-                            ref="xpr:term[index('repeatTechnicalTerm')]"
-                            value=""/>
-                    </xf:action>
-                    <xf:help>Ajouter un mot-clé.</xf:help>
-                </xf:trigger>
-            </xf:group>
-            <xf:group
-                ref="xpr:description/xpr:keywords[@type='tools']">
-                <xf:label>Outils et actions de l'expertise</xf:label>
-                <xf:repeat
-                    id="repeatToolsTerm"
-                    bind="toolsTerm"
-                    appearance="full">
-                    <xf:input
-                        ref="."
-                        incremental="true">
-                        <xf:label>Mot-clé</xf:label>
-                    </xf:input>
-                    <xf:trigger
-                        class="delete">
-                        <xf:label>&#10007;</xf:label>
-                        <xf:delete
-                            nodeset="."
-                            at="1"
-                            ev:event="DOMActivate"
-                            if="count(//xpr:description/xpr:keywords[@type='tools']/xpr:term) > 1"/>
-                        <xf:help>Supprimer un mot-clé.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger
-                    class="insert">
-                    <xf:label>Ajouter un mot-clé</xf:label>
-                    <xf:action
-                        ev:event="DOMActivate">
-                        <xf:insert
-                            nodeset="xpr:term"
-                            at="index('repeatToolsTerm')"
-                            position="after"
-                            ev:event="DOMActivate"/>
-                        <xf:setvalue
-                            ref="xpr:term[index('repeatToolsTerm')]"
-                            value=""/>
-                    </xf:action>
-                    <xf:help>Ajouter un mot-clé.</xf:help>
-                </xf:trigger>
-            </xf:group>
-            <xf:group
-                ref="xpr:description/xpr:keywords[@type='estimation']">
-                <xf:label>Rubrique spécifique aux estimations</xf:label>
-                <xf:repeat
-                    id="repeatEstimationTerm"
-                    bind="estimationTerm"
-                    appearance="full">
-                    <xf:input
-                        ref="."
-                        incremental="true">
-                        <xf:label>Mot-clé</xf:label>
-                    </xf:input>
-                    <xf:trigger
-                        class="delete">
-                        <xf:label>&#10007;</xf:label>
-                        <xf:delete
-                            nodeset="."
-                            at="1"
-                            ev:event="DOMActivate"
-                            if="count(//xpr:description/xpr:keywords[@type='estimation']/xpr:term) > 1"/>
-                        <xf:help>Supprimer un mot-clé.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger
-                    class="insert">
-                    <xf:label>Ajouter un mot-clé</xf:label>
-                    <xf:action
-                        ev:event="DOMActivate">
-                        <xf:insert
-                            nodeset="xpr:term"
-                            at="index('repeatEstimationTerm')"
-                            position="after"
-                            ev:event="DOMActivate"/>
-                        <xf:setvalue
-                            ref="xpr:term[index('repeatEstimationTerm')]"
-                            value=""/>
-                    </xf:action>
-                    <xf:help>Ajouter un mot-clé.</xf:help>
-                </xf:trigger>
-            </xf:group>
-            <xf:group
-                ref="xpr:description/xpr:keywords[@type='law']">
-                <xf:label>Rubrique spécifique au droit</xf:label>
-                <xf:repeat
-                    id="repeatLawTerm"
-                    bind="lawTerm"
-                    appearance="full">
-                    <xf:input
-                        ref="."
-                        incremental="true">
-                        <xf:label>Mot-clé</xf:label>
-                    </xf:input>
-                    <xf:trigger
-                        class="delete">
-                        <xf:label>&#10007;</xf:label>
-                        <xf:delete
-                            nodeset="."
-                            at="1"
-                            ev:event="DOMActivate"
-                            if="count(//xpr:description/xpr:keywords[@type='law']/xpr:term) > 1"/>
-                        <xf:help>Supprimer un mot-clé.</xf:help>
-                    </xf:trigger>
-                </xf:repeat>
-                <xf:trigger
-                    class="insert">
-                    <xf:label>Ajouter un mot-clé</xf:label>
-                    <xf:action
-                        ev:event="DOMActivate">
-                        <xf:insert
-                            nodeset="xpr:term"
-                            at="index('repeatLawTerm')"
-                            position="after"
-                            ev:event="DOMActivate"/>
-                        <xf:setvalue
-                            ref="xpr:term[index('repeatLawTerm')]"
-                            value=""/>
-                    </xf:action>
-                    <xf:help>Ajouter un mot-clé.</xf:help>
-                </xf:trigger>
-            </xf:group>
+            <xf:label><!--Mots-clés et -->Commentaires</xf:label>
             <xf:group
                 ref="xpr:description/xpr:analysis">
                 <xf:label>Commentaires et première analyse</xf:label>
@@ -2340,6 +2180,211 @@
             </xf:group>
         </xf:case>
     </xf:switch>
+    <span
+        id="keywordsControl"
+        class="keywords">
+        <span
+            class="closeKeywords"
+            onclick="closeKeywords()">&#10007;</span>
+        <h2>Mots-clefs</h2>
+        <xf:group
+            ref="xpr:description">
+            <xf:select
+                ref="xpr:keywords[@group='estates']"
+                appearance="full">
+                <xf:label>
+                    <span>Biens expertisés</span> (nature juridique et caractères)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='estates']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='procedure']"
+                appearance="full">
+                <xf:label>
+                    <span>Procédure</span> (questions de)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='procedure']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='contract']"
+                appearance="full">
+                <xf:label>
+                    <span>Contrat</span> (type de, concernant le bien expertisé)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='contract']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='encumbrance']"
+                appearance="full">
+                <xf:label>
+                    <span>Servitudes</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='encumbrance']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='law']"
+                appearance="full">
+                <xf:label>
+                    <span>Droit</span> (nature et source du)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='law']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='measurement']"
+                appearance="full">
+                <xf:label>
+                    <span>Mesure</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='measurement']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='repairs']"
+                appearance="full">
+                <xf:label>
+                    <span>Réparations</span> (hors cas d’expertises portant sur des réparations)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='repairs']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='guarantees']"
+                appearance="full">
+                <xf:label>
+                    <span>Sûreté/Garanties</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='guarantees']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='responsability']"
+                appearance="full">
+                <xf:label>
+                    <span>Responsabilité</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='responsability']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='ownership']"
+                appearance="full">
+                <xf:label>
+                    <span>Propriété</span> (transmission de)
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='ownership']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='value']"
+                appearance="full">
+                <xf:label>
+                    <span>Valeur</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='value']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='neighbourhood']"
+                appearance="full">
+                <xf:label>
+                    <span>Voisinage</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='neighbourhood']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='disorder']"
+                appearance="full">
+                <xf:label>
+                    <span>Désordres</span>
+                </xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='disorder']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+            <xf:select
+                ref="xpr:keywords[@group='transformation']"
+                appearance="full">
+                <xf:label><span>Transformation du bâti/Travaux</span> (type de)</xf:label>
+                <xf:itemset
+                    nodeset="instance('xprSupplement')/xpr:index/xpr:group[@type='transformation']/xpr:term">
+                    <xf:label
+                        value="."/>
+                    <xf:copy
+                        ref="."/>
+                </xf:itemset>
+            </xf:select>
+        </xf:group>
+    </span>
     <xf:submit
         submission="submit">
         <xf:label>Enregistrer</xf:label>

@@ -92,7 +92,7 @@ nav ul li:first-child {
 .fixed-nav #navigation {
     position: fixed;
     top: 0;
-    z-index: 1;
+    z-index: 2;
     /*box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);*/
 }
 
@@ -100,8 +100,9 @@ nav ul li:first-child {
 .fixed-nav #navForm {
     position: fixed;    
     z-index: 1;
-    /*box-shadow: 0 0.005em 0.5em 0.01em var(--colorSub);*/
+
 }
+
 
 nav > ul > li > a {
     color: var(--colorMain);
@@ -114,7 +115,7 @@ nav > ul > li > a:hover {
     opacity: .7;
     background-size: 0.35em 0.35em;
 }
-}
+
 
 /*
  * typo
@@ -610,8 +611,23 @@ table {
   /*  white-space: nowrap; */
 }
 
+.openKeywords {
+   border-radius: 12px;
+   border:0.15em, solid, var(--colorMain);
+   padding: 0.1em 0.5em 0.1em 0.5em ;
+   
+}
+
 .openKeywords, .closeKeywords {
     cursor:pointer;
+    color: white;
+    background-color: var(--colorMain); 
+    border-radius: 0.2em;
+}
+
+.closeKeywords {
+    padding-left: 0.35em;
+    padding-right: 0.35em;
 }
 
 .closeKeywords {
@@ -625,31 +641,42 @@ table {
   z-index: 1; /* Stay on top */
   top: 0;
   left: 0;
-  display: grid;
+  display: flex;
+  flex-direction: column;
+  align-content: center;
   background-color: var(--colorTint);
   overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: scroll;
+  scrollbar-color: white var(--colorMain);
+  scrollbar-width: thin;
   padding-top: 60px; /* Place content 60px from the top */
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
 }
 
-.keywords > .xforms-group {
-    margin-left: auto;
-    margin-right: auto;
+.keywords h2 {
+    margin-left: 1.3em;
+}
+
+.keywords >span {
+    align-self: flex-end;
+    margin-right: 3em;
+    mask: url(picol/cancel.svg) no-repeat 50% 50%;
+    mask-size: auto;
+    -webkit-mask-size: cover;
+    mask-size: cover;
+    color: var(--colorMain);
+    background-color: var(--colorMain);
+    background-size: 1em 1em;
 }
 
 .keywords .xforms-group-content {
-    /*margin-left: 1em;
-    display: grid;
-    grid-gap:2em;
-    grid-template-columns :auto auto auto auto;*/
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 
 .keywords .xforms-group-content span.xforms-select {
-    /*grid-column-start:inherit;
-    grid-column-end:inherit;*/
     display: inline;
     width: 18em;
     margin-bottom: 1em;
@@ -663,4 +690,50 @@ table {
 
 .keywords .xforms-item {
     margin-top: 0.2em;
+}
+
+form.gip {
+    width: inherit;
+}
+
+form.gip > .xforms-switch > .xforms-case > span {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 2em;
+}
+
+form.gip > .xforms-switch > .xforms-case > span > label {
+    flex:1 1 100%;
+}
+
+form.gip > .xforms-switch > .xforms-case > span span.data{
+    flex: 4;
+    padding-right: 1.2em;
+}
+
+form.gip > .xforms-switch > .xforms-case > span > span.form {
+    flex: 7;
+}
+
+#navForm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.3em;
+}
+
+ button {
+    cursor:pointer;
+    line-height: calc(var(--baseline)* 1.5rem);
+    color: var(--colorMain) ;
+    background-color: var(--colorSub); 
+    border:0.15em solid;
+    border-radius: 0.2em;
+    border-color:  var(--colorMain);
+    box-shadow: none;
+    outline: none;
+    margin-left: -0.15em;
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: normal;
+    letter-spacing: 0.0em
 }
