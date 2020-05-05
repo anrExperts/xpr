@@ -1,7 +1,7 @@
 xquery version "3.0";
-module namespace xpr = "xpr";
+module namespace xpr.xpr = "xpr.xpr";
 (:~
- : This xquery module is an application for the Z1J expertises called xpr
+ : This xquery module is an application for xpr
  :
  : @author emchateau & sardinecan (ANR Experts)
  : @since 2019-01
@@ -14,6 +14,10 @@ module namespace xpr = "xpr";
  :
  :)
 
+import module namespace G = 'xpr.globals' at './globals.xqm' ;
+import module namespace xpr.mappings.html = 'xpr.mappings.html' at './mappings.html.xqm' ;
+import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' ;
+
 declare namespace rest = "http://exquery.org/ns/restxq" ;
 declare namespace file = "http://expath.org/ns/file" ;
 declare namespace output = "http://www.w3.org/2010/xslt-xquery-serialization" ;
@@ -22,22 +26,21 @@ declare namespace web = "http://basex.org/modules/web" ;
 declare namespace update = "http://basex.org/modules/update" ;
 declare namespace perm = "http://basex.org/modules/perm" ;
 declare namespace user = "http://basex.org/modules/user" ;
+declare namespace session = 'http://basex.org/modules/session' ;
 declare namespace http = "http://expath.org/ns/http-client" ;
-declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
 
-declare namespace xlink = "http://www.w3.org/1999/xlink" ;
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
-declare namespace xf = "http://www.w3.org/2002/xforms" ;
 declare namespace eac = "eac" ;
 
+declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
+declare namespace xf = "http://www.w3.org/2002/xforms" ;
+declare namespace xlink = "http://www.w3.org/1999/xlink" ;
+
+declare namespace xpr = "xpr" ;
 declare default element namespace "xpr" ;
-declare default function namespace "xpr" ;
+declare default function namespace "xpr.xpr" ;
 
 declare default collation "http://basex.org/collation?lang=fr" ;
-
-declare variable $xpr:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl" ;
-declare variable $xpr:home := file:base-dir() ;
-declare variable $xpr:interface := fn:doc($xpr:home || "files/interface.xml") ;
 
 (:~
  : This resource function defines the application root
@@ -115,10 +118,32 @@ function listHtml() {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises
+ :)
+declare
+  %rest:path("/xpr/expertises/list2")
+  %rest:produces('text/html')
+  %output:method("xml")
+function listHtml2() {
+ let $content := map {
+    'title' : 'Liste des expertises',
+    'data' : getExpertises(),
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise2.xml",
+    'mapping' : xpr.mappings.html:xprList2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -152,7 +177,7 @@ function viewExpertises() {
   let $outputParam := map {
     'layout' : "listeExpertise.xml"
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -183,7 +208,7 @@ function viewExpertise($id) {
   let $outputParam := map {
     'layout' : "ficheExpertise.xml"
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -223,9 +248,9 @@ function new() {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -249,9 +274,9 @@ function modify($id) {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -400,7 +425,7 @@ function viexEntities() {
   let $outputParam := map {
     'layout' : "listeProsopo.xml"
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -431,7 +456,7 @@ function viewBiography($id) {
   let $outputParam := map {
     'layout' : "ficheProsopo.xml"
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -451,9 +476,9 @@ function viewBiography2($id) {
   }
   let $outputParam := map {
     'layout' : "ficheProsopo2.xml",
-    'mapping' : eac2html(map:get($content, 'data'), map{})
+    'mapping' : xpr.mappings.html:eac2html(map:get($content, 'data'), map{})
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -475,9 +500,9 @@ function modifyEntity($id) {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -499,9 +524,9 @@ function newBio() {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -634,9 +659,9 @@ function newInventory() {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -750,9 +775,9 @@ function newSource() {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -785,9 +810,9 @@ function modifySource($id) {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -864,9 +889,9 @@ function gipView() {
   }
   let $outputParam := map {
     'layout' : "listeExpertise2.xml",
-    'mapping' : listXpr2html(map:get($content, 'data'), map{})
+    'mapping' : xpr.mappings.html:xprList2html(map:get($content, 'data'), map{})
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 
@@ -898,7 +923,7 @@ function viewGipExpertise($id) {
   let $outputParam := map {
     'layout' : "ficheExpertise.xml"
   }
-  return wrapper($content, $outputParam)
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -921,9 +946,9 @@ function modifyGip($id) {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $xpr:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
-    wrapper($content, $outputParam)
+    xpr.models.xpr:wrapper($content, $outputParam)
     )
 };
 
@@ -1231,322 +1256,11 @@ function networkViz($year) {
  :)
 declare
   %rest:path('xpr/files/{$file=.+}')
-function xpr:file($file as xs:string) as item()+ {
+function xpr.xpr:file($file as xs:string) as item()+ {
   let $path := file:base-dir() || 'files/' || $file
   return
     (
       web:response-header( map {'media-type' : web:content-type($path)}),
       file:read-binary($path)
     )
-};
-
-(:~
- : this function return a mime-type for a specified file
- :
- : @param  $name  file name
- : @return a mime type for the specified file
- :)
-declare function xpr:mime-type($name as xs:string) as xs:string {
-    fetch:content-type($name)
-};
-
-(:~
- : this function call a wrapper
- :
- : @param $content the content to serialize
- : @param $outputParams the output params
- : @return an updated document and instantiated pattern
- :)
-declare function wrapper($content as map(*), $outputParams as map(*)) as node()* {
-  let $layout := file:base-dir() || "files/" || map:get($outputParams, 'layout')
-  let $mapping := map:get($content, 'mapping')
-  let $wrap := fn:doc($layout)
-  let $regex := '\{(.+?)\}'
-  return
-    $wrap/* update (
-      for $node in .//*[fn:matches(text(), $regex)] | .//@*[fn:matches(., $regex)]
-      let $key := fn:analyze-string($node, $regex)//fn:group/text()
-      return switch ($key)
-        case 'model' return replace node $node with getModels($content)
-        case 'trigger' return replace node $node with getTriggers($content)
-        case 'form' return replace node $node with getForms($content)
-        case 'data' return replace node $node with $content?data
-        case 'content' return replace node $node with $outputParams?mapping
-        default return associate($content, $outputParams, $node)
-      )
-};
-
-(:~
- : this function get the models
- :
- : @param $content the content params
- : @return the default models or its instance version
- : @bug not generic enough
- :)
-declare function getModels($content as map(*)){
-  let $instances := map:get($content, 'instance')
-  let $path := map:get($content, 'path')
-  let $models := map:get($content, 'model')
-  for $model at $i in $models return
-    if ($instances[$i])
-    then (
-      copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-      modify replace value of node $doc/xf:model/xf:instance[@id=fn:substring-before($model, 'Model.xml')]/@src with '/xpr/' || $path || '/' || $instances[$i]
-      return $doc
-    )
-    else
-    fn:doc(file:base-dir() || "files/" || $model)
-};
-
-(:~
- : this function get the models
- :
- : @param $content the content params
- : @return the default models or its instance version
- : @bug not generic enough
- :)
-declare function getTriggers($content as map(*)){
-  let $instance := map:get($content, 'instance')
-  let $path := map:get($content, 'path')
-  let $triggers := map:get($content, 'trigger')
-  return if ($triggers) then fn:doc(file:base-dir() || "files/" || $triggers) else ()
-};
-
-(:~
- : this function get the forms
- :
- : @param $content the content params
- : @return the default forms or its instance version
- : @bug not generic enough
- :)
-declare function getForms($content as map(*)){
-  let $instance := map:get($content, 'instance')
-  let $path := map:get($content, 'path')
-  let $forms := map:get($content, 'form')
-  return if ($forms) then fn:doc(file:base-dir() || "files/" || $forms) else ()
-};
-
-(:~
- : this function dispatch the content with the data
- :
- : @param $content the content to serialize
- : @param $outputParams the serialization params
- : @return an updated node with the data
- : @bug the behavior is not complete
- :) 
-declare 
-  %updating 
-function associate($content as map(*), $outputParams as map(*), $node as node()) {
-  let $regex := '\{(.+?)\}'
-  let $keys := fn:analyze-string($node, $regex)//fn:group/text()
-  let $values := map:get($content, $keys)
-    return typeswitch ($values)
-    case document-node() return replace node $node with $values
-    case empty-sequence() return ()
-    case text() return replace value of node $node with $values
-    case xs:string return replace value of node $node with $values
-    case xs:string+ return 
-      if ($node instance of attribute()) (: when key is an attribute value :)
-      then 
-        replace node $node/parent::* with 
-          element {fn:name($node/parent::*)} {
-          for $att in $node/parent::*/(@* except $node) return $att, 
-          attribute {fn:name($node)} {fn:string-join($values, ' ')},
-          $node/parent::*/text()
-          }
-    else
-      replace node $node with 
-      for $value in $values 
-      return element {fn:name($node)} { 
-        for $att in $node/@* return $att,
-        $value
-      } 
-    case xs:integer return replace value of node $node with xs:string($values)
-    case element()+ return replace node $node with 
-      for $value in $values 
-      return element {fn:name($node)} { 
-        for $att in $node/@* return $att, "todo"
-      }
-    default return replace value of node $node with 'default'
-};
-
-(:~
- : this function 
- :)
-(: declare 
-  %output:indent('no') 
-function entry($node as node()*, $options as map(*)) as item()* {
-  for $i in $node return dispatch($i, $options)
-}; :)
-
-(:~
- : this function get the interface message
- :)
-declare function getMessage($id, $lang) {
-  let $message := $xpr:interface/xpr:interface/xpr:prosopo/xpr:element[@xml:id=$id]/xpr:message[@xml:lang]/node()
-  return if ($message[fn:normalize-space(.)!=''])
-    then $message
-    else <message>todo</message>
-};
-
-(:~
- : this function dispatches the treatment of the XML document
- :)
-declare 
-  %output:indent('no')
-function eac2html($node as node()*, $options as map(*)) as item()* {
-  typeswitch($node)
-    case text() return $node[fn:normalize-space(.)!='']
-    case element(eac:eac-cpf) return eac-cpf($node, $options)
-    case element(eac:cpfDescription) return cpfDescription($node, $options)
-    case element(eac:identity) return identity($node, $options)
-    case element(eac:description) return description($node, $options)
-    case element(eac:existDates) return existDates($node, $options)
-    case element(eac:localDescription) return sex($node, $options)
-    case element(eac:functions) return functions($node, $options)
-    case element(eac:function) return xpr:function($node, $options)
-    case element(eac:biogHist) return biogHist($node, $options)
-    case element(eac:chronList) return chronList($node, $options)
-    case element(eac:control) return ()
-    default return passthru($node, $options)
-};
-
-(:~
- : This function pass through child nodes (xsl:apply-templates
- :)
-declare 
-  %output:indent('no') 
-function passthru($nodes as node(), $options as map(*)) as item()* {
-  for $node in $nodes/node()
-  return eac2html($node, $options)
-};
-
-declare function eac-cpf($node, $options){
-  <article>{passthru($node, $options)}</article>
-};
-
-declare function cpfDescription($node, $options){
-  <div>{passthru($node, $options)}</div>
-};
-
-declare function identity($node, $options){
-  <header>{(
-    entityType($node/eac:entityType, $options),
-    nameEntry($node/eac:nameEntry[eac:authorizedForm], $options),
-    entityId($node/eac:entityId, $options),
-    for $nameEntry in$ node/eac:nameEntry[fn:not(eac:authorizedForm)] return nameEntry($nameEntry, $options)
-)}</header>
-};
-
-declare function entityId($node, $options){
-  <span class="id">{passthru($node, $options)}</span>
-};
-declare function entityType($node, $options){
-  (:<h3>{
-    switch ($node)
-    case $node[parent::eac:identity[@localType='expert']] return 'Fiche prosopographique d’expert'
-    case $node[parent::eac:identity[@localType='masson']] return 'Fiche prosopographique de maçon'
-    default return 'Fiche prosopographique'
-  }</h3>:)
-  let $type := $node/parent::eac:identity/@localType
-  return <h3>{getMessage($type,'fr')}</h3>
-  (: @todo add other entry types :)
-};
-
-declare function nameEntry($node, $options){
-  if ($node/eac:authorizedForm) 
-  then <h2>{passthru($node/eac:part, $options)}</h2>
-  else for $nameEntry in $node return <div>
-    <h4>{getMessage('nameEntry', 'fr')}</h4>
-    <ul>{part($node/eac:part, $options)}</ul>
-  </div>
-};
-
-declare function part($node, $options){
-    for $key in ('surname', 'forename', 'particle', 'common', 'formal', 'academic', 'religious', 'nobiliary')
-    let $message := getMessage($key, 'fr')
-    let $part := $node[@localType=$key]
-    where $part[fn:normalize-space(.)!='']
-    return <li>{$message || ' : ' || eac2html($part, $options)}</li>
-};
-
-declare function description($node, $options){
-  <div>
-    <h4>{getMessage('description', 'fr')}</h4>
-    <ul>{
-      eac2html($node/eac:existDates, $options),
-      eac2html($node/eac:localDescription[@localType="sex"], $options)
-    }</ul>
-  </div>,
-  eac2html($node/eac:functions, $options),
-  eac2html($node/eac:biogHist, $options)
-};
-
-declare function existDates($node, $options){
-  <li>{getMessage('existance', 'fr') || ' : ' || getDate($node/eac:dateRange, $options)}</li>
-};
-
-declare function functions($node, $options){
-  <div class="function">
-    <h4>{getMessage($node/fn:name(), 'fr')}</h4>
-    {passthru($node, $options)}
-  </div>
-};
-
-declare function xpr:function($node, $options){
-  <div>
-    <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
-  </div>
-  (: @todo prévoir cas où date fixe :)
-};
-
-declare function biogHist($node, $options){
-  <div class="biogHist">
-    <h4>{getMessage($node/fn:name(), 'fr')}</h4>
-    {passthru($node, $options)}
-  </div>
-};
-
-declare function chronList($node, $options){
-  for $chronItem in $node/eac:chronItem
-  return
-    <div>
-      <h5>{$node/eac:event}</h5>
-      <p>{getMessage($chronItem/eac:date/fn:name(),'fr')} : {getDate($chronItem/eac:date, $options)}</p>
-      <p>Participant : {$chronItem/eac:participant}</p>
-      <p>{'Involve :' || $chronItem/eac:involve}</p>
-      <p>Source : {$chronItem/eac:source}</p>
-      <p>Coût : {$chronItem/eac:cost}</p>
-    </div>
-};
-
-declare function getDate($node, $options) as xs:string {
-  switch($node)
-  case $node[self::eac:dateRange] return fn:string-join(
-    ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
-    ' à ')
-  default return getPrecision($node/*, $options)
-  (: @todo mettre valeur vide en cas d’abs :)
-};
-
-declare function getPrecision($node, $options) as xs:string* {
-  switch ($node)
-  case $node[@notAfter] return ($node/@notAfter || ' ]')
-  case $node[@notBefore] return ('[ ', $node/@notBefore)
-  case $node[@standardDate] return ($node/@standardDate)
-  default return $node/@*
-};
-
-declare function sex($node, $options){
-  <li>{getMessage($node, 'fr')}</li>
-  (: @todo restreindre l’appel au sex :)
-};
-
-declare function listXpr2html($content, $options) {
-  for $expertise in $content/expertise
-  return (
-    <li>
-      {fn:string($expertise/@xml:id)}
-    </li>
-  )
 };
