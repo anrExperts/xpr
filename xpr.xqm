@@ -1209,17 +1209,20 @@ declare
   %rest:path("/xpr/gip/view")
   %rest:produces('application/html')
   %output:method("html")
-function viewGipExpertises() {
-  let $content := map {
-    'data' : db:open('gip')//expertise,
+function gipView() {
+ let $content := map {
+    'title' : 'Liste des expertises du GIP',
+    'data' : getGipExpertises(),
     'trigger' : '',
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "listeExpertise.xml"
+    'layout' : "listGip.xml",
+    'mapping' : eac2html(map:get($content, 'data'), map{})
   }
   return wrapper($content, $outputParam)
 };
+
 
 (:~
  : @return an xml representation of a gip expertise item
