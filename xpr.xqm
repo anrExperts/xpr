@@ -295,7 +295,15 @@ function xformResult($param, $referer) {
       let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
       let $param := 
         copy $d := $param
-        modify insert node attribute xml:id {$id} into $d/*
+        modify (
+          insert node attribute xml:id {$id} into $d/*,
+          for $place at $i in $d/expertise/description/places/place
+          let $idPlace := fn:generate-id($place)
+          return (
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+          )
+        )
         return $d
       return (
         insert node $param into $db/xpr/expertises,
