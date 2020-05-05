@@ -1219,7 +1219,10 @@ function entry($node as node()*, $options as map(*)) as item()* {
  : this function get the interface message
  :)
 declare function getMessage($id, $lang) {
-  $xpr:interface/xpr:interface/xpr:prosopo/xpr:element[@xml:id=$id]/xpr:message[@xml:lang]/node()
+  let $message := $xpr:interface/xpr:interface/xpr:prosopo/xpr:element[@xml:id=$id]/xpr:message[@xml:lang]/node()
+  return if ($message[fn:normalize-space(.)!=''])
+    then $message
+    else <message>todo</message>
 };
 
 (:~
@@ -1238,6 +1241,8 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
     case element(eac:localDescription) return sex($node, $options)
     case element(eac:functions) return functions($node, $options)
     case element(eac:function) return xpr:function($node, $options)
+    case element(eac:biogHist) return biogHist($node, $options)
+    case element(eac:chronList) return chronList($node, $options)
     case element(eac:control) return ()
     default return passthru($node, $options)
 };
@@ -1309,7 +1314,8 @@ declare function description($node, $options){
       eac2html($node/eac:localDescription[@localType="sex"], $options)
     }</ul>
   </div>,
-  eac2html($node/eac:functions, $options)
+  eac2html($node/eac:functions, $options),
+  eac2html($node/eac:biogHist, $options)
 };
 
 declare function existDates($node, $options){
@@ -1317,7 +1323,7 @@ declare function existDates($node, $options){
 };
 
 declare function functions($node, $options){
-  <div>
+  <div class="function">
     <h4>{getMessage($node/fn:name(), 'fr')}</h4>
     {passthru($node, $options)}
   </div>
@@ -1325,10 +1331,29 @@ declare function functions($node, $options){
 
 declare function xpr:function($node, $options){
   <div>
-    <p>{$node/eac:term}</p>
-    <p>{getDate($node/eac:dateRange, $options)}</p>
+    <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
   </div>
   (: @todo prévoir cas où date fixe :)
+};
+
+declare function biogHist($node, $options){
+  <div class="biogHist">
+    <h4>{getMessage($node/fn:name(), 'fr')}</h4>
+    {passthru($node, $options)}
+  </div>
+};
+
+declare function chronList($node, $options){
+  for $chronItem in $node/eac:chronItem
+  return
+    <div>
+      <h5>{$node/eac:event}</h5>
+      <p>{getMessage($chronItem/eac:date/fn:name(),'fr')} : {getDate($chronItem/eac:date, $options)}</p>
+      <p>Participant : {$chronItem/eac:participant}</p>
+      <p>{'Involve :' || $chronItem/eac:involve}</p>
+      <p>Source : {$chronItem/eac:source}</p>
+      <p>Coût : {$chronItem/eac:cost}</p>
+    </div>
 };
 
 declare function getDate($node, $options) as xs:string {

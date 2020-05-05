@@ -56,5 +56,11 @@
         <element xml:id="functions">
             <message xml:lang="fr">Fonctions</message>
         </element>
+        <element xml:id="biogHist">
+            <message xml:lang="fr">Informations biographiques</message>
+        </element>
+        <element xml:id="date">
+            <message xml:lang="fr">Date</message>
+        </element>
     </prosopo>
 </interface>
