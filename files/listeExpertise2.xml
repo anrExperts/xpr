@@ -1,0 +1,69 @@
+<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xmlns:eac="eac" xmlns:rico="rico" xpr:bogus="fix Firefox namespace issue" eac:bogus="fix Firefox namespace issue" rico:bogus="fix Firefox namespace issue">
+  <head>
+    <title>xpr</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Application de l’ANR Experts" />
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
+    <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
+    <link href="/xpr/files/css/main.css" rel="stylesheet" />
+    <script type="text/javascript" src="/xpr/files/lib/Saxon-JS-1.2.0/SaxonJS.min.js"></script>
+  </head>
+  <body>
+    <nav id="navigation">
+      <ul>
+        <li><a href="/xpr">¡xpr!</a></li>
+        <li><a href="/xpr/expertises/view">pv</a></li>
+        <li><a href="/xpr/biographies/view">prosopo</a></li>
+        <li><a href="/xpr/inventories/list">iad</a></li>
+        <li><a href="/xpr/networks">dataviz</a></li>
+        <li><a href="/xpr/about">?</a></li>
+      </ul>
+    </nav>
+    <main>
+    <section class="alternate">
+      <h2 id="title">Liste des expertises</h2>
+      <ul>{content}</ul>
+    </section>
+    <!-- <section>{data}</section> -->
+    </main>
+    <script>
+/*function repeat() {
+  var element = document.querySelectorAll('div.xforms-group-content');
+  for (var i = 0; i &lt; element.length; i++) {
+    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+    }
+  }*/
+function repeat() {
+  var element = document.querySelectorAll('div.xforms-repeat');
+  for (var i = 0; i &lt; element.length; i++) {
+    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+    }
+  }
+        </script>
+    <script>
+// Sticky navigation
+const nav = document.querySelector('#navigation');
+const navTop = nav.offsetTop;
+
+function stickyNavigation() {
+  console.log('navTop = ' + navTop);
+  console.log('scrollY = ' + window.scrollY);
+  if (window.scrollY >= navTop) {
+    // nav offsetHeight = height of nav
+    document.body.style.paddingTop = nav.offsetHeight + 'px';
+    document.body.classList.add('fixed-nav');
+    }
+    else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove('fixed-nav');
+    }
+  }
+window.addEventListener('scroll', stickyNavigation);
+    </script>
+  </body>
+</html>

@@ -863,8 +863,8 @@ function gipView() {
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "listGip.xml",
-    'mapping' : eac2html(map:get($content, 'data'), map{})
+    'layout' : "listeExpertise2.xml",
+    'mapping' : listXpr2html(map:get($content, 'data'), map{})
   }
   return wrapper($content, $outputParam)
 };
@@ -1540,4 +1540,13 @@ declare function getPrecision($node, $options) as xs:string* {
 declare function sex($node, $options){
   <li>{getMessage($node, 'fr')}</li>
   (: @todo restreindre l’appel au sex :)
+};
+
+declare function listXpr2html($content, $options) {
+  for $expertise in $content/expertise
+  return (
+    <li>
+      {fn:string($expertise/@xml:id)}
+    </li>
+  )
 };
