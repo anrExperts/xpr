@@ -522,6 +522,7 @@ declare
   %rest:path("/xpr/biographies/{$id}/view")
   %rest:produces('application/html')
   %output:method("html")
+  %output:html-version('5.0')
 function getBiographyHtml($id) {
   let $content := map {
     'title' : 'Fiche de ' || $id,
@@ -935,6 +936,7 @@ declare
   %rest:path("/xpr/gip/view")
   %rest:produces('application/html')
   %output:method("html")
+  %output:html-version('5.0')
 function gipView() {
  let $content := map {
     'title' : 'Liste des expertises du GIP',
@@ -976,7 +978,7 @@ function getGipExpertiseHtml($id) {
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "ficheExpertise.xml"
+    'layout' : "ficheExpertiseSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
