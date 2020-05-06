@@ -37,6 +37,7 @@ declare default collation "http://basex.org/collation?lang=fr" ;
 
 (:~
  : this function get the interface message
+ : @todo deals with other cases
  :)
 declare function getMessage($id, $lang) {
   let $message := $G:interface/xpr:interface/xpr:prosopo/xpr:element[@xml:id=$id]/xpr:message[@xml:lang]/node()
@@ -46,7 +47,25 @@ declare function getMessage($id, $lang) {
 };
 
 (:~
- : this function dispatches the treatment of the XML document
+ : This function is a list of entities
+ : @param
+ :)
+declare function listEac2html($node as node()*, $options as map(*)) as item()* {
+  for $entity in $node//eac:eac-cpf
+  let $id := $entity/@xml:id => fn:normalize-unicode()
+  let $name := $entity//eac:nameEntry[eac:authorizedForm] => fn:normalize-unicode()
+  let $type := $entity//eac:identity/@localType => getMessage($options)
+  let $dates := $entity/@xml:id => fn:normalize-unicode()
+  return <li>
+    <h3 class="name">{$name}</h3>
+      <p class="date">{$dates}</p>
+      <p class="type">{$type}</p>
+      <p><a href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
+    </li>
+};
+
+(:~
+ : This function dispatches the treatment of the XML document
  :)
 declare
   %output:indent('no')
@@ -91,7 +110,7 @@ declare function identity($node, $options){
     nameEntry($node/eac:nameEntry[eac:authorizedForm], $options),
     entityId($node/eac:entityId, $options),
     for $nameEntry in$ node/eac:nameEntry[fn:not(eac:authorizedForm)] return nameEntry($nameEntry, $options)
-)}</header>
+    )}</header>
 };
 
 declare function entityId($node, $options){
@@ -203,28 +222,6 @@ declare function sex($node, $options){
  : @return an html list of expertises
  :)
 declare function listXpr2html($content, $options) {
-  for $expertise in $content/xpr:expertise
-  let $id := $expertise/@xml:id => fn:string()
-  let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()
-  let $addresses := for $place in $expertise/xpr:description/xpr:places
-    return fn:normalize-space($place)
-    => fn:string-join(' ; ')
-  let $dates := $expertise//xpr:sessions/xpr:date/@when => fn:string-join(' ; ')
-  return (
-    <li>
-      <h3 class="cote">{$cote}</h3>
-      <p class="date">{$dates}</p>
-      <p>{$addresses}</p>
-      <p><a href="{'/xpr/expertises/' || $id || '/view'}">Voir</a> | <a href="{'/xpr/expertises/' || $id || '/modify'}">Modifier</a></p>
-    </li>
-  )
-};
-
-(:~
- : this function serialise an expertises list
- : @return an html list of expertises
- :)
-declare function listEac2html($content, $options) {
   for $expertise in $content/xpr:expertise
   let $id := $expertise/@xml:id => fn:string()
   let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()

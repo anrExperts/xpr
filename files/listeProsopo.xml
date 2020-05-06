@@ -25,7 +25,7 @@
         <h2>Liste des entités</h2>
         <div id="entities">
           <!-- class="search" automagically makes an input a search field. -->
-          <input class="search" placeholder="Chercher" />
+          <!-- <input class="search" placeholder="Chercher" /> -->
           <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
           <ul class="list">{content}</ul>
         </div>

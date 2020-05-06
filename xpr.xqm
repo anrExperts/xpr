@@ -213,14 +213,14 @@ declare
   %rest:path("xpr/expertises/{$id}/view")
   %rest:produces('application/html')
   %output:method("html")
-function getExpertiseHtml($id) {
+function getExpertiseSaxon($id) {
   let $content := map {
     'data' : db:open('xpr')//expertise[@xml:id=$id],
     'trigger' : '',
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "ficheExpertise.xml"
+    'layout' : "ficheExpertiseSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
@@ -379,8 +379,29 @@ declare
   %rest:path("/xpr/biographies")
   %rest:produces('application/xml')
   %output:method("xml")
-function getBiographiesList() {
+function getBiographies() {
   db:open('xpr')/xpr/bio
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises in html
+ :)
+declare
+  %rest:path("/xpr/biographies/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getBiographiesHtml() {
+ let $content := map {
+    'title' : 'Liste des entités',
+    'data' : getBiographies()
+  }
+  let $outputParam := map {
+    'layout' : "listeProsopo.xml",
+    'mapping' : xpr.mappings.html:listEac2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -480,7 +501,7 @@ function viewBiographyHtml($id) {
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "ficheProsopo2.xml",
+    'layout' : "ficheProsopo.xml",
     'mapping' : xpr.mappings.html:eac2html(map:get($content, 'data'), map{})
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
