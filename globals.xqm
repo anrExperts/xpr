@@ -14,6 +14,8 @@ module namespace G = 'xpr.globals';
  :
  :)
 
- declare variable $G:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl" ;
- declare variable $G:home := file:base-dir() ;
- declare variable $G:interface := fn:doc($G:home || "files/interface.xml") ;
+declare namespace file = "http://expath.org/ns/file" ;
+
+declare variable $G:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.xsl" ;
+declare variable $G:home := file:base-dir() ;
+declare variable $G:interface := fn:doc($G:home || "files/interface.xml") ;

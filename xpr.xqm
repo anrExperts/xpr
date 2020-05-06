@@ -77,6 +77,18 @@ function install() {
 };
 
 (:~
+ : This resource function export the z1j database into the base-dir
+ : @return redirect to the expertises list
+ : @todo change the export path
+ :)
+declare
+  %rest:path("/xpr/expertises/export")
+function z1jExport(){
+  db:export("xpr", file:base-dir(), map { 'method': 'xml' }),
+  web:redirect("/xpr/expertises/view")
+};
+
+(:~
  : This resource function defines the application home
  : @return redirect to the expertises list
  :)
@@ -89,7 +101,7 @@ function home() {
 
 (:~
  : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : @return an ordered list of expertises in xml
  :)
 declare 
   %rest:path("/xpr/expertises")
@@ -101,13 +113,34 @@ function getExpertises() {
 
 (:~
  : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : @return an ordered list of expertises in html
+ :)
+declare
+  %rest:path("/xpr/expertises/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getExpertisesHtml() {
+ let $content := map {
+    'title' : 'Liste des expertises',
+    'data' : getExpertises()
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml",
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises with xforms
  :)
 declare 
-  %rest:path("/xpr/expertises/list")
+  %rest:path("/xpr/expertises/xforms")
   %rest:produces('text/html')
   %output:method("xml")
-function listHtml() {
+function getExpertisesXforms() {
   let $content := map {
     'instance' : '',
     'model' : 'xprListModel.xml',
@@ -126,63 +159,43 @@ function listHtml() {
 
 (:~
  : This resource function lists all the expertises
- : @return an ordered list of expertises
- :)
-declare
-  %rest:path("/xpr/expertises/list2")
-  %rest:produces('text/html')
-  %output:method("xml")
-function listHtml2() {
- let $content := map {
-    'title' : 'Liste des expertises',
-    'data' : getExpertises(),
-    'trigger' : '',
-    'form' : ''
-  }
-  let $outputParam := map {
-    'layout' : "listeExpertise2.xml",
-    'mapping' : xpr.mappings.html:xprList2html(map:get($content, 'data'), map{})
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-(:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : @return an ordered list of expertises in json
+ : @todo to develop
  :)
 declare 
-  %rest:path("/xpr/expertises/list/json")
+  %rest:path("/xpr/expertises/json")
   %rest:produces('application/json')
   %output:media-type('application/json')
   %output:method('json')
-function jsonExpertises() {
+function getExpertisesJson() {
   let $content := db:open('xpr')//expertise
   return map{'test' : 1}
 };
 
 (:~
  : This resource function lists all the expertises
- : @return an ordered list of expertises
+ : @return an ordered list of expertises with saxonjs
  :)
 declare 
-  %rest:path("/xpr/expertises/view")
+  %rest:path("/xpr/expertises/saxon")
   %rest:produces('application/html')
   %output:method("html")
-function viewExpertises() {
+function getExpertisesSaxon() {
   let $content := map {
     'data' : db:open('xpr')//expertise,
     'trigger' : '',
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "listeExpertise.xml"
+    'layout' : "listeExpertiseSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
- : @return an xml representation of an expertise item
- : @return an xml representation of an expertise
+ : This resource function returns an expertise item
+ : @param $id the expertise id
+ : @return an expertise item in xml (xpr)
  :)
 declare 
   %rest:path("xpr/expertises/{$id}")
@@ -192,14 +205,15 @@ function getExpertise($id) {
 };
 
 (:~
- : This resource function shows an expertise item
- : @return an html representation of an expertise
+ : This resource function returns an expertise item
+ : @param $id the expertise id
+ : @return an expertise item in html
  :)
 declare 
   %rest:path("xpr/expertises/{$id}/view")
   %rest:produces('application/html')
   %output:method("html")
-function viewExpertise($id) {
+function getExpertiseHtml($id) {
   let $content := map {
     'data' : db:open('xpr')//expertise[@xml:id=$id],
     'trigger' : '',
@@ -212,15 +226,17 @@ function viewExpertise($id) {
 };
 
 (:~
- : This resource function shows an expertise item
- : @return an json representation of an expertise
+ : This resource function returns an expertise item
+ : @param $id the expertise id
+ : @return an expertise item in json
+ : @todo to develop
  :)
 declare 
-  %rest:path("xpr/expertises/json/{$id}")
+  %rest:path("xpr/expertises/{$id}/json")
   %rest:produces('application/json')
   %output:media-type('application/json')
   %output:method('json')
-function jsonExpertise($id) {
+function getExpertiseJson($id) {
   let $expertise := db:open('xpr')//expertise[@xml:id=$id]
   return array{
     map{
@@ -231,8 +247,8 @@ function jsonExpertise($id) {
 };
 
 (:~
- : This resource function creates a new exertise
- : @return an xforms for the expertise
+ : This resource function edits a new expertise
+ : @return an xforms to edit an expertise
 :)
 declare
   %rest:path("xpr/expertises/new")
@@ -256,8 +272,8 @@ function new() {
 
 (:~
  : This resource function modify an expertise item
- : @param $id an expertise id
- : @return the expertise item in xforms
+ : @param $id the expertise id
+ : @return an xforms to edit the expertise
  :)
 declare 
   %rest:path("xpr/expertises/{$id}/modify")
@@ -281,8 +297,10 @@ function modify($id) {
 };
 
 (:~
- : This function consumes new expertises 
- : @param $param content
+ : This function creates new expertises
+ : @param $param content to insert in the database
+ : @param $refere the callback url
+ : @return update the database with an updated content and an 200 http
  : @bug change of cote and dossier doesn’t work
  :)
 declare
@@ -354,27 +372,14 @@ function xformResult($param, $referer) {
 };
 
 (:~
- : This function export the z1j database into the base-dir
- : @return redirect to the expertises list
- :
- : @todo change the export path 
- :)
-declare 
-  %rest:path("/xpr/expertises/export")
-function z1jExport(){
-  db:export("xpr", file:base-dir(), map { 'method': 'xml' }),
-  web:redirect("/xpr/expertises/view")
-};
-
-(:~
- : This resource function lists all the biographies
+ : This resource function lists the persons or corporate bodies
  : @return an xml list of persons/corporate bodies
  :)
 declare 
   %rest:path("/xpr/biographies")
   %rest:produces('application/xml')
   %output:method("xml")
-function biographies() {
+function getBiographiesList() {
   db:open('xpr')/xpr/bio
 };
 
@@ -383,10 +388,10 @@ function biographies() {
  : @return an html list of persons/corporate bodies
  :)
 declare 
-  %rest:path("/xpr/biographies/list")
+  %rest:path("/xpr/biographies/old")
   %rest:produces('text/html')
   %output:method("html")
-function listBio() {
+function getBiographiesOld() {
   <html>
     <head>Expertises</head>
     <body>
@@ -413,17 +418,17 @@ function listBio() {
  : @return an ordered list of entities
  :)
 declare 
-  %rest:path("/xpr/biographies/view")
+  %rest:path("/xpr/biographies/saxon")
   %rest:produces('application/html')
   %output:method("html")
-function viexEntities() {
+function getEntitiesListSaxon() {
   let $content := map {
     'data' : db:open('xpr')//bio,
     'trigger' : '',
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "listeProsopo.xml"
+    'layout' : "listeProsopoSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
@@ -444,17 +449,17 @@ function getBiography($id) {
  : @return an html view of an entity
  :)
 declare 
-  %rest:path("/xpr/biographies/{$id}/view")
+  %rest:path("/xpr/biographies/{$id}/saxon")
   %rest:produces('application/html')
   %output:method("html")
-function viewBiography($id) {
+function getBiographyXforms($id) {
   let $content := map {
     'data' : db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id],
     'trigger' : '',
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "ficheProsopo.xml"
+    'layout' : "ficheProsopoSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
@@ -464,10 +469,10 @@ function viewBiography($id) {
  : @return an html view of an entity with xquery templating
  :)
 declare 
-  %rest:path("/xpr/biographies/{$id}/view2")
+  %rest:path("/xpr/biographies/{$id}/view")
   %rest:produces('application/html')
   %output:method("html")
-function viewBiography2($id) {
+function viewBiographyHtml($id) {
   let $content := map {
     'title' : 'Fiche de ' || $id,
     'data' : getBiography($id),
@@ -628,7 +633,7 @@ function inventories() {
  : @return an ordered list of posthumous inventories
  :)
 declare 
-%rest:path("/xpr/inventories/list")
+%rest:path("/xpr/inventories/view")
 %rest:produces('text/html')
 %output:method("html")
 function listInventories() {
@@ -733,7 +738,7 @@ function sources() {
  : @return an ordered list of sources
  :)
 declare 
-  %rest:path("/xpr/sources/list")
+  %rest:path("/xpr/sources/view")
   %rest:produces('text/html')
   %output:method("html")
 function listSources() {
@@ -888,8 +893,8 @@ function gipView() {
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "listeExpertise2.xml",
-    'mapping' : xpr.mappings.html:xprList2html(map:get($content, 'data'), map{})
+    'layout' : "listeExpertise.xml",
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };

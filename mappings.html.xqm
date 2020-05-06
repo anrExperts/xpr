@@ -202,15 +202,40 @@ declare function sex($node, $options){
  : this function serialise an expertises list
  : @return an html list of expertises
  :)
-declare function xprList2html($content, $options) {
-  for $expertise in $content/expertise
+declare function listXpr2html($content, $options) {
+  for $expertise in $content/xpr:expertise
   let $id := $expertise/@xml:id => fn:string()
-  let $cote := ($expertise/sourceDesc/idno[@type='unitid'] || '/' || $expertise/sourceDesc/idno[@type='item']) => fn:normalize-space()
-  let $addresses := $expertise/description/places => fn:string-join(' ; ')
+  let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()
+  let $addresses := for $place in $expertise/xpr:description/xpr:places
+    return fn:normalize-space($place)
+    => fn:string-join(' ; ')
+  let $dates := $expertise//xpr:sessions/xpr:date/@when => fn:string-join(' ; ')
   return (
     <li>
-      <p>{$id}</p>
-      <h3>{$cote}</h3>
+      <h3 class="cote">{$cote}</h3>
+      <p class="date">{$dates}</p>
+      <p>{$addresses}</p>
+      <p><a href="{'/xpr/expertises/' || $id || '/view'}">Voir</a> | <a href="{'/xpr/expertises/' || $id || '/modify'}">Modifier</a></p>
+    </li>
+  )
+};
+
+(:~
+ : this function serialise an expertises list
+ : @return an html list of expertises
+ :)
+declare function listEac2html($content, $options) {
+  for $expertise in $content/xpr:expertise
+  let $id := $expertise/@xml:id => fn:string()
+  let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()
+  let $addresses := for $place in $expertise/xpr:description/xpr:places
+    return fn:normalize-space($place)
+    => fn:string-join(' ; ')
+  let $dates := $expertise//xpr:sessions/xpr:date/@when => fn:string-join(' ; ')
+  return (
+    <li>
+      <h3 class="cote">{$cote}</h3>
+      <p class="date">{$dates}</p>
       <p>{$addresses}</p>
       <p><a href="{'/xpr/expertises/' || $id || '/view'}">Voir</a> | <a href="{'/xpr/expertises/' || $id || '/modify'}">Modifier</a></p>
     </li>

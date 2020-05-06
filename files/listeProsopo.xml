@@ -1,4 +1,4 @@
-<html lang="fr" xmlns="http://www.w3.org/1999/xhtml" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xpr="xpr" xmlns:eac="eac" xmlns:rico="rico" xpr:bogus="fix Firefox namespace issue" eac:bogus="fix Firefox namespace issue" rico:bogus="fix Firefox namespace issue">
+<html lang="fr">
   <head>
     <title>xpr</title>
     <meta charset="utf-8" />
@@ -7,17 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
-    <script type="text/javascript" src="/xpr/files/lib/Saxon-JS-1.2.0/SaxonJS.min.js"></script>
-    <script>window.onload = function() {
-        SaxonJS.transform({
-           stylesheetLocation: "http://localhost:8984/xpr/files/xsl/proso2list.xml",
-           sourceLocation: "http://localhost:8984/xpr/biographies"
-           });
-      }   
-      </script>
-
-    <instance>{model}</instance>
-
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
   </head>
   <body>
     <nav id="navigation">
@@ -25,17 +15,21 @@
         <li><a href="/xpr">¡xpr!</a></li>
         <li><a href="/xpr/expertises/view">pv</a></li>
         <li><a href="/xpr/biographies/view">prosopo</a></li>
-        <li><a href="/xpr/inventories/list">iad</a></li>
+        <li><a href="/xpr/inventories/view">iad</a></li>
         <li><a href="/xpr/networks">dataviz</a></li>
         <li><a href="/xpr/about">?</a></li>
       </ul>
     </nav>
     <main>
-    <section class="alternate">
-      <h2 id="title">Liste des entrées prosopographiques</h2>
-      <div id="experts"/>
-      <div id="sortToolTip" class="tooltip" style="position:fixed; visibility:hidden; left:0px; top:0px">Click to sort on this column</div>
-    </section>
+      <section class="alternate">
+        <h2>Liste des entités</h2>
+        <div id="entities">
+          <!-- class="search" automagically makes an input a search field. -->
+          <input class="search" placeholder="Chercher" />
+          <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
+          <ul class="list">{content}</ul>
+        </div>
+      </section>
     <!-- <section>{data}</section> -->
     </main>
     <script>
