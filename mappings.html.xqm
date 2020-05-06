@@ -6,6 +6,7 @@ module namespace xpr.mappings.html = "xpr.mappings.html";
  : @author emchateau & sardinecan (ANR Experts)
  : @since 2019-01
  : @licence GNU http://www.gnu.org/licenses
+ : @version 0.2
  :
  : xpr is free software: you can redistribute it and/or modify
  : it under the terms of the GNU General Public License as published by
