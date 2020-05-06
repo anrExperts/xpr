@@ -22,6 +22,7 @@
     </nav>
     <main>
       <section class="alternate">
+        <button onclick="window.location.href='/xpr/biographies/new'">nouveau</button>
         <h2>Liste des entités</h2>
         <div id="entities">
           <!-- class="search" automagically makes an input a search field. -->
