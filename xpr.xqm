@@ -320,6 +320,19 @@ function xformResult($param, $referer) {
         copy $d := $param
         modify replace value of node $d/@xml:id with $id
         return $d :)
+      let $param :=
+        copy $d := $param
+        modify (
+(:          insert node attribute xml:id {$id} into $d/*,:)
+          for $place at $i in $d/expertise/description/places/place
+          let $idPlace := fn:generate-id($place)
+          where $place[fn:not(@xml:id)]
+          return (
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+            )
+        )
+        return $d
       return (
         replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param,
         update:output(
