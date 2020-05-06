@@ -385,6 +385,21 @@ function putExpertise($param, $referer) {
 };
 
 (:~
+ : This resource function lists all the expertises’ ids
+ : @return an xml list the expertises with theire @xml:id
+ :)
+declare
+  %rest:path("/xpr/expertises/ids")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getExpertisesId() {
+  <expertises>{
+    for $expertise in getExpertises()/expertise
+    return <expertise xmlns="xpr" xml:id="{$expertise/@xml:id}"></expertise>
+  }</expertises>
+};
+
+(:~
  : This resource function lists the persons or corporate bodies
  : @return an xml list of persons/corporate bodies
  :)
