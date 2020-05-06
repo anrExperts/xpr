@@ -245,3 +245,28 @@ declare function listXpr2html($content, $options) {
     </li>
   )
 };
+
+(:~
+ : this function serialise an expertises list
+ : @return an html list of expertises
+ :)
+declare function listGip2html($content, $options) {
+  for $expertise in $content/xpr:expertise
+  let $id := $expertise/@xml:id => fn:string()
+  let $path := '/xpr/gip/'
+  return
+    if ($expertise/@status)
+    then listXpr2html($content, $options)
+    else
+      let $cote := $expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || ' dossier n° ' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']
+      let $addresses := $expertise/xpr:data/xpr:entry[1] => fn:normalize-space()
+      let $dates := $expertise/xpr:data/xpr:sessions => fn:normalize-space()
+      return
+      <li status="todo">
+        <h3 class="cote">{$cote}</h3>
+        <p class="date">{$dates}</p>
+        <p>{$addresses}</p>
+        <!--<p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>-->
+        <p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>
+      </li>
+};

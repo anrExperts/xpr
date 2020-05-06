@@ -944,7 +944,7 @@ function gipView() {
   }
   let $outputParam := map {
     'layout' : "listeExpertise.xml",
-    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+    'mapping' : xpr.mappings.html:listGip2html(map:get($content, 'data'), map{})
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
