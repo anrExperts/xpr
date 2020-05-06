@@ -253,7 +253,7 @@ function getExpertiseJson($id) {
 declare
   %rest:path("xpr/expertises/new")
   %output:method("xml")
-function new() {
+function newExpertise() {
   let $content := map {
     'instance' : '',
     'model' : 'xprExpertiseModel.xml',
@@ -278,7 +278,7 @@ function new() {
 declare 
   %rest:path("xpr/expertises/{$id}/modify")
   %output:method("xml")
-function modify($id) {
+function modifyExpertise($id) {
   let $content := map {
     'instance' : $id,
     'path' : 'expertises',
@@ -309,7 +309,7 @@ declare
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
   %updating
-function xformResult($param, $referer) {
+function putExpertise($param, $referer) {
   let $db := db:open("xpr")
   return 
     if (fn:ends-with($referer, 'modify'))
@@ -323,7 +323,7 @@ function xformResult($param, $referer) {
       let $param :=
         copy $d := $param
         modify (
-(:          insert node attribute xml:id {$id} into $d/*,:)
+          replace value of node $d/expertise/@xml:id with $id,
           for $place at $i in $d/expertise/description/places/place
           let $idPlace := fn:generate-id($place)
           where $place[fn:not(@xml:id)]
@@ -506,7 +506,7 @@ declare
   %rest:path("/xpr/biographies/{$id}/view")
   %rest:produces('application/html')
   %output:method("html")
-function viewBiographyHtml($id) {
+function getBiographyHtml($id) {
   let $content := map {
     'title' : 'Fiche de ' || $id,
     'data' : getBiography($id),
@@ -552,7 +552,7 @@ function modifyEntity($id) {
 declare
   %rest:path("xpr/biographies/new")
   %output:method("xml")
-function newBio() {
+function newBiography() {
   let $content := map {
     'instance' : '',
     'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml', 'xprInventoryModel.xml'),
@@ -579,7 +579,7 @@ declare
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
   %updating
-function xformBioResult($param, $referer) {
+function putBiography($param, $referer) {
   let $db := db:open("xpr")
   return 
     if ($param/*/@xml:id)
@@ -639,7 +639,7 @@ declare
   %rest:path("/xpr/entities")
   %rest:produces('application/xml')
   %output:method("xml")
-function entities() {
+function getEntities() {
   <entities xmlns="xpr">
     {
       for $entity in db:open('xpr')/xpr/bio/eac:eac-cpf
@@ -658,7 +658,7 @@ declare
   %rest:path("/xpr/inventories")
   %rest:produces('application/xml')
   %output:method("xml")
-function inventories() {
+function getInventories() {
   db:open('xpr')/xpr/posthumousInventories
 };
 
@@ -670,7 +670,7 @@ declare
 %rest:path("/xpr/inventories/view")
 %rest:produces('text/html')
 %output:method("html")
-function listInventories() {
+function getInventoriesHtml() {
   <html>
     <head>Inventaires après-décès</head>
     <body>
@@ -715,7 +715,7 @@ declare
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
   %updating
-function xformInventoryResult($param, $referer) {
+function putInventory($param, $referer) {
   let $db := db:open("xpr")
   return insert node $param into $db/xpr/posthumousInventories
 };
@@ -732,7 +732,7 @@ declare
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
   %updating
-function xformRelationResult($param, $referer) {
+function putRelation($param, $referer) {
   let $db := db:open("xpr")
   let $expert := $param/inventory/sourceDesc/expert/@ref
   for $relation in $param//eac:relations/eac:cpfRelation
@@ -757,7 +757,7 @@ declare
 %rest:path("/xpr/sources")
 %rest:produces('application/xml')
 %output:method("xml")
-function sources() {
+function getSources() {
   <sources xmlns="xpr">
     {
       for $source in db:open('xpr')/xpr/sources/source
@@ -775,7 +775,7 @@ declare
   %rest:path("/xpr/sources/view")
   %rest:produces('text/html')
   %output:method("html")
-function listSources() {
+function getSourcesHtml() {
   <html>
     <head>Source</head>
     <body>
@@ -827,7 +827,7 @@ function newSource() {
 declare 
   %rest:path("xpr/sources/{$id}")
   %output:method("xml")
-function showSource($id) {
+function getSource($id) {
   db:open('xpr')/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $id]
 };
 
@@ -866,7 +866,7 @@ declare
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
   %updating
-function xformSourcesResult($param, $referer) {
+function putSource($param, $referer) {
   let $db := db:open("xpr")
   let $origin := fn:analyze-string($referer, 'xpr/(.+?)/(.+?)/modify')//fn:group[@nr='1']
   return
@@ -953,7 +953,7 @@ declare
   %rest:path("xpr/gip/{$id}/view")
   %rest:produces('application/html')
   %output:method("html")
-function viewGipExpertise($id) {
+function getGipExpertiseHtml($id) {
   let $content := map {
     'data' : db:open('gip')//expertise[@xml:id=$id],
     'trigger' : '',
@@ -973,7 +973,7 @@ function viewGipExpertise($id) {
 declare
   %rest:path("xpr/gip/{$id}/modify")
   %output:method("xml")
-function modifyGip($id) {
+function modifyGipExpertise($id) {
   let $content := map {
     'instance' : $id,
     'path' : 'gip',
@@ -1002,7 +1002,7 @@ declare
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
   %updating
-function xformGipResult($param, $referer) {
+function putGipExpertise($param, $referer) {
   let $db := db:open('gip')
   return
     if (fn:ends-with($referer, 'modify'))
@@ -1100,7 +1100,7 @@ declare
   %rest:path("xpr/networks/{$year}")
   %output:method("json")
   %rest:produces('application/json')
-function networks($year) {
+function getNetworks($year) {
   let $expertises := db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
   let $experts := fn:distinct-values(db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
   
@@ -1132,7 +1132,7 @@ function networks($year) {
 declare
   %rest:path("xpr/networks/{$year}/viz")
   %output:method("html")
-function networkViz($year) {
+function getNetworkViz($year) {
 <html>
     <head>
         <title></title>
