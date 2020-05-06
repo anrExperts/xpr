@@ -220,10 +220,16 @@ declare function sex($node, $options){
 (:~
  : this function serialise an expertises list
  : @return an html list of expertises
+ : @rmq $path switch for gip to be removed
  :)
 declare function listXpr2html($content, $options) {
   for $expertise in $content/xpr:expertise
   let $id := $expertise/@xml:id => fn:string()
+  let $path := 
+    (switch ($expertise)
+      case $expertise[descendant::xpr:entry/xpr:key] return '/xpr/gip/'
+      default return '/xpr/expertises/'
+    )
   let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()
   let $addresses := for $place in $expertise/xpr:description/xpr:places
     return fn:normalize-space($place)
@@ -234,7 +240,7 @@ declare function listXpr2html($content, $options) {
       <h3 class="cote">{$cote}</h3>
       <p class="date">{$dates}</p>
       <p>{$addresses}</p>
-      <p><a href="{'/xpr/expertises/' || $id || '/view'}">Voir</a> | <a href="{'/xpr/expertises/' || $id || '/modify'}">Modifier</a></p>
+      <p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>
     </li>
   )
 };
