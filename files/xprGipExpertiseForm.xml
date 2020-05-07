@@ -2671,23 +2671,25 @@
             </xf:select>
         </xf:group>
     </span>
-    <xf:select1 class="statut" ref="instance('xprExpertise')/xpr:control/xpr:localControl/xpr:term" appearance="full" incremental="true">
-        <xf:label>Statut</xf:label>
-        <xf:item>
-            <xf:label>En cours</xf:label>
-            <xf:value>in progress</xf:value>
-        </xf:item>
-        <xf:item>
-            <xf:label>À revoir</xf:label>
-            <xf:value>to revise</xf:value>
-        </xf:item>
-        <xf:item>
-            <xf:label>Terminée</xf:label>
-            <xf:value>completed</xf:value>
-        </xf:item>
-    </xf:select1>
-    <xf:submit
-        submission="submitGip">
-        <xf:label>Enregistrer</xf:label>
-    </xf:submit>
+    <span class="save">
+        <xf:select1 ref="instance('xprExpertise')/xpr:control/xpr:localControl/xpr:term" appearance="full" incremental="true">
+            <xf:label>Statut</xf:label>
+            <xf:item>
+                <xf:label>En cours</xf:label>
+                <xf:value>in progress</xf:value>
+            </xf:item>
+            <xf:item>
+                <xf:label>À revoir</xf:label>
+                <xf:value>to revise</xf:value>
+            </xf:item>
+            <xf:item>
+                <xf:label>Terminée</xf:label>
+                <xf:value>completed</xf:value>
+            </xf:item>
+        </xf:select1>
+        <xf:submit
+                submission="submit">
+            <xf:label>Enregistrer</xf:label>
+        </xf:submit>
+    </span>
 </form>

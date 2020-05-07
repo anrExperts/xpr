@@ -123,7 +123,7 @@ nav > ul > li > a:hover {
 body {
     font-family: 'IBM Plex Serif', serif;
     font-weight: normal;
-    letter-spacing: 0.0em
+    letter-spacing: 0.0em;
 }
 
 h1,
@@ -201,6 +201,18 @@ sup {
 
 sup.note {
   font-size: 0.7em;
+}
+
+a {
+    color: var(--colorMain);
+    /* text-decoration: none; */
+    transition: background-size .45s;
+}
+
+a:hover {
+    color: var(--colorMain);
+    opacity: .7;
+    background-size: 0.35em 0.35em;
 }
 
 /*
@@ -722,7 +734,7 @@ form.gip > .xforms-switch > .xforms-case > span > span.form {
     padding-bottom: 0.3em;
 }
 
- button {
+button {
     cursor:pointer;
     line-height: calc(var(--baseline)* 1.5rem);
     color: var(--colorMain) ;
@@ -736,4 +748,18 @@ form.gip > .xforms-switch > .xforms-case > span > span.form {
     font-family: 'IBM Plex Serif', serif;
     font-weight: normal;
     letter-spacing: 0.0em
+}
+
+button:hover {
+    background-color: var(--colorMain);
+    color: var(--colorSub);
+}
+
+span.save {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+span.xforms-select1.statut {
+    margin: 0 1em 0 1em;
 }
