@@ -2688,7 +2688,7 @@
             </xf:item>
         </xf:select1>
         <xf:submit
-                submission="submit">
+                submission="submitGip">
             <xf:label>Enregistrer</xf:label>
         </xf:submit>
     </span>

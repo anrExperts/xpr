@@ -317,15 +317,11 @@ function putExpertise($param, $referer) {
     then 
       let $location := fn:analyze-string($referer, 'xpr/expertises/(.+?)/modify')//fn:group[@nr='1']
       let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
-      (: let $param := 
-        copy $d := $param
-        modify replace value of node $d/@xml:id with $id
-        return $d :)
       let $param :=
         copy $d := $param
         modify (
           replace value of node $d/expertise/@xml:id with $id,
-          for $place at $i in $d/expertise/description/places/place
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
           let $idPlace := fn:generate-id($place)
           where $place[fn:not(@xml:id)]
           return (
@@ -1027,6 +1023,19 @@ function putGipExpertise($param, $referer) {
     then
       let $location := fn:analyze-string($referer, 'xpr/gip/(.+?)/modify')//fn:group[@nr='1']
       let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000')
+      let $param :=
+        copy $d := $param
+        modify (
+          replace value of node $d/expertise/@xml:id with $id,
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
+          let $idPlace := fn:generate-id($place)
+          where $place[fn:not(@xml:id)]
+          return (
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+            )
+          )
+        return $d
       return (
         replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param,
         update:output(
@@ -1052,7 +1061,7 @@ function putGipExpertise($param, $referer) {
         modify insert node attribute xml:id {$id} into $d/*
         return $d
       return (
-        insert node $param into $db/xpr/gip,
+        insert node $param into $db/expertises,
         update:output(
          (
           <rest:response>
