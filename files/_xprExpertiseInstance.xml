@@ -1,7 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <expertise
-    xmlns="xpr">
+    xmlns="xpr"
+    status="">
     <meta/>
+    <control>
+        <maintenanceStatus/>
+        <publicationStatus/>
+        <localControl
+            localType="detailLevel">
+            <term/>
+        </localControl>
+        <maintenanceHistory>
+            <maintenanceEvent>
+                <eventType/>
+                <eventDateTime
+                    standardDateTime=""/>
+                <agentType>human</agentType>
+                <agent/>
+            </maintenanceEvent>
+        </maintenanceHistory>
+    </control>
     <sourceDesc>
         <idno
             type="unitid"/>
@@ -135,7 +153,8 @@
             <expenses
                 mentioned="false"/>
         </conclusions>
-        <keywords group=""/>
+        <keywords
+            group=""/>
         <analysis/>
         <noteworthy/>
     </description>
