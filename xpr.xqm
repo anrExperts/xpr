@@ -922,8 +922,6 @@ function getGipExpertises() {
   db:open('gip')/xpr/expertises
 };
 
-
-
 (:~
  : This resource function lists all the gip expertises
  : @return an ordered list of gip expertises
@@ -942,11 +940,10 @@ function gipView() {
   }
   let $outputParam := map {
     'layout' : "listeExpertise.xml",
-    'mapping' : xpr.mappings.html:listGip2html(map:get($content, 'data'), map{})
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
-
 
 (:~
  : @return an xml representation of a gip expertise item
