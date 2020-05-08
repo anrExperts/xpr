@@ -706,12 +706,14 @@ table {
     margin-bottom: 1em;
 }
 
-/* cette règle s’applique généralement */
-.xforms-value > .xforms-item {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
+
+.keywords .xforms-item,
+.xforms-optional .xforms-item,
+.xforms-itemset .xforms-item,
+.xforms-select1 .xforms-item {
+    margin-top: 0.2em;
 }
+
 
 /* cette règle s’applique généralement */
 .xforms-label span {
@@ -773,8 +775,11 @@ span.save .xforms-control {
     margin: 0 1em 0 1em;
 }
 
-/* in progress | completed |  */
+/*
+ * stylage des listes
+ */
 
+/* in progress | completed |  */
 [status='in progress'] h3::before {
     display: inline;
     content: '~ ';
