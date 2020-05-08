@@ -354,7 +354,7 @@ function putExpertise($param, $referer) {
         copy $d := $param
         modify (
           insert node attribute xml:id {$id} into $d/*,
-          for $place at $i in $d/expertise/description/places/place
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
           let $idPlace := fn:generate-id($place)
           return (
             insert node attribute xml:id {$idPlace} into $place,
