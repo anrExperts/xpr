@@ -766,9 +766,10 @@ button:hover {
 span.save {
     display: flex;
     flex-wrap: wrap;
+    align-items: end;
 }
 
-span.xforms-select1.statut {
+span.save .xforms-control {
     margin: 0 1em 0 1em;
 }
 

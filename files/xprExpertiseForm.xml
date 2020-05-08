@@ -2387,7 +2387,7 @@
     </span>
     <span class="save">
         <xf:select1 ref="instance('xprExpertise')/xpr:control/xpr:localControl/xpr:term" appearance="full" incremental="true">
-            <xf:label>Statut</xf:label>
+            <xf:label><span>Statut</span></xf:label>
             <xf:item>
                 <xf:label>En cours</xf:label>
                 <xf:value>in progress</xf:value>
