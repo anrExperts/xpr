@@ -218,9 +218,17 @@ a:hover {
 /*
  * Fields
  */
+
+/* onglets */
+#navForm{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 0.3em;
+}
+
 input,
 textarea {
-
     /* To make sure that all text fields have the same font settings
      By default, textareas have a monospace font */
     font: 1em 'IBM Plex Serif';
@@ -672,6 +680,7 @@ table {
 .keywords > span {
     align-self: flex-end;
     margin-right: 3em;
+    -webkit-mask: url(picol/cancel.svg) no-repeat 50% 50%;
     mask: url(picol/cancel.svg) no-repeat 50% 50%;
     mask-size: auto;
     -webkit-mask-size: cover;
@@ -731,13 +740,6 @@ form.gip > .xforms-switch > .xforms-case > span > span.data{
 
 form.gip > .xforms-switch > .xforms-case > span > span.form {
     flex: 7;
-}
-
-#navForm{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-bottom: 0.3em;
 }
 
 button {
