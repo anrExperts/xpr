@@ -665,11 +665,11 @@ table {
   transition: 0.5s; /* 0.5 second transition effect to slide in the sidepanel */
 }
 
-.keywords h2 {
+.keywords > h2 {
     margin-left: 1.3em;
 }
 
-.keywords >span {
+.keywords > span {
     align-self: flex-end;
     margin-right: 3em;
     mask: url(picol/cancel.svg) no-repeat 50% 50%;
@@ -681,27 +681,33 @@ table {
     background-size: 1em 1em;
 }
 
+.keywords > span:hover {
+    opacity: .7;
+}
+
 .keywords .xforms-group-content {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-
-.keywords .xforms-group-content span.xforms-select {
+.keywords span.xforms-select {
     display: inline;
     width: 18em;
     margin-bottom: 1em;
 }
 
-
-.keywords .xforms-label span {
-    font-weight: bold;
-    display:block;
+/* cette règle s’applique généralement */
+.xforms-value > .xforms-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
 }
 
-.keywords .xforms-item {
-    margin-top: 0.2em;
+/* cette règle s’applique généralement */
+.xforms-label span {
+    font-weight: bolder;
+    display:block;
 }
 
 form.gip {
@@ -718,7 +724,7 @@ form.gip > .xforms-switch > .xforms-case > span > label {
     flex:1 1 100%;
 }
 
-form.gip > .xforms-switch > .xforms-case > span span.data{
+form.gip > .xforms-switch > .xforms-case > span > span.data{
     flex: 4;
     padding-right: 1.2em;
 }
@@ -762,4 +768,21 @@ span.save {
 
 span.xforms-select1.statut {
     margin: 0 1em 0 1em;
+}
+
+/* in progress | completed |  */
+
+[status='in progress'] h3::before {
+    display: inline;
+    content: '~ ';
+}
+
+[status='to revise'] h3::before {
+    display: inline;
+    content: '± ';
+}
+
+[status='completed'] h3::before {
+    display: inline;
+    content: '∞ ';
 }
