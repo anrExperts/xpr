@@ -1,3 +1,16 @@
+/*
+ * CSS stylesheet for the xpr app
+ *
+ * @author emchateau & sardinecan (ANR Experts)
+ * @since 2019-01
+ * @licence GNU http://www.gnu.org/licenses
+ * @version 0.2
+ *
+ * xpr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
 *,
 *::before,
 *::after {
@@ -236,13 +249,14 @@ textarea {
     /* To harmonize the look & feel of text field border */
     border-radius: 0.1em;
     border: 1px solid var(--colorMain);
+    padding-left: 0.3em;
 }
 
 input {
     /* To give the same size to all text fields */
     width: 100%;
     box-sizing: border-box;
-    height: 1.6em;
+    height: calc(var(--baseline)* 1.1rem); /*height: 1.6em;*/
 }
 
 textarea {
@@ -263,7 +277,7 @@ textarea {
     vertical-align: top;
 
     /* To give enough room to type some text */
-    height: 5em;
+    height: calc(var(--baseline)* 6rem);
     width: 100%;
 }
 
@@ -271,7 +285,7 @@ select {
     font-family: 'IBM Plex Serif';
     font-size: 1em;
     width: 100%;
-    height: 1.6em;
+    height: calc(var(--baseline)* 1.1rem); /*height: 1.6em;*/
     border-radius: 0.1em;
     border: 1px solid var(--colorMain);
     /* needed */
@@ -547,7 +561,8 @@ button.aid-button {
 
 .repeat {
     background-color: var(--colorTint);
-    border: 1em solid var(--colorTint)
+    border: 1em solid var(--colorTint);
+    border-radius: 0.1em;
 }
 
 .repeat .xforms-repeat {
@@ -632,17 +647,23 @@ table {
 }
 
 .openKeywords {
-   border-radius: 12px;
-   border:0.15em, solid, var(--colorMain);
-   padding: 0.1em 0.5em 0.1em 0.5em ;
-   
+   font-size: 1em;
+   line-height: calc(var(--baseline)* 1.2rem);
+   border-radius: 0.1em;
+   border:0, solid, var(--colorMain);
+   padding: 0 0.5em 0 0.5em ;
+   margin-right: 1.2em;
+}
+
+.openKeywords:hover {
+    opacity: .7;
 }
 
 .openKeywords, .closeKeywords {
     cursor:pointer;
     color: white;
-    background-color: var(--colorMain); 
-    border-radius: 0.2em;
+    background-color: var(--colorMain);
+    border-radius: 0.1em;
 }
 
 .closeKeywords {
@@ -746,11 +767,11 @@ form.gip > .xforms-switch > .xforms-case > span > span.form {
 
 button {
     cursor:pointer;
-    line-height: calc(var(--baseline)* 1.5rem);
+    line-height: calc(var(--baseline)* 1.1rem);
     color: var(--colorMain) ;
     background-color: var(--colorSub); 
-    border:0.15em solid;
-    border-radius: 0.2em;
+    border:0.15em solid; /* border:0.15em solid; */
+    border-radius: 0.1em;
     border-color:  var(--colorMain);
     box-shadow: none;
     outline: none;
@@ -763,6 +784,7 @@ button {
 button:hover {
     background-color: var(--colorMain);
     color: var(--colorSub);
+    transition: 0.2s;
 }
 
 span.save {
@@ -778,6 +800,76 @@ span.save .xforms-control {
 /*
  * stylage des listes
  */
+input#filter {
+    color: var(--colorMain) ;
+    background-color: var(--colorSub);
+    border:0.15em solid; /* border:0.15em solid; */
+    border-radius: 0.1em;
+    border-color:  var(--colorMain);
+    height: calc(var(--baseline)* 1.2rem);
+    width: 18em;
+    padding-left: 1em;
+    margin: 0 0.5em 0 0;
+}
+
+button.sort {
+    margin: 0 0.5em 0 0;
+    width: 5em;
+}
+button.sort::before{
+    content: "⇅"; /* ⇅ ⇵ ⥮ ⥯ */
+}
+
+ul#list {
+    list-style:none;
+    margin-left: -2.2em;
+    margin-right: 0;
+}
+ul#list li {
+    position: relative;
+    padding: 0.001em 1em 0.001em 1em;
+}
+
+/*ul#list a.view {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}
+
+ul#list a.modify {
+    position: relative;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+}*/
+
+ul#list li:hover {
+    /* opacity: .7; */
+    border-left: 0.5em var(--colorMain) solid;
+    /* border-bottom: 0.1em var(--colorMain) solid;*/
+    box-shadow: 0 0.5em 0.5em 0 rgba(0,0,0,0.1);
+    padding: 0.001em 0.5em 0.001em 0.5em;
+    transition: 0.1s;
+}
+
+ul#list li:nth-child(odd) {
+    background-color: var(--colorTint);
+    border-radius: 0.1em;
+    padding: 0.001em 1em 0.001em 1em; /* pourquoi faut-il 0.001em */
+}
+
+ul#list li:nth-child(odd):hover {
+    border-left: 0.5em var(--colorMain) solid;
+    /* border-bottom: 0.1em var(--colorMain) solid;*/
+    box-shadow: 0 0.5em 0.5em 0 rgba(0,0,0,0.1);
+    padding: 0.001em 0.5em 0.001em 0.5em;
+    transition: 0.1s;
+}
 
 /* in progress | completed |  */
 [status='in progress'] h3::before {
