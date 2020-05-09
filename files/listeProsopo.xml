@@ -26,10 +26,14 @@
         <button onclick="window.location.href='/xpr/biographies/new'">nouveau</button>
         <h2>Liste des entités</h2>
         <div id="entities">
+          <input id="filter" placeholder="Filtrer la liste" />
+          <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
+          <button class="sort" data-sort="alphabetical">A-Z</button>
+          <button class="sort" data-sort="date">dates</button>
           <!-- class="search" automagically makes an input a search field. -->
           <!-- <input class="search" placeholder="Chercher" /> -->
           <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
-          <ul class="list">{content}</ul>
+          <ul id="list">{content}</ul>
         </div>
       </section>
     <!-- <section>{data}</section> -->
@@ -72,5 +76,6 @@ function stickyNavigation() {
   }
 window.addEventListener('scroll', stickyNavigation);
     </script>
+    <script src="/xpr/files/js/script.js"></script>
   </body>
 </html>

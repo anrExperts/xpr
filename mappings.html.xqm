@@ -52,17 +52,20 @@ declare function getMessage($id, $lang) {
  : @param
  :)
 declare function listEac2html($node as node()*, $options as map(*)) as item()* {
-  for $entity in $node//eac:eac-cpf
-  let $id := $entity/@xml:id => fn:normalize-unicode()
-  let $name := $entity//eac:nameEntry[eac:authorizedForm] => fn:normalize-unicode()
-  let $type := $entity//eac:identity/@localType => getMessage($options)
-  let $dates := $entity/@xml:id => fn:normalize-unicode()
-  return <li>
-    <h3 class="name">{$name}</h3>
-      <p class="date">{$dates}</p>
-      <p class="type">{$type}</p>
-      <p><a href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
-    </li>
+  <ul id="list">{
+    for $entity in $node//eac:eac-cpf
+    let $id := $entity/@xml:id => fn:normalize-unicode()
+    let $name := $entity//eac:nameEntry[eac:authorizedForm] => fn:normalize-unicode()
+    let $type := $entity//eac:identity/@localType => getMessage($options)
+    let $dates := $entity/@xml:id => fn:normalize-unicode()
+    return
+      <li>
+        <h3 class="name">{$name}</h3>
+        <p class="date">{$dates}</p>
+        <p class="type">{$type}</p>
+        <p><a class="view" href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a class="modify" href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
+      </li>
+  }</ul>
 };
 
 (:~
@@ -224,10 +227,12 @@ declare function sex($node, $options){
  : @todo remove the differentiated treatment when gip imported
  :)
 declare function listXpr2html($content, $options) {
-  for $expertise in $content/xpr:expertise
-  return
-    if ($expertise[descendant::xpr:entry/xpr:key]) then itemGip2Html($expertise, map{'path' : '/xpr/gip/'})
-    else itemXpr2Html($expertise, map{'path' : '/xpr/expertises/'})
+  <ul id="list">{
+    for $expertise in $content/xpr:expertise
+    return
+        if ($expertise[descendant::xpr:entry/xpr:key]) then itemGip2Html($expertise, map{'path' : '/xpr/gip/'})
+        else itemXpr2Html($expertise, map{'path' : '/xpr/expertises/'})
+  }</ul>
 };
 
 (:~
@@ -247,7 +252,7 @@ declare function itemXpr2Html($expertise, $options){
       <h3 class="cote">{$cote}</h3>
       <p class="date">{$dates}</p>
       <p>{$addresses}</p>
-      <p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>
+      <p><a class="view" href="{$path || $id || '/view'}">Voir</a> | <a class="modify" href="{$path || $id || '/modify'}">Modifier</a></p>
     </li>
 };
 
@@ -269,6 +274,6 @@ declare function itemGip2Html($expertise, $options){
       <p class="date">{$dates}</p>
       <p>{$addresses}</p>
         <!--<p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>-->
-      <p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>
+      <p><a class="view" href="{$path || $id || '/view'}">Voir</a> | <a class="modify" href="{$path || $id || '/modify'}">Modifier</a></p>
     </li>
 };

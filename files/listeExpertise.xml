@@ -7,7 +7,6 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
   </head>
   <body>
     <nav id="navigation">
@@ -26,12 +25,11 @@
         <button onclick="window.location.href='/xpr/expertises/new'">nouveau</button>
         <h2>Liste des expertises</h2>
         <div id="expertises">
-          <!-- class="search" automagically makes an input a search field. -->
-          <input class="search" placeholder="Chercher" />
+          <input id="filter" placeholder="Filtrer la liste" />
           <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
-          <button class="sort" data-sort="cote">Trier par cote</button>
-          <button class="sort" data-sort="date">Trier par date</button>
-          <ul class="list">{content}</ul>
+          <button class="sort" data-sort="cote">cotes</button>
+          <button class="sort" data-sort="date">dates</button>
+          <ul id="list">{content}</ul>
         </div>
       </section>
     <!-- <section>{data}</section> -->
@@ -74,13 +72,6 @@ function stickyNavigation() {
   }
 window.addEventListener('scroll', stickyNavigation);
     </script>
-    <script>
-// listjs
-var options = {
-  valueNames: [ 'cote', 'date' ]
-};
-
-var expertises = new List('expertises', options);
-    </script>
+    <script src="/xpr/files/js/script.js"></script>
   </body>
 </html>
