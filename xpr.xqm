@@ -1259,6 +1259,40 @@ function dragended(d) {{
 };
 
 (:~
+ : This resource function lists all the expertises with 2 or more categories
+ : @return an ordered list of expertises in xml
+ :)
+declare 
+  %rest:path("/xpr/dualcat")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getExpertisesDualCategories() {
+  <expertises>{db:open('xpr')/xpr/expertises/expertise[fn:count(descendant::category) > 1]}</expertises>
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises in html
+ :)
+declare
+  %rest:path("/xpr/dualcat/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getExpertisesDualCategoriesHtml() {
+ let $content := map {
+    'title' : 'Liste des expertises avec plusieurs catégories d‘expertise',
+    'data' : getExpertisesDualCategories()
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml",
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+
+(:~
  : This function consumes 
  : @param $year content
  : 
@@ -1304,6 +1338,7 @@ function networkViz($year) {
 </html>
 
 }; :)
+
 
 (:~
  : ~:~:~:~:~:~:~:~:~
