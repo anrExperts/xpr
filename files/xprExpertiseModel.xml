@@ -134,6 +134,7 @@
                         <xf:setvalue
                                 value="event('response-body')//*:id"
                                 ref="instance('test')"/>
+                        <xf:load resource="/xpr/gip/view" show="replace"/>
                 </xf:action>
                 <xf:message
                         ev:event="xforms-submit-error"
@@ -164,10 +165,11 @@
                         <xf:setvalue
                                 value="event('response-body')//*:id"
                                 ref="instance('test')"/>
+                        <xf:load resource="/xpr/gip/view" show="replace"/>
                 </xf:action>
                 <xf:message
                         ev:event="xforms-submit-error"
-                        level="modal"> Une erreur est apparue : <xf:output
+                        level="modal">Une erreur est apparue : <xf:output
                                 value="event('error-type')"/>; Status : <xf:output
                                 value="event('response-status-code')"/>; URI : <xf:output
                                 value="event('resource-uri')"/>; Headers : <xf:output
