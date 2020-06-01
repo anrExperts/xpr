@@ -29,6 +29,12 @@
                                 instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[7]/@type, ' ',
                                 instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[8]/@type
                                 )"/>
+                <xf:setvalue
+                        ref="instance('xprSupplement')/xpr:expenses/xpr:expense[not(@type)]"
+                        value="concat(
+                                instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[1]/@type, ' ',
+                                instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[2]/@type
+                                )"/>
                 <!-- @rmq for gip - to be removed -->
                 <xf:action 
                         ev:event="xforms-ready"
