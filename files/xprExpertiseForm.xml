@@ -1012,6 +1012,10 @@
                             <xf:value>appointed</xf:value>
                         </xf:item>
                         <xf:item>
+                            <xf:label>par les experts</xf:label>
+                            <xf:value>experts</xf:value>
+                        </xf:item>
+                        <xf:item>
                             <xf:label>indéterminé</xf:label>
                             <xf:value>unknown</xf:value>
                         </xf:item>
