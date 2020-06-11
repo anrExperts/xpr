@@ -96,6 +96,8 @@
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
+                    <xpr:source
+                            xlink:href=""/>
                 </occupation>
             </occupations>
             <functions>
