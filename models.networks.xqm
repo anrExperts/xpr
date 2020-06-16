@@ -70,7 +70,7 @@ declare function pairsCombinations($seq) {
     let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
     let $edges :=
         if ($year) then
-          for $affaires in db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = $year]]
+          for $affaires in db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
           let $participants := $affaires/xpr:description/xpr:participants/xpr:experts
           return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
         else
