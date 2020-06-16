@@ -18,6 +18,7 @@ module namespace xpr.xpr = "xpr.xpr";
 import module namespace G = 'xpr.globals' at './globals.xqm' ;
 import module namespace xpr.mappings.html = 'xpr.mappings.html' at './mappings.html.xqm' ;
 import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' ;
+import module namespace xpr.models.networks = 'xpr.models.networks' at './models.networks.xqm' ;
 
 declare namespace rest = "http://exquery.org/ns/restxq" ;
 declare namespace file = "http://expath.org/ns/file" ;
@@ -1256,6 +1257,34 @@ function dragended(d) {{
     </body>
 </html>
 
+};
+
+
+(:~
+ :
+ :)
+declare
+  %rest:path("/xpr/reseau")
+  %rest:produces("application/xml")
+  %output:method("xml")
+function getReseau() {
+  xpr.models.networks:getExpertsCollaborations(map{})
+};
+
+declare
+  %rest:path("/xpr/reseau/view")
+  %rest:produces("application/xml")
+  %output:method("xml")
+function getReseauHtml() {
+  let $content := map {
+      'title' : 'Liste des expertises',
+      'data' : getReseau()
+    }
+    let $outputParam := map {
+      'layout' : "listeExpertise.xml",
+      'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+    }
+    return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
