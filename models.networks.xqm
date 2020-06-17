@@ -59,52 +59,100 @@ declare function pairsCombinations($seq) {
     }
 };
 
-    (:~
-     : Experts collaboration
-     : @return a gexf network of collaborations
-     :)
-    declare function getExpertsCollaborations($queryParam as map(*)) as element() {
-    let $db := db:open('xpr')
-    let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
-    let $edges :=
-      for $affaires in db:open('xpr')//xpr:expertise
-      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts
-      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
-    let $description := "Associations d’experts"
-    return
-      <gexf xmlns="http://www.gexf.net/1.2draft" version="1.2">
-        <meta lastmodifieddate="{fn:current-date()}">
-          <creator>ANR Experts</creator>
-          <description>{$description}</description>
-        </meta>
-        <graph mode="static" defaultedgetype="undirected">
-          <attributes class="node">
-            <attribute id="0" title="category" type="string"/>
-          </attributes>
-          <nodes>{
-            for $node in $nodes
-            let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
-            let $functions := $node//*:functions
-            let $function :=
-              switch ($functions)
-              case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
-                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
-                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
-                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
-                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
-                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
-                default return 'unknown'
-              return
-                <node id="{$node/@xml:id}" label="{$label}">
-                  <attvalues>
-                    <attvalue for="0" value="{$function}"/>
-                      </attvalues>
-                    </node>
-          }</nodes>
-          <edges>{
-            for $edge at $i in $edges
-            return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
-          }</edges>
-        </graph>
-      </gexf>
-    };
+(:~
+ : Experts collaboration
+ : @return a gexf network of collaborations
+ :)
+declare function getExpertsCollaborations($queryParam as map(*)) as element() {
+  let $db := db:open('xpr')
+  let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
+  let $edges :=
+    for $affaires in db:open('xpr')//xpr:expertise
+    let $participants := $affaires/xpr:description/xpr:participants/xpr:experts
+    return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
+  let $description := "Associations d’experts"
+  return
+  <gexf xmlns="http://www.gexf.net/1.2draft" version="1.2">
+    <meta lastmodifieddate="{fn:current-date()}">
+      <creator>ANR Experts</creator>
+      <description>{$description}</description>
+    </meta>
+    <graph mode="static" defaultedgetype="undirected">
+      <attributes class="node">
+        <attribute id="0" title="category" type="string"/>
+      </attributes>
+      <nodes>{
+        for $node in $nodes
+        let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+        let $functions := $node//*:functions
+        let $function :=
+        switch ($functions)
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+          default return 'unknown'
+        return
+          <node id="{$node/@xml:id}" label="{$label}">
+            <attvalues>
+              <attvalue for="0" value="{$function}"/>
+            </attvalues>
+          </node>
+      }</nodes>
+      <edges>{
+        for $edge at $i in $edges
+        return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
+      }</edges>
+    </graph>
+  </gexf>
+};
+
+(:~
+ : Experts collaboration
+ : @return a gexf network of collaborations
+ :)
+declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as element() {
+  let $db := db:open('xpr')
+  let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
+  let $edges :=
+    for $affaires in db:open('xpr')//xpr:expertise
+    let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+    return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
+  let $description := "Associations d’experts"
+  return
+  <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+    <key id="d0" for="node" attr.name="category" attr.type="string">
+        <default>architecte</default>
+    </key>
+    <graph id="G" edgedefault="undirected">
+      <nodes>{
+        for $node in $nodes
+        let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+        let $functions := $node//*:functions
+        let $function :=
+        switch ($functions)
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+          default return 'unknown'
+        return
+          <node id="{$node/@xml:id}" label="{$label}">
+            <attvalues>
+              <attvalue for="d0" value="{$function}"/>
+            </attvalues>
+          </node>
+      }</nodes>
+      <edges>{
+        for $edge at $i in $edges
+        return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
+      }</edges>
+    </graph>
+  </graphml>
+};

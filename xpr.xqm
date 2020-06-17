@@ -1268,7 +1268,7 @@ declare
   %rest:produces("application/xml")
   %output:method("xml")
 function getReseau() {
-  xpr.models.networks:getExpertsCollaborations(map{})
+  xpr.models.networks:getExpertsCollaborationsGraphML(map{})
 };
 
 declare
