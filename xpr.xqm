@@ -1271,6 +1271,9 @@ function getReseau() {
   xpr.models.networks:getExpertsCollaborationsGraphML(map{})
 };
 
+(:
+ : view doesn't work for now
+ :)
 declare
   %rest:path("/xpr/reseau/view")
   %rest:produces("application/xml")
@@ -1279,6 +1282,39 @@ function getReseauHtml() {
   let $content := map {
       'title' : 'Liste des expertises',
       'data' : getReseau()
+    }
+    let $outputParam := map {
+      'layout' : "listeExpertise.xml",
+      'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+    }
+    return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ :
+ :)
+declare
+  %rest:path("/xpr/reseau/{$year}")
+  %rest:produces("application/xml")
+  %output:method("xml")
+function getReseauByYear($year) {
+  let $queryParam := map{
+    'year' : $year
+  }
+  return xpr.models.networks:getExpertsCollaborations($queryParam)
+};
+
+(:
+ : view doesn't work for now
+ :)
+declare
+  %rest:path("/xpr/reseau/{$year}/view")
+  %rest:produces("application/xml")
+  %output:method("xml")
+function getReseauByYearHtml($year) {
+  let $content := map {
+      'title' : 'Liste des expertises',
+      'data' : getReseauByYear($year)
     }
     let $outputParam := map {
       'layout' : "listeExpertise.xml",
