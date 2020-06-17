@@ -123,6 +123,7 @@ return
  :)
 declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as element() {
   let $db := db:open('xpr')
+  let $year := $queryParam?year
   let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
   let $edges := if ($year)
     then
