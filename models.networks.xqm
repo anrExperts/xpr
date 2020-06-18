@@ -142,7 +142,7 @@ declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as eleme
     xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
     <key id="d0" for="node" attr.name="category" attr.type="string"/>
     <key id="d1" for="node" attr.name="name" attr.type="string"/>
-    <graph id="G" edgedefault="undirected">
+    <graph edgedefault="undirected">
       {
         for $node in $nodes
         let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
