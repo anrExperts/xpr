@@ -1267,8 +1267,9 @@ declare
   %rest:path("/xpr/reseau")
   %rest:produces("application/xml")
   %output:method("xml")
-function getReseau() {
-  xpr.models.networks:getExpertsCollaborationsGraphML(map{})
+  %rest:query-param("format", "{$format}", "gexf")
+function getReseau($format as xs:string) {
+  xpr.models.networks:getExpertsCollaborations(map{})
 };
 
 (:
@@ -1278,7 +1279,8 @@ declare
   %rest:path("/xpr/reseau/view")
   %rest:produces("application/xml")
   %output:method("xml")
-function getReseauHtml() {
+  %rest:query-param("format", "{$format}", "gexf")
+function getReseauHtml($format as xs:string) {
   let $content := map {
       'title' : 'Liste des expertises',
       'data' : getReseau()
@@ -1297,9 +1299,11 @@ declare
   %rest:path("/xpr/reseau/{$year}")
   %rest:produces("application/xml")
   %output:method("xml")
-function getReseauByYear($year) {
+  %rest:query-param("format", "{$format}", "gexf")
+function getReseauByYear($year as xs:string, $format as xs:string) {
   let $queryParam := map{
-    'year' : $year
+    'year' : $year,
+    'format' : $format
   }
   return xpr.models.networks:getExpertsCollaborations($queryParam)
 };
@@ -1311,10 +1315,11 @@ declare
   %rest:path("/xpr/reseau/{$year}/view")
   %rest:produces("application/xml")
   %output:method("xml")
-function getReseauByYearHtml($year) {
+  %rest:query-param("format", "{$format}", "gexf")
+function getReseauByYearHtml($year as xs:string, $format as xs:string) {
   let $content := map {
       'title' : 'Liste des expertises',
-      'data' : getReseauByYear($year)
+      'data' : xpr.models.networks:getExpertsCollaborations($year)
     }
     let $outputParam := map {
       'layout' : "listeExpertise.xml",

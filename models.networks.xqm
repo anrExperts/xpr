@@ -58,13 +58,23 @@ declare function pairsCombinations($seq) {
       'target' : $j
     }
 };
-    
+
+(:~
+ : Experts collaboration
+ : @return the asked format network of collaboration
+ :)
+declare function getExpertsCollaborations($queryParam as map(*)) as element() {
+  if ($queryParam?format = 'graphml')
+  then getExpertsCollaborationsGraphML($queryParam)
+  else getExpertsCollaborationsGexf($queryParam)
+};
+
 (:~
  : Experts collaboration
  : @return a gexf network of collaborations
  : @todo select experts by year
  :)
-declare function getExpertsCollaborations($queryParam as map(*)) as element() {
+declare function getExpertsCollaborationsGexf($queryParam as map(*)) as element() {
 let $db := db:open('xpr')
 let $year := $queryParam?year
 let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
