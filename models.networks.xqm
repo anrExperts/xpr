@@ -136,14 +136,14 @@ declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as eleme
       return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
   let $description := "Associations d’experts"
   return
-  <graphml xmlns="http://graphml.graphdrawing.org/xmlns"
-      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
-    <key id="d0" for="node" attr.name="category" attr.type="string">
-        <default>architecte</default>
-    </key>
+  <graphml
+    xmlns="http://graphml.graphdrawing.org/xmlns"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
+    <key id="d0" for="node" attr.name="category" attr.type="string"/>
+    <key id="d1" for="node" attr.name="name" attr.type="string"/>
     <graph id="G" edgedefault="undirected">
-      <nodes>{
+      {
         for $node in $nodes
         let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
         let $functions := $node//*:functions
@@ -157,16 +157,15 @@ declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as eleme
           case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
           default return 'unknown'
         return
-          <node id="{$node/@xml:id}" label="{$label}">
-            <attvalues>
-              <attvalue for="d0" value="{$function}"/>
-            </attvalues>
+          <node id="{$node/@xml:id}">
+            <data key="d0">{$function}</data>
+            <data key="d1">{$label/text()}</data>
           </node>
-      }</nodes>
-      <edges>{
+      }
+      {
         for $edge at $i in $edges
         return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
-      }</edges>
+      }
     </graph>
   </graphml>
 };
