@@ -1283,7 +1283,7 @@ declare
 function getReseauHtml($format as xs:string) {
   let $content := map {
       'title' : 'Liste des expertises',
-      'data' : getReseau()
+      'data' : getReseau($format)
     }
     let $outputParam := map {
       'layout' : "listeExpertise.xml",
