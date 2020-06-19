@@ -130,19 +130,21 @@ return
 (:~
  : Experts collaboration
  : @return a gexf network of collaborations
+ : @todo resolve issue with the cases dates (for now we take the first date)
  :)
 declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as element() {
   let $db := db:open('xpr')
   let $year := $queryParam?year
-  let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
+  let $cases := db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
+  let $nodes := $db//*:eac-cpf[@xml:id = $cases//xpr:experts/xpr:expert/@ref][*:cpfDescription/*:identity[@localType = 'expert']]
   let $edges := if ($year)
     then
-      for $affaires in db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
-      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+      for $case in $cases
+      let $participants := $case/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
       return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
     else
-      for $affaires in db:open('xpr')//xpr:expertise
-      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+      for $case in db:open('xpr')//xpr:expertise
+      let $participants := $case/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
       return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
   let $description := "Associations d’experts"
   return
