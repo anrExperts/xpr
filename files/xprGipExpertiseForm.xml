@@ -279,6 +279,18 @@
                             <xf:output
                                 value="xpr:date"/>
                         </xf:group>
+                        <xf:group
+                                ref="xpr:entry[xpr:key='Lieux de l’expertise']">
+                            <xf:label>
+                                <xf:output
+                                        value="xpr:key"/>
+                            </xf:label>
+                            <xf:repeat
+                                    nodeset="xpr:value">
+                                <xf:output
+                                        value="."/>
+                            </xf:repeat>
+                        </xf:group>
                     </xf:group>
                 </span>
                 <span
@@ -556,18 +568,6 @@
                         </xf:group>
                         <xf:group
                             ref="xpr:entry[xpr:key='Institution requérante']">
-                            <xf:label>
-                                <xf:output
-                                    value="xpr:key"/>
-                            </xf:label>
-                            <xf:repeat
-                                nodeset="xpr:value">
-                                <xf:output
-                                    value="."/>
-                            </xf:repeat>
-                        </xf:group>
-                        <xf:group
-                            ref="xpr:entry[xpr:key='Lieux de l’expertise']">
                             <xf:label>
                                 <xf:output
                                     value="xpr:key"/>
