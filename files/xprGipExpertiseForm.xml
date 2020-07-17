@@ -1092,30 +1092,28 @@
                                     value="."/>
                             </xf:repeat>
                         </xf:group>
-                        <xf:group
-                            ref="xpr:entry[xpr:key='Partie requérante']">
+                        <xf:repeat nodeset="xpr:entry[xpr:key='Partie requérante']">
                             <xf:label>
                                 <xf:output
-                                    value="xpr:key"/>
+                                        value="if(position() = 1, xpr:key[.='Partie requérante'], '')"/>
                             </xf:label>
                             <xf:repeat
-                                nodeset="xpr:value">
+                                    nodeset="*[not(self::xpr:key)]">
                                 <xf:output
-                                    value="."/>
+                                        value="."/>
                             </xf:repeat>
-                        </xf:group>
-                        <xf:group
-                            ref="xpr:entry[xpr:key='Partie opposante']">
+                        </xf:repeat>
+                        <xf:repeat nodeset="xpr:entry[xpr:key='Partie opposante']">
                             <xf:label>
                                 <xf:output
-                                    value="xpr:key"/>
+                                        value="if(position() = 1, xpr:key[.='Partie opposante'], '')"/>
                             </xf:label>
                             <xf:repeat
-                                nodeset="xpr:value">
+                                    nodeset="*[not(self::xpr:key)]">
                                 <xf:output
-                                    value="."/>
+                                        value="."/>
                             </xf:repeat>
-                        </xf:group>
+                        </xf:repeat>
                         <xf:group
                             ref="xpr:entry[xpr:key='(Partie opposante) Autre(s) partie(s)']">
                             <xf:label>
@@ -2400,6 +2398,18 @@
                                 nodeset="xpr:value">
                                 <xf:output
                                     value="."/>
+                            </xf:repeat>
+                        </xf:group>
+                        <xf:group
+                                ref="xpr:entry[xpr:key='Motivations']">
+                            <xf:label>
+                                <xf:output
+                                        value="xpr:key"/>
+                            </xf:label>
+                            <xf:repeat
+                                    nodeset="xpr:value">
+                                <xf:output
+                                        value="."/>
                             </xf:repeat>
                         </xf:group>
                         <xf:group
