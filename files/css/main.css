@@ -759,10 +759,14 @@ form.gip > .xforms-switch > .xforms-case > span > label {
 form.gip > .xforms-switch > .xforms-case > span > span.data{
     flex: 4;
     padding-right: 1.2em;
+    position: fixed;
+    max-width: 33%;
+    overflow-y: auto;
 }
 
 form.gip > .xforms-switch > .xforms-case > span > span.form {
     flex: 7;
+    margin-left: 33%;
 }
 
 button {
