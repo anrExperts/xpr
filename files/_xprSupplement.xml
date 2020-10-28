@@ -1,210 +1,48 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<supplement
-    xmlns="xpr"
-    xmlns:eac="eac"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!--Parties's representative-->
-    <representative>
-        <persName>
-            <surname/>
-            <forename/>
-        </persName>
-        <occupation/>
-    </representative>
-    <!--Parties's prosecutor-->
-    <prosecutor>
-        <persName>
-            <surname/>
-            <forename/>
-        </persName>
-    </prosecutor>
-    <categories>
-        <category/>
-        <category
-            type="estimation">Estimer la valeur des biens</category>
-        <category
-            type="acceptation">Recevoir et évaluer le travail réalisé</category>
-        <category
-            type="registration">Enregistrer</category>
-        <category
-            type="settlement">Départager</category>
-        <category
-            type="assessment">Décrire et évaluer les travaux à venir</category>
-    </categories>
-    <objects>
-        <object/>
-        <object
-            type="house">Maison</object>
-        <object
-            type="plot">Terrain</object>
-        <object
-            type="buildings">Ensemble de bâtiments</object>
-        <object
-            type="territory">Domaine, terres, fief</object>
-        <object
-            type="wall">Mur</object>
-        <object
-            type="cesspool">Fosse d'aisance</object>
-        <object
-            type="well">Puits</object>
-        <object
-            type="other"/>
-    </objects>
-    <expenses>
-        <expense/>
-        <expense
-            type="clerk"
-            l=""
-            s=""
-            d=""/>
-        <expense
-            type="expert"
-            l=""
-            s=""
-            d=""/>
-    </expenses>
-    <iterator/>
-    <appraisals>
-        <appraisal
-            l=""
-            s=""
-            d="">
-            <desc/>
-        </appraisal>
-    </appraisals>
-    <opinion
-        ref=""/>
-    <fees>
-        <fee
-            type="expert"
-            ref=""
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="clerk"
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="rolls"
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="papers"
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="plans"
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="prosecutors"
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="help"
-            l=""
-            s=""
-            d=""/>
-        <fee
-            type="other"
-            l=""
-            s=""
-            d=""/>
-    </fees>
-    <comment/>
+<supplement xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- PROSOPOGRAPHY -->
     <!-- for adding new source in the prosopo form -->
-    <source
-        localType="new"
-        xml:id=""/>
-    <eac:source
-        localType="new"
-        xlink:href="">
+    <source localType="new" xml:id=""/>
+    <eac:source localType="new" xlink:href="">
         <eac:sourceEntry/>
         <eac:descriptiveNote>
             <eac:p/>
         </eac:descriptiveNote>
     </eac:source>
-    <rico:participant
-        xmlns:rico="rico"
-        localType="new"/>
-    <rico:involve
-        xmlns:rico="rico"
-        localType="new"/>
-    <eac:cpfRelation
-        xmlns:eac="eac"
-        localType="new"/>
+    <rico:participant xmlns:rico="rico" localType="new"/>
+    <rico:involve xmlns:rico="rico" localType="new"/>
+    <eac:cpfRelation xmlns:eac="eac" localType="new"/>
     <!-- for IAD form -->
-    <relation
-        href=""
-        arcrole=""
-        localType="new"/>
+    <relation href="" arcrole="" localType="new"/>
     <eac:dateRange>
-        <eac:fromDate
-            standardDate=""
-            notBefore=""
-            notAfter=""/>
-        <eac:toDate
-            standardDate=""
-            notBefore=""
-            notAfter=""/>
+        <eac:fromDate standardDate="" notBefore="" notAfter=""/>
+        <eac:toDate standardDate="" notBefore="" notAfter=""/>
     </eac:dateRange>
-    <xpr:cost
-        xmlns:xpr="xpr"/>
-    <biogHist
-        xmlns="eac">
+    <xpr:cost xmlns:xpr="xpr"/>
+    <biogHist xmlns="eac">
         <chronList>
-            <chronItem
-                localType="">
-                <date
-                    standardDate=""
-                    notBefore=""
-                    notAfter=""/>
+            <chronItem localType="">
+                <date standardDate="" notBefore="" notAfter=""/>
                 <placeEntry/>
                 <event/>
-                <rico:participant
-                    xmlns:rico="rico"
-                    xlink:href=""/>
-                <rico:involve
-                    xmlns:rico="rico"
-                    xlink:href=""/>
-                <xpr:source
-                    xmlns:xpr="xpr"
-                    xlink:href=""/>
+                <rico:participant xmlns:rico="rico" xlink:href=""/>
+                <rico:involve xmlns:rico="rico" xlink:href=""/>
+                <xpr:source xmlns:xpr="xpr" xlink:href=""/>
             </chronItem>
         </chronList>
     </biogHist>
     <response/>
-    <dateSet
-        xmlns="eac">
-        <date
-            standardDate=""
-            notBefore=""
-            notAfter="">
-            <xpr:source
-                xmlns:xpr="xpr"
-                xlink:href=""/>
+    <dateSet xmlns="eac">
+        <date standardDate="" notBefore="" notAfter="">
+            <xpr:source xmlns:xpr="xpr" xlink:href=""/>
         </date>
     </dateSet>
-    <entity
-        localType="new"
-        db=""
-        xml:id="">
+    <entity localType="new" db="" xml:id="">
         <label/>
     </entity>
     <bug>
-        <eac:date
-            standardDate=""
-            notBefore=""
-            notAfter="">
-            <xpr:source
-                xmlns:xpr="xpr"/>
+        <eac:date standardDate="" notBefore="" notAfter="">
+            <xpr:source xmlns:xpr="xpr"/>
         </eac:date>
     </bug>
     <boolean>
@@ -217,153 +55,4 @@
             <value>false</value>
         </state>
     </boolean>
-    
-    <index>
-        <group type="estates">
-            <label>Biens expertisés (nature juridique et caractères)</label>
-            <term>Accessoire</term>
-            <term>Acquêts</term>
-            <term>Biens propres</term>
-            <term>Biens vacants</term>
-            <term>Fruits</term>
-            <term>Meubles</term>
-            <term>Usufruit</term>
-            <term>Maison (re)construite à neuf</term>
-            <term>Maison nouvellement acquise</term>
-        </group>
-        <group type="procedure">
-            <label>Procédure (questions de)</label>
-            <term value="b1">Délai (1, 2, 10, 20, 30 ans)</term>
-            <term value="b2">Célérité</term>
-            <term value="b3">Preuve</term>
-            <term value="b4">Urgence</term>
-            <term value="b5">Comparution</term>
-            <term value="b6">Titre (de propriété)</term>
-            <term value="b7">Anticipation</term>
-        </group>
-        <group type="contract">
-            <label>Contrat (type de, concernant le bien expertisé)</label>
-            <term value="c1">Bail</term>
-            <term value="c2">Devis et marché</term>
-            <term value="c3">Donations et dons mutuels </term>
-            <term value="c4">Echange</term>
-            <term value="c5">Enchère / surenchère</term>
-            <term value="c6">Marché en bloc</term>
-            <term value="c7">Partage</term>
-            <term value="c8">Pot de vin</term>
-            <term value="c9">Rente</term>
-            <term value="c10">Fermage</term>
-            <term value="c11">Emphytéose</term>
-        </group>
-        <group type="encumbrance">
-            <label>Servitudes</label>
-            <term value="d1">Bornage</term>
-            <term value="d2">Droit de passage</term>
-            <term value="d3">Père de famille</term>
-            <term value="d4">Contre-mur</term>
-            <term value="d5">Eaux de gouttière</term>
-            <term value="d6">Elaguer</term>
-            <term value="d7">Evacuation des eaux</term>
-            <term value="d8">Vue</term>
-            <term value="d9">Souffrance (vue de)</term>
-            <term value="d10">Mur de clôture</term>
-            <term value="d11">Mur de séparation</term>
-            <term value="d12">Percer (vue ou mur)</term>
-            <term value="d13">Passage des eaux</term>
-            <term value="d14">Forge / Four / Fourneau</term>
-            <term value="d15">Fossés </term>
-            <term value="d16">Atre</term>
-        </group>
-        <group type="law">
-            <label>Droit (nature et source du)</label>
-            <term value="e1">Coutume (articles le cas échéant)</term>
-            <term value="e2">Police (ordonnances de)</term>
-            <term value="e3">Doctrine (Desgodets)</term>
-        </group>
-        <group type="measurement">
-            <label>Mesure</label>
-            <term value="f1">Arpentage</term>
-            <term value="f2">Borne (cf. Marque)</term>
-            <term value="f3">Toiser</term>
-            <term value="f4">Mesurage (des déformations, aplombs et autres)</term>
-            <term value="f5">Relevé (mesurage pour faire un dessin)</term>
-        </group>
-        <group type="repairs">
-            <label>Réparations (hors cas d’expertises portant sur des réparations)</label>
-            <term value="g1">Réparations</term>
-        </group>
-        <group type="guarantees">
-            <label>Sûreté/Garanties</label>
-            <term value="h1">Hypothèques</term>
-            <term value="h2">Ordre et distribution</term>
-            <term value="h3">Privilège</term>
-        </group>
-        <group type="responsability">
-            <label>Responsabilité</label>
-            <term value="i1">Imprudence</term>
-            <term value="i2">Accident</term>
-            <term value="i3">Imprévu, imprévisibilité</term>
-            <term value="i4">Négligence</term>
-        </group>
-        <group type="ownership">
-            <label>Propriété (transmission de)</label>
-            <term value="j1">Bénéfice d'inventaire</term>
-            <term value="j2">Prescription</term>
-            <term value="j3">Retrait</term>
-        </group>
-        <group type="value">
-            <label>Valeur</label>
-            <term value="k1">Loyer</term>
-            <term value="k2">Salaire</term>
-            <term value="k3">Ventilation </term>
-            <term value="k4">Dépréciation</term>
-            <term value="k5">Honoraires</term>
-            <term value="k6">Travail à la journée (par économie)</term>
-            <term value="k7">Superficie</term>
-            <term value="k8">Conduite (du chantier par l'architecte)</term>
-            <term value="k9">Juste prix</term>
-            <term value="k10">Valeur intrinsèque</term>
-            <term value="k11">Saisie (endettement)</term>
-        </group>
-        <group type="neighbourhood">
-            <label>Voisinage</label>
-            <term value="l1">Voisin</term>
-        </group>
-        <group type="disorder">
-            <label>Désordres</label>
-            <term value="m1">Malfaçon / Défectuosité / défaut</term>
-            <term value="m2">Infection (nuisances olfactives)</term>
-            <term value="m3">Infiltration / fuite (dégâts des eaux ou autres)</term>
-            <term value="m4">Péril imminent</term>
-            <term value="m5">Ruine</term>
-            <term value="m6">Dégradation</term>
-            <term value="m7">Vétusté / usure</term>
-            <term value="m8">Dépérissement</term>
-            <term value="m9">Engorgement de privés</term>
-            <term value="m10">Déformation</term>
-            <term value="m11">Effondrement / Ecroulement / chute</term>
-            <term value="m12">Incendie</term>
-            <term value="m13">Fissuration</term>
-        </group>
-        <group type="transformation">
-            <label>Transformation du bâti/ Travaux (type de)</label>
-            <term value="n1">Amélioration (travaux qui sans être utiles à sa conservation lui sont utiles et lui procure une plus-value) ǂ</term>
-            <term value="n2">Conservation (nécessaires et urgents : rendre habitable / logeable et éviter une plus grande dégradation)</term>
-            <term value="n3">Augmentation</term>
-            <term value="n4">Surélévation</term>
-            <term value="n5">Changement (en cours de contrat)</term>
-            <term value="n6">Embellissement</term>
-            <term value="n7">Démolition</term>
-            <term value="n8">Ravalement</term>
-            <term value="n9">Reconstruction</term>
-            <term value="n10">Rétablissement</term>
-            <term value="n11">Commodité</term>
-            <term value="n12">Matériaux nouveaux ou inusuels (expérimentations / tests, essais)</term>
-            <term value="n13">Remploi</term>
-            <term value="n14">Consolidation /Etaiements</term>
-            <term value="n15">Reprise-en-sous-œuvre</term>
-            <term value="n16">Doublage / contre-mur</term>
-        </group>
-    </index>
-    
 </supplement>

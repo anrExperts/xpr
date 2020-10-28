@@ -1,40 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<expertise
-    xmlns="xpr"
-    status="">
+<expertise xmlns="xpr" status="">
     <meta/>
     <control>
         <maintenanceStatus/>
         <publicationStatus/>
-        <localControl
-            localType="detailLevel">
+        <localControl localType="detailLevel">
             <term/>
         </localControl>
         <maintenanceHistory>
             <maintenanceEvent>
                 <eventType/>
-                <eventDateTime
-                    standardDateTime=""/>
+                <eventDateTime standardDateTime=""/>
                 <agentType>human</agentType>
                 <agent/>
             </maintenanceEvent>
         </maintenanceHistory>
     </control>
     <sourceDesc>
-        <idno
-            type="unitid"/>
-        <idno
-            type="item"/>
-        <facsimile
-            from=""
-            to=""/>
+        <idno type="unitid">z1j904</idno>
+        <idno type="item">38</idno>
+        <facsimile from="" to=""/>
         <physDesc>
-            <extent
-                sketch=""/>
+            <extent sketch=""/>
             <appendices>
                 <appendice>
-                    <type
-                        type=""/>
+                    <type type=""/>
                     <extent/>
                     <desc/>
                     <note/>
@@ -44,13 +34,10 @@
     </sourceDesc>
     <description>
         <sessions>
-            <date
-                when=""
-                type=""/>
+            <date when="" type=""/>
         </sessions>
         <places>
-            <place
-                type="paris">
+            <place type="paris">
                 <address>
                     <street/>
                     <buildingNumber/>
@@ -63,19 +50,15 @@
             </place>
         </places>
         <categories>
-            <designation
-                rubric=""/>
+            <designation rubric=""/>
         </categories>
         <procedure>
-            <framework
-                type=""/>
-            <origination
-                type=""/>
+            <framework type=""/>
+            <origination type=""/>
             <sentences>
                 <sentence>
                     <orgName/>
-                    <date
-                        when=""/>
+                    <date when=""/>
                 </sentence>
             </sentences>
             <case/>
@@ -83,10 +66,7 @@
         </procedure>
         <participants>
             <experts>
-                <expert
-                    ref=""
-                    context=""
-                    appointment="">
+                <expert ref="" context="" appointment="">
                     <title/>
                 </expert>
             </experts>
@@ -99,10 +79,7 @@
                 </clerk>
             </clerks>
             <parties>
-                <party
-                    role=""
-                    presence=""
-                    intervention="">
+                <party role="" presence="" intervention="">
                     <person>
                         <persName>
                             <surname/>
@@ -111,8 +88,20 @@
                         <occupation/>
                     </person>
                     <status/>
-                    <expert
-                        ref=""/>
+                    <expert ref=""/>
+                    <representative>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                        <occupation/>
+                    </representative>
+                    <prosecutor>
+                        <persName>
+                            <surname/>
+                            <forename/>
+                        </persName>
+                    </prosecutor>
                 </party>
             </parties>
             <craftmen>
@@ -126,35 +115,23 @@
             </craftmen>
         </participants>
         <conclusions>
-            <agreement
-                type=""/>
+            <agreement type=""/>
+            <opinion ref=""/>
             <arrangement/>
-            <estimate
-                l=""
-                s=""
-                d=""/>
+            <estimate l="" s="" d=""/>
             <estimates>
                 <place>
-                    <appraisal
-                        l=""
-                        s=""
-                        d="">
+                    <appraisal l="" s="" d="">
                         <desc/>
                     </appraisal>
                 </place>
             </estimates>
-            <fees
-                detail="">
-                <total
-                    l=""
-                    s=""
-                    d=""/>
+            <fees detail="">
+                <total l="" s="" d=""/>
             </fees>
-            <expenses
-                mentioned="false"/>
+            <expenses mentioned=""/>
         </conclusions>
-        <keywords
-            group=""/>
+        <keywords group=""/>
         <analysis/>
         <noteworthy/>
     </description>
