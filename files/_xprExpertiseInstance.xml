@@ -17,8 +17,8 @@
         </maintenanceHistory>
     </control>
     <sourceDesc>
-        <idno type="unitid">z1j904</idno>
-        <idno type="item">38</idno>
+        <idno type="unitid"/>
+        <idno type="item"/>
         <facsimile from="" to=""/>
         <physDesc>
             <extent sketch=""/>
