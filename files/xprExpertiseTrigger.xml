@@ -22,10 +22,6 @@
     </xf:trigger>
     <xf:trigger>
         <xf:label><!--Mots-clés et -->Commentaires</xf:label>
-        <xf:toggle case="keywordsPanel" ev:event="DOMActivate"/>
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label>keywords</xf:label>
-        <xf:toggle case="keywords2" ev:event="DOMActivate"/>
+        <xf:toggle case="commentPanel" ev:event="DOMActivate"/>
     </xf:trigger>
 </nav>

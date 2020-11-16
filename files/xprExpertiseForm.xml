@@ -1132,7 +1132,7 @@
                 </xf:group>
             </xf:group>
         </xf:case>
-        <xf:case id="keywordsPanel" selected="false">
+        <xf:case id="commentPanel" selected="false">
             <xf:label><!--Mots-clés et -->Commentaires</xf:label>
             <xf:group ref="xpr:description/xpr:analysis">
                 <xf:label>Commentaires et première analyse</xf:label>
