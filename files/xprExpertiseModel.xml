@@ -2,90 +2,41 @@
     <xf:action ev:event="xforms-model-construct-done">
         <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:expenses/xpr:expense">
             <xf:delete nodeset="instance('xprExpertiseExpenses')//*"/>
-            <xf:insert
-                context="instance('xprExpertiseExpenses')"
-                origin="instance('xprExpertise')//xpr:conclusions/xpr:expenses//*"
-                nodeset="*"/>
+            <xf:insert context="instance('xprExpertiseExpenses')" origin="instance('xprExpertise')//xpr:conclusions/xpr:expenses//*" nodeset="*"/>
         </xf:action>
-
-        <xf:setvalue
-            if="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']"
-            ref="instance('xprExpertiseObjects')/xpr:object[@type='other']"
-            value="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']"/>
+        <xf:setvalue if="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']" ref="instance('xprExpertiseObjects')/xpr:object[@type='other']" value="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']"/>
     </xf:action>
-
     <xf:action ev:event="xforms-ready">
-        <xf:insert
-            if="/xpr:expertise[not(xpr:control)]"
-            context="instance('xprExpertise')"
-            origin="instance('xprExpertiseCopy')/xpr:control"
-            nodeset="xpr:meta"
-            at="1"
-            position="after"/>
-
+        <xf:insert if="/xpr:expertise[not(xpr:control)]" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control" nodeset="xpr:meta" at="1" position="after"/>
         <!-- delete xpr:appendices if all xpr:appendice are empty -->
-        <xf:delete
-            nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices[normalize-space(.)='' and xpr:appendice/xpr:type/@type[. = '']]"/>
-        <xf:delete
-            nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative[normalize-space(.) = '']"/>
-        <xf:delete
-            nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor[normalize-space(.) = '']"/>
-        <xf:setvalue
-            ref="instance('xprExpertiseCategories')/xpr:category[not(@type)]"
-            value="string-join(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category/@type, ' ')"/>
-
-        <xf:delete
-            if="not(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'])"
-            nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"/>
+        <xf:delete nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices[normalize-space(.)='' and xpr:appendice/xpr:type/@type[. = '']]"/>
+        <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative[normalize-space(.) = '']"/>
+        <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:prosecutor[normalize-space(.) = '']"/>
+        <xf:setvalue ref="instance('xprExpertiseCategories')/xpr:category[not(@type)]" value="string-join(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category/@type, ' ')"/>
+        <xf:delete if="not(instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation'])" nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates"/>
     </xf:action>
-
-    <xf:action
-        ev:event="xforms-ready"
-        while="count(instance('xprExpertise')/xpr:description/xpr:keywords[@group]) &lt; count(instance('xprExpertiseIndex')/xpr:group)">
-        <xf:insert
-            context="instance('xprExpertise')/xpr:description"
-            origin="instance('xprExpertiseCopy')/xpr:description/xpr:keywords[@group]"
-            nodeset="xpr:conclusions[not(following-sibling::xpr:keywords[@group])]
-            | xpr:keywords[@group]"
-            at="last()"
-            position="after"/>
+    <xf:action ev:event="xforms-ready" while="count(instance('xprExpertise')/xpr:description/xpr:keywords[@group]) &lt; count(instance('xprExpertiseIndex')/xpr:group)">
+        <xf:insert context="instance('xprExpertise')/xpr:description" origin="instance('xprExpertiseCopy')/xpr:description/xpr:keywords[@group]" nodeset="xpr:conclusions[not(following-sibling::xpr:keywords[@group])]
+            | xpr:keywords[@group]" at="last()" position="after"/>
     </xf:action>
-
-    <xf:action
-        ev:event="xforms-ready"
-        while="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)]">
-        <xf:setvalue
-            ref="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)][1]/@group"
-            value="instance('xprExpertiseIndex')/xpr:group[not(@type = instance('xprExpertise')/xpr:description/xpr:keywords/@group)]/@type"/>
+    <xf:action ev:event="xforms-ready" while="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)]">
+        <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)][1]/@group" value="instance('xprExpertiseIndex')/xpr:group[not(@type = instance('xprExpertise')/xpr:description/xpr:keywords/@group)]/@type"/>
     </xf:action>
-
     <!-- @rmq for gip - to be removed -->
-    <xf:action
-        ev:event="xforms-ready"
-        while="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party[not(xpr:person)]">
-        <xf:insert
-            context="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party[not(xpr:person)]"
-            origin="instance('xprExpertiseCopy')//xpr:participants/xpr:parties/xpr:party/xpr:person"
-            nodeset="xpr:status"
-            at="1"
-            position="before"/>
+    <xf:action ev:event="xforms-ready" while="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party[not(xpr:person)]">
+        <xf:insert context="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party[not(xpr:person)]" origin="instance('xprExpertiseCopy')//xpr:participants/xpr:parties/xpr:party/xpr:person" nodeset="xpr:status" at="1" position="before"/>
     </xf:action>
-
-
     <xf:instance id="xprExpertise" src="/xpr/files/_xprExpertiseInstance.xml"/>
     <xf:instance id="xprExpertiseCopy" src="/xpr/files/_xprExpertiseInstance.xml"/>
     <!--for server response-->
     <xf:instance id="response">
         <return xmlns=""/>
     </xf:instance>
-
     <xf:instance id="var">
         <var xmlns="xpr"/>
     </xf:instance>
-
     <xf:instance id="xprExperts" src="/xpr/entities"/>
-    <xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>
-
+    <!--<xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>-->
     <xf:instance id="xprExpertiseObjects">
         <objects xmlns="xpr">
             <object type="house">Maison</object>
@@ -98,7 +49,6 @@
             <object type="other"/>
         </objects>
     </xf:instance>
-
     <xf:instance id="xprExpertiseCategories">
         <categories xmlns="xpr">
             <category/>
@@ -109,7 +59,6 @@
             <category type="assessment">Décrire et évaluer les travaux à venir</category>
         </categories>
     </xf:instance>
-
     <xf:instance id="xprExpertiseFees">
         <fees xmlns="xpr">
             <fee type="expert" ref="" l="" s="" d=""/>
@@ -122,14 +71,15 @@
             <fee type="other" l="" s="" d=""/>
         </fees>
     </xf:instance>
-
     <xf:instance id="xprExpertiseExpenses">
         <expenses xmlns="xpr">
             <expense type="clerk" l="" s="" d=""/>
             <expense type="expert" l="" s="" d=""/>
         </expenses>
     </xf:instance>
-
+    <xf:instance id="xprExpertiseComment">
+        <comment xmlns="xpr"/>
+    </xf:instance>
     <xf:instance id="xprExpertiseIndex">
         <index xmlns="xpr">
             <group type="estates">
@@ -279,82 +229,37 @@
             </group>
         </index>
     </xf:instance>
-
     <xf:bind nodeset="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" calculate="if(/xpr:expertise[not(@xml:id)], 'new', 'revised')"/>
-
-    <xf:bind
-        nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
-        calculate="if(ancestor::xpr:expenses/xpr:expense, 'true', 'false')"/>
-
-    <xf:bind
-        nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()"
-        readonly="true()"/>
-
-    <xf:bind
-        nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']"
-        required="true()"
-        constraint=""/>
-    <xf:bind
-        nodeset="xpr:sourceDesc/xpr:idno[@type='item']"
-        required="true()"/>
-
-    <xf:bind
-        nodeset="xpr:description/xpr:sessions/xpr:date/@when"
-        type="xf:date"
-        constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))"/>
-
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street"
-        relevant="../../@type='paris'
+    <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" calculate="if(ancestor::xpr:expenses/xpr:expense, 'true', 'false')"/>
+    <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()" readonly="true()"/>
+    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()" constraint=""/>
+    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()"/>
+    <xf:bind nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris'
       or ../@type='suburbs'
       or ../@type='province'
       or ../@type='indeterminate'"/>
-
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber"
-        relevant="../../@type='paris'
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
       or ../@type='suburbs'
       or ../@type='province'
       or ../@type='indeterminate'"/>
-
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:complement"
-        relevant="../@type='paris'
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris'
       or ../@type='suburbs'
       or ../@type='province'
       or ../@type='indeterminate'"/>
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:parish"
-        relevant="../@type='paris'"/>
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:city"
-        relevant="../@type='suburbs'
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:parish" relevant="../@type='paris'"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:city" relevant="../@type='suburbs'
       or ../@type='province'"/>
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:district"
-        relevant="../@type='suburbs'
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:district" relevant="../@type='suburbs'
       or ../@type='province'"/>
-    <xf:bind
-        nodeset="xpr:description/xpr:places/xpr:place/xpr:owner"
-        relevant="../@type='paris'
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:owner" relevant="../@type='paris'
       or ../@type='suburbs'
       or ../@type='province'
       or ../@type='indeterminate'"/>
-
-    <xf:bind
-        nodeset="xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"
-        relevant="."/>
-
-    <xf:bind
-        id="addOtherFee"
-        nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']"
-        relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
-<!--@todo à supprimer ?-->
-    <xf:bind
-        id="addComment"
-        nodeset="instance('xprSupplement')/xpr:comment"
-        relevant="not(instance('xprExpertise')/xpr:comment)"/>
-
+    <xf:bind nodeset="xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']" relevant="."/>
+    <xf:bind id="addOtherFee" nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+    
+    <xf:bind id="addComment" nodeset="instance('xprExpertiseComment')" relevant="not(instance('xprExpertise')/xpr:comment)"/>
     <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>

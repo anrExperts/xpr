@@ -492,11 +492,7 @@
                             <xf:label value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/>
                             <xf:copy ref="."/>
                         </xf:itemset>
-                        <xf:setvalue
-                                ev:event="xforms-value-changed"
-                                if="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects[not(xpr:object[@type='other'])]"
-                                ref="instance('xprExpertiseObjects')/xpr:object[@type='other'] | $objects/xpr:object[@type='other']"
-                                value=""/>
+                        <xf:setvalue ev:event="xforms-value-changed" if="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects[not(xpr:object[@type='other'])]" ref="instance('xprExpertiseObjects')/xpr:object[@type='other'] | $objects/xpr:object[@type='other']" value=""/>
                     </xf:select>
                     <xf:input ref="$objects/xpr:object[@type='other'][instance('xprExpertise')//xpr:objects/xpr:object[@type='other']] | instance('xprExpertise')//xpr:objects/xpr:object[@type='other'] | instance('xprExpertiseObjects')/xpr:object[@type='other'][instance('xprExpertise')//xpr:objects/xpr:object[@type='other']]" incremental="true">
                         <xf:label>Autre, à préciser</xf:label>
@@ -1130,18 +1126,43 @@
                                 </xf:input>
                             </xf:group>
                         </xf:itemset>
-                        <xf:setvalue
-                                ev:event="xforms-value-changed"
-                                if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]"
-                                ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
-                                value="'false'"/>
-                        <xf:setvalue
-                                ev:event="xforms-value-changed"
-                                if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]"
-                                ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
-                                value="'false'"/>
+                        <xf:setvalue ev:event="xforms-value-changed" if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" value="'false'"/>
+                        <xf:setvalue ev:event="xforms-value-changed" if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" value="'false'"/>
                     </xf:select>
                 </xf:group>
+            </xf:group>
+        </xf:case>
+        <xf:case id="keywordsPanel" selected="false">
+            <xf:label><!--Mots-clés et -->Commentaires</xf:label>
+            <xf:group ref="xpr:description/xpr:analysis">
+                <xf:label>Commentaires et première analyse</xf:label>
+                <xf:textarea ref=".">
+                    <xf:label>Passages intéressants</xf:label>
+                </xf:textarea>
+            </xf:group>
+            <xf:group ref="xpr:description/xpr:noteworthy">
+                <xf:label>Éléments remarquables</xf:label>
+                <xf:textarea ref=".">
+                    <xf:label/>
+                </xf:textarea>
+            </xf:group>
+            <xf:trigger bind="addComment">
+                <xf:label>Ajouter un commentaire sur ce formulaire</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert context="instance('xprExpertise')" origin="instance('xprExpertiseComment')" nodeset="xpr:description" position="after"/>
+                </xf:action>
+                <xf:help>Ajouter un commentaire sur ce formulaire.</xf:help>
+            </xf:trigger>
+            <xf:group ref="xpr:comment">
+                <xf:label>Commentaire sur ce formulaire</xf:label>
+                <xf:textarea ref=".">
+                    <xf:label/>
+                </xf:textarea>
+                <xf:trigger class="delete">
+                    <xf:label>&#10007;</xf:label>
+                    <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                    <xf:help>Supprimer le commentaire.</xf:help>
+                </xf:trigger>
             </xf:group>
         </xf:case>
     </xf:switch>
@@ -1149,7 +1170,7 @@
         <span class="closeKeywords" onclick="closeKeywords()">&#10007;</span>
         <h2>Mots-clefs</h2>
         <xf:group ref="xpr:description">
-<!--            <xf:select ref="xpr:keywords[@group='estates']" appearance="full">
+            <!--            <xf:select ref="xpr:keywords[@group='estates']" appearance="full">
                 <xf:label>
                     <span>Biens expertisés</span> (nature juridique et caractères)
                 </xf:label>
@@ -1277,7 +1298,11 @@
             </xf:select>-->
             <xf:repeat nodeset="xpr:keywords">
                 <xf:var name="group" value="."/>
-                <xf:label><span><xf:output value="instance('xprExpertiseIndex')/xpr:group[@type=$group/@group]/xpr:label"/></span></xf:label>
+                <xf:label>
+                    <span>
+                        <xf:output value="instance('xprExpertiseIndex')/xpr:group[@type=$group/@group]/xpr:label"/>
+                    </span>
+                </xf:label>
                 <xf:select ref="." appearance="full">
                     <xf:itemset nodeset="instance('xprExpertiseIndex')/xpr:group[@type=$group/@group]/xpr:term">
                         <xf:label value="."/>
