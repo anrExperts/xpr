@@ -715,13 +715,13 @@ table {
     opacity: .7;
 }
 
-.keywords .xforms-group-content {
+.keywords .xforms-group-content > .xforms-repeat {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
 }
 
-.keywords span.xforms-select {
+.keywords .xforms-group-content > .xforms-repeat > .xforms-repeat-item {
     display: inline;
     width: 18em;
     margin-bottom: 1em;
