@@ -258,18 +258,18 @@
       or ../@type='indeterminate'"/>
     <xf:bind nodeset="xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']" relevant="."/>
     <xf:bind id="addOtherFee" nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
-    
     <xf:bind id="addComment" nodeset="instance('xprExpertiseComment')" relevant="not(instance('xprExpertise')/xpr:comment)"/>
     <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
             </xf:message>
             <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
-            <xf:load resource="/xpr/gip/view" show="replace"/>
+            <xf:load resource="/xpr/expertises/view" show="replace"/>
         </xf:action>
-        <xf:message ev:event="xforms-submit-error" level="modal"> Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
+        <xf:message ev:event="xforms-submit-error" level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
         </xf:message>
     </xf:submission>
+    
     <xf:submission id="submitGip" resource="/xpr/gip/put" method="put" replace="none">
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
