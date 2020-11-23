@@ -1,9 +1,13 @@
 <xf:model id="inventory" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
-        <!--<xf:action ev:event="xforms-ready">
-                <xf:action while="//xpr:relation[not(@href = '')]/xpr:relationEntry[. = '']">
+        <xf:action ev:event="xforms-ready">
+                <!--<xf:action while="//xpr:relation[not(@href = '')]/xpr:relationEntry[. = '']">
                         
+                </xf:action>-->
+                <xf:action ev:event="xforms-ready">
+                        <xf:setvalue ref="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:entityType" value="'person'"/>
+                        <xf:setvalue ref="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/@localType" value="'person'"/>
                 </xf:action>
-        </xf:action>-->
+        </xf:action>
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
         <xf:bind id="participantRef" nodeset="instance('xprInventory')/eac:relations/eac:cpfRelation/@xlink:href" relevant="parent::eac:cpfRelation[not(@localType = 'new')]"/>

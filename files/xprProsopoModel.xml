@@ -26,6 +26,10 @@
         <xf:action if="instance('xprProsopo')//eac:identity[eac:entityType = '']/eac:nameEntry[eac:alternativeForm]">
             <xf:delete ref="instance('xprProsopo')//eac:identity[eac:entityType = '']//eac:nameEntry[eac:alternativeForm]"/>
         </xf:action>
+        <xf:action ev:event="xforms-ready">
+            <xf:setvalue ref="instance('xprNewEntity')/eac:cpfDescription/eac:identity/eac:entityType" value="'person'"/>
+            <xf:setvalue ref="instance('xprNewEntity')/eac:cpfDescription/eac:identity/@localType" value="'person'"/>
+        </xf:action>
     </xf:action>
     <!-- xprProsopo main instance-->
     <xf:instance id="xprProsopo" src="/xpr/files/_xprProsopoInstance.xml"/>
