@@ -22,10 +22,6 @@
     <xf:action ev:event="xforms-ready" while="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)]">
         <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:keywords[@group = ''][not(@type)][1]/@group" value="instance('xprExpertiseIndex')/xpr:group[not(@type = instance('xprExpertise')/xpr:description/xpr:keywords/@group)]/@type"/>
     </xf:action>
-    <!-- @rmq for gip - to be removed -->
-    <xf:action ev:event="xforms-ready" while="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party[not(xpr:person)]">
-        <xf:insert context="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party[not(xpr:person)]" origin="instance('xprExpertiseCopy')//xpr:participants/xpr:parties/xpr:party/xpr:person" nodeset="xpr:status" at="1" position="before"/>
-    </xf:action>
     <xf:instance id="xprExpertise" src="/xpr/files/_xprExpertiseInstance.xml"/>
     <xf:instance id="xprExpertiseCopy" src="/xpr/files/_xprExpertiseInstance.xml"/>
     <!--for server response-->
