@@ -218,12 +218,13 @@ declare
   %output:method("html")
 function getExpertiseHtml($id) {
   let $content := map {
-    'data' : db:open('xpr')//expertise[@xml:id=$id],
+    'data' : getExpertise($id),
     'trigger' : '',
     'form' : ''
   }
   let $outputParam := map {
-    'layout' : "ficheExpertiseSaxon.xml"
+    'layout' : "ficheExpertise.xml",
+    'mapping' : xpr.mappings.html:xpr2html(map:get($content, 'data'), map{})
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };

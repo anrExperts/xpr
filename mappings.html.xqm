@@ -69,7 +69,40 @@ declare function listEac2html($node as node()*, $options as map(*)) as item()* {
 };
 
 (:~
- : This function dispatches the treatment of the XML document
+ : This function dispatches the treatment of the xpr XML document
+ :)
+declare
+  %output:indent('no')
+function xpr2html($node as node()*, $options as map(*)) as item()* {
+  <article>
+    <header>
+      <h2>{serializeXpr($node//xpr:sourceDesc/xpr:idno[1], $options)}</h2>
+    </header>
+    <div class="meta"></div>
+    <div class="control"></div>
+  </article>
+};
+
+
+declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
+  typeswitch($node)
+    case text() return $node[fn:normalize-unicode(.)!='']
+    default return passthruXpr($node, $options)
+  };
+
+(:~
+ : This function pass through child nodes (xsl:apply-templates)
+ :)
+declare
+  %output:indent('no')
+function passthruXpr($nodes as node(), $options as map(*)) as item()* {
+  for $node in $nodes/node()
+  return serializeXpr($node, $options)
+};
+
+
+(:~
+ : This function dispatches the treatment of the eac XML document
  :)
 declare
   %output:indent('no')
