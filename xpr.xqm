@@ -210,9 +210,31 @@ function getExpertise($id) {
  : This resource function returns an expertise item
  : @param $id the expertise id
  : @return an expertise item in html
+ : @todo use html templating
+ :)
+declare
+  %rest:path("xpr/expertises/{$id}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function getExpertiseHtml($id) {
+  let $content := map {
+    'data' : db:open('xpr')//expertise[@xml:id=$id],
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheExpertiseSaxon.xml"
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function returns an expertise item
+ : @param $id the expertise id
+ : @return an expertise item in html
  :)
 declare 
-  %rest:path("xpr/expertises/{$id}/view")
+  %rest:path("xpr/expertises/{$id}/saxon")
   %rest:produces('application/html')
   %output:method("html")
 function getExpertiseSaxon($id) {
