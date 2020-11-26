@@ -41,24 +41,6 @@
     <!-- <section>{data}</section> -->
     </main>
     <script>
-/*function repeat() {
-  var element = document.querySelectorAll('div.xforms-group-content');
-  for (var i = 0; i &lt; element.length; i++) {
-    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
-      element[i].classList.add('repeat');
-      }
-    }
-  }*/
-function repeat() {
-  var element = document.querySelectorAll('div.xforms-repeat');
-  for (var i = 0; i &lt; element.length; i++) {
-    if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
-      element[i].classList.add('repeat');
-      }
-    }
-  }
-        </script>
-    <script>
 // Sticky navigation
 const nav = document.querySelector('#navigation');
 const navTop = nav.offsetTop;
