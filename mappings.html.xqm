@@ -252,25 +252,3 @@ declare function itemXpr2Html($expertise, $options){
       <p><a class="view" href="{$path || $id || '/view'}">Voir</a> | <a class="modify" href="{$path || $id || '/modify'}">Modifier</a></p>
     </li>
 };
-
-(:~
- : This function serialise a gip expertise item in a list
- : @return an html item of expertises in a list
- :)
-declare function itemGip2Html($expertise, $options){
-  let $id := $expertise/@xml:id => fn:string()
-  let $path := $options?path
-  let $status := $expertise/xpr:control/xpr:localControl/xpr:term => fn:string()
-  let $cote := $expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || ' dossier n° ' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']
-  let $addresses := $expertise/xpr:data/xpr:entry[1] => fn:normalize-space()
-  let $dates := $expertise/xpr:data/xpr:sessions => fn:normalize-space()
-  return
-    <li status="{$status}">
-      <h3 class="cote">{$cote}</h3>
-      <p>yes</p>
-      <p class="date">{$dates}</p>
-      <p>{$addresses}</p>
-        <!--<p><a href="{$path || $id || '/view'}">Voir</a> | <a href="{$path || $id || '/modify'}">Modifier</a></p>-->
-      <p><a class="view" href="{$path || $id || '/view'}">Voir</a> | <a class="modify" href="{$path || $id || '/modify'}">Modifier</a></p>
-    </li>
-};
