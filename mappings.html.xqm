@@ -224,14 +224,11 @@ declare function sex($node, $options){
 (:~
  : This function serialise an expertises list
  : @return an html list of expertises
- : @todo remove the differentiated treatment when gip imported
  :)
 declare function listXpr2html($content, $options) {
   <ul id="list">{
     for $expertise in $content/xpr:expertise
-    return
-        if ($expertise[descendant::xpr:entry/xpr:key]) then itemGip2Html($expertise, map{'path' : '/xpr/gip/'})
-        else itemXpr2Html($expertise, map{'path' : '/xpr/expertises/'})
+    return itemXpr2Html($expertise, map{'path' : '/xpr/expertises/'})
   }</ul>
 };
 
