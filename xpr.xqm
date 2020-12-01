@@ -1313,6 +1313,15 @@ declare variable $xpr.xpr:style :=
             tr:not(.label) td {{
             text-align: center;
             }}
+
+            .vertical {{
+            writing-mode: vertical-rl;
+            text-orientation: sideways;
+            min-width: 20px;
+            }}
+            div {{
+            margin-bottom : 50px;
+            }}
           </style>;
 
 (:~
@@ -1329,6 +1338,7 @@ declare
 %output:html-version('5.0')
 function xpr.xpr:query($term) {
   let $db := db:open('xpr')
+  let $data := xpr.xpr:queryData($term)
   let $expertises := fn:count($db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')])
   return
     <html>
@@ -1338,6 +1348,47 @@ function xpr.xpr:query($term) {
         <body>
           <h1>Expertises mentionnant « {$term} »</h1>
           <p>Nombre d’expertises : {$expertises}</p>
+          <div>
+            <table>
+                <tr class="label">
+                    <td>Année</td>
+                    {
+                    for $cat in fn:distinct-values($data//categories/fn:string-join(category, ' - '))
+                    return <td class="vertical">{$cat}</td>
+                    }
+                    <td>nb expertises</td>
+                    <td>total année</td>
+                    <td>pourcentage</td>
+                </tr>
+                {
+                for $year in fn:distinct-values($data//year)
+                let $expertiseCount := fn:count($data//expertise[year = $year])
+                let $expertiseYear := fn:count($db//expertise[descendant::sessions/date[1]/fn:substring(@when, '1', '4') = $year])
+                let $pourcentage := fn:format-number($expertiseCount div $expertiseYear, '0%')
+                order by $year
+                return (
+                    <tr>
+                        <td>{$year}</td>
+                        {
+                        for $cat in fn:distinct-values($data//categories/fn:string-join(category, ' - '))
+                        return(
+                            <td>{
+                            let $num := fn:count($data//expertise[year = $year][fn:string-join(categories/category, ' - ') = $cat])
+                            return
+                            if ($num != 0) then $num
+                            else ''
+                            }</td>
+                        )
+                        }
+                        <td>{$expertiseCount}</td>
+                        <td>{$expertiseYear}</td>
+                        <td>{$pourcentage}</td>
+                    </tr>
+                )
+                }
+            </table>
+          </div>
+          <div>
             <table>
                 <tr class="label">
                     <td>ID</td>
@@ -1387,8 +1438,33 @@ function xpr.xpr:query($term) {
                 </tr>
                 }
             </table>
+          </div>
         </body>
     </html>
+};
+
+declare function xpr.xpr:queryData($term) {
+let $db := db:open('xpr')
+return (
+    <expertises>
+        {
+            for $expertise in $db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')]
+            return
+            (
+            <expertise>
+                <unitid>{$expertise//idno[@type='unitid']}</unitid>
+                <item>{$expertise//idno[@type='item']}</item>
+                <categories>{
+                    for $category in $expertise//categories/category
+                    order by $category
+                    return $category
+                }</categories>
+                <year>{$expertise//sessions/date[1]/fn:substring(@when, '1', '4')}</year>
+            </expertise>
+            )
+        }
+    </expertises>
+)
 };
 
 declare function xpr.xpr:expertiseCounter() {
