@@ -1287,3 +1287,190 @@ function xpr.xpr:file($file as xs:string) as item()+ {
       file:read-binary($path)
     )
 };
+
+(:~
+ : this variable defines style for status & query functions
+ : @rmq to be removed
+ :)
+declare variable $xpr.xpr:style :=
+          <style>
+            body {{
+              width : 800px;
+              margin: auto;
+            }}
+            table {{
+             display: inline;
+             border-collapse:collapse
+             }}
+            td {{
+             border-width:1px;
+             border-style:solid;
+             border-color:red;
+             }}
+            .label td {{
+              font-weight: bold;
+            }}
+            tr:not(.label) td {{
+            text-align: center;
+            }}
+          </style>;
+
+(:~
+ : this function queries term in xpr databes
+ : @param $term
+ :
+ : @todo use XQFT
+ : @todo use mapping
+ :)
+declare
+%rest:path('/xpr/query/{$term}')
+%rest:produces('application/html')
+%output:method("html")
+%output:html-version('5.0')
+function xpr.xpr:query($term) {
+  let $db := db:open('xpr')
+  let $expertises := fn:count($db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')])
+  return
+    <html>
+        <head>
+          {$xpr.xpr:style}
+        </head>
+        <body>
+          <h1>Expertises mentionnant « {$term} »</h1>
+          <p>Nombre d’expertises : {$expertises}</p>
+            <table>
+                <tr class="label">
+                    <td>ID</td>
+                    <td>Catégories d’expertise</td>
+                    <td>Désignation</td>
+                    <td>Causes</td>
+                    <td>Conclusions</td>
+                    <td>Keywords</td>
+                </tr>
+                {
+                for $expertise in $db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')]
+                return
+                <tr>
+                    <td>
+                    {
+                      let $unitid := fn:normalize-space($expertise/@xml:id)
+                      let $path := '/xpr/expertises/' || $unitid || '/modify'
+                      return <a href="{$path}">{$unitid}</a>
+                    }
+                    </td>
+                    <td>
+                      <ul>{
+                        for $cat in $expertise/description/categories/category
+                        return <li>{fn:normalize-space($cat)}</li>
+                      }</ul>
+                    </td>
+                    <td>{
+                      if($expertise//designation[fn:matches(fn:normalize-space(.), $term, 'i')])
+                      then 'X'
+                      else ''
+                    }</td>
+                    <td>{
+                      if($expertise//case[fn:matches(fn:normalize-space(.), $term, 'i')])
+                      then 'X'
+                      else ''
+                    }</td>
+                    <td>{
+                      if($expertise//opinion[fn:matches(fn:normalize-space(.), $term, 'i')])
+                      then 'X'
+                      else ''
+                    }</td>
+                    <td>{
+                      if($expertise//keywords[fn:matches(fn:normalize-space(.), $term, 'i')])
+                      then 'X'
+                      else ''
+                    }</td>
+                </tr>
+                }
+            </table>
+        </body>
+    </html>
+};
+
+declare function xpr.xpr:expertiseCounter() {
+    let $db := db:open('xpr')//expertises
+    return(
+     <data>
+       {
+         for $unitid in fn:distinct-values($db/expertise/fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j'))
+         return (
+           <file>
+             <unitid>{$unitid}</unitid>
+             <count>{fn:format-number(fn:count($db/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid]), '000')}</count>
+             <last>{$db/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid][fn:last()]/fn:substring-after(@xml:id, 'd')}</last>
+           </file>
+         )
+       }
+     </data>
+    )
+};
+
+
+(:~
+ : this function returns the xpr database status
+ : @todo use mapping
+ :)
+declare
+%rest:path('/xpr/status')
+%rest:produces('application/html')
+%output:method("html")
+%output:html-version('5.0')
+function xpr.xpr:status() {
+    let $db := db:open('xpr')//expertises
+    let $expertises := fn:count($db/expertise)
+    let $data := xpr.xpr:expertiseCounter()
+    return(
+      <html>
+        <head>
+          {$xpr.xpr:style}
+        </head>
+        <body>
+          <div>
+            <h1>État des dépouillements</h1>
+            <p>Expertises dépouillées : {$expertises}</p>
+            <table>
+              <tr class="label">
+                <td>Unitid</td>
+                <td>Nb expertises</td>
+                <td>last expertise</td>
+              </tr>
+              {
+                for $unitid in $data/file
+                return (
+                <tr>
+                  <td>{$unitid/unitid}</td>
+                  <td>{$unitid/count}</td>
+                  <td>{$unitid/last}</td>
+                </tr>
+                )
+              }
+              </table>
+              <table>
+              <tr class="label">
+                <td colspan="3">À vérifier</td>
+              </tr>
+                <tr class="label">
+                  <td>Unitid</td>
+                  <td>Nb expertises</td>
+                  <td>last expertise</td>
+                </tr>
+                {
+                  for $diff in $data//file[count != last]
+                  return  (
+                  <tr>
+                    <td>{$diff/unitid}</td>
+                    <td>{$diff/count}</td>
+                    <td>{$diff/last}</td>
+                  </tr>
+                  )
+                }
+              </table>
+          </div>
+        </body>
+      </html>
+    )
+};
