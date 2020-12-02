@@ -42,7 +42,7 @@ declare namespace xpr = "xpr" ;
 declare default element namespace "xpr" ;
 declare default function namespace "xpr.xpr" ;
 
-declare default collation "http://basex.org/collation?lang=fr" ;
+declare default collation "http://basex.org/collation?lang=fr;strength=identical" ;
 
 (:~
  : This resource function defines the application root
@@ -1339,7 +1339,7 @@ declare
 function xpr.xpr:query($term) {
   let $db := db:open('xpr')
   let $data := xpr.xpr:queryData($term)
-  let $expertises := fn:count($db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')])
+  let $expertises := fn:count($data//expertise)
   return
     <html>
         <head>
@@ -1445,10 +1445,14 @@ function xpr.xpr:query($term) {
 
 declare function xpr.xpr:queryData($term) {
 let $db := db:open('xpr')
+let $diacritics := 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöùúûüýÿ'
+let $noAccent := 'AAAAAACEEEEIIIINOOOOOUUUUYaaaaaaceeeeiiiinooooouuuuyy'
+
 return (
     <expertises>
         {
-            for $expertise in $db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')]
+            for $expertise in $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
+            (:where $expertise//text() contains text "réparation":)
             return
             (
             <expertise>
@@ -1456,8 +1460,18 @@ return (
                 <item>{$expertise//idno[@type='item']}</item>
                 <categories>{
                     for $category in $expertise//categories/category
-                    order by $category
-                    return $category
+                    order by $category/fn:normalize-space(@type)
+                    return (
+                      <category>{
+                      switch ($category/fn:normalize-space(@type))
+                      case 'acceptation' return 'Recevoir et évaluer le travail réalisé'
+                      case 'registration' return 'Enregistrer'
+                      case 'settlement' return 'Départager'
+                      case 'assessment' return 'Décrire et évaluer les travaux à venir'
+                      case 'estimation' return 'Estimer la valeur des biens'
+                      default return "Pas de catégorie"
+                      }</category>
+                    )
                 }</categories>
                 <year>{$expertise//sessions/date[1]/fn:substring(@when, '1', '4')}</year>
             </expertise>
