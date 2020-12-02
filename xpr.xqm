@@ -1295,32 +1295,49 @@ function xpr.xpr:file($file as xs:string) as item()+ {
 declare variable $xpr.xpr:style :=
           <style>
             body {{
-              width : 800px;
-              margin: auto;
-            }}
-            table {{
-             display: inline;
-             border-collapse:collapse
-             }}
-            td {{
-             border-width:1px;
-             border-style:solid;
-             border-color:red;
-             }}
-            .label td {{
-              font-weight: bold;
-            }}
-            tr:not(.label) td {{
-            text-align: center;
+              font-family: sans-serif; /* 1 */
+              background-color: #fff;
+              color: #E73E0D;
             }}
 
-            .vertical {{
-            writing-mode: vertical-rl;
-            text-orientation: sideways;
-            min-width: 20px;
+            html {{
+              line-height: 1.15; /* 2 */
+              -ms-text-size-adjust: 100%; /* 3 */
+              -webkit-text-size-adjust: 100%; /* 3 */
             }}
-            div {{
-            margin-bottom : 50px;
+
+            main {{
+              width: 95%;
+              margin:auto;
+            }}
+
+            table {{
+              display: inline;
+              border-collapse:collapse;
+            }}
+
+            thead td {{
+              background-color: #E73E0D;
+              color:#fff;
+              min-width:50px;
+            }}
+
+            div:not(.detail) thead td {{
+              height:400px;
+              writing-mode:vertical-rl;
+            }}
+
+            td {{
+              border: 0.15em solid ;
+            }}
+
+            tbody td {{
+              text-align: center;
+            }}
+
+            main div {{
+              margin-bottom: 3em;
+
             }}
           </style>;
 
@@ -1340,106 +1357,136 @@ function xpr.xpr:query($term) {
   let $db := db:open('xpr')
   let $data := xpr.xpr:queryData($term)
   let $expertises := fn:count($data//expertise)
+  let $diacritics := 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöùúûüýÿ'
+  let $noAccent := 'AAAAAACEEEEIIIINOOOOOUUUUYaaaaaaceeeeiiiinooooouuuuyy'
   return
     <html>
-        <head>
-          {$xpr.xpr:style}
-        </head>
-        <body>
+      <head>
+        {$xpr.xpr:style}
+        <!--<link href="/xpr/files/css/normalize.css" rel="stylesheet" />
+        <link href="/xpr/files/css/main.css" rel="stylesheet" />-->
+      </head>
+      <body>
+        <nav></nav>
+        <main>
           <h1>Expertises mentionnant « {$term} »</h1>
           <p>Nombre d’expertises : {$expertises}</p>
           <div>
             <table>
-                <tr class="label">
-                    <td>Année</td>
-                    {
-                    for $cat in fn:distinct-values($data//categories/fn:string-join(category, ' - '))
-                    return <td class="vertical">{$cat}</td>
-                    }
-                    <td>nb expertises</td>
-                    <td>total année</td>
-                    <td>pourcentage</td>
+              <thead>
+                <tr>
+                  <td><span>Année</span></td>
+                  {
+                  for $cat in fn:distinct-values($data//categories/fn:string-join(category, ' - '))
+                  order by $cat
+                  return
+                  <td><span>{$cat}</span></td>
+                  }
+                  <td><span>nb expertises</span></td>
+                  <td><span>total année</span></td>
+                  <td><span>pourcentage</span></td>
                 </tr>
+              </thead>
+              <tbody>
+              {
+              for $year in fn:distinct-values($data//year)
+              let $expertiseCount := fn:count($data//expertise[year = $year])
+              let $expertiseYear := fn:count($db//expertise[descendant::sessions/date[1]/fn:substring(@when, '1', '4') = $year])
+              let $pourcentage := fn:format-number($expertiseCount div $expertiseYear, '0%')
+              order by $year
+              return (
+              <tr>
+                <td>{$year}</td>
                 {
-                for $year in fn:distinct-values($data//year)
-                let $expertiseCount := fn:count($data//expertise[year = $year])
-                let $expertiseYear := fn:count($db//expertise[descendant::sessions/date[1]/fn:substring(@when, '1', '4') = $year])
-                let $pourcentage := fn:format-number($expertiseCount div $expertiseYear, '0%')
-                order by $year
-                return (
-                    <tr>
-                        <td>{$year}</td>
-                        {
-                        for $cat in fn:distinct-values($data//categories/fn:string-join(category, ' - '))
-                        return(
-                            <td>{
-                            let $num := fn:count($data//expertise[year = $year][fn:string-join(categories/category, ' - ') = $cat])
-                            return
-                            if ($num != 0) then $num
-                            else ''
-                            }</td>
-                        )
-                        }
-                        <td>{$expertiseCount}</td>
-                        <td>{$expertiseYear}</td>
-                        <td>{$pourcentage}</td>
-                    </tr>
+                for $cat in fn:distinct-values($data//categories/fn:string-join(category, ' - '))
+                order by $cat
+                return(
+                  <td>
+                    {
+                    let $num := fn:count($data//expertise[year = $year][fn:string-join(categories/category, ' - ') = $cat])
+                    return
+                    if ($num != 0) then $num
+                    else ''
+                    }
+                  </td>
                 )
                 }
+                <td>{$expertiseCount}</td>
+                <td>{$expertiseYear}</td>
+                <td>{$pourcentage}</td>
+              </tr>
+              )
+              }
+              </tbody>
             </table>
           </div>
-          <div>
+          <div class="detail">
             <table>
-                <tr class="label">
-                    <td>ID</td>
-                    <td>Catégories d’expertise</td>
-                    <td>Désignation</td>
-                    <td>Causes</td>
-                    <td>Conclusions</td>
-                    <td>Keywords</td>
+              <thead>
+                <tr>
+                  <td>ID</td>
+                  <td>Catégories d’expertise</td>
+                  <td>Désignation</td>
+                  <td>Causes</td>
+                  <td>Conclusions</td>
+                  <td>Keywords</td>
                 </tr>
-                {
-                for $expertise in $db//expertise[fn:matches(fn:normalize-space(.), $term, 'i')]
+              </thead>
+              <tbody>
+              {
+                for $expertise in $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
                 return
                 <tr>
-                    <td>
+                  <td>
+                  {
+                  let $unitid := fn:normalize-space($expertise/@xml:id)
+                  let $path := '/xpr/expertises/' || $unitid || '/modify'
+                  return <a href="{$path}">{$unitid}</a>
+                  }
+                  </td>
+                  <td>
+                    <ul>
                     {
-                      let $unitid := fn:normalize-space($expertise/@xml:id)
-                      let $path := '/xpr/expertises/' || $unitid || '/modify'
-                      return <a href="{$path}">{$unitid}</a>
+                      for $cat in $expertise/description/categories/category
+                      return <li>{fn:normalize-space($cat)}</li>
                     }
-                    </td>
-                    <td>
-                      <ul>{
-                        for $cat in $expertise/description/categories/category
-                        return <li>{fn:normalize-space($cat)}</li>
-                      }</ul>
-                    </td>
-                    <td>{
-                      if($expertise//designation[fn:matches(fn:normalize-space(.), $term, 'i')])
-                      then 'X'
-                      else ''
-                    }</td>
-                    <td>{
-                      if($expertise//case[fn:matches(fn:normalize-space(.), $term, 'i')])
-                      then 'X'
-                      else ''
-                    }</td>
-                    <td>{
-                      if($expertise//opinion[fn:matches(fn:normalize-space(.), $term, 'i')])
-                      then 'X'
-                      else ''
-                    }</td>
-                    <td>{
-                      if($expertise//keywords[fn:matches(fn:normalize-space(.), $term, 'i')])
-                      then 'X'
-                      else ''
-                    }</td>
+                    </ul>
+                  </td>
+                  <td>
+                  {
+                    if($expertise//designation[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')])
+                    then 'X'
+                    else ''
+                  }
+                  </td>
+                  <td>
+                  {
+                    if($expertise//case[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')])
+                    then 'X'
+                    else ''
+                  }
+                  </td>
+                  <td>
+                  {
+                    if($expertise//opinion[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')])
+                    then 'X'
+                    else ''
+                  }
+                  </td>
+                  <td>
+                  {
+                    if($expertise//keywords[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')])
+                    then 'X'
+                    else ''
+                  }
+                  </td>
                 </tr>
-                }
+              }
+              </tbody>
             </table>
           </div>
-        </body>
+        </main>
+      </body>
     </html>
 };
 
@@ -1447,7 +1494,6 @@ declare function xpr.xpr:queryData($term) {
 let $db := db:open('xpr')
 let $diacritics := 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöùúûüýÿ'
 let $noAccent := 'AAAAAACEEEEIIIINOOOOOUUUUYaaaaaaceeeeiiiinooooouuuuyy'
-
 return (
     <expertises>
         {
@@ -1459,6 +1505,7 @@ return (
                 <unitid>{$expertise//idno[@type='unitid']}</unitid>
                 <item>{$expertise//idno[@type='item']}</item>
                 <categories>{
+                    if($expertise//categories/category) then
                     for $category in $expertise//categories/category
                     order by $category/fn:normalize-space(@type)
                     return (
@@ -1469,9 +1516,10 @@ return (
                       case 'settlement' return 'Départager'
                       case 'assessment' return 'Décrire et évaluer les travaux à venir'
                       case 'estimation' return 'Estimer la valeur des biens'
-                      default return "Pas de catégorie"
+                      default return ""
                       }</category>
                     )
+                    else <category>Pas de catégorie</category>
                 }</categories>
                 <year>{$expertise//sessions/date[1]/fn:substring(@when, '1', '4')}</year>
             </expertise>
