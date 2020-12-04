@@ -46,7 +46,7 @@
                 </xf:select1>
                 <xf:group>
                     <xf:label>Forme(s) du nom</xf:label>
-                    <xf:input ref="eac:nameEntry[child::eac:authorizedForm]eac:part" incremental="true">
+                    <xf:input ref="eac:nameEntry[child::eac:authorizedForm]/eac:part" incremental="true">
                         <xf:label>Forme contrôlée</xf:label>
                     </xf:input>
                     <xf:select1 ref="instance('xprIdentities')/eac:identity">
