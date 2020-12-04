@@ -42,7 +42,7 @@ declare namespace xpr = "xpr" ;
 declare default element namespace "xpr" ;
 declare default function namespace "xpr.xpr" ;
 
-declare default collation "http://basex.org/collation?lang=fr ;
+declare default collation "http://basex.org/collation?lang=fr" ;
 
 (:~
  : This resource function defines the application root
