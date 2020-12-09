@@ -7,7 +7,10 @@
         <xf:setvalue if="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']" ref="instance('xprExpertiseObjects')/xpr:object[@type='other']" value="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']"/>
     </xf:action>
     <xf:action ev:event="xforms-ready">
+        <!--à supprimer une fois toutes les expertises reprises (toutes devraient avoir un control)-->
         <xf:insert if="/xpr:expertise[not(xpr:control)]" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control" nodeset="xpr:meta" at="1" position="after"/>
+        <!--add maintenanceEvent for revision-->
+        <xf:insert if="/xpr:expertise/@xml:id" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" nodeset="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" at="last()" position="after"/>
         <!-- delete xpr:appendices if all xpr:appendice are empty -->
         <xf:delete nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices[normalize-space(.)='' and xpr:appendice/xpr:type/@type[. = '']]"/>
         <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative[normalize-space(.) = '']"/>
@@ -256,22 +259,17 @@
     <xf:bind id="addOtherFee" nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
     <xf:bind id="addComment" nodeset="instance('xprExpertiseComment')" relevant="not(instance('xprExpertise')/xpr:comment)"/>
     <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
+        <xf:action ev:event="xforms-submit">
+            <xf:setvalue if="/xpr:expertise/@xml:id" ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'revised'"/>
+            <xf:setvalue if="not(/xpr:expertise/@xml:id)" ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'created'"/>
+            <xf:setvalue if="not(/xpr:expertise/@xml:id)" ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDescription" value="'Création de la fiche.'"/>
+            <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDateTime/@standardDateTime" value="now()"/>
+        </xf:action>
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
             </xf:message>
             <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
             <xf:load resource="/xpr/expertises/view" show="replace"/>
-        </xf:action>
-        <xf:message ev:event="xforms-submit-error" level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
-        </xf:message>
-    </xf:submission>
-    
-    <xf:submission id="submitGip" resource="/xpr/gip/put" method="put" replace="none">
-        <xf:action ev:event="xforms-submit-done">
-            <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
-            </xf:message>
-            <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
-            <xf:load resource="/xpr/gip/view" show="replace"/>
         </xf:action>
         <xf:message ev:event="xforms-submit-error" level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
         </xf:message>

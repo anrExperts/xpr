@@ -13,6 +13,7 @@
                 <eventDateTime standardDateTime=""/>
                 <agentType>human</agentType>
                 <agent/>
+                <eventDescription/>
             </maintenanceEvent>
         </maintenanceHistory>
     </control>

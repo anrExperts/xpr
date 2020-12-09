@@ -1354,8 +1354,28 @@
                 <xf:value>completed</xf:value>
             </xf:item>
         </xf:select1>
-        <xf:submit submission="submit">
+        <xf:dialog id="control">
+            <xf:group ref="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]">
+                <xf:input ref="xpr:eventDescription">
+                    <xf:label>Motif de la révision</xf:label>
+                </xf:input>
+            </xf:group>
+            <xf:trigger>
+                <xf:label>Annuler</xf:label>
+                <xf:hide ev:event="DOMActivate" dialog="control"/>
+            </xf:trigger>
+            <xf:submit submission="submit">
+                <xf:label>Enregistrer</xf:label>
+            </xf:submit>
+        </xf:dialog>
+        <xf:trigger>
             <xf:label>Enregistrer</xf:label>
-        </xf:submit>
+            <xf:action if="/xpr:expertise/@xml:id" ev:event="DOMActivate">
+                <xf:show dialog="control"/>
+            </xf:action>
+            <xf:action if="not(/xpr:expertise/@xml:id)" ev:event="DOMActivate">
+                <xf:send submission="submit"/>
+            </xf:action>
+        </xf:trigger>
     </span>
 </form>
