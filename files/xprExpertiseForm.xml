@@ -14,6 +14,30 @@
                         <xf:label>Dossier</xf:label>
                         <xf:alert>Le champ "Dossier" est requis.</xf:alert>
                     </xf:input>
+                    <xf:select1 ref="xpr:idno[@type = 'supplement']" incremental="true" appearance="full">
+                        <xf:label>Supplement cote</xf:label>
+                        <xf:item>
+                            <xf:label>bis</xf:label>
+                            <xf:value>bis</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>ter</xf:label>
+                            <xf:value>ter</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                    <xf:trigger ref="instance('xprExpertise')/xpr:sourceDesc[not(xpr:idno[@type='supplement'])]">
+                        <xf:label>bis/ter</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert if="not(instance('xprExpertise')/xpr:sourceDesc/xpr:idno[@type='supplement'])" context="." origin="instance('xprExpertiseCopy')/xpr:sourceDesc/xpr:idno[@type='item']" nodeset="xpr:idno[@type='item']" position="after"/>
+                            <xf:setvalue ev:event="xforms-insert" ref="instance('xprExpertise')/xpr:sourceDesc/xpr:idno[@type='item'][2]/@type" value="'supplement'"/>
+                        </xf:action>
+                    </xf:trigger>
+                    <xf:trigger ref="instance('xprExpertise')/xpr:sourceDesc[xpr:idno[@type='supplement']]">
+                        <xf:label>Supprimer le supplement cote</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:delete if="instance('xprExpertise')/xpr:sourceDesc/xpr:idno[@type='supplement']" nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:idno[@type='supplement']"/>
+                        </xf:action>
+                    </xf:trigger>
                 </xf:group>
                 <xf:group ref="xpr:facsimile">
                     <xf:label>Identifiants des vues</xf:label>
