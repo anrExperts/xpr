@@ -26,6 +26,8 @@
         <xf:action if="instance('xprProsopo')//eac:identity[eac:entityType = '']/eac:nameEntry[eac:alternativeForm]">
             <xf:delete ref="instance('xprProsopo')//eac:identity[eac:entityType = '']//eac:nameEntry[eac:alternativeForm]"/>
         </xf:action>
+        <!--add maintenanceEvent for revision-->
+        <xf:insert if="/eac:eac-cpf/@xml:id" context="instance('xprProsopo')" origin="instance('xprProsopoCopy')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent" nodeset="eac:control/eac:maintenanceHistory/eac:maintenanceEvent" at="last()" position="after"/>
         <xf:action ev:event="xforms-ready">
             <xf:setvalue ref="instance('xprNewEntity')/eac:cpfDescription/eac:identity/eac:entityType" value="'person'"/>
             <xf:setvalue ref="instance('xprNewEntity')/eac:cpfDescription/eac:identity/@localType" value="'person'"/>
@@ -266,6 +268,20 @@
             <xf:delete nodeset="instance('xprProsopo')//@notBefore[. = '']"/>
             <xf:delete nodeset="instance('xprProsopo')//@notAfter[. = '']"/>
             <xf:delete ref="instance('xprProsopo')//*[@localType = 'new']/@localType"/>
+
+            <!--set value for maintenance event informations-->
+            <xf:action if="/eac:eac-cpf/@xml:id">
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceStatus" value="'revised'"/>
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventType" value="'revision'"/>
+            </xf:action>
+            <xf:action if="not(/eac:eac-cpf/@xml:id)">
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceStatus" value="'new'"/>
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventType" value="'creation'"/>
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventDescription" value="'Création de la fiche.'"/>
+            </xf:action>
+            <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventDateTime/@standardDateTime
+                            | instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventDateTime"
+                         value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit" if="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']">
             <xf:setvalue ref="instance('xprProsopo')//eac:nameEntry[child::eac:authorizedForm]/eac:part[. = '']" value="concat(
@@ -336,6 +352,14 @@
             <xf:delete nodeset="instance('xprNewEntity')//@notBefore[. = '']"/>
             <xf:delete nodeset="instance('xprNewEntity')//@notAfter[. = '']"/>
             <xf:delete nodeset="instance('xprNewEntity')//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
+            <!--set value for maintenance event informations-->
+            <xf:setvalue ref="instance('xprNewEntity')/eac:control/eac:localControl/eac:term" value="'in progress'"/>
+            <xf:setvalue ref="instance('xprNewEntity')/eac:control/eac:maintenanceStatus" value="'new'"/>
+            <xf:setvalue ref="instance('xprNewEntity')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventType" value="'creation'"/>
+            <xf:setvalue ref="instance('xprNewEntity')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventDescription" value="concat('Création de la fiche (à partir de la fiche de ', instance('xprProsopo')//eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part, ').')"/>
+            <xf:setvalue ref="instance('xprNewEntity')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventDateTime/@standardDateTime
+                | instance('xprNewEntity')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]/eac:eventDateTime"
+                         value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/>; Body : <xf:output value="event('response-body')"/>. </xf:message>

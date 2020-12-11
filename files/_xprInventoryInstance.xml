@@ -4,6 +4,22 @@
     xmlns:eac="eac"
     xmlns:xlink="http://www.w3.org/1999/xlink"
     xml:id="">
+    <control>
+        <maintenanceStatus/>
+        <publicationStatus/>
+        <localControl localType="detailLevel">
+            <term/>
+        </localControl>
+        <maintenanceHistory>
+            <maintenanceEvent>
+                <eventType/>
+                <eventDateTime standardDateTime=""/>
+                <agentType>human</agentType>
+                <agent/>
+                <eventDescription/>
+            </maintenanceEvent>
+        </maintenanceHistory>
+    </control>
     <sourceDesc>
         <idno
             unitid=""/>

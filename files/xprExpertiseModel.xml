@@ -228,7 +228,6 @@
             </group>
         </index>
     </xf:instance>
-    <xf:bind nodeset="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" calculate="if(/xpr:expertise[not(@xml:id)], 'new', 'revised')"/>
     <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" calculate="if(ancestor::xpr:expenses/xpr:expense, 'true', 'false')"/>
     <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()" readonly="true()"/>
     <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()" constraint=""/>
@@ -260,14 +259,22 @@
     <xf:bind id="addComment" nodeset="instance('xprExpertiseComment')" relevant="not(instance('xprExpertise')/xpr:comment)"/>
     <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
         <xf:action ev:event="xforms-submit">
-            <xf:setvalue if="/xpr:expertise/@xml:id" ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'revised'"/>
-            <xf:setvalue if="not(/xpr:expertise/@xml:id)" ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'created'"/>
-            <xf:setvalue if="not(/xpr:expertise/@xml:id)" ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDescription" value="'Création de la fiche.'"/>
-            <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDateTime/@standardDateTime" value="now()"/>
+            <!--set value for maintenance event informations-->
+            <xf:action if="/xpr:expertise/@xml:id">
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'revised'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'revision'"/>
+            </xf:action>
+            <xf:action if="not(/xpr:expertise/@xml:id)">
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'new'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'creation'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDescription" value="'Création de la fiche.'"/>
+            </xf:action>
+            <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDateTime/@standardDateTime
+                            | instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDateTime"
+                         value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
-            <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
-            </xf:message>
+            <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
             <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
             <xf:load resource="/xpr/expertises/view" show="replace"/>
         </xf:action>

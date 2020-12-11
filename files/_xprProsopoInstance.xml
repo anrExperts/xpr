@@ -7,6 +7,20 @@
     xmlns:rico="rico">
     <!--xmlns="urn:isbn:1-931666-33-4"-->
     <control>
+        <maintenanceStatus/>
+        <publicationStatus/>
+        <localControl localType="detailLevel">
+            <term/>
+        </localControl>
+        <maintenanceHistory>
+            <maintenanceEvent>
+                <eventType/>
+                <eventDateTime standardDateTime=""/>
+                <agentType>human</agentType>
+                <agent/>
+                <eventDescription/>
+            </maintenanceEvent>
+        </maintenanceHistory>
         <sources>
             <source
                 xlink:href="">

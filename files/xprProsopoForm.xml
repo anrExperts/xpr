@@ -1277,21 +1277,68 @@
                     <xf:help>Ajouter une relation</xf:help>
                 </xf:trigger>
             </xf:group>
-            <xf:trigger>
-                <xf:label>Enregistrer</xf:label>
-                <xf:delete nodeset="instance('xprInventory')/*" ev:event="DOMActivate"/>
-                <xf:action ev:event="DOMActivate">
-                    <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
-                        <xf:send submission="submitNewEntity"/>
+            <span class="save">
+                <xf:select1 ref="instance('xprProsopo')/eac:control/eac:localControl/eac:term" appearance="full" incremental="true">
+                    <xf:label>
+                        <span>Statut</span>
+                    </xf:label>
+                    <xf:item>
+                        <xf:label>En cours</xf:label>
+                        <xf:value>in progress</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>À revoir</xf:label>
+                        <xf:value>to revise</xf:value>
+                    </xf:item>
+                    <xf:item>
+                        <xf:label>Terminée</xf:label>
+                        <xf:value>completed</xf:value>
+                    </xf:item>
+                </xf:select1>
+                <xf:dialog id="control">
+                    <xf:group ref="eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]">
+                        <xf:input ref="eac:eventDescription">
+                            <xf:label>Motif de la révision</xf:label>
+                        </xf:input>
+                    </xf:group>
+                    <xf:trigger>
+                        <xf:label>Annuler</xf:label>
+                        <xf:hide ev:event="DOMActivate" dialog="control"/>
+                    </xf:trigger>
+                    <xf:trigger>
+                        <xf:label>Enregistrer</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
+                                <xf:send submission="submitNewEntity"/>
+                            </xf:action>
+                            <xf:action while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
+                                <xf:send submission="submitNewSource"/>
+                            </xf:action>
+                            <xf:action ev:event="xforms-value-changed" ev:observer="participantRef" if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
+                                <xf:send submission="submitBio"/>
+                            </xf:action>
+                        </xf:action>
+                    </xf:trigger>
+                </xf:dialog>
+                <xf:trigger>
+                    <xf:label>Enregistrer</xf:label>
+                    <xf:delete nodeset="instance('xprInventory')/*" ev:event="DOMActivate"/>
+                    <xf:action if="/eac:eac-cpf/@xml:id" ev:event="DOMActivate">
+                        <xf:show dialog="control"/>
                     </xf:action>
-                    <xf:action while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
-                        <xf:send submission="submitNewSource"/>
+                    <xf:action if="not(/eac:eac-cpf/@xml:id)" ev:event="DOMActivate">
+                        <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
+                            <xf:send submission="submitNewEntity"/>
+                        </xf:action>
+                        <xf:action while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
+                            <xf:send submission="submitNewSource"/>
+                        </xf:action>
+                        <xf:action ev:event="xforms-value-changed" ev:observer="participantRef" if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
+                            <xf:send submission="submitBio"/>
+                        </xf:action>
                     </xf:action>
-                    <xf:action ev:event="xforms-value-changed" ev:observer="participantRef" if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
-                        <xf:send submission="submitBio"/>
-                    </xf:action>
-                </xf:action>
-            </xf:trigger>
+                </xf:trigger>
+            </span>
         </xf:case>
         <xf:case id="newEntitiesPanel">
             <xf:group ref="instance('xprEntities')">
