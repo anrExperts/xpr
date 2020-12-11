@@ -7,11 +7,13 @@
                         <xf:setvalue ref="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:entityType" value="'person'"/>
                         <xf:setvalue ref="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/@localType" value="'person'"/>
                 </xf:action>
+                <!--add maintenanceEvent for revision-->
+                <xf:insert if="/xpr:inventory/@xml:id" context="instance('xprInventory')" origin="instance('xprInventoryCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" nodeset="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" at="last()" position="after"/>
         </xf:action>
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
         <xf:bind id="participantRef" nodeset="instance('xprInventory')/eac:relations/eac:cpfRelation/@xlink:href" relevant="parent::eac:cpfRelation[not(@localType = 'new')]"/>
-        <!-- @rmq bind pour vérouiller la modification -->
+        <!-- @rmq bind pour verrouiller la modification -->
         <xf:bind nodeset="instance('xprInventory')//xpr:relation[not(@href = '')]//* | instance('xprInventory')//xpr:relation[not(@href = '')]//@*" readonly="true()"/>
         <xf:bind id="relationHrefOb" nodeset="instance('xprInventory')//xpr:relation/@href"/>
         <xf:bind id="relationMarriage" nodeset="instance('xprInventory')//xpr:relation/@href"/>
