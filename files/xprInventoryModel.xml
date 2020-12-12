@@ -8,7 +8,7 @@
                         <xf:setvalue ref="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/@localType" value="'person'"/>
                 </xf:action>
                 <!--add maintenanceEvent for revision-->
-                <xf:insert if="/xpr:inventory/@xml:id" context="instance('xprInventory')" origin="instance('xprInventoryCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" nodeset="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" at="last()" position="after"/>
+                <xf:insert if="/xpr:inventory/@xml:id" context="instance('xprInventory')" origin="instance('xprInventoryCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" nodeset="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" at="1" position="before"/>
         </xf:action>
         <!--Instance principale-->
         <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>

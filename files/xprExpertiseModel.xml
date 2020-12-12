@@ -10,7 +10,7 @@
         <!--à supprimer une fois toutes les expertises reprises (toutes devraient avoir un control)-->
         <xf:insert if="/xpr:expertise[not(xpr:control)]" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control" nodeset="xpr:meta" at="1" position="after"/>
         <!--add maintenanceEvent for revision-->
-        <xf:insert if="/xpr:expertise/@xml:id" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" nodeset="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" at="last()" position="after"/>
+        <xf:insert if="/xpr:expertise/@xml:id" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" nodeset="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent" at="1" position="before"/>
         <!-- delete xpr:appendices if all xpr:appendice are empty -->
         <xf:delete nodeset="instance('xprExpertise')/xpr:sourceDesc/xpr:physDesc/xpr:appendices[normalize-space(.)='' and xpr:appendice/xpr:type/@type[. = '']]"/>
         <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:parties/xpr:party/xpr:representative[normalize-space(.) = '']"/>
@@ -262,15 +262,15 @@
             <!--set value for maintenance event informations-->
             <xf:action if="/xpr:expertise/@xml:id">
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'revised'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'revision'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'revision'"/>
             </xf:action>
             <xf:action if="not(/xpr:expertise/@xml:id)">
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'new'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventType" value="'creation'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDescription" value="'Création de la fiche.'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'creation'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDescription" value="'Création de la fiche.'"/>
             </xf:action>
-            <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDateTime/@standardDateTime
-                            | instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]/xpr:eventDateTime"
+            <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime/@standardDateTime
+                            | instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime"
                          value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
