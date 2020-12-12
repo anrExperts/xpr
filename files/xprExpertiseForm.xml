@@ -1355,7 +1355,7 @@
             </xf:item>
         </xf:select1>
         <xf:dialog id="control">
-            <xf:group ref="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[last()]">
+            <xf:group ref="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]">
                 <xf:input ref="xpr:eventDescription">
                     <xf:label>Motif de la révision</xf:label>
                 </xf:input>

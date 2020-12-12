@@ -1296,7 +1296,7 @@
                     </xf:item>
                 </xf:select1>
                 <xf:dialog id="control">
-                    <xf:group ref="eac:control/eac:maintenanceHistory/eac:maintenanceEvent[last()]">
+                    <xf:group ref="eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]">
                         <xf:input ref="eac:eventDescription">
                             <xf:label>Motif de la révision</xf:label>
                         </xf:input>
