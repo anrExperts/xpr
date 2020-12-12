@@ -763,7 +763,7 @@ function putInventory($param, $referer) {
  : @param $param content
  : @
  :)
-declare
+(:declare
   %rest:path("xpr/relations/put")
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
@@ -782,8 +782,55 @@ function putRelation($param, $referer) {
       default return insert node $relation/xpr:source into $db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]
   else
     insert node $relation into $db//eac:eac-cpf[@xml:id = $expert]//eac:relations
-};
+};:)
 
+declare
+  %rest:path("xpr/relations/put")
+  %output:method("xml")
+  %rest:header-param("Referer", "{$referer}", "none")
+  %rest:PUT("{$param}")
+  %updating
+function putRelation($param, $referer) {
+  let $db := db:open("xpr")
+  let $expert := $param/inventory/sourceDesc/expert/@ref
+  let $expertName := $db//eac:eac-cpf[@xml:id = $expert]//eac:nameEntry[eac:authorizedForm]/eac:part
+  for $prosopography in $db//eac:eac-cpf[@xml:id = $expert]
+  return (
+    for $relation in $param//eac:relations/eac:cpfRelation
+      let $relationName := $db//eac:eac-cpf[@xml:id = $relation/@xlink:href]//eac:nameEntry[eac:authorizedForm]/eac:part
+      return
+      if ($prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole])
+      then
+        for $source in $prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]/xpr:source/@xlink:href
+        let $event :=
+            <maintenanceEvent>
+              <eventType>revision</eventType>
+              <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
+              <agentType>human</agentType>
+              <agent/>
+              <eventDescription>Documentation de la relation entre {$expertName} et {$relationName}</eventDescription>
+            </maintenanceEvent>
+        return (
+          switch ($source)
+          case $relation/xpr:source/@xlink:href return ()
+          default return insert node $relation/xpr:source into $prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole],
+          insert node $event before $prosopography/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]
+        )
+      else
+      let $event :=
+                  <maintenanceEvent>
+                    <eventType>revision</eventType>
+                    <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
+                    <agentType>human</agentType>
+                    <agent/>
+                    <eventDescription>Ajout d'une relation entre {fn:normalize-space($expertName)} et {fn:normalize-space($relationName)}</eventDescription>
+                  </maintenanceEvent>
+        return (
+            insert node $relation into $prosopography//eac:relations,
+            insert node $event before $prosopography/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]
+        )
+  )
+};
 
 (:~
  : This resource function lists all the sources
