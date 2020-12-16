@@ -59,7 +59,6 @@ declare function xpr.models.xpr:mime-type($name as xs:string) as xs:string {
  :)
 declare function wrapper($content as map(*), $outputParams as map(*)) as node()* {
   let $layout := file:base-dir() || "files/" || map:get($outputParams, 'layout')
-  let $mapping := map:get($content, 'mapping')
   let $wrap := fn:doc($layout)
   let $regex := '\{(.+?)\}'
   return
@@ -82,6 +81,7 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
  : @param $content the content params
  : @return the default models or its instance version
  : @bug not generic enough
+ : @todo add control on models and instances number
  :)
 declare function getModels($content as map(*)){
   let $instances := map:get($content, 'instance')
@@ -118,6 +118,7 @@ declare function getTriggers($content as map(*)){
  : @param $content the content params
  : @return the default forms or its instance version
  : @bug not generic enough
+ : @todo make loop if multiple forms
  :)
 declare function getForms($content as map(*)){
   let $instance := map:get($content, 'instance')
