@@ -115,6 +115,22 @@ function getExpertises() {
 
 (:~
  : This resource function lists all the expertises
+ : @return an ordered list of expertises in xml
+ : @todo check for multiple value for expert
+ :)
+declare
+  %rest:path("/xpr/expertises/experts")
+  %rest:produces('application/xml')
+  %output:method("xml")
+  %rest:query-param('ids', '{$ids}', 'xpr0228')
+function getExpertises($ids as xs:string) {
+  if($ids) then
+    <xml>{db:open('xpr')/xpr/expertises/expertise[descendant::experts/expert[@ref=$ids]]}</xml>
+  else db:open('xpr')/xpr/expertises
+};
+
+(:~
+ : This resource function lists all the expertises
  : @return an ordered list of expertises in html
  :)
 declare
@@ -522,7 +538,7 @@ declare
   %rest:path("/xpr/biographies/{$id}/saxon")
   %rest:produces('application/html')
   %output:method("html")
-function getBiographyXforms($id) {
+function getBiographySaxon($id) {
   let $content := map {
     'data' : db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id],
     'trigger' : '',
@@ -555,6 +571,32 @@ function getBiographyHtml($id) {
     'mapping' : xpr.mappings.html:eac2html(map:get($content, 'data'), map{})
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function modify an entity
+ : @return an xforms to modify an entity
+ : @todo everywhere replace instance/$path with a direct link to the resource (model.xpr.xqm => getModels)
+ :)
+declare
+  %rest:path("xpr/biographies/{$id}/xforms")
+  %output:method("xml")
+function getBiographyXforms($id) {
+  let $content := map {
+    'instance' : ($id, getExpertises($id)),
+    'path' : 'biographies',
+    'model' : 'xprProsopoViewModel.xml',
+    'trigger' : '',
+    'form' : 'xprProsopoViewForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
 };
 
 (:~

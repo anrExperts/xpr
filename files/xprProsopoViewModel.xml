@@ -1,0 +1,4 @@
+<xf:model id="prosopoView" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:instance id="xprProsopoView" src=""/>
+<!--    <xf:bind nodeset="eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part" relevant="eac:cpfDescription/@xml:id"/>-->
+</xf:model>
