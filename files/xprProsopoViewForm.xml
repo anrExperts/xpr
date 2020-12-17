@@ -1,8 +1,20 @@
 <article xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
-    <xf:group ref="instance('xprProsopoView')/eac:cpfDescription">
-        <h1>
-            <xf:output if="instance('xprProsopoView')/eac:cpfDescription[@xml:id]" ref="eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part"/>
-        </h1>
+        <xf:group ref="instance('xprProsopoView')/eac:cpfDescription">
+            <header>
+            <h1>
+                <xf:output ref="eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part"/>
+            </h1>
+        <div>
+            <xf:repeat nodeset="eac:identity/eac:nameEntry[eac:alternativeForm]">
+                <!-- @todo deals with other nameParts : common, formal, academic, religious, nobiliairy -->
+                <p><xf:output value="string-join(eac:part[normalize-space(.)!=''],
+                 ', ')"/></p>
+            </xf:repeat>
+            <p>
+                <xf:output value="if "></xf:output>
+            </p>
+        </div>
+        </header>
     </xf:group>
 
 </article>
