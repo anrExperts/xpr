@@ -11,7 +11,7 @@
                  ', ')"/></p>
             </xf:repeat>
             <p>
-                <xf:output value="if "></xf:output>
+                <xf:output value="month-from-date('1900-02-28')"></xf:output>
             </p>
         </div>
         </header>

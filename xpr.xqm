@@ -577,6 +577,7 @@ function getBiographyHtml($id) {
  : This resource function modify an entity
  : @return an xforms to modify an entity
  : @todo everywhere replace instance/$path with a direct link to the resource (model.xpr.xqm => getModels)
+ : @rmq abandonned because it was to complicated to treat the content with xforms
  :)
 declare
   %rest:path("xpr/biographies/{$id}/xforms")

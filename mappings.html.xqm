@@ -77,12 +77,36 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
   <article>
     <header>
       <h2>{serializeXpr($node//xpr:sourceDesc/xpr:idno[1], $options)}</h2>
+      <h2>(: cote dossier || ', ' nb sessions : dates extrêmes</h2>
+      <h3>{fn:string-join(getPlaces($node/xpr:description/xpr:places/xpr:place, $options), '; ')}</h3>
+      <p>(: lien vers les images, description annexes :)</p>
     </header>
     <div class="meta"></div>
     <div class="control"></div>
   </article>
 };
 
+declare function getPlaces($node as node()*, $options as map(*)) as item()* {
+  switch ($node/@type)
+  case 'paris' return 'Paris' || getAddress($node, $options)
+  case 'suburbs' return ''
+  case 'province' return ''
+  case 'office' return 'Bureau des experts'
+  case 'clerkOffice' return 'Bureau du greffié'
+  default return 'Indéterminé'
+};
+
+declare function getAddress($node as node()*, $options as map(*)) as item()* {
+  let $buildingNumber := $node/xpr:address/xpr:buildingNumber[fn:normalize-space(.)!='']
+  let $street := $node/xpr:address/xpr:street[fn:normalize-space(.)!='']
+  let $complement := $node/xpr:complement[fn:normalize-space(.)!='']
+  let $parish := $node/xpr:parish[fn:normalize-space(.)!='']
+  let $owner := $node/xpr:owner[fn:normalize-space(.)!='']
+  return fn:string-join(
+    ($buildingNumber, $street, $complement),
+    ', '
+  )
+};
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
   typeswitch($node)
