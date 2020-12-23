@@ -42,6 +42,7 @@
     <xf:bind nodeset="instance('xprProsopo')//eac:biogHist//eac:entityType" required="true()"/>
     <xf:bind nodeset="instance('xprProsopo')//eac:biogHist//eac:identity/@localType" required="true()"/>
     <xf:bind nodeset="instance('xprProsopo')//eac:biogHist//eac:identity/eac:nameEntry[./eac:authorizedForm]/eac:part" required="true()"/>
+    <xf:bind nodeset="instance('xprProsopo')//eac:biogHist//eac:identity[eac:identityType='corporateBody' or eac:identityType='family']/eac:nameEntry[./eac:alternativeForm]/eac:part/@localType" readonly="true()"/>
     <!--<xf:bind nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[./eac:authorizedForm]/eac:part" required="true()"/>-->
     <xf:bind id="nameEntry" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[./eac:alternativeForm]"/>
     <xf:bind id="chronItem" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem"/>

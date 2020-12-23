@@ -42,23 +42,7 @@
             </nameEntry>
             <nameEntry>
                 <part
-                    localType="surname"/>
-                <part
-                    localType="forename"/>
-                <part
-                    localType="particle"/>
-                <part
-                    localType="common"/>
-                <part
-                    localType="formal"/>
-                <part
-                    localType="academic"/>
-                <part
-                    localType="religious"/>
-                <part
-                    localType="nobiliary"/>
-                <part
-                    localType="officeName"/>
+                    localType=""/>
                 <alternativeForm/>
                 <xpr:source
                     xmlns:xpr="xpr"

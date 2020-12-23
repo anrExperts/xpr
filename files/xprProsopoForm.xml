@@ -13,7 +13,7 @@
                             <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value=""/>
                             <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert context="instance('xprProsopo')/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
-                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>
+<!--                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>-->
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -23,7 +23,7 @@
                             <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value=""/>
                             <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert context="instance('xprProsopo')/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
-                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
+<!--                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>-->
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -33,7 +33,7 @@
                             <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value="'family'"/>
                             <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert context="instance('xprProsopo')/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" at="last()" position="after"/>
-                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='surname')]"/>
+<!--                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='surname')]"/>-->
                         </xf:action>
                     </xf:item>
                 </xf:select1>
@@ -82,33 +82,54 @@
                     </xf:select1>
                     <xf:repeat id="repeatName" nodeset="eac:nameEntry[child::eac:alternativeForm]" appearance="full">
                         <xf:label>Forme attestée</xf:label>
-                        <xf:input ref="eac:part[@localType='surname']">
-                            <xf:label>Nom</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='forename']">
-                            <xf:label>Prénom</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='particle']">
-                            <xf:label>Particule</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='common']">
-                            <xf:label>Titre d'appel</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='formal']">
-                            <xf:label>Titre institutionnel</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='academic']">
-                            <xf:label>Titre académique</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='religious']">
-                            <xf:label>Titre religieux</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='nobiliary']">
-                            <xf:label>Titre de noblesse</xf:label>
-                        </xf:input>
-                        <xf:input ref="eac:part[@localType='officeName']">
-                            <xf:label>Dénomination</xf:label>
-                        </xf:input>
+                        <xf:repeat id="namePart" nodeset="eac:part" appearance="full">
+                            <xf:input ref=".">
+                                <xf:label>Composante du nom</xf:label>
+                            </xf:input>
+                            <xf:select1 ref="@localType">
+                                <xf:label>Type de composante</xf:label>
+                                <xf:item>
+                                    <xf:label>Nom</xf:label>
+                                    <xf:value>surname</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Prénom</xf:label>
+                                    <xf:value>forename</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Particule</xf:label>
+                                    <xf:value>particle</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Titre d’appel</xf:label>
+                                    <xf:value>common</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Titre académique</xf:label>
+                                    <xf:value>academic</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Titre religieux</xf:label>
+                                    <xf:value>religious</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Titre de noblesse</xf:label>
+                                    <xf:value>nobiliary</xf:value>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Dénomination</xf:label>
+                                    <xf:value>officeName</xf:value>
+                                </xf:item>
+                            </xf:select1>
+                            <xf:trigger class="delete">
+                                <xf:label>Supprimer une composante du nom</xf:label>
+                                <xf:delete ev:event="DOMActivate" nodeset="." if="count(parent::eac:nameEntry/eac:part) > 1"/>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <xf:trigger class="insert">
+                            <xf:label>Insérer une nouvelle composante du nom</xf:label>
+                            <xf:insert ev:event="DOMActivate" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]/eac:part" context="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm][index('repeatName')]/" nodeset="eac:part" at="index('namePart')" position="after"/>
+                        </xf:trigger>
                         <xf:group>
                             <xf:label>Sources</xf:label>
                             <xf:repeat id="repeatNameSource" nodeset="xpr:source">
