@@ -76,36 +76,90 @@ declare
 function xpr2html($node as node()*, $options as map(*)) as item()* {
   <article>
     <header>
-      <h2>{serializeXpr($node//xpr:sourceDesc/xpr:idno[1], $options)}</h2>
-      <h2>(: cote dossier || ', ' nb sessions : dates extrêmes</h2>
-      <h3>{fn:string-join(getPlaces($node/xpr:description/xpr:places/xpr:place, $options), '; ')}</h3>
+      <h2>{ getReference($node, $options) }</h2>
+      <h3>{ fn:string-join(
+      for $place in $node/xpr:description/xpr:places/xpr:place return getPlace($place, $options),
+      ' | ') }</h3>
       <p>(: lien vers les images, description annexes :)</p>
+      <ul>{
+        <lh>Vacations</lh>,
+        getSessions($node/xpr:description/xpr:sessions, $options) ! <li>{.}</li>
+      }</ul>
     </header>
     <div class="meta"></div>
     <div class="control"></div>
   </article>
 };
 
-declare function getPlaces($node as node()*, $options as map(*)) as item()* {
-  switch ($node/@type)
-  case 'paris' return 'Paris' || getAddress($node, $options)
-  case 'suburbs' return ''
-  case 'province' return ''
-  case 'office' return 'Bureau des experts'
-  case 'clerkOffice' return 'Bureau du greffié'
-  default return 'Indéterminé'
+declare function getReference($node as node()*, $options as map(*)) as xs:string {
+let $supplement := $node/xpr:sourceDesc/xpr:idno[@type='supplement'][fn:normalize-space(.) != '']
+return fn:string-join(
+    (
+        fn:concat($node/xpr:sourceDesc/xpr:idno[@type='unitid'], ' dossier n° ', $node/xpr:sourceDesc/xpr:idno[@type='item']),
+        if ($supplement) then ' ' || $supplement,
+        ' (' || getInterval($node/xpr:description/xpr:sessions, $options) || ')'
+     )
+   )
 };
 
-declare function getAddress($node as node()*, $options as map(*)) as item()* {
+(:~
+ : @todo translate dates in french (basex bug)
+ :)
+declare function getInterval($node as node()*, $options as map(*)) as xs:string {
+let $interval := (
+    for $date in $node/xpr:date/@when
+    order by $date
+    return xs:date($date)
+    )[fn:position() = 1 or fn:position() = fn:last()]
+return fn:string-join(
+    $interval ! fn:format-date(., '[D01] [Mn] [Y0001]', 'en', (), ())
+    , ' au ')
+};
+
+declare function getPlace($node as node()*, $options as map(*)) as xs:string {
+  switch ($node/@type)
+  case 'paris' return fn:string-join(getAddress($node, $options))
+  case 'suburbs' return 'Banlieue : ' || fn:string-join(getAddress($node, $options))
+  case 'province' return 'Province : ' || fn:string-join(getAddress($node, $options))
+  case 'office' return 'Bureau des experts'
+  case 'clerkOffice' return 'Bureau du greffié'
+  default return 'Indéterminé : ' || fn:string-join(getAddress($node, $options))
+};
+
+declare function getAddress($node as node()*, $options as map(*)) as xs:string {
   let $buildingNumber := $node/xpr:address/xpr:buildingNumber[fn:normalize-space(.)!='']
   let $street := $node/xpr:address/xpr:street[fn:normalize-space(.)!='']
   let $complement := $node/xpr:complement[fn:normalize-space(.)!='']
   let $parish := $node/xpr:parish[fn:normalize-space(.)!='']
+  let $city := $node/xpr:city[fn:normalize-space(.)!='']
+  let $district := $node/xpr:district[fn:normalize-space(.)!='']
   let $owner := $node/xpr:owner[fn:normalize-space(.)!='']
-  return fn:string-join(
-    ($buildingNumber, $street, $complement),
-    ', '
+  return (
+    if ($buildingNumber, $street, $complement) then fn:string-join(
+      ($buildingNumber, $street, $complement),
+      ', '
+    ) || '. ',
+    if ($parish, $city, $district) then fn:string-join(
+      ($parish, $city, $district),
+      ', '
+    ) || '. ' else(),
+    if ($owner) then '[' || fn:string-join(
+      $owner,
+      ', '
+    ) || ']. '
   )
+};
+(:
+ : @bug with array
+ :)
+declare function getSessions($node as node()*, $options as map(*)) as item()* {
+    let $pairs := array{ $node/xpr:date ! (./@type , ./@when)}
+    return $pairs ! (
+        if (.[1] = 'paris') then 'Paris'
+        else if (.[1] = 'suburbs') then 'Banlieue'
+        else 'Province',
+        fn:format-date(xs:date(.[2]), '[D01] [Mn] [Y0001]', 'en', (), ())
+        )
 };
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
