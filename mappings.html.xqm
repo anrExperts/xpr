@@ -94,7 +94,20 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
           ' : ')}</li>
       }</ul>
     </header>
-    <div class="meta"></div>
+    <div class="meta">
+      <div class="procedure">
+        <h3>Procédure</h3>
+      </div>
+      <div class="participants">
+        <h3>Participants</h3>
+      </div>
+      <div class="conclusions">
+        <h3>Conclusions</h3>
+      </div>
+    </div>
+    <div class="meta">
+      <h3></h3>
+    </div>
     <div class="control"></div>
   </article>
 };
