@@ -83,7 +83,14 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
       <p>(: lien vers les images, description annexes :)</p>
       <ul>{
         <lh>Vacations</lh>,
-        getSessions($node/xpr:description/xpr:sessions, $options) ! <li>{.}</li>
+        let $pairs := $node/xpr:date ! array{./@type , ./@when}
+        for $pairs ! (
+          <li>{if (array:head(.) = 'paris') then 'Paris'
+          else if (array:head(.) = 'suburbs') then 'Banlieue'
+          else 'Province',
+          fn:format-date(xs:date(array:tail(.)), '[D01] [Mn] [Y0001]', 'en', (), ())
+          }</li>
+          )
       }</ul>
     </header>
     <div class="meta"></div>
@@ -148,18 +155,6 @@ declare function getAddress($node as node()*, $options as map(*)) as xs:string {
       ', '
     ) || ']. '
   )
-};
-(:
- : @bug with array
- :)
-declare function getSessions($node as node()*, $options as map(*)) as item()* {
-    let $pairs := array{ $node/xpr:date ! (./@type , ./@when)}
-    return $pairs ! (
-        if (.[1] = 'paris') then 'Paris'
-        else if (.[1] = 'suburbs') then 'Banlieue'
-        else 'Province',
-        fn:format-date(xs:date(.[2]), '[D01] [Mn] [Y0001]', 'en', (), ())
-        )
 };
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
