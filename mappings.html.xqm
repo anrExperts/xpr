@@ -82,15 +82,16 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
       ' | ') }</h3>
       <p>(: lien vers les images, description annexes :)</p>
       <ul>{
-        <lh>Vacations</lh>,
-        let $pairs := $node/xpr:date ! array{./@type , ./@when}
-        for $pairs ! (
-          <li>{if (array:head(.) = 'paris') then 'Paris'
-          else if (array:head(.) = 'suburbs') then 'Banlieue'
-          else 'Province',
-          fn:format-date(xs:date(array:tail(.)), '[D01] [Mn] [Y0001]', 'en', (), ())
-          }</li>
-          )
+        <lh>Liste des vacations</lh>,
+        for $pair in $node/xpr:description/xpr:sessions/xpr:date ! array{./@type , ./@when}
+        return <li>{fn:string-join(
+            (
+              if (array:head($pair) = 'paris') then 'Paris'
+              else if (array:head($pair) = 'suburbs') then 'Banlieue'
+              else 'Province',
+              fn:format-date(xs:date(array:tail($pair)), '[D01] [Mn] [Y0001]', 'en', (), ())
+            ),
+          ' : ')}</li>
       }</ul>
     </header>
     <div class="meta"></div>
@@ -133,7 +134,7 @@ declare function getPlace($node as node()*, $options as map(*)) as xs:string {
   default return 'Indéterminé : ' || fn:string-join(getAddress($node, $options))
 };
 
-declare function getAddress($node as node()*, $options as map(*)) as xs:string {
+declare function getAddress($node as node()*, $options as map(*)) as xs:string* {
   let $buildingNumber := $node/xpr:address/xpr:buildingNumber[fn:normalize-space(.)!='']
   let $street := $node/xpr:address/xpr:street[fn:normalize-space(.)!='']
   let $complement := $node/xpr:complement[fn:normalize-space(.)!='']
