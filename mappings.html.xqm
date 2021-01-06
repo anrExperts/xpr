@@ -16,6 +16,7 @@ module namespace xpr.mappings.html = "xpr.mappings.html";
  :)
 
 import module namespace G = 'xpr.globals' at './globals.xqm' ;
+import module namespace functx = "http://www.functx.com";
 
 declare namespace db = "http://basex.org/modules/db" ;
 declare namespace file = "http://expath.org/ns/file" ;
@@ -85,21 +86,56 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
         <lh>Liste des vacations</lh>,
         for $pair in $node/xpr:description/xpr:sessions/xpr:date ! array{./@type , ./@when}
         return <li>{fn:string-join(
-            (
-              if (array:head($pair) = 'paris') then 'Paris'
-              else if (array:head($pair) = 'suburbs') then 'Banlieue'
-              else 'Province',
-              fn:format-date(xs:date(array:tail($pair)), '[D01] [Mn] [Y0001]', 'en', (), ())
-            ),
+          (
+            if (array:head($pair) = 'paris') then 'Paris'
+            else if (array:head($pair) = 'suburbs') then 'Banlieue'
+            else 'Province',
+            fn:format-date(xs:date(array:tail($pair)), '[D01] [Mn] [Y0001]', 'en', (), ())
+          ),
           ' : ')}</li>
       }</ul>
     </header>
     <div class="meta">
       <div class="procedure">
         <h3>Procédure</h3>
+        {if (fn:normalize-space($node/xpr:description/xpr:categories/xpr:designation) != '') then
+        <p>{fn:normalize-space($node/xpr:description/xpr:categories/xpr:designation), if($node/xpr:description/xpr:categories/xpr:designation[@rubric='true']) then ' (en rubric)'}</p>}
+        <p>{if (fn:count($node/xpr:description/xpr:categories/xpr:category) > 1) then
+          'Catégories d’expertise : '
+          else 'Catégorie d’expertise : ',
+          fn:string-join($node/xpr:description/xpr:categories/xpr:category, ' ; ') => fn:concat( '.')}
+        </p>
+        <p>Procédure : {fn:concat($node/xpr:description/xpr:procedure/xpr:framework/@type, ' - ', fn:normalize-space($node/xpr:description/xpr:procedure/xpr:framework))}</p>
+        <p>Origine de l’expertise : {$node/xpr:description/xpr:procedure/xpr:origination}</p>
+        {if (fn:normalize-space($node/xpr:description/xpr:procedure/xpr:sentences) != '') then
+        <p>Intervention d’une institution  : {
+          (for $sentence in $node/xpr:description/xpr:procedure/xpr:sentences/xpr:sentence
+          return fn:concat(
+            functx:capitalize-first($sentence/xpr:orgName),
+            ' : ',
+            (for $date in $sentence/xpr:date/@when return getFormatedDate($date, $options)) => fn:string-join(', ')))
+          => fn:string-join(' | ')
+        }</p>}
+        <p>Cause de l’expertise : {fn:normalize-space($node/xpr:description/xpr:procedure/xpr:case)}</p>
+        <p>{
+          if(fn:count($node/xpr:description/xpr:procedure/xpr:objects/xpr:object) > 1) then 'Objets de l’expertise : '
+          else 'Objet de l’expertise : ',
+          fn:string-join($node/xpr:description/xpr:procedure/xpr:objects/xpr:object, ' ; ') => fn:concat('.')
+        }</p>
       </div>
       <div class="participants">
         <h3>Participants</h3>
+        <ul>{
+          <lh>{if(fn:count($node/xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1) then 'Experts' else 'Expert'}</lh>,
+          for $expert in $node/xpr:description/xpr:participants/xpr:experts/xpr:expert
+          return <li>{ getExpert($expert, $options) }</li>
+        }</ul>
+        <ul>{
+          <lh>{if(fn:count($node/xpr:description/xpr:participants/xpr:clerks/xpr:clerk) > 1) then 'Greffiers' else 'Greffier'}</lh>,
+          for $clerk in $node/xpr:description/xpr:participants/xpr:clerks/xpr:clerk
+          return <li>{ getPersName($clerk/xpr:persName, $options) }</li>
+        }</ul>
+        {for $party in $node/xpr:description/xpr:participants/xpr:parties/xpr:party[fn:normalize-space(.)!=''] return getParty($party, $options)}
       </div>
       <div class="conclusions">
         <h3>Conclusions</h3>
@@ -110,6 +146,77 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
     </div>
     <div class="control"></div>
   </article>
+};
+
+declare function getParty($node as node()*, $options as map(*)) as element() {
+  let $role := switch ($node/@role)
+    case 'petitioner' return 'Partie requérante'
+    case 'opponent' return 'Partie opposante'
+    default return 'Partie'
+  let $status := switch ($node/xpr:status)
+    case 'builder' return 'entrepreneur'
+    case 'owner' return 'propriétaire'
+    case 'joint-owner' return 'copropriétaire'
+    case 'limited-partner' return 'commanditaire'
+    case 'heir' return 'héritier'
+    case 'neighbour' return 'voisin'
+    case 'tenant' return 'locataire'
+    case 'main-tenant' return 'principal locataire'
+    case 'creditor' return 'créancier'
+    case 'mortgagor' return 'débiteur'
+    case 'contractor' return 'fermier judiciaire'
+    default return 'qualification indéterminée'
+  let $presence := switch ($node/@presence)
+    case 'true' return 'présente'
+    case 'false' return 'non présente'
+    default return ''
+  let $intervention := switch ($node/@intervention)
+    case 'true' return 'intervenante'
+    case 'false' return 'non intervenante'
+    default return ''
+  let $expertName := fn:normalize-space(db:open('xpr')/xpr:xpr/xpr:bio/eac:eac-cpf[@xml:id=$node/xpr:expert/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/xpr:expert/@ref)}/view">{ $expertName }</a>
+  return
+    <div class="party">{
+      <h4>{ $role || ' (' || $status || ')' }</h4>,
+      if(fn:normalize-space(fn:concat($presence, $intervention))!='') then
+      <p>{
+        'Partie ',
+        ($presence, $intervention) => fn:string-join(', ')
+      }</p>,
+      <ul>{
+        for $person in $node/xpr:person[fn:normalize-space(.)!='']
+        return <li>{ getPersName($person/xpr:persName, $options) }</li>
+      }</ul>,
+      if(fn:normalize-space($node/xpr:expert/@ref)!='') then
+      <p>{ 'Expert : ', $expert }</p>,
+      if(fn:normalize-space($node/xpr:representative)!='') then
+      <ul>{
+        <lh>{ if(fn:count($node/xpr:representative[fn:normalize-space(.)!='']) > 1) then 'Représentants' else 'Représentant' }</lh>,
+        for $representative in $node/xpr:representative
+        return <li>{(
+          getPersName($representative/xpr:persName, $options),
+          if(fn:normalize-space($representative/xpr:occupation)!='') then fn:normalize-space($representative/xpr:occupation)
+          ) => fn:string-join(', ')}</li>
+      }</ul>,
+      if(fn:normalize-space($node/xpr:prosecutor)!='') then
+      <ul>{
+        <lh>{ if(fn:count($node/xpr:prosecutor[fn:normalize-space(.)!='']) > 1) then 'Procureurs' else 'Procureur' }</lh>,
+        for $prosecutor in $node/xpr:prosecutor
+        return <li>{ getPersName($prosecutor/xpr:persName, $options) }</li>
+      }</ul>
+    }</div>
+};
+
+declare function getFormatedDate($node as node()*, $options as map(*)) as xs:string {
+  fn:format-date(xs:date($node), '[D01] [Mn] [Y0001]', 'en', (), ())
+};
+
+declare function getPersName($node as node()*, $options as map(*)) as xs:string {
+  if(fn:normalize-space($node/xpr:surname)!='' and fn:normalize-space($node/xpr:forename)!='') then
+    functx:capitalize-first(fn:normalize-space($node/xpr:surname)) || ', ' || functx:capitalize-first(fn:normalize-space($node/xpr:forename))
+  else
+    functx:capitalize-first(fn:normalize-space($node))
 };
 
 declare function getReference($node as node()*, $options as map(*)) as xs:string {
@@ -169,6 +276,28 @@ declare function getAddress($node as node()*, $options as map(*)) as xs:string* 
       ', '
     ) || ']. '
   )
+};
+
+declare function getExpert($node as node()*, $options as map(*)) as node()* {
+  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/@ref)}/view">{ $expertName }</a>
+  let $context :=
+    switch ($node/@context[fn:normalize-space(.)!=''])
+    case 'primary' return 'nommé en premier lieu'
+    case 'third-party' return 'tiers expert'
+    case 'unknown' return 'nomination indéterminée'
+    default return ()
+  let $appointment :=
+    (if(fn:not($node/@context='primary') and fn:not($node/@appointment = 'unknown')) then 'nommé ',
+    switch ($node/@appointment[fn:normalize-space(.)!=''])
+    case 'court-appointed' return 'd’office (par le lieutenant civil)'
+    case 'appointed' return 'par les parties'
+    case 'experts' return 'par les experts'
+    case 'unkwnown' return 'origine de la nomination indéterminée'
+    default return ())
+
+  return ($expert, text{' ' || ($node/xpr:title[fn:normalize-space(.)!=''], $context, $appointment) => fn:string-join(', ') || '.'})
 };
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
