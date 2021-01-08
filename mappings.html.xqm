@@ -125,27 +125,181 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
       </div>
       <div class="participants">
         <h3>Participants</h3>
-        <ul>{
-          <lh>{if(fn:count($node/xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1) then 'Experts' else 'Expert'}</lh>,
-          for $expert in $node/xpr:description/xpr:participants/xpr:experts/xpr:expert
-          return <li>{ getExpert($expert, $options) }</li>
-        }</ul>
-        <ul>{
-          <lh>{if(fn:count($node/xpr:description/xpr:participants/xpr:clerks/xpr:clerk) > 1) then 'Greffiers' else 'Greffier'}</lh>,
-          for $clerk in $node/xpr:description/xpr:participants/xpr:clerks/xpr:clerk
-          return <li>{ getPersName($clerk/xpr:persName, $options) }</li>
-        }</ul>
+        <div>{
+          <h4>{ if(fn:count($node/xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1) then 'Experts' else 'Expert' }</h4>,
+          <ul>{
+            for $expert in $node/xpr:description/xpr:participants/xpr:experts/xpr:expert
+            return <li>{ getExpert($expert, $options) }</li>
+          }</ul>
+        }</div>
+        <div>{
+          <h4>{ if(fn:count($node/xpr:description/xpr:participants/xpr:clerks/xpr:clerk) > 1) then 'Greffiers' else 'Greffier' }</h4>,
+          <ul>{
+            for $clerk in $node/xpr:description/xpr:participants/xpr:clerks/xpr:clerk
+            return <li>{ getPersName($clerk/xpr:persName, $options) }</li>
+          }</ul>
+        }</div>
         {for $party in $node/xpr:description/xpr:participants/xpr:parties/xpr:party[fn:normalize-space(.)!=''] return getParty($party, $options)}
+        {if(fn:normalize-space($node/xpr:description/xpr:participants/xpr:craftmen)!='') then
+        <div>{
+          <h4>Entrepreneurs, architectes ou maîtres d’œuvre</h4>,
+          <ul>{
+            for $craftman in $node/xpr:description/xpr:participants/xpr:craftmen/xpr:craftman
+            return <li>{(
+              getPersName($craftman/xpr:persName, $options),
+              if(fn:normalize-space($craftman/xpr:occupation)!='') then fn:normalize-space($craftman/xpr:occupation)
+              ) => fn:string-join(', ') }</li>
+          }</ul>
+        }</div>
+        }
       </div>
       <div class="conclusions">
         <h3>Conclusions</h3>
+        <p>{
+          fn:concat(
+            'Dispositif de l’expertise : ',
+            fn:lower-case(fn:normalize-space($node/xpr:description/xpr:conclusions/xpr:agreement)))
+        }</p>
+        {for $opinion in $node/xpr:description/xpr:conclusions/xpr:opinion
+        return <p>{ getOpinion($opinion, $options) }</p>}
+        {if(fn:normalize-space($node/xpr:description/xpr:conclusions/xpr:arrangement)!='') then
+          <p>{ 'Accomodement : ' || fn:lower-case(fn:normalize-space($node/xpr:description/xpr:conclusions/xpr:arrangement)) || '.' }</p>}
+        {if(fn:normalize-space(fn:string-join($node/xpr:description/xpr:conclusions/xpr:estimate/@*))!='') then
+          <p>{'Montant global (pour les estimations) : ' || getValue($node/xpr:description/xpr:conclusions/xpr:estimate, $options)}</p>}
+        {if(fn:normalize-space($node/xpr:description/xpr:conclusions/xpr:estimates)!='') then
+          <ul>{
+            for $place in $node/xpr:description/xpr:conclusions/xpr:estimates/xpr:place
+            let $ref := fn:substring-after($place/@ref, '#')
+            let $placeName := getAddress($node/xpr:description/xpr:places/xpr:place[@xml:id=$ref], $options)
+            return (
+              <lh>{ 'Estimation pour', $placeName }</lh>,
+              for $appraisal in $place/xpr:appraisal
+              return <li>{ fn:normalize-space($appraisal/xpr:desc) || ' : ' || getValue($appraisal, $options) }</li>)
+          }</ul>}
+        {if(
+          fn:normalize-space(
+            fn:string-join($node/xpr:description/xpr:conclusions/xpr:fees/(descendant::*/@l, descendant::*/@s, descendant::*/@d)))!='')
+        then
+          for $fee in $node/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[fn:string-join((@l, @s, @d))!='']
+          return <p>{ getFee($fee, $options) }</p>}
+        {if(
+          fn:normalize-space(
+            fn:string-join($node/xpr:description/xpr:conclusions/xpr:fees/xpr:total/(@l, @s, @d)))!='')
+        then <p>{ 'Coût total de l’expertise :', getValue($node/xpr:description/xpr:conclusions/xpr:fees/xpr:total, $options) }</p>}
+        {if(
+          fn:normalize-space(
+            fn:string-join($node/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/(@l, @s, @d)))!='')
+        then <p>{ 'Bourse commune des experts :', getValue($node/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert'], $options) }</p>}
+        {if(
+          fn:normalize-space(
+            fn:string-join($node/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/(@l, @s, @d)))!='')
+        then <p>{ 'Bourse commune des greffiers :', getValue($node/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk'], $options) }</p>}
       </div>
+      {if(fn:normalize-space(fn:string-join($node/xpr:description/xpr:keywords[@group]))!='')
+      then
+        <div class="indexation">{
+          <h3>Indexation</h3>,
+          for $keywordsGroup in $node/xpr:description/xpr:keywords[@group][fn:normalize-space(.)!='']
+          return getKeywords($keywordsGroup, $options)
+        }</div>}
+      {if(fn:normalize-space($node/xpr:description/xpr:analysis)!='')
+      then
+        <div class="analysis">{
+          <h3>Commentaires et première analyse</h3>,
+          fn:normalize-space($node/xpr:description/xpr:analysis)
+        }</div>}
+      {if(fn:normalize-space($node/xpr:description/xpr:noteworthy)!='')
+      then
+        <div class="indexation">{
+          <h3>Éléments remarquables</h3>,
+          fn:normalize-space($node/xpr:description/xpr:noteworthy)
+        }</div>}
     </div>
-    <div class="meta">
-      <h3></h3>
-    </div>
-    <div class="control"></div>
+    <div class="control">{
+      <h3>Historique des modifications</h3>,
+      <ul>{
+        for $maintenanceEvent in $node/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent
+        return <li>{ getMaintenanceEvent($maintenanceEvent, $options) }</li>
+      }</ul>
+    }</div>
   </article>
+};
+
+declare function getMaintenanceEvent($node as node()*, $options as map(*)) as xs:string {
+  let $dateTime := $node/xpr:eventDateTime/@standardDateTime
+  return (
+    $dateTime, fn:normalize-space($node/xpr:eventDescription), 'par', fn:normalize-space($node/xpr:agent)
+    ) => fn:string-join(' ')
+};
+
+declare function getKeywords($node as node()*, $options as map(*)) as element() {
+  let $label :=
+  switch ($node/@group)
+    case 'estates' return 'Biens expertisés (nature juridique et caractères)'
+    case 'procedure' return 'Procédure (questions de)'
+    case 'contract' return 'Contrat (type de, concernant le bien expertisé)'
+    case 'encumbrance' return 'Servitudes'
+    case 'law' return 'Droit (nature et source du)'
+    case 'measurement' return 'Mesure'
+    case 'repairs' return 'Réparations (hors cas d’expertises portant sur des réparations)'
+    case 'guarantees' return 'Sûreté/Garanties'
+    case 'responsability' return 'Responsabilité'
+    case 'ownership' return 'Propriété (transmission de)'
+    case 'value' return 'Valeur'
+    case 'neighbourhood' return 'Voisinage'
+    case 'disorder' return 'Désordres'
+    case 'transformation' return 'Transformation du bâti/Travaux (type de)'
+    default return ()
+  return
+    <p>{$label || ' : ',
+      for $term in $node/xpr:term
+      return <a href="/xpr/index/{$term/@value}">{ fn:normalize-space($term) }</a>}</p>
+};
+
+declare function getFee($node as node()*, $options as map(*)) as xs:string {
+  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $type :=
+  switch ($node/@type)
+    case 'expert'
+    return (
+      ('Expert',
+      if(fn:normalize-space($node/@ref)!='') then
+        let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+        let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+        return '(' || $expertName || ')')) => fn:string-join(' ')
+    case 'clerk' return 'Greffier'
+    case 'rolls' return 'Rôles'
+    case 'papers' return 'Papier et contrôle'
+    case 'plans' return 'Plans'
+    case 'prosecutors' return 'Procureur(s)'
+    case 'help' return 'Aides'
+    case 'other' return fn:normalize-space($node/text())
+    default return ()
+  return text{$type || ' : ' || getValue($node, $options)}
+};
+
+declare function getValue($node as node()*, $options as map(*)) as xs:string {
+  (for $value in $node/@*[fn:local-name() = 'l' or fn:local-name() = 's' or fn:local-name() = 'd'][fn:normalize-space(.)!='']
+  let $money :=
+  switch($value/fn:local-name())
+    case 'l' return 'livres'
+    case 's' return 'sols'
+    case 'd' return 'deniers'
+    default return ()
+  return (fn:normalize-space($value) || ' ' || $money)) => fn:string-join(', ')
+};
+
+declare function getOpinion($node as node()*, $options as map(*)) as node()* {
+  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/@ref)}/view">{ $expertName }</a>
+  let $opinion := $node/text()
+  return (
+    text{'Conclusion'},
+    if(fn:normalize-space($node/@ref)!='') then (text{' de '}, $expert),
+    text{' : ' || $opinion})
+
 };
 
 declare function getParty($node as node()*, $options as map(*)) as element() {
@@ -297,7 +451,7 @@ declare function getExpert($node as node()*, $options as map(*)) as node()* {
     case 'unkwnown' return 'origine de la nomination indéterminée'
     default return ())
 
-  return ($expert, text{' ' || ($node/xpr:title[fn:normalize-space(.)!=''], $context, $appointment) => fn:string-join(', ') || '.'})
+  return ($expert, text{', ' || ($node/xpr:title[fn:normalize-space(.)!=''], $context, $appointment) => fn:string-join(', ') || '.'})
 };
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
