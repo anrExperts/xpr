@@ -110,7 +110,7 @@
     </xf:instance>
     
     <xf:instance id="xprEntitiesTypes">
-        <EntitiesSubTypes xmlns="">
+        <entitiesSubTypes xmlns="xpr">
             <identity type="person">
                 <label>Expert (tableau)</label>
                 <value>expert</value>
@@ -139,7 +139,7 @@
                 <label>famille</label>
                 <value>family</value>
             </identity>
-        </EntitiesSubTypes>
+        </entitiesSubTypes>
     </xf:instance>
     
     <xf:instance id="xprPlaceTypes">
