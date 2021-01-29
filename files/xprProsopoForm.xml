@@ -10,7 +10,7 @@
                         <xf:label>personne</xf:label>
                         <xf:value>person</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value=""/>
+                            <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value="''"/>
                             <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert context="instance('xprProsopo')/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
 <!--                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[@localType='officeName']"/>-->
@@ -20,7 +20,7 @@
                         <xf:label>office</xf:label>
                         <xf:value>corporateBody</xf:value>
                         <xf:action ev:event="xforms-select">
-                            <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value=""/>
+                            <xf:setvalue ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/@localType" value="''"/>
                             <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]"/>
                             <xf:insert context="instance('xprProsopo')/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
 <!--                            <xf:delete ref="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>-->
@@ -128,7 +128,7 @@
                         </xf:repeat>
                         <xf:trigger class="insert">
                             <xf:label>Insérer une nouvelle composante du nom</xf:label>
-                            <xf:insert ev:event="DOMActivate" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]/eac:part" context="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm][index('repeatName')]/" nodeset="eac:part" at="index('namePart')" position="after"/>
+                            <xf:insert ev:event="DOMActivate" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]/eac:part" context="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm][index('repeatName')]" nodeset="eac:part" at="index('namePart')" position="after"/>
                         </xf:trigger>
                         <xf:group>
                             <xf:label>Sources</xf:label>
@@ -659,7 +659,7 @@
                     <xf:label>Ajouter une occupation</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert nodeset="eac:occupation" at="last()" position="after" ev:event="DOMActivate"/>
-                        <xf:setvalue ref="eac:occupation[last()]//* | eac:occupation[last()]//@*" value=""/>
+                        <xf:setvalue ref="eac:occupation[last()]//* | eac:occupation[last()]//@*" value="''"/>
                     </xf:action>
                     <xf:help>Ajouter une occupation</xf:help>
                 </xf:trigger>
@@ -749,22 +749,23 @@
                         <xf:label>Coût</xf:label>
                     </xf:input>
                     <xf:repeat id="repeatParticipant" nodeset="rico:participant">
+                        <xf:var name="participant" value="."/>
                         <xf:label>Participant</xf:label>
-                        <xf:trigger ref="@localType">
+                        <xf:trigger ref=".[@localType]">
                             <xf:label>Personne dans la base</xf:label>
                             <!--<xf:delete
                                 ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/ancestor::rico:participant/@xlink:href]"
                                 ev:event="DOMActivate"/>-->
-                            <xf:setvalue ref="ancestor::rico:participant/@xlink:href" value=""/>
-                            <xf:delete ref="ancestor::rico:participant/@localType" ev:event="DOMActivate"/>
-                            <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
+                            <xf:setvalue ref="@xlink:href" value="''" ev:event="DOMActivate"/>
+                            <xf:delete ref="@localType" ev:event="DOMActivate"/>
+                            <!--&lt;!&ndash; to resolve display bug when adding item into itemset (gap label/value diplayed)&ndash;&gt;
                             <xf:action ev:event="DOMActivate">
                                 <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
                                 <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
                                 <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                            </xf:action>
+                            </xf:action>-->
                         </xf:trigger>
-                        <xf:trigger ref="self::node()[not(@localType)]">
+                        <xf:trigger ref=".[not(@localType)]">
                             <xf:label>Nouvelle personne</xf:label>
                             <xf:insert context="." origin="instance('xprNewEntries')/rico:participant/@localType" nodeset="rico:participant" ev:event="DOMActivate"/>
                             <xf:insert context="instance('xprEntities')" origin="instance('xprNewEntries')/xpr:entity" nodeset="xpr:entity[1]" position="before" ev:event="DOMActivate"/>
@@ -774,11 +775,11 @@
                                 | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
                                 | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))" ev:event="DOMActivate"/>
                             <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                            <xf:action ev:event="DOMActivate">
+                            <!--<xf:action ev:event="DOMActivate">
                                 <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
                                 <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
                                 <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                            </xf:action>
+                            </xf:action>-->
                         </xf:trigger>
                         <xf:select1 ref="@xlink:href" incremental="true">
                             <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity">
@@ -786,7 +787,8 @@
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
                         </xf:select1>
-                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = current()/@xlink:href[parent::rico:participant[@localType = 'new']]]/eac:eac-cpf">
+                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $participant/@xlink:href[parent::rico:participant/@localType='new']]/eac:eac-cpf">
+                            <xf:var name="entity" value="."/>
                             <xf:label>Nouvelle entrée</xf:label>
                             <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
                                 <xf:label>Type d'entité</xf:label>
@@ -794,7 +796,7 @@
                                     <xf:label>personne</xf:label>
                                     <xf:value>person</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[@localType='officeName']"/>
@@ -804,7 +806,7 @@
                                     <xf:label>office</xf:label>
                                     <xf:value>corporateBody</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
@@ -823,9 +825,9 @@
                             </xf:select1>
                             <xf:select1 ref="eac:cpfDescription/eac:identity/@localType" appearance="minimal">
                                 <xf:label>Répertoire</xf:label>
-                                <xf:itemset model="prosopo" nodeset="instance('xprEntitiesTypes')/identity[@type = current()/ancestor::eac:identity/eac:entityType]">
-                                    <xf:label ref="label"/>
-                                    <xf:value ref="value"/>
+                                <xf:itemset nodeset="instance('xprEntitiesTypes')/xpr:identity">
+                                    <xf:label ref="xpr:label"/>
+                                    <xf:value ref="xpr:value"/>
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
@@ -895,7 +897,7 @@
                             <!--<xf:delete
                                 ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/ancestor::rico:involve/@xlink:href]"
                                 ev:event="DOMActivate"/>-->
-                            <xf:setvalue ref="ancestor::rico:involve/@xlink:href" value=""/>
+                            <xf:setvalue ref="ancestor::rico:involve/@xlink:href" value="''"/>
                             <xf:delete ref="ancestor::rico:involve/@localType" ev:event="DOMActivate"/>
                             <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
                             <xf:action ev:event="DOMActivate">
@@ -934,7 +936,7 @@
                                     <xf:label>personne</xf:label>
                                     <xf:value>person</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[@localType='officeName']"/>
@@ -944,7 +946,7 @@
                                     <xf:label>office</xf:label>
                                     <xf:value>corporateBody</xf:value>
                                     <xf:action ev:event="xforms-select">
-                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                        <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                         <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                         <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
@@ -1103,7 +1105,7 @@
                     <xf:label>Relation</xf:label>
                     <xf:trigger ref="@localType">
                         <xf:label>Personne dans la base</xf:label>
-                        <xf:setvalue ref="ancestor::rico:cpfRelation/@xlink:href" value=""/>
+                        <xf:setvalue ref="ancestor::rico:cpfRelation/@xlink:href" value="''"/>
                         <xf:delete ref="ancestor::eac:cpfRelation/@localType" ev:event="DOMActivate"/>
                         <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
                         <xf:action ev:event="DOMActivate">
@@ -1144,7 +1146,7 @@
                                 <xf:label>personne</xf:label>
                                 <xf:value>person</xf:value>
                                 <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                     <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                     <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                     <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[@localType='officeName']"/>
@@ -1154,7 +1156,7 @@
                                 <xf:label>office</xf:label>
                                 <xf:value>corporateBody</xf:value>
                                 <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                     <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                     <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                     <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
@@ -1372,7 +1374,7 @@
                             <xf:label>personne</xf:label>
                             <xf:value>person</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                 <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                 <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                 <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[@localType='officeName']"/>
@@ -1382,7 +1384,7 @@
                             <xf:label>office</xf:label>
                             <xf:value>corporateBody</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value=""/>
+                                <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
                                 <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
                                 <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
                                 <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
