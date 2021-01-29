@@ -1,0 +1,103 @@
+/*
+ * CSS stylesheet for the xpr app
+ *
+ * @author emchateau & sardinecan (ANR Experts)
+ * @since 2021-01-21
+ * @licence GNU http://www.gnu.org/licenses
+ * @version 0.2
+ *
+ * xpr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --colorMain: #E73E0D;
+    --colorSub: /* #3f51b5; */ #fff;
+    --colorTint: #FFE1D5;
+    --colorAccent: /* #3f51b5; */ #E73E0D;
+    --baseline: 1.5; /* 1.5 * 18 = 27px*/
+    font-size: 1.125em; /* 18px */
+    line-height: var(--baseline);
+}
+
+
+/* structure de la page (à retirer) */
+body {
+    background-color: var(--colorSub);
+    color: var(--colorMain);
+}
+
+section {
+    background-color: var(--colorMain);
+    color: var(--colorSub);
+}
+
+header,
+footer,
+.alternate {
+    background-color: var(--colorSub);
+    color: var(--colorMain);
+}
+
+/* css rules for xforms */
+form {
+    /* Just to center the form on the page */
+    margin: 0 auto;
+    width: 60em;
+    /* To see the outline of the form */
+    padding: 1em;
+}
+
+xforms-input {
+
+}
+
+
+/*
+input,
+textarea {
+    !* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font *!
+    font: 1em 'IBM Plex Serif';
+
+    !* To harmonize the look & feel of text field border *!
+    border-radius: 0.1em;
+    border: 1px solid var(--colorMain);
+    padding-left: 0.3em;
+}
+
+input {
+    !* To give the same size to all text fields *!
+    width: 100%;
+    box-sizing: border-box;
+    height: calc(var(--baseline)* 1.1rem); !*height: 1.6em;*!
+}
+
+textarea {
+    !* To give the same size to all text fields *!
+    width: 49em;
+    box-sizing: border-box;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    !* To give a little highlight on active elements *!
+    border-color: #000;
+}
+
+textarea {
+    !* To properly align multiline text fields with their labels *!
+    vertical-align: top;
+
+    !* To give enough room to type some text *!
+    height: calc(var(--baseline)* 6rem);
+    width: 100%;
+}*/
