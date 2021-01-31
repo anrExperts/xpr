@@ -230,7 +230,7 @@
     </xf:instance>
     <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" calculate="if(ancestor::xpr:expenses/xpr:expense, 'true', 'false')"/>
     <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()" readonly="true()"/>
-    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()" constraint=""/>
+    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()"/>
     <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()"/>
     <xf:bind nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))"/>
     <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris'
@@ -254,9 +254,17 @@
       or ../@type='suburbs'
       or ../@type='province'
       or ../@type='indeterminate'"/>
-    <xf:bind nodeset="xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']" relevant="."/>
+    <xf:bind nodeset="instance('xprExpertiseObjects')/xpr:object[@type='other']" calculate="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@l" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@l"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@s" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@s"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@d" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@d"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@l" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@l"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@s" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@s"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@d" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@d"/>
     <xf:bind id="addOtherFee" nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
     <xf:bind id="addComment" nodeset="instance('xprExpertiseComment')" relevant="not(instance('xprExpertise')/xpr:comment)"/>
+
+
     <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
         <xf:action ev:event="xforms-submit">
             <!--set value for maintenance event informations-->

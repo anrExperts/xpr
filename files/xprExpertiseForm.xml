@@ -419,29 +419,25 @@
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
-                        <xf:choices>
-                            <xf:item>
-                                <xf:label>B3/ Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:label>
-                                <xf:value>b3</xf:value>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="parent::xpr:framework">Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:setvalue>
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
-                                </xf:action>
-                            </xf:item>
-                        </xf:choices>
-                        <xf:choices>
-                            <!--@todo comment faire pour préciser si ce n'est pas le LC ?-->
-                            <xf:item>
-                                <xf:label>C/ Cas problématique</xf:label>
-                                <xf:value>c</xf:value>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="parent::xpr:framework">Cas problématique</xf:setvalue>
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value=""/>
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value=""/>
-                                </xf:action>
-                            </xf:item>
-                        </xf:choices>
+                        <xf:item>
+                            <xf:label>B3/ Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:label>
+                            <xf:value>b3</xf:value>
+                            <xf:action ev:event="xforms-select">
+                                <xf:setvalue ref="parent::xpr:framework">Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:setvalue>
+                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
+                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
+                            </xf:action>
+                        </xf:item>
+                        <!--@todo comment faire pour préciser si ce n'est pas le LC ?-->
+                        <xf:item>
+                            <xf:label>C/ Cas problématique</xf:label>
+                            <xf:value>c</xf:value>
+                            <xf:action ev:event="xforms-select">
+                                <xf:setvalue ref="parent::xpr:framework">Cas problématique</xf:setvalue>
+                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="''"/>
+                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="''"/>
+                            </xf:action>
+                        </xf:item>
                     </xf:select1>
                 </xf:group>
                 <xf:group ref="xpr:origination">
@@ -507,18 +503,14 @@
                     </xf:input>
                 </xf:group>
                 <xf:group ref="xpr:objects">
-                    <!--@rmq $objects is necesserary for the itemset update.
-                    if not present it doesn't work-->
-                    <xf:var name="objects" value="instance('xprExpertiseObjects')"/>
                     <xf:select ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects" appearance="full">
                         <xf:label>Objet de l’expertise</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseObjects')/xpr:object[@type]">
-                            <xf:label value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/>
+                            <xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>
                             <xf:copy ref="."/>
                         </xf:itemset>
-                        <xf:setvalue ev:event="xforms-value-changed" if="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects[not(xpr:object[@type='other'])]" ref="instance('xprExpertiseObjects')/xpr:object[@type='other'] | $objects/xpr:object[@type='other']" value=""/>
                     </xf:select>
-                    <xf:input ref="$objects/xpr:object[@type='other'][instance('xprExpertise')//xpr:objects/xpr:object[@type='other']] | instance('xprExpertise')//xpr:objects/xpr:object[@type='other'] | instance('xprExpertiseObjects')/xpr:object[@type='other'][instance('xprExpertise')//xpr:objects/xpr:object[@type='other']]" incremental="true">
+                    <xf:input ref="xpr:object[@type='other']" incremental="true">
                         <xf:label>Autre, à préciser</xf:label>
                     </xf:input>
                 </xf:group>
@@ -532,7 +524,7 @@
                     <xf:select1 ref="@ref" incremental="true">
                         <xf:label>Patronyme</xf:label>
                         <xf:itemset nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert']">
-                            <xf:label value="xpr:label"/>
+                            <xf:label ref="xpr:label"/>
                             <xf:value ref="@xml:id"/>
                         </xf:itemset>
                     </xf:select1>
@@ -714,7 +706,7 @@
                     <xf:select1 ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
                         <xf:itemset nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert'][@xml:id = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
-                            <xf:label value="."/>
+                            <xf:label ref="."/>
                             <xf:value ref="@xml:id"/>
                         </xf:itemset>
                     </xf:select1>
@@ -1128,30 +1120,24 @@
                     </xf:group>
                 </xf:group>
                 <xf:group ref="xpr:expenses">
-                    <xf:var name="expenses" value="instance('xprExpertiseExpenses')"/>
                     <xf:select ref="." appearance="full">
                         <xf:label>Bourse commune</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseExpenses')/xpr:expense">
-                            <xf:label value="if(@type='expert' , 'Bourse commune des experts', 'Bourse commune des greffiers')"/>
+                            <xf:label><xf:output value="if(@type='expert' , 'Experts', 'Greffiers')"/></xf:label>
                             <xf:copy ref="."/>
-                            <xf:group ref="$expenses/xpr:expense[@type=current()/@type][instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type=current()/@type]]">
-                                <xf:label>Montant</xf:label>
-                                <xf:input ref="@l" incremental="true">
-                                    <xf:label>livres</xf:label>
-                                    <xf:setvalue ev:event="xforms-value-changed" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type=current()/ancestor::xpr:expense/@type]/@l | instance('xprExpertiseExpenses')/xpr:expense[@type=current()/ancestor::xpr:expense/@type]/@l" value="current()"/>
-                                </xf:input>
-                                <xf:input ref="@s" incremental="true">
-                                    <xf:label>sols</xf:label>
-                                    <xf:setvalue ev:event="xforms-value-changed" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type=current()/ancestor::xpr:expense/@type]/@s | instance('xprExpertiseExpenses')/xpr:expense[@type=current()/ancestor::xpr:expense/@type]/@s" value="current()"/>
-                                </xf:input>
-                                <xf:input ref="@d" incremental="true">
-                                    <xf:label>deniers</xf:label>
-                                    <xf:setvalue ev:event="xforms-value-changed" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type=current()/ancestor::xpr:expense/@type]/@d | instance('xprExpertiseExpenses')/xpr:expense[@type=current()/ancestor::xpr:expense/@type]/@d" value="current()"/>
-                                </xf:input>
-                            </xf:group>
                         </xf:itemset>
-                        <xf:setvalue ev:event="xforms-value-changed" if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" value="'false'"/>
-                        <xf:setvalue ev:event="xforms-value-changed" if="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses[not(xpr:expense)]" ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" value="'false'"/>
+                        <xf:repeat nodeset="xpr:expense">
+                            <xf:label><xf:output value="if(@type='expert' , 'Bourse commune des experts', 'Bourse commune des greffiers')"/></xf:label>
+                            <xf:input ref="@l" incremental="true">
+                                <xf:label>livres</xf:label>
+                            </xf:input>
+                            <xf:input ref="@s" incremental="true">
+                                <xf:label>sols</xf:label>
+                            </xf:input>
+                            <xf:input ref="@d" incremental="true">
+                                <xf:label>deniers</xf:label>
+                            </xf:input>
+                        </xf:repeat>
                     </xf:select>
                 </xf:group>
             </xf:group>
@@ -1329,7 +1315,7 @@
                 </xf:label>
                 <xf:select ref="." appearance="full">
                     <xf:itemset nodeset="instance('xprExpertiseIndex')/xpr:group[@type=$group/@group]/xpr:term">
-                        <xf:label value="."/>
+                        <xf:label ref="."/>
                         <xf:copy ref="."/>
                     </xf:itemset>
                 </xf:select>
