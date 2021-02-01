@@ -506,7 +506,7 @@
                     <xf:select ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects" appearance="full">
                         <xf:label>Objet de l’expertise</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseObjects')/xpr:object[@type]">
-                            <xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>
+                            <xf:label value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/>
                             <xf:copy ref="."/>
                         </xf:itemset>
                     </xf:select>
@@ -1123,22 +1123,22 @@
                     <xf:select ref="." appearance="full">
                         <xf:label>Bourse commune</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseExpenses')/xpr:expense">
-                            <xf:label><xf:output value="if(@type='expert' , 'Experts', 'Greffiers')"/></xf:label>
+                            <xf:label value="if(@type='expert' , 'Experts', 'Greffiers')"/>
                             <xf:copy ref="."/>
                         </xf:itemset>
-                        <xf:repeat nodeset="xpr:expense">
-                            <xf:label><xf:output value="if(@type='expert' , 'Bourse commune des experts', 'Bourse commune des greffiers')"/></xf:label>
-                            <xf:input ref="@l" incremental="true">
-                                <xf:label>livres</xf:label>
-                            </xf:input>
-                            <xf:input ref="@s" incremental="true">
-                                <xf:label>sols</xf:label>
-                            </xf:input>
-                            <xf:input ref="@d" incremental="true">
-                                <xf:label>deniers</xf:label>
-                            </xf:input>
-                        </xf:repeat>
                     </xf:select>
+                    <xf:repeat nodeset="xpr:expense">
+                        <xf:label><xf:output value="if(@type='expert' , 'Bourse commune des experts', 'Bourse commune des greffiers')"/></xf:label>
+                        <xf:input ref="@l" incremental="true">
+                            <xf:label>livres</xf:label>
+                        </xf:input>
+                        <xf:input ref="@s" incremental="true">
+                            <xf:label>sols</xf:label>
+                        </xf:input>
+                        <xf:input ref="@d" incremental="true">
+                            <xf:label>deniers</xf:label>
+                        </xf:input>
+                    </xf:repeat>
                 </xf:group>
             </xf:group>
         </xf:case>
