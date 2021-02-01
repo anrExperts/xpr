@@ -39,9 +39,9 @@
                 </xf:select1>
                 <xf:select1 ref="@localType" appearance="full">
                     <xf:label>Répertoire</xf:label>
-                    <xf:itemset model="prosopo" nodeset="instance('xprEntitiesTypes')/identity[@type = instance('xprProsopo')//eac:entityType]">
-                        <xf:label ref="label"/>
-                        <xf:value ref="value"/>
+                    <xf:itemset model="prosopo" nodeset="instance('xprEntitiesTypes')/xpr:identity[@type = instance('xprProsopo')//eac:entityType]">
+                        <xf:label ref="xpr:label"/>
+                        <xf:value ref="xpr:value"/>
                     </xf:itemset>
                 </xf:select1>
                 <xf:group>
@@ -58,11 +58,11 @@
                         </xf:item>
                         <xf:itemset model="prosopo" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]">
                             <!--<xf:label value="concat(eac:part[@localType='officeName'], eac:part[@localType='surname'], if(ancestor::eac:identity/eac:entityType='person', ', ', ''), eac:part[@localType='forename'])"/>-->
-                            <xf:label value="concat(
+                            <xf:label><xf:output value="concat(
                                 if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'person'], concat(eac:part[@localType='surname'], ', ', eac:part[@localType='forename'], ' (', if(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
                                 if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'corporateBody'], concat(eac:part[@localType='officeName'], ''), ''),
                                 if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'family'], concat(eac:part[@localType='surname'], ''), '')
-                                )"/>
+                                )"/></xf:label>
                             <xf:copy ref="."/>
                         </xf:itemset>
                         <xf:action ev:event="xforms-value-changed" if="instance('xprIdentities')/eac:identity/*:nameEntry//*:part[not(. = '')]">
@@ -133,37 +133,27 @@
                         <xf:group>
                             <xf:label>Sources</xf:label>
                             <xf:repeat id="repeatNameSource" nodeset="xpr:source">
-                                <xf:trigger ref="@localType">
+                                <xf:var name="source" value="."/>
+                                <xf:trigger ref=".[@localType]">
                                     <xf:label>Sélectionner une source dans la base</xf:label>
-                                    <xf:delete ref="parent::xpr:source/@localType" ev:event="DOMActivate"/>
-                                    <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                                    <xf:action ev:event="DOMActivate">
-                                        <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                        <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                        <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                    </xf:action>
+                                    <xf:delete ref="@localType" ev:event="DOMActivate"/>
                                 </xf:trigger>
-                                <xf:trigger ref="self::node()[not(@localType)]">
+                                <xf:trigger ref=".[not(@localType)]">
                                     <xf:label>Ajouter une nouvelle source</xf:label>
-                                    <!-- @rmq insert  -->
                                     <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                    <xf:insert origin="instance('xprNewEntries')/xpr:source" context="instance('xprSources')" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                    <xf:setvalue ref="./@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-source', number(count(instance('xprProsopo')//*:source[@localType='new'])))" ev:event="DOMActivate"/>
-                                    <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
-                                    <xf:action ev:event="DOMActivate">
-                                        <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                        <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                        <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                    </xf:action>
+                                    <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                    <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                                 value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                                 ev:event="DOMActivate"/>
                                 </xf:trigger>
                                 <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                                     <xf:label>Source</xf:label>
                                     <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                        <xf:label value="."/>
-                                        <xf:value ref="if(@localId, @localId, .)"/>
+                                        <xf:label ref="."/>
+                                        <xf:value ref="if(@xml:id, @xml:id, .)"/>
                                     </xf:itemset>
                                 </xf:select1>
-                                <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                                <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
                                     <xf:label>Nouvelle source</xf:label>
                                     <xf:input ref="." incremental="true">
                                         <xf:label>Source</xf:label>
@@ -186,13 +176,13 @@
                                 <xf:help>Ajouter une source</xf:help>
                             </xf:trigger>
                         </xf:group>
-                        <xf:trigger ref="self::node()[./eac:alternativeForm]" class="delete">
+                        <xf:trigger ref=".[eac:alternativeForm]">
                             <xf:label>Supprimer une forme du nom</xf:label>
                             <xf:delete nodeset="." at="1" if="count(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]) &gt; 1" ev:event="DOMActivate"/>
                             <xf:help>Supprimer une forme du nom</xf:help>
                         </xf:trigger>
                     </xf:repeat>
-                    <xf:trigger ref="self::node()[eac:nameEntry[eac:alternativeForm]]" class="insert">
+                    <xf:trigger ref=".[eac:nameEntry[eac:alternativeForm]]" class="insert">
                         <xf:label>Nouvelle forme attestée du nom</xf:label>
                         <xf:action ev:event="DOMActivate">
                             <xf:insert context="." origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:alternativeForm][last()]" position="after" ev:event="DOMActivate"/>
@@ -306,36 +296,27 @@
                             <xf:group>
                                 <xf:label>Sources</xf:label>
                                 <xf:repeat id="repeatPlaceSource" nodeset="xpr:source">
-                                    <xf:trigger ref="@localType">
+                                    <xf:var name="source" value="."/>
+                                    <xf:trigger ref=".[@localType]">
                                         <xf:label>Sélectionner une source dans la base</xf:label>
-                                        <xf:delete ref="parent::xpr:source/@localType" ev:event="DOMActivate"/>
-                                        <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                                        <xf:action ev:event="DOMActivate">
-                                            <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                            <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                            <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                        </xf:action>
+                                        <xf:delete ref="@localType" ev:event="DOMActivate"/>
                                     </xf:trigger>
-                                    <xf:trigger ref="self::node()[not(@localType)]">
+                                    <xf:trigger ref=".[not(@localType)]">
                                         <xf:label>Ajouter une nouvelle source</xf:label>
                                         <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                        <xf:insert origin="instance('xprNewEntries')/xpr:source" context="instance('xprSources')" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                        <xf:setvalue ref="./@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-source', number(count(instance('xprProsopo')//*:source[@localType='new'])))" ev:event="DOMActivate"/>
-                                        <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
-                                        <xf:action ev:event="DOMActivate">
-                                            <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                            <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                            <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                        </xf:action>
+                                        <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                        <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                                     value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                                     ev:event="DOMActivate"/>
                                     </xf:trigger>
                                     <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                                         <xf:label>Source</xf:label>
                                         <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                            <xf:label value="."/>
-                                            <xf:value ref="if(@localId, @localId, .)"/>
+                                            <xf:label ref="."/>
+                                            <xf:value ref="if(@xml:id, @xml:id, .)"/>
                                         </xf:itemset>
                                     </xf:select1>
-                                    <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                                    <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
                                         <xf:label>Nouvelle source</xf:label>
                                         <xf:input ref="." incremental="true">
                                             <xf:label>Source</xf:label>
@@ -346,7 +327,7 @@
                                     </xf:input>
                                     <xf:trigger ref="." class="delete">
                                         <xf:label>Supprimer une source</xf:label>
-                                        <xf:delete nodeset="." at="1" if="count(ancestor::eac:place//xpr:source) &gt; 1" ev:event="DOMActivate"/>
+                                        <xf:delete nodeset="." at="1" if="count(ancestor::eac:nameEntry/xpr:source) &gt; 1" ev:event="DOMActivate"/>
                                         <xf:help>Supprimer une source</xf:help>
                                     </xf:trigger>
                                 </xf:repeat>
@@ -460,36 +441,27 @@
                     <xf:group>
                         <xf:label>Sources</xf:label>
                         <xf:repeat id="repeatFunctionSource" nodeset="xpr:source">
-                            <xf:trigger ref="@localType">
+                            <xf:var name="source" value="."/>
+                            <xf:trigger ref=".[@localType]">
                                 <xf:label>Sélectionner une source dans la base</xf:label>
-                                <xf:delete ref="parent::xpr:source/@localType" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:delete ref="@localType" ev:event="DOMActivate"/>
                             </xf:trigger>
-                            <xf:trigger ref="self::node()[not(@localType)]">
+                            <xf:trigger ref=".[not(@localType)]">
                                 <xf:label>Ajouter une nouvelle source</xf:label>
                                 <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                <xf:insert origin="instance('xprNewEntries')/xpr:source" context="instance('xprSources')" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                <xf:setvalue ref="./@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-source', number(count(instance('xprProsopo')//*:source[@localType='new'])))" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                             value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                             ev:event="DOMActivate"/>
                             </xf:trigger>
                             <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                                 <xf:label>Source</xf:label>
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                    <xf:label value="."/>
-                                    <xf:value ref="if(@localId, @localId, .)"/>
+                                    <xf:label ref="."/>
+                                    <xf:value ref="if(@xml:id, @xml:id, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input ref="." incremental="true">
                                     <xf:label>Source</xf:label>
@@ -500,7 +472,7 @@
                             </xf:input>
                             <xf:trigger ref="." class="delete">
                                 <xf:label>Supprimer une source</xf:label>
-                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:function/xpr:source) &gt; 1" ev:event="DOMActivate"/>
+                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:nameEntry/xpr:source) &gt; 1" ev:event="DOMActivate"/>
                                 <xf:help>Supprimer une source</xf:help>
                             </xf:trigger>
                         </xf:repeat>
@@ -597,36 +569,27 @@
                     <xf:group>
                         <xf:label>Sources</xf:label>
                         <xf:repeat id="repeatOccupationSource" nodeset="xpr:source">
-                            <xf:trigger ref="@localType">
+                            <xf:var name="source" value="."/>
+                            <xf:trigger ref=".[@localType]">
                                 <xf:label>Sélectionner une source dans la base</xf:label>
-                                <xf:delete ref="parent::xpr:source/@localType" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:delete ref="@localType" ev:event="DOMActivate"/>
                             </xf:trigger>
-                            <xf:trigger ref="self::node()[not(@localType)]">
+                            <xf:trigger ref=".[not(@localType)]">
                                 <xf:label>Ajouter une nouvelle source</xf:label>
                                 <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                <xf:insert origin="instance('xprNewEntries')/xpr:source" context="instance('xprSources')" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                <xf:setvalue ref="./@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-source', number(count(instance('xprProsopo')//*:source[@localType='new'])))" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                             value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                             ev:event="DOMActivate"/>
                             </xf:trigger>
                             <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                                 <xf:label>Source</xf:label>
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                    <xf:label value="."/>
-                                    <xf:value ref="if(@localId, @localId, .)"/>
+                                    <xf:label ref="."/>
+                                    <xf:value ref="if(@xml:id, @xml:id, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input ref="." incremental="true">
                                     <xf:label>Source</xf:label>
@@ -637,7 +600,7 @@
                             </xf:input>
                             <xf:trigger ref="." class="delete">
                                 <xf:label>Supprimer une source</xf:label>
-                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:occupation/xpr:source) &gt; 1" ev:event="DOMActivate"/>
+                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:nameEntry/xpr:source) &gt; 1" ev:event="DOMActivate"/>
                                 <xf:help>Supprimer une source</xf:help>
                             </xf:trigger>
                         </xf:repeat>
@@ -753,17 +716,8 @@
                         <xf:label>Participant</xf:label>
                         <xf:trigger ref=".[@localType]">
                             <xf:label>Personne dans la base</xf:label>
-                            <!--<xf:delete
-                                ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/ancestor::rico:participant/@xlink:href]"
-                                ev:event="DOMActivate"/>-->
                             <xf:setvalue ref="@xlink:href" value="''" ev:event="DOMActivate"/>
                             <xf:delete ref="@localType" ev:event="DOMActivate"/>
-                            <!--&lt;!&ndash; to resolve display bug when adding item into itemset (gap label/value diplayed)&ndash;&gt;
-                            <xf:action ev:event="DOMActivate">
-                                <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                            </xf:action>-->
                         </xf:trigger>
                         <xf:trigger ref=".[not(@localType)]">
                             <xf:label>Nouvelle personne</xf:label>
@@ -774,12 +728,6 @@
                             <xf:setvalue ref="@xlink:href 
                                 | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
                                 | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))" ev:event="DOMActivate"/>
-                            <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                            <!--<xf:action ev:event="DOMActivate">
-                                <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                            </xf:action>-->
                         </xf:trigger>
                         <xf:select1 ref="@xlink:href" incremental="true">
                             <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity">
@@ -787,8 +735,7 @@
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
                         </xf:select1>
-                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $participant/@xlink:href[parent::rico:participant/@localType='new']]/eac:eac-cpf">
-                            <xf:var name="entity" value="."/>
+                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $participant[@localType='new']/@xlink:href]/eac:eac-cpf">
                             <xf:label>Nouvelle entrée</xf:label>
                             <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
                                 <xf:label>Type d'entité</xf:label>
@@ -876,9 +823,6 @@
                         </xf:group>
                         <xf:trigger class="delete">
                             <xf:label>Supprimer un participant</xf:label>
-                            <!--<xf:delete
-                                ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/@xlink:href]"
-                                ev:event="DOMActivate"/>-->
                             <xf:delete nodeset="." at="1" if="count(ancestor::eac:chronItem/rico:participant) > 1" ev:event="DOMActivate"/>
                             <xf:help>Supprimer un participant</xf:help>
                         </xf:trigger>
@@ -891,36 +835,22 @@
                         <xf:help>Ajouter un participant</xf:help>
                     </xf:trigger>
                     <xf:repeat id="repeatInvolve" nodeset="rico:involve">
-                        <xf:label>involve</xf:label>
-                        <xf:trigger ref="@localType">
+                        <xf:var name="involve" value="."/>
+                        <xf:label>Involve</xf:label>
+                        <xf:trigger ref=".[@localType]">
                             <xf:label>Personne dans la base</xf:label>
-                            <!--<xf:delete
-                                ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = current()/ancestor::rico:involve/@xlink:href]"
-                                ev:event="DOMActivate"/>-->
-                            <xf:setvalue ref="ancestor::rico:involve/@xlink:href" value="''"/>
-                            <xf:delete ref="ancestor::rico:involve/@localType" ev:event="DOMActivate"/>
-                            <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                            <xf:action ev:event="DOMActivate">
-                                <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                            </xf:action>
+                            <xf:setvalue ref="@xlink:href" value="''" ev:event="DOMActivate"/>
+                            <xf:delete ref="@localType" ev:event="DOMActivate"/>
                         </xf:trigger>
-                        <xf:trigger ref="self::node()[not(@localType)]">
+                        <xf:trigger ref=".[not(@localType)]">
                             <xf:label>Nouvelle personne</xf:label>
                             <xf:insert context="." origin="instance('xprNewEntries')/rico:involve/@localType" nodeset="rico:involve" ev:event="DOMActivate"/>
                             <xf:insert context="instance('xprEntities')" origin="instance('xprNewEntries')/xpr:entity" nodeset="xpr:entity[1]" position="before" ev:event="DOMActivate"/>
                             <xf:insert context="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']" origin="instance('xprNewEntity')" nodeset="xpr:label" position="after" ev:event="DOMActivate"/>
-                            <!-- set a temporary value for entities instance -->
-                            <xf:setvalue ref="@xlink:href 
+                            <!-- set a temporary value for participant instance -->
+                            <xf:setvalue ref="@xlink:href
                                 | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
                                 | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-involve', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))" ev:event="DOMActivate"/>
-                            <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                            <xf:action ev:event="DOMActivate">
-                                <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                            </xf:action>
                         </xf:trigger>
                         <xf:select1 ref="@xlink:href" incremental="true">
                             <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity">
@@ -928,7 +858,7 @@
                                 <xf:value ref="@xml:id"/>
                             </xf:itemset>
                         </xf:select1>
-                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = current()/@xlink:href[parent::rico:involve[@localType = 'new']]]/eac:eac-cpf">
+                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $involve[@localType='new']/@xlink:href]/eac:eac-cpf">
                             <xf:label>Nouvelle entrée</xf:label>
                             <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
                                 <xf:label>Type d'entité</xf:label>
@@ -965,9 +895,9 @@
                             </xf:select1>
                             <xf:select1 ref="eac:cpfDescription/eac:identity/@localType" appearance="minimal">
                                 <xf:label>Répertoire</xf:label>
-                                <xf:itemset model="prosopo" nodeset="instance('xprEntitiesTypes')/identity[@type = current()/ancestor::eac:identity/eac:entityType]">
-                                    <xf:label ref="label"/>
-                                    <xf:value ref="value"/>
+                                <xf:itemset nodeset="instance('xprEntitiesTypes')/xpr:identity">
+                                    <xf:label ref="xpr:label"/>
+                                    <xf:value ref="xpr:value"/>
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
@@ -1033,36 +963,27 @@
                     <xf:group>
                         <xf:label>Sources</xf:label>
                         <xf:repeat id="repeatEventSource" nodeset="xpr:source">
-                            <xf:trigger ref="@localType">
+                            <xf:var name="source" value="."/>
+                            <xf:trigger ref=".[@localType]">
                                 <xf:label>Sélectionner une source dans la base</xf:label>
-                                <xf:delete ref="parent::xpr:source/@localType" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:delete ref="@localType" ev:event="DOMActivate"/>
                             </xf:trigger>
-                            <xf:trigger ref="self::node()[not(@localType)]">
+                            <xf:trigger ref=".[not(@localType)]">
                                 <xf:label>Ajouter une nouvelle source</xf:label>
                                 <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                <xf:insert origin="instance('xprNewEntries')/xpr:source" context="instance('xprSources')" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                <xf:setvalue ref="./@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-source', number(count(instance('xprProsopo')//*:source[@localType='new'])))" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                             value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                             ev:event="DOMActivate"/>
                             </xf:trigger>
                             <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                                 <xf:label>Source</xf:label>
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                    <xf:label value="."/>
-                                    <xf:value ref="if(@localId, @localId, .)"/>
+                                    <xf:label ref="."/>
+                                    <xf:value ref="if(@xml:id, @xml:id, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input ref="." incremental="true">
                                     <xf:label>Source</xf:label>
@@ -1073,7 +994,7 @@
                             </xf:input>
                             <xf:trigger ref="." class="delete">
                                 <xf:label>Supprimer une source</xf:label>
-                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:chronItem/xpr:source) &gt; 1" ev:event="DOMActivate"/>
+                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:nameEntry/xpr:source) &gt; 1" ev:event="DOMActivate"/>
                                 <xf:help>Supprimer une source</xf:help>
                             </xf:trigger>
                         </xf:repeat>
@@ -1234,36 +1155,27 @@
                     <xf:group>
                         <xf:label>Sources</xf:label>
                         <xf:repeat id="repeatRelationSource" nodeset="xpr:source">
-                            <xf:trigger ref="@localType">
+                            <xf:var name="source" value="."/>
+                            <xf:trigger ref=".[@localType]">
                                 <xf:label>Sélectionner une source dans la base</xf:label>
-                                <xf:delete ref="parent::xpr:source/@localType" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:delete ref="@localType" ev:event="DOMActivate"/>
                             </xf:trigger>
-                            <xf:trigger ref="self::node()[not(@localType)]">
+                            <xf:trigger ref=".[not(@localType)]">
                                 <xf:label>Ajouter une nouvelle source</xf:label>
                                 <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                <xf:insert origin="instance('xprNewEntries')/xpr:source" context="instance('xprSources')" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                <xf:setvalue ref="./@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-source', number(count(instance('xprProsopo')//*:source[@localType='new'])))" ev:event="DOMActivate"/>
-                                <!-- to resolve display bug when adding new item into itemset (gap label/value diplayed)-->
-                                <xf:action ev:event="DOMActivate">
-                                    <xf:insert origin="instance('xprProsopo')" context="instance('xprStorage')" nodeset="./*"/>
-                                    <xf:insert origin="instance('xprStorage')/eac:eac-cpf" context="instance('xprProsopo')" nodeset="."/>
-                                    <xf:delete ref="instance('xprStorage')/eac:eac-cpf"/>
-                                </xf:action>
+                                <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                             value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                             ev:event="DOMActivate"/>
                             </xf:trigger>
                             <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                                 <xf:label>Source</xf:label>
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                    <xf:label value="."/>
-                                    <xf:value ref="if(@localId, @localId, .)"/>
+                                    <xf:label ref="."/>
+                                    <xf:value ref="if(@xml:id, @xml:id, .)"/>
                                 </xf:itemset>
                             </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = current()/@xlink:href[ancestor::xpr:source[@localType]]]">
+                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input ref="." incremental="true">
                                     <xf:label>Source</xf:label>
@@ -1274,7 +1186,7 @@
                             </xf:input>
                             <xf:trigger ref="." class="delete">
                                 <xf:label>Supprimer une source</xf:label>
-                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:cpfRelation/xpr:source) &gt; 1" ev:event="DOMActivate"/>
+                                <xf:delete nodeset="." at="1" if="count(ancestor::eac:nameEntry/xpr:source) &gt; 1" ev:event="DOMActivate"/>
                                 <xf:help>Supprimer une source</xf:help>
                             </xf:trigger>
                         </xf:repeat>
@@ -1403,9 +1315,9 @@
                     </xf:select1>
                     <xf:select1 ref="eac:cpfDescription/eac:identity/@localType" appearance="minimal">
                         <xf:label>Répertoire</xf:label>
-                        <xf:itemset model="prosopo" nodeset="instance('xprEntitiesTypes')/identity[@type = current()/ancestor::eac:identity/eac:entityType]">
-                            <xf:label ref="label"/>
-                            <xf:value ref="value"/>
+                        <xf:itemset nodeset="instance('xprEntitiesTypes')/xpr:identity">
+                            <xf:label ref="xpr:label"/>
+                            <xf:value ref="xpr:value"/>
                         </xf:itemset>
                     </xf:select1>
                     <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
@@ -1488,7 +1400,7 @@
                     <xf:select1 ref="@xlink:href[parent::eac:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
                         <xf:label>Source</xf:label>
                         <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                            <xf:label value="."/>
+                            <xf:label ref="."/>
                             <xf:value ref="if(@localId, @localId, .)"/>
                         </xf:itemset>
                     </xf:select1>
