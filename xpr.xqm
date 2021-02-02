@@ -672,6 +672,7 @@ function putBiography($param, $referer) {
         return $d :)
       return replace node $db/xpr/bio/eac:eac-cpf[@xml:id = $location] with $param  
     else
+      let $xformsId := $param//eac:entityId
       let $id :=
         for $type in $param//eac:identity/@localType
         return switch ($type)
@@ -702,6 +703,7 @@ function putBiography($param, $referer) {
             </http:response>
           </rest:response>,
           <result>
+            {if(fn:normalize-space($xformsId)!='') then <xforms-id>{$xformsId}</xforms-id>}
             <id>{$id}</id>
             <message>Une nouvelle entité a été ajoutée : {$param//eac:nameEntry[eac:authorizedForm]/eac:part}.</message>
           </result>
