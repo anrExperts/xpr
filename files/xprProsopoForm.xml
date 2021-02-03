@@ -1148,7 +1148,8 @@
                         <xf:show dialog="control"/>
                     </xf:action>
                     <xf:action if="not(/eac:eac-cpf/@xml:id)" ev:event="DOMActivate">
-                        <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
+                        <xf:setvalue ref="instance('xprIterator')/xpr:newEntity" value="'1'"/>
+                        <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][position() = instance('xprIterator')/xpr:newEntity][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
                             <xf:send submission="submitNewEntity"/>
                         </xf:action>
                         <xf:action while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
@@ -1157,6 +1158,15 @@
                         <xf:action ev:event="xforms-value-changed" ev:observer="participantRef" if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
                             <xf:send submission="submitBio"/>
                         </xf:action>
+                        <!--<xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
+                            <xf:send submission="submitNewEntity"/>
+                        </xf:action>
+                        <xf:action while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
+                            <xf:send submission="submitNewSource"/>
+                        </xf:action>
+                        <xf:action ev:event="xforms-value-changed" ev:observer="participantRef" if="not(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem/*[@localType = 'new'][@xlink:href = ''][eac:eac-cpf])">
+                            <xf:send submission="submitBio"/>
+                        </xf:action>-->
                     </xf:action>
                 </xf:trigger>
             </span>
