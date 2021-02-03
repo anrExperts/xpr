@@ -71,7 +71,7 @@
                         <xf:action ev:event="xforms-value-changed" if="instance('xprIdentities')/eac:identity/*:nameEntry//*:part[not(. = '')]">
                             <!-- @rmq lors de la copie le préfixe de l'espace de nom saute => utilisation de '*:element' -->
                             <!--
-                                @rmq pour récupérer toutes les valeurs, faire une boucle while 
+                                @rmq pour récupérer toutes les valeurs, faire une boucle while
                                 avec une itération (faire une instance('xprIterator') pour boucler
                                 sur eac:part qui ne sont pas vides et trouver leur position
                             -->
@@ -927,7 +927,7 @@
                         <xf:insert context="instance('xprEntities')" origin="instance('xprNewEntries')/xpr:entity" nodeset="xpr:entity[1]" position="before" ev:event="DOMActivate"/>
                         <xf:insert context="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']" origin="instance('xprProsopoCopy')" nodeset="xpr:label" position="after" ev:event="DOMActivate"/>
                         <!-- set a temporary value for participant instance -->
-                        <xf:setvalue ref="@xlink:href 
+                        <xf:setvalue ref="@xlink:href
                             | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
                             | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-relation', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))" ev:event="DOMActivate"/>
                         <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
@@ -1148,7 +1148,7 @@
                         <xf:show dialog="control"/>
                     </xf:action>
                     <xf:action if="not(/eac:eac-cpf/@xml:id)" ev:event="DOMActivate">
-                        <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
+                        <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][eac:eac-cpf][@xml:id = instance('xprProsopo')//*/@xlink:href]">
                             <xf:send submission="submitNewEntity"/>
                         </xf:action>
                         <xf:action while="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]">
