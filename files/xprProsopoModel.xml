@@ -400,6 +400,7 @@
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
             <xf:message level="modal">erreur</xf:message>
+            <xf:action ev:defaultAction="cancel"/>
             <xf:action
                 while="instance('xprEntities')//eac:date[not(@standardDate)]
                 | instance('xprEntities')//eac:fromDate[not(@standardDate)]
