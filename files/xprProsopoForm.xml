@@ -741,7 +741,7 @@
                             </xf:select1>
                         </xf:group>
 
-                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $participant[@localType='new']/@xlink:href]/eac:eac-cpf">
+                        <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $participant/@xlink:href]/eac:eac-cpf">
                             <xf:var name="entityType" value="descendant::eac:entityType"/>
                             <xf:label>Nouvelle entrée</xf:label>
                             <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
@@ -850,26 +850,31 @@
                         <xf:label>Sources</xf:label>
                         <xf:repeat id="repeatEventSource" nodeset="xpr:source">
                             <xf:var name="source" value="."/>
-                            <xf:trigger ref=".[@localType]">
-                                <xf:label>Sélectionner une source dans la base</xf:label>
-                                <xf:delete ref="@localType" ev:event="DOMActivate"/>
-                            </xf:trigger>
-                            <xf:trigger ref=".[not(@localType)]">
-                                <xf:label>Ajouter une nouvelle source</xf:label>
-                                <xf:insert context="." origin="instance('xprNewEntries')/xpr:source/@localType" nodeset="xpr:source" ev:event="DOMActivate"/>
-                                <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
-                                <xf:setvalue ref="@xlink:href | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
-                                             value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
-                                             ev:event="DOMActivate"/>
-                            </xf:trigger>
-                            <xf:select1 ref="@xlink:href[parent::xpr:source[not(@localType = 'new')]]" appearance="minimal" incremental="true">
-                                <xf:label>Source</xf:label>
-                                <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
-                                    <xf:label ref="."/>
-                                    <xf:value ref="if(@xml:id, @xml:id, .)"/>
-                                </xf:itemset>
-                            </xf:select1>
-                            <xf:group ref="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = $source[@localType='new']/@xlink:href]">
+                            <xf:label>Source</xf:label>
+                            <xf:group ref="@xlink:href[.!='' and .=instance('xprSources')/xpr:source[@localType='new']/@xml:id]">
+                                <xf:trigger>
+                                    <xf:label>Sélectionner une source dans la base</xf:label>
+                                    <xf:setvalue ref="." value="''" ev:event="DOMActivate"/>
+                                </xf:trigger>
+                            </xf:group>
+                            <xf:group ref="@xlink:href[.='' or . = instance('xprSources')/xpr:source[not(@localType='new')]/@xml:id]">
+                                <xf:trigger>
+                                    <xf:label>Ajouter une nouvelle source</xf:label>
+                                    <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source[1]" position="before" ev:event="DOMActivate"/>
+                                    <!-- set a temporary xml:id value for added source -->
+                                    <xf:setvalue ref=".
+                                                    | instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = '']/@xml:id"
+                                                 value="concat('local-id-source', number(count(instance('xprSources')//*:source[@localType='new'])))"
+                                                 ev:event="DOMActivate"/>
+                                </xf:trigger>
+                                <xf:select1 ref="." incremental="true">
+                                    <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
+                                        <xf:label ref="."/>
+                                        <xf:value ref="choose(@xml:id, @xml:id, .)"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                            </xf:group>
+                            <xf:group ref="instance('xprSources')/xpr:source[@xml:id = $source/@xlink:href]">
                                 <xf:label>Nouvelle source</xf:label>
                                 <xf:input ref="." incremental="true">
                                     <xf:label>Source</xf:label>
