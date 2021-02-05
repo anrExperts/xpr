@@ -36,13 +36,11 @@
 
     <xf:submission mode="synchronous"
                    id="submitNewSource"
-                   ref="instance('xprSource')"
+                   ref="instance('xprSources')/xpr:source[@localType='new'][@xml:id = instance('xprProsopo')//xpr:source/@xlink:href][1]"
                    resource="/xpr/sources/put"
                    method="put"
                    replace="none">
         <xf:action ev:event="xforms-submit">
-            <xf:insert nodeset="instance('xprSource')"
-                       origin="instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href][1]"/>
             <xf:delete ref="instance('xprSource')/@localType"/>
             <xf:delete ref="instance('xprSource')/@xlink:href"/>
         </xf:action>
@@ -56,12 +54,18 @@
             </xf:message>
             <xf:setvalue ref="instance('xprSources')/xpr:source[@localType = 'new'][. = event('response-body')//*:id]/@localType"
                          value="'stored'"/>
-            <xf:setvalue ref="instance('xprProsopo')//*:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//*:id]/@xml:id]/@xlink:href
-                            | instance('xprProsopo')//*:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//*:id]]/@xlink:href"
-                         value="event('response-body')//*:id"/>
-            <xf:setvalue ref="instance('xprProsopo')//eac:source[@xlink:href = event('response-body')//*:id][not(./@xlink:href = ./eac:sourceEntry)]/eac:sourceEntry"
-                         value="event('response-body')//*:id"/>
-            <xf:delete ref="instance('xprProsopo')//*:source[@localType = 'new'][@xlink:href = event('response-body')//*:id]/@localType"/>
+            <xf:setvalue ref="instance('xprProsopo')//xpr:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//xpr:id]/@xml:id]/@xlink:href
+                            | instance('xprProsopo')//xpr:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//xpr:id]]/@xlink:href"
+                         value="event('response-body')//xpr:id"/>
+            <xf:setvalue ref="instance('xprProsopo')//eac:source[@xlink:href = event('response-body')//xpr:id][not(@xlink:href = eac:sourceEntry)]/eac:sourceEntry"
+                         value="event('response-body')//xpr:id"/>
+
+            <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] or instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]">
+                <xf:dispatch name="submission" targetid="prosopo" delay="1"/>
+            </xf:action>
+            <xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])">
+                <xf:dispatch name="submissionBio" targetid="prosopo" delay="1"/>
+            </xf:action>
         </xf:action>
 
         <xf:action ev:event="xforms-submit-error">

@@ -79,13 +79,6 @@
         <xf:refresh ev:event="DOMActivate" model="source"/>
         <xf:refresh ev:event="DOMActivate" model="prosopo"/>
     </xf:action>
-
-    <xf:instance id="xprIterator">
-        <iterator xmlns="xpr">
-            <newEntity/>
-            <newSource/>
-        </iterator>
-    </xf:instance>
     
     <xf:instance id="xprNewEntries">
         <entries xmlns="xpr" xmlns:eac="eac" xmlns:rico="rico" xmlns:xlink="http://www.w3.org/1999/xlink">
@@ -263,8 +256,20 @@
             <xpr:cost xmlns:xpr="xpr"/>
         </event>
     </xf:instance>
-    
-    <xf:submission mode="synchronous" id="submitBio" resource="/xpr/biographies/put" method="put" replace="none">
+
+    <xf:action ev:event="submission">
+        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]" submission="submitNewEntity"/>
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]" submission="submitNewSource"/>
+    </xf:action>
+    <xf:action ev:event="submissionBio">
+        <xf:send submission="submitBio"/>
+    </xf:action>
+
+    <xf:submission mode="synchronous"
+                   id="submitBio"
+                   resource="/xpr/biographies/put"
+                   method="put"
+                   replace="none">
         <xf:action ev:event="xforms-submit">
             <xf:delete nodeset="instance('xprProsopo')//@standardDate[. = '']"/>
             <xf:delete nodeset="instance('xprProsopo')//@notBefore[. = '']"/>
@@ -304,58 +309,59 @@
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal">
-                Body : 
-                <xf:output value="event('response-body')"/> ;
-                Status : <xf:output value="event('response-status-code')"/>;
-                URI :
-                <xf:output value="event('resource-uri')"/>;
-                Headers :
-                <xf:output value="event('response-headers')"/>;
-                Reason :
-                <xf:output value="event('response-reason-phrase')"/>.
+                Body: <xf:output value="event('response-body')"/> ;
+                Status: <xf:output value="event('response-status-code')"/>;
+                URI: <xf:output value="event('resource-uri')"/>;
+                Headers: <xf:output value="event('response-headers')"/>;
+                Reason: <xf:output value="event('response-reason-phrase')"/>.
             </xf:message>
-            <xf:load show="replace">
+            <!--<xf:load show="replace">
                 <xf:resource value="'/xpr/biographies/new'"/>
-            </xf:load>
+            </xf:load>-->
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
-            <xf:message>Votre formulaire n’a pas pu être enregistré, merci de corriger les erreurs</xf:message>
+            <xf:message level="modal">
+                Une erreur est apparue : <xf:output value="event('error-type')"/>;
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>
+                Body : <xf:output value="event('response-body')"/>
+            </xf:message>
             <xf:action while="instance('xprProsopo')//eac:date[not(@standardDate)]
-                | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
-                | instance('xprProsopo')//eac:toDate[not(@standardDate)]" ev:event="xforms-submit-error">
+                              | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
+                              | instance('xprProsopo')//eac:toDate[not(@standardDate)]">
                 <xf:insert context="instance('xprProsopo')//eac:date[not(@standardDate)]
-                    | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
-                    | instance('xprProsopo')//eac:toDate[not(@standardDate)]" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@standardDate"/>
+                                    | instance('xprProsopo')//eac:fromDate[not(@standardDate)]
+                                    | instance('xprProsopo')//eac:toDate[not(@standardDate)]"
+                           origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@standardDate"/>
             </xf:action>
             <xf:action while="instance('xprProsopo')//eac:date[not(@notAfter)]
-                | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                | instance('xprProsopo')//eac:toDate[not(@notAfter)]" ev:event="xforms-submit-error-ready">
+                              | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                              | instance('xprProsopo')//eac:toDate[not(@notAfter)]">
                 <xf:insert context="instance('xprProsopo')//eac:date[not(@notAfter)]
-                    | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
-                    | instance('xprProsopo')//eac:toDate[not(@notAfter)]" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@notAfter"/>
+                                    | instance('xprProsopo')//eac:fromDate[not(@notAfter)]
+                                    | instance('xprProsopo')//eac:toDate[not(@notAfter)]"
+                           origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@notAfter"/>
             </xf:action>
             <xf:action while="instance('xprProsopo')//eac:date[not(@notBefore)]
-                | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                | instance('xprProsopo')//eac:toDate[not(@notBefore)]" ev:event="xforms-submit-error">
+                              | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                              | instance('xprProsopo')//eac:toDate[not(@notBefore)]">
                 <xf:insert context="instance('xprProsopo')//eac:date[not(@notBefore)]
-                    | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
-                    | instance('xprProsopo')//eac:toDate[not(@notBefore)]" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@notBefore"/>
+                                    | instance('xprProsopo')//eac:fromDate[not(@notBefore)]
+                                    | instance('xprProsopo')//eac:toDate[not(@notBefore)]"
+                           origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@notBefore"/>
             </xf:action>
         </xf:action>
     </xf:submission>
 
-
     <xf:submission mode="synchronous"
                    id="submitNewEntity"
-                   ref="choose(
-                   instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf,
-                   instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf,
-                   instance('xprProsopo'))"
+                   ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf"
                    resource="/xpr/biographies/put"
                    method="put"
                    replace="none">
         <xf:action ev:event="xforms-submit">
-            <xf:var name="position" value="instance('xprIterator')/xpr:newEntity"/>
             <!-- source if iad form -->
             <xf:setvalue if="instance('xprInventory')/xpr:sourceDesc"
                 ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:places/eac:place/eac:dateSet/eac:date/xpr:source/@xlink:href
@@ -407,7 +413,15 @@
                 Reason : <xf:output value="event('response-reason-phrase')"/>;
                 Body : <xf:output value="event('response-body')"/>.
             </xf:message>
-            <xf:dispatch name="next" targetid="prosopo" delay="1"/>
+            <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] or instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]">
+                <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
+            </xf:action>
+            <xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])">
+                <xf:dispatch name="submissionBio" targetid="prosopo" delay="1000"/>
+            </xf:action>
+            <!--<xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']])">
+                <xf:dispatch name="submissionBio" targetid="prosopo" delay="1000"/>
+            </xf:action>-->
             <!--<xf:delete if="not(instance('xprInventory')/xpr:sourceDesc)"
                        nodeset="instance('xprProsopo')//*[@xlink:href=normalize-space(event('response-body')//xpr:id)]/@localType[.='new']"/>
             <xf:setvalue if="instance('xprInventory')/xpr:sourceDesc"
@@ -417,7 +431,14 @@
                         nodeset="instance('xprInventory')//*[@xlink:href = event('response-body')//*:id]/@localType[. = 'new']"/>-->
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
-            <xf:message level="modal">erreur</xf:message>
+            <xf:message level="modal">
+                erreur :
+                error-type: <output value="event('error-type')"/>
+                error-message: <output value="event('error-message')"/>
+                response-status-code: <output value="event('response-status-code')"/>
+                response-reason-phrase: <output value="event('response-reason-phrase')"/>
+                resource-uri: <output value="event('resource-uri')"/>
+            </xf:message>
             <xf:action
                 while="instance('xprEntities')//eac:date[not(@standardDate)]
                 | instance('xprEntities')//eac:fromDate[not(@standardDate)]
@@ -448,15 +469,6 @@
                     | instance('xprEntities')//eac:toDate[not(@notBefore)]"
                     origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@notBefore"/>
             </xf:action>
-
-            <!--<xf:setvalue ref="instance('xprIterator')/xpr:newEntity" value="instance('xprIterator')/xpr:newEntity + 1"/>-->
         </xf:action>
     </xf:submission>
-
-    <xf:action ev:event="next">
-        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf" submission="submitNewEntity"/>
-        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]" submission="submitNewSource"/>
-        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf) and not(instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href])" submission="submitNewEntity"/>
-    </xf:action>
-
 </xf:model>

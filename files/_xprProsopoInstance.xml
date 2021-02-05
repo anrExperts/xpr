@@ -22,8 +22,7 @@
             </maintenanceEvent>
         </maintenanceHistory>
         <sources>
-            <source
-                xlink:href="">
+            <source xlink:href="">
                 <sourceEntry/>
                 <descriptiveNote>
                     <p/>
@@ -32,8 +31,7 @@
         </sources>
     </control>
     <cpfDescription>
-        <identity
-            localType="">
+        <identity localType="">
             <entityId/>
             <entityType/>
             <nameEntry>
@@ -41,29 +39,19 @@
                 <authorizedForm/>
             </nameEntry>
             <nameEntry>
-                <part
-                    localType=""/>
+                <part localType=""/>
                 <alternativeForm/>
-                <xpr:source
-                    xmlns:xpr="xpr"
-                    xlink:href=""/>
+                <xpr:source xmlns:xpr="xpr" xlink:href=""/>
             </nameEntry>
         </identity>
         <description>
             <existDates>
                 <dateRange>
-                    <fromDate
-                        standardDate=""
-                        notBefore=""
-                        notAfter=""/>
-                    <toDate
-                        standardDate=""
-                        notBefore=""
-                        notAfter=""/>
+                    <fromDate standardDate="" notBefore="" notAfter=""/>
+                    <toDate standardDate="" notBefore="" notAfter=""/>
                 </dateRange>
             </existDates>
-            <localDescription
-                localType="sex">
+            <localDescription localType="sex">
                 <term/>
             </localDescription>
             <places>
@@ -71,12 +59,8 @@
                     <placeRole>Adresse</placeRole>
                     <placeEntry/>
                     <dateSet>
-                        <date
-                            standardDate=""
-                            notBefore=""
-                            notAfter="">
-                            <xpr:source
-                                xlink:href=""/>
+                        <date standardDate="" notBefore="" notAfter="">
+                            <xpr:source xlink:href=""/>
                         </date>
                     </dateSet>
                     <descriptiveNote>
@@ -87,58 +71,40 @@
             <occupations>
                 <occupation>
                     <term/>
-                    <date
-                        standardDate=""
-                        notBefore=""
-                        notAfter=""/>
+                    <date standardDate="" notBefore="" notAfter=""/>
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
-                    <xpr:source
-                            xlink:href=""/>
+                    <xpr:source xlink:href=""/>
                 </occupation>
             </occupations>
             <functions>
                 <function>
                     <term/>
-                    <date
-                        standardDate=""
-                        notBefore=""
-                        notAfter=""/>
+                    <date standardDate="" notBefore="" notAfter=""/>
                     <descriptiveNote>
                         <p/>
                     </descriptiveNote>
-                    <xpr:source
-                        xlink:href=""/>
+                    <xpr:source xlink:href=""/>
                 </function>
             </functions>
             <biogHist>
                 <chronList>
-                    <chronItem
-                        localType="">
-                        <date
-                            standardDate=""
-                            notBefore=""
-                            notAfter=""/>
+                    <chronItem localType="">
+                        <date standardDate="" notBefore="" notAfter=""/>
                         <placeEntry/>
                         <event/>
-                        <rico:participant
-                            xlink:href=""/>
-                        <rico:involve
-                            xlink:href=""/>
-                        <xpr:source
-                            xlink:href=""/>
+                        <rico:participant xlink:href=""/>
+                        <rico:involve xlink:href=""/>
+                        <xpr:source xlink:href=""/>
                     </chronItem>
                 </chronList>
             </biogHist>
         </description>
         <relations>
-            <cpfRelation
-                xlink:href=""
-                xlink:arcrole="">
+            <cpfRelation xlink:href="" xlink:arcrole="">
                 <relationEntry/>
-                <xpr:source
-                    xlink:href=""/>
+                <xpr:source xlink:href=""/>
             </cpfRelation>
         </relations>
     </cpfDescription>
