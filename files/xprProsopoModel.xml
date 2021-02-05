@@ -347,7 +347,10 @@
 
     <xf:submission mode="synchronous"
                    id="submitNewEntity"
-                   ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf"
+                   ref="choose(
+                   instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf,
+                   instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf,
+                   instance('xprProsopo'))"
                    resource="/xpr/biographies/put"
                    method="put"
                    replace="none">
@@ -404,10 +407,7 @@
                 Reason : <xf:output value="event('response-reason-phrase')"/>;
                 Body : <xf:output value="event('response-body')"/>.
             </xf:message>
-
-            <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf">
-                <xf:send submission="submitNewEntity"/>
-            </xf:action>
+            <xf:dispatch name="next" targetid="prosopo" delay="1"/>
             <!--<xf:delete if="not(instance('xprInventory')/xpr:sourceDesc)"
                        nodeset="instance('xprProsopo')//*[@xlink:href=normalize-space(event('response-body')//xpr:id)]/@localType[.='new']"/>
             <xf:setvalue if="instance('xprInventory')/xpr:sourceDesc"
@@ -452,4 +452,11 @@
             <!--<xf:setvalue ref="instance('xprIterator')/xpr:newEntity" value="instance('xprIterator')/xpr:newEntity + 1"/>-->
         </xf:action>
     </xf:submission>
+
+    <xf:action ev:event="next">
+        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf" submission="submitNewEntity"/>
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href]" submission="submitNewSource"/>
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf) and not(instance('xprSources')/xpr:source[@localType = 'new'][@xml:id = instance('xprProsopo')//*:source/@xlink:href])" submission="submitNewEntity"/>
+    </xf:action>
+
 </xf:model>
