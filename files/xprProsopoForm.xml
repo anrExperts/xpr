@@ -1174,13 +1174,8 @@
                     </xf:trigger>
                     <xf:trigger>
                         <xf:label>Enregistrer</xf:label>
-                        <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] or instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]"
-                                   ev:event="DOMActivate">
-                            <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
-                        </xf:action>
-                        <xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])"
-                                   ev:event="DOMActivate">
-                            <xf:dispatch name="submissionBio" targetid="prosopo" delay="1000"/>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:dispatch name="submission" targetid="prosopo"/>
                         </xf:action>
                     </xf:trigger>
                 </xf:dialog>
@@ -1191,12 +1186,7 @@
                         <xf:show dialog="control"/>
                     </xf:action>
                     <xf:action if="not(/eac:eac-cpf/@xml:id)" ev:event="DOMActivate">
-                        <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] or instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]">
-                            <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
-                        </xf:action>
-                        <xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])">
-                            <xf:dispatch name="submissionBio" targetid="prosopo" delay="1000"/>
-                        </xf:action>
+                        <xf:dispatch name="submission" targetid="prosopo"/>
                     </xf:action>
                 </xf:trigger>
             </span>

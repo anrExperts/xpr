@@ -59,13 +59,7 @@
                          value="event('response-body')//xpr:id"/>
             <xf:setvalue ref="instance('xprProsopo')//eac:source[@xlink:href = event('response-body')//xpr:id][not(@xlink:href = eac:sourceEntry)]/eac:sourceEntry"
                          value="event('response-body')//xpr:id"/>
-
-            <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] or instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]">
-                <xf:dispatch name="submission" targetid="prosopo" delay="1"/>
-            </xf:action>
-            <xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])">
-                <xf:dispatch name="submissionBio" targetid="prosopo" delay="1"/>
-            </xf:action>
+            <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
         </xf:action>
 
         <xf:action ev:event="xforms-submit-error">

@@ -258,9 +258,16 @@
     </xf:instance>
 
     <xf:action ev:event="submission">
-        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']])" submission="submitBio"/>
-        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]" submission="submitNewEntity"/>
+        <!--
+        /!\ send order note /!\
+        An event is defined and three submissions are to be sent synchronously, one after one, according to a condition which should be true for one only.
+        The first one (and the second one) will send again the same event producing a submission loop effect.
+        But the first one (and the second one) is also altering the loop condition and it appears that, at the end, the 2 or 3 submissions are sent for the same event just before the latest event being caught.
+        The easiest way to control this is to invert the order of the submissions: the one to be activated at the end is to be tested before the others to be activated repeatedly.
+        -->
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]) and not(instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])" submission="submitBio"/>
         <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]" submission="submitNewSource"/>
+        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]" submission="submitNewEntity"/>
     </xf:action>
 
 
