@@ -72,13 +72,13 @@
     <xf:bind nodeset="instance('xprEntities')/xpr:entity[@localType='new']/eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" required="true()"/>
     <xf:bind nodeset="instance('xprEntities')/xpr:entity[@localType='new']/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part" required="true()"/>
 
-    <xf:bind id="obsListEntity" nodeset="instance('xprEntities')"/>
-    <!-- to update item list in itemset  -->
-    <!-- @todo verif les DOMActivate ne doivent pas servir à grand chose -->
+<!--    <xf:bind id="obsListEntity" nodeset="instance('xprEntities')"/>
+    &lt;!&ndash; to update item list in itemset  &ndash;&gt;
+    &lt;!&ndash; @todo verif les DOMActivate ne doivent pas servir à grand chose &ndash;&gt;
     <xf:action ev:event="xforms-value-changed" ev:observer="obsListEntity">
         <xf:refresh ev:event="DOMActivate" model="source"/>
         <xf:refresh ev:event="DOMActivate" model="prosopo"/>
-    </xf:action>
+    </xf:action>-->
     
     <xf:instance id="xprNewEntries">
         <entries xmlns="xpr" xmlns:eac="eac" xmlns:rico="rico" xmlns:xlink="http://www.w3.org/1999/xlink">
