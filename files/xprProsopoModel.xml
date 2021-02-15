@@ -258,12 +258,11 @@
     </xf:instance>
 
     <xf:action ev:event="submission">
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']])" submission="submitBio"/>
         <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]" submission="submitNewEntity"/>
         <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]" submission="submitNewSource"/>
     </xf:action>
-    <xf:action ev:event="submissionBio">
-        <xf:send submission="submitBio"/>
-    </xf:action>
+
 
     <xf:submission mode="synchronous"
                    id="submitBio"
@@ -315,9 +314,9 @@
                 Headers: <xf:output value="event('response-headers')"/>;
                 Reason: <xf:output value="event('response-reason-phrase')"/>.
             </xf:message>
-            <!--<xf:load show="replace">
+            <xf:load show="replace">
                 <xf:resource value="'/xpr/biographies/new'"/>
-            </xf:load>-->
+            </xf:load>
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
             <xf:message level="modal">
@@ -401,8 +400,7 @@
                          value="event('response-body')//xpr:id"/>
             <xf:setvalue ref="instance('xprProsopo')//@*[normalize-space(.)=normalize-space(event('response-body')//xpr:xforms-id)]"
                          value="event('response-body')//xpr:id"/>
-            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@xml:id=normalize-space(event('response-body')//xpr:id)]/@localType"
-                         value="'stored'"/>
+            <xf:delete nodeset="instance('xprEntities')/xpr:entity[@xml:id=normalize-space(event('response-body')//xpr:id)]/@localType"/>
             <xf:delete nodeset="instance('xprEntities')/xpr:entity[@xml:id=normalize-space(event('response-body')//xpr:id)]/eac:eac-cpf"/>
 
             <xf:message level="modal">
@@ -413,12 +411,7 @@
                 Reason : <xf:output value="event('response-reason-phrase')"/>;
                 Body : <xf:output value="event('response-body')"/>.
             </xf:message>
-            <xf:action if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] or instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]">
-                <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
-            </xf:action>
-            <xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']] and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])">
-                <xf:dispatch name="submissionBio" targetid="prosopo" delay="1000"/>
-            </xf:action>
+            <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
             <!--<xf:action if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']])">
                 <xf:dispatch name="submissionBio" targetid="prosopo" delay="1000"/>
             </xf:action>-->
