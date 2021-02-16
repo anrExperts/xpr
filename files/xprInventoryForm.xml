@@ -13,8 +13,8 @@
                 </xf:input>
                 <xf:select1 ref="xpr:expert/@ref" incremental="true">
                     <xf:label>Patronyme</xf:label>
-                    <xf:itemset nodeset="instance('xprEntities')/*[@type='expert' or @type='altExpert']">
-                        <xf:label value="xpr:label"/>
+                    <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity[@type='expert' or @type='altExpert']">
+                        <xf:label ref="xpr:label"/>
                         <xf:value ref="@xml:id"/>
                     </xf:itemset>
                 </xf:select1>
@@ -51,46 +51,46 @@
                     </xf:item>
                 </xf:select1>
             </xf:group>
-            <xf:group ref="eac:relations">
+            <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:relations">
                 <xf:label>Relations</xf:label>
                 <xf:repeat id="repeatRelation" nodeset="eac:cpfRelation">
+                    <xf:var name="relation" value="."/>
                     <xf:label>Relation</xf:label>
-                    <xf:trigger ref="@localType">
-                        <xf:label>Personne dans la base</xf:label>
-                        <xf:setvalue ref="ancestor::eac:cpfRelation/@xlink:href" value="''"/>
-                        <xf:delete ref="ancestor::eac:cpfRelation/@localType" ev:event="DOMActivate"/>
-                        <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                        <xf:action ev:event="DOMActivate">
-                            <xf:insert origin="instance('xprInventory')" context="instance('xprStorage')" nodeset="./*"/>
-                            <xf:insert origin="instance('xprStorage')/xpr:inventory" context="instance('xprInventory')" nodeset="."/>
-                            <xf:delete ref="instance('xprStorage')/xpr:inventory"/>
-                        </xf:action>
-                    </xf:trigger>
-                    <xf:trigger ref="self::node()[not(@localType)]">
-                        <xf:label>Nouvelle personne</xf:label>
-                        <xf:insert context="." origin="instance('xprNewEntries')/eac:cpfRelation/@localType" nodeset="eac:cpfRelation" ev:event="DOMActivate"/>
-                        <xf:insert context="instance('xprEntities')" origin="instance('xprNewEntries')/xpr:entity" nodeset="xpr:entity[1]" position="before" ev:event="DOMActivate"/>
-                        <xf:insert context="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']" origin="instance('xprProsopoCopy')" nodeset="xpr:label" position="after" ev:event="DOMActivate"/>
-                        <!-- set a temporary value for participant instance -->
-                        <xf:setvalue ref="@xlink:href
-                    | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
-                    | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id" value="concat('local-id-relation', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))" ev:event="DOMActivate"/>
-                        <!-- to resolve display bug when adding item into itemset (gap label/value diplayed)-->
-                        <xf:action ev:event="DOMActivate">
-                            <xf:insert origin="instance('xprInventory')" context="instance('xprStorage')" nodeset="./*"/>
-                            <xf:insert origin="instance('xprStorage')/xpr:inventory" context="instance('xprInventory')" nodeset="."/>
-                            <xf:delete ref="instance('xprStorage')/xpr:inventory"/>
-                        </xf:action>
-                    </xf:trigger>
-                    <xf:select1 ref="@xlink:href" incremental="true">
-                        <xf:label>Entité</xf:label>
-                        <xf:itemset model="inventory" nodeset="instance('xprEntities')/xpr:entity">
-                            <xf:label ref="xpr:label"/>
-                            <xf:value ref="@xml:id"/>
-                        </xf:itemset>
-                        <xf:setvalue ev:event="xforms-value-changed" ref="parent::eac:cpfRelation/eac:relationEntry" value="instance('xprEntities')/xpr:entity[@xml:id = current()]/xpr:label"/>
-                    </xf:select1>
-                    <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = current()/@xlink:href[parent::eac:cpfRelation[@localType = 'new']]]/eac:eac-cpf">
+                    <xf:group ref="@xlink:href[.!='' and .=instance('xprEntities')/xpr:entity[@localType='new']/@xml:id]">
+                        <xf:trigger>
+                            <xf:label>Personne dans la base</xf:label>
+                            <xf:setvalue ref="." value="''" ev:event="DOMActivate"/>
+                        </xf:trigger>
+                    </xf:group>
+                    <xf:group ref="@xlink:href[.='' or . = instance('xprEntities')/xpr:entity[not(@localType='new')]/@xml:id]">
+                        <xf:trigger>
+                            <xf:label>Nouvelle personne</xf:label>
+                            <xf:insert context="instance('xprEntities')"
+                                       origin="instance('xprNewEntries')/xpr:entity"
+                                       nodeset="xpr:entity[1]"
+                                       position="before"
+                                       ev:event="DOMActivate"/>
+                            <xf:insert context="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']"
+                                       origin="instance('xprProsopoCopy')"
+                                       nodeset="xpr:label"
+                                       position="after"
+                                       ev:event="DOMActivate"/>
+                            <!-- set a temporary xml:id value for added entity -->
+                            <xf:setvalue ref=".
+                                                | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
+                                                | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id"
+                                         value="concat('local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))"
+                                         ev:event="DOMActivate"/>
+                        </xf:trigger>
+                        <xf:select1 ref="." incremental="true">
+                            <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity">
+                                <xf:label ref="xpr:label"/>
+                                <xf:value ref="@xml:id"/>
+                            </xf:itemset>
+                        </xf:select1>
+                    </xf:group>
+                    <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $relation/@xlink:href]/eac:eac-cpf">
+                        <xf:var name="entityType" value="descendant::eac:entityType"/>
                         <xf:label>Nouvelle entrée</xf:label>
                         <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
                             <xf:label>Type d'entité</xf:label>
@@ -127,50 +127,17 @@
                         </xf:select1>
                         <xf:select1 ref="eac:cpfDescription/eac:identity/@localType" appearance="minimal">
                             <xf:label>Répertoire</xf:label>
-                            <xf:itemset model="inventory" nodeset="instance('xprEntitiesTypes')/identity[@type = current()/ancestor::eac:identity/eac:entityType]">
-                                <xf:label ref="label"/>
-                                <xf:value ref="value"/>
+                            <xf:itemset nodeset="instance('xprEntitiesTypes')/xpr:identity[@type=$entityType]">
+                                <xf:label ref="xpr:label"/>
+                                <xf:value ref="xpr:value"/>
                             </xf:itemset>
                         </xf:select1>
-                        <xf:group ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]">
-                            <xf:label>Forme attestée du nom</xf:label>
-                            <xf:input ref="eac:part[@localType='surname']">
-                                <xf:label>Nom</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='forename']">
-                                <xf:label>Prénom</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='particle']">
-                                <xf:label>Particule</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='common']">
-                                <xf:label>Titre d'appel</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='formal']">
-                                <xf:label>Titre institutionnel</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='academic']">
-                                <xf:label>Titre académique</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='religious']">
-                                <xf:label>Titre religieux</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='nobiliary']">
-                                <xf:label>Titre de noblesse</xf:label>
-                            </xf:input>
-                            <xf:input ref="eac:part[@localType='officeName']">
-                                <xf:label>Dénomination</xf:label>
-                            </xf:input>
-                        </xf:group>
-                        <xf:group ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]">
-                            <xf:label>Forme autorisée du nom (vedette)</xf:label>
-                            <xf:input ref="eac:part">
-                                <xf:label>Nom</xf:label>
-                                <xf:action ev:event="xforms-value-changed">
-                                    <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
-                                </xf:action>
-                            </xf:input>
-                        </xf:group>
+                        <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
+                            <xf:label>Nom</xf:label>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
+                            </xf:action>
+                        </xf:input>
                         <xf:group ref="eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate">
                             <xf:label>Naissance</xf:label>
                             <xf:input ref="@standardDate">
@@ -208,18 +175,12 @@
                                 </xf:item>
                             </xf:select1>
                         </xf:group>
-                        <xf:group ref="eac:cpfDescription/eac:description/eac:places/eac:place">
-                            <xf:label>Résidence</xf:label>
-                            <xf:input ref="eac:placeEntry">
-                                <xf:label>Adresse</xf:label>
-                            </xf:input>
-                        </xf:group>
                     </xf:group>
                     <xf:select1 ref="@xlink:arcrole" incremental="true">
                         <xf:label>Type de relation</xf:label>
-                        <xf:itemset nodeset="instance('xprRelationsTypes')/type">
-                            <xf:label ref="label"/>
-                            <xf:value ref="value"/>
+                        <xf:itemset model="prosopo" nodeset="instance('xprRelationsTypes')/xpr:type">
+                            <xf:label ref="xpr:label"/>
+                            <xf:value ref="xpr:value"/>
                         </xf:itemset>
                     </xf:select1>
                     <xf:trigger ref="." class="delete">
@@ -228,11 +189,17 @@
                         <xf:help>Supprimer une relation</xf:help>
                     </xf:trigger>
                 </xf:repeat>
-                <xf:trigger>
-                    <xf:label>ajouter une relation</xf:label>
+                <xf:trigger class="insert">
+                    <xf:label>Nouvelle une relation</xf:label>
                     <xf:action ev:event="DOMActivate">
-                        <xf:insert context="." origin="instance('xprInventoryCopy')/eac:relations/eac:cpfRelation" nodeset="eac:cpfRelation[last()]" position="after"/>
+                        <xf:insert context="."
+                                   origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:relations/eac:cpfRelation"
+                                   nodeset="eac:cpfRelation"
+                                   at="last()"
+                                   position="after"
+                                   ev:event="DOMActivate"/>
                     </xf:action>
+                    <xf:help>Ajouter une relation</xf:help>
                 </xf:trigger>
             </xf:group>
             <xf:group ref="xpr:wealth">
@@ -591,9 +558,6 @@
                         <xf:label>Éléments remarquables</xf:label>
                     </xf:textarea>
                 </xf:group>
-                <!--<xf:group ref="xpr:">
-            <xf:label></xf:label>
-        </xf:group>-->
             </xf:group>
             <xf:group ref="xpr:objects">
                 <xf:label>Objets</xf:label>
@@ -696,18 +660,21 @@
                     <xf:trigger>
                         <xf:label>Enregistrer</xf:label>
                         <xf:action ev:event="DOMActivate">
-                            <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprInventory')//eac:cpfRelation/@xlink:href]">
-                                <xf:send submission="submitNewEntity"/>
-                            </xf:action>
-                            <xf:action ev:event="xforms-value-changed" ev:observer="relationHrefOb" if="not(instance('xprInventory')/xpr:relations//xpr:relation[@href = ''])">
-                                <xf:send submission="submitInventory"/>
-                            </xf:action>
+                            <xf:dispatch name="submission" targetid="inventory"/>
                         </xf:action>
                     </xf:trigger>
                 </xf:dialog>
                 <xf:trigger>
                     <xf:label>Enregistrer</xf:label>
+                    <!--we are using xf:delete to distinguish which submission module we need (prosopo or inventory)-->
+                    <xf:delete nodeset="instance('xprProsopo')/*" ev:event="DOMActivate"/>
                     <xf:action if="/eac:inventory/@xml:id" ev:event="DOMActivate">
+                        <xf:show dialog="control"/>
+                    </xf:action>
+                    <xf:action if="not(/eac:inventory/@xml:id)" ev:event="DOMActivate">
+                        <xf:dispatch name="submission" targetid="inventory"/>
+                    </xf:action>
+                    <!--<xf:action if="/eac:inventory/@xml:id" ev:event="DOMActivate">
                         <xf:show dialog="control"/>
                     </xf:action>
                     <xf:action if="not(/eac:inventory/@xml:id)" ev:event="DOMActivate">
@@ -719,7 +686,7 @@
                                 <xf:send submission="submitInventory"/>
                             </xf:action>
                         </xf:action>
-                    </xf:action>
+                    </xf:action>-->
                 </xf:trigger>
             </span>
         </xf:case>

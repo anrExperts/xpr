@@ -1181,6 +1181,7 @@
                 </xf:dialog>
                 <xf:trigger>
                     <xf:label>Enregistrer</xf:label>
+                    <!--we are using xf:delete to distinguish which submission module we need (prosopo or inventory)-->
                     <xf:delete nodeset="instance('xprInventory')/*" ev:event="DOMActivate"/>
                     <xf:action if="/eac:eac-cpf/@xml:id" ev:event="DOMActivate">
                         <xf:show dialog="control"/>
