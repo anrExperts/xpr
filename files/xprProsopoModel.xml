@@ -304,11 +304,11 @@
             <!--set value for maintenance event informations-->
             <xf:action if="/eac:eac-cpf/@xml:id">
                 <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceStatus" value="'revised'"/>
-                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventType" value="'revision'"/>
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventType" value="'revised'"/>
             </xf:action>
             <xf:action if="not(/eac:eac-cpf/@xml:id)">
                 <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceStatus" value="'new'"/>
-                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventType" value="'creation'"/>
+                <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventType" value="'created'"/>
                 <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDescription" value="'Création de la fiche.'"/>
             </xf:action>
             <xf:setvalue ref="instance('xprProsopo')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDateTime/@standardDateTime

@@ -270,11 +270,11 @@
             <!--set value for maintenance event informations-->
             <xf:action if="/xpr:expertise/@xml:id">
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'revised'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'revision'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'revised'"/>
             </xf:action>
             <xf:action if="not(/xpr:expertise/@xml:id)">
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'new'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'creation'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'created'"/>
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDescription" value="'Création de la fiche.'"/>
             </xf:action>
             <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime/@standardDateTime
