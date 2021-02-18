@@ -83,15 +83,15 @@
         <index xmlns="xpr">
             <group type="estates">
                 <label>Biens expertisés (nature juridique et caractères)</label>
-                <term>Accessoire</term>
-                <term>Acquêts</term>
-                <term>Biens propres</term>
-                <term>Biens vacants</term>
-                <term>Fruits</term>
-                <term>Meubles</term>
-                <term>Usufruit</term>
-                <term>Maison (re)construite à neuf</term>
-                <term>Maison nouvellement acquise</term>
+                <term value="a1">Accessoire</term>
+                <term value="a2">Acquêts</term>
+                <term value="a3">Biens propres</term>
+                <term value="a4">Biens vacants</term>
+                <term value="a5">Fruits</term>
+                <term value="a6">Meubles</term>
+                <term value="a7">Usufruit</term>
+                <term value="a8">Maison (re)construite à neuf</term>
+                <term value="a9">Maison nouvellement acquise</term>
             </group>
             <group type="procedure">
                 <label>Procédure (questions de)</label>
