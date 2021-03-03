@@ -58,14 +58,10 @@
                         </xf:item>
                         <xf:itemset model="prosopo" nodeset="instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:alternativeForm]">
                             <!--<xf:label value="concat(eac:part[@localType='officeName'], eac:part[@localType='surname'], if(ancestor::eac:identity/eac:entityType='person', ', ', ''), eac:part[@localType='forename'])"/>-->
-                            <xf:label>
-                                <xf:output
-                                    value="concat(
-                                    if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'person'], concat(eac:part[@localType='surname'], ', ', eac:part[@localType='forename'], ' (', if(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
-                                    if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'corporateBody'], concat(eac:part[@localType='officeName'], ''), ''),
-                                    if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'family'], concat(eac:part[@localType='surname'], ''), '')
-                                    )"/>
-                            </xf:label>
+                            <xf:label value="concat(
+                                        if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'person'], concat(eac:part[@localType='surname'], ', ', eac:part[@localType='forename'], ' (', if(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*[not(. = '')], substring(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*[not(. = '')], 1, 4), '?'), ' - ', if(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*[not(. = '')], substring(instance('xprProsopo')/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*[not(. = '')], 1, 4), '?'), ')'), ''),
+                                        if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'corporateBody'], concat(eac:part[@localType='officeName'], ''), ''),
+                                        if(instance('xprProsopo')/eac:cpfDescription/eac:identity/eac:entityType[. = 'family'], concat(eac:part[@localType='surname'], ''), ''))"/>
                             <xf:copy ref="."/>
                         </xf:itemset>
                         <xf:action ev:event="xforms-value-changed" if="instance('xprIdentities')/eac:identity/*:nameEntry//*:part[not(. = '')]">
