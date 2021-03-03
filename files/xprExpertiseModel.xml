@@ -83,15 +83,15 @@
         <index xmlns="xpr">
             <group type="estates">
                 <label>Biens expertisés (nature juridique et caractères)</label>
-                <term>Accessoire</term>
-                <term>Acquêts</term>
-                <term>Biens propres</term>
-                <term>Biens vacants</term>
-                <term>Fruits</term>
-                <term>Meubles</term>
-                <term>Usufruit</term>
-                <term>Maison (re)construite à neuf</term>
-                <term>Maison nouvellement acquise</term>
+                <term value="a1">Accessoire</term>
+                <term value="a2">Acquêts</term>
+                <term value="a3">Biens propres</term>
+                <term value="a4">Biens vacants</term>
+                <term value="a5">Fruits</term>
+                <term value="a6">Meubles</term>
+                <term value="a7">Usufruit</term>
+                <term value="a8">Maison (re)construite à neuf</term>
+                <term value="a9">Maison nouvellement acquise</term>
             </group>
             <group type="procedure">
                 <label>Procédure (questions de)</label>
@@ -270,11 +270,11 @@
             <!--set value for maintenance event informations-->
             <xf:action if="/xpr:expertise/@xml:id">
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'revised'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'revision'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'revised'"/>
             </xf:action>
             <xf:action if="not(/xpr:expertise/@xml:id)">
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'new'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'creation'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'created'"/>
                 <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDescription" value="'Création de la fiche.'"/>
             </xf:action>
             <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime/@standardDateTime
@@ -282,11 +282,14 @@
                          value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
-            <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
+            <xf:hide dialog="waitingMessage"/>
+            <xf:message level="modal">La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
             <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
             <xf:load resource="/xpr/expertises/view" show="replace"/>
         </xf:action>
-        <xf:message ev:event="xforms-submit-error" level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
-        </xf:message>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:hide dialog="waitingMessage"/>
+            <xf:message level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
+        </xf:action>
     </xf:submission>
 </xf:model>
