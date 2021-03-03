@@ -1374,6 +1374,7 @@
                 <xf:hide ev:event="DOMActivate" dialog="control"/>
             </xf:trigger>
             <xf:submit submission="submit">
+                <xf:show dialog="waitingMessage"/>
                 <xf:label>Enregistrer</xf:label>
             </xf:submit>
         </xf:dialog>
@@ -1383,8 +1384,10 @@
                 <xf:show dialog="control"/>
             </xf:action>
             <xf:action if="not(/xpr:expertise/@xml:id)" ev:event="DOMActivate">
+                <xf:show dialog="waitingMessage"/>
                 <xf:send submission="submit"/>
             </xf:action>
         </xf:trigger>
+        <xf:dialog id="waitingMessage">Enregistrement en cours.</xf:dialog>
     </span>
 </form>

@@ -282,11 +282,14 @@
                          value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
-            <xf:message level="modal"> La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
+            <xf:hide dialog="waitingMessage"/>
+            <xf:message level="modal">La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
             <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
             <xf:load resource="/xpr/expertises/view" show="replace"/>
         </xf:action>
-        <xf:message ev:event="xforms-submit-error" level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/>
-        </xf:message>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:hide dialog="waitingMessage"/>
+            <xf:message level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
+        </xf:action>
     </xf:submission>
 </xf:model>
