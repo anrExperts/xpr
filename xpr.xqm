@@ -19,6 +19,7 @@ import module namespace G = 'xpr.globals' at './globals.xqm' ;
 import module namespace xpr.mappings.html = 'xpr.mappings.html' at './mappings.html.xqm' ;
 import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' ;
 import module namespace xpr.models.networks = 'xpr.models.networks' at './models.networks.xqm' ;
+import module namespace xpr.session = 'xpr.session' at '../sessionApp/index.xqm' ;
 
 declare namespace rest = "http://exquery.org/ns/restxq" ;
 declare namespace file = "http://expath.org/ns/file" ;
@@ -294,6 +295,7 @@ function getExpertiseJson($id) {
 declare
   %rest:path("xpr/expertises/new")
   %output:method("xml")
+  %perm:allow("expertises")
 function newExpertise() {
   let $content := map {
     'instance' : '',
