@@ -19,6 +19,7 @@ import module namespace G = 'xpr.globals' at './globals.xqm' ;
 import module namespace xpr.mappings.html = 'xpr.mappings.html' at './mappings.html.xqm' ;
 import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' ;
 import module namespace xpr.models.networks = 'xpr.models.networks' at './models.networks.xqm' ;
+import module namespace Session = 'http://basex.org/modules/session';
 
 declare namespace rest = "http://exquery.org/ns/restxq" ;
 declare namespace file = "http://expath.org/ns/file" ;
@@ -294,6 +295,7 @@ function getExpertiseJson($id) {
 declare
   %rest:path("xpr/expertises/new")
   %output:method("xml")
+  %perm:allow("expertises")
 function newExpertise() {
   let $content := map {
     'instance' : '',
@@ -319,6 +321,7 @@ function newExpertise() {
 declare 
   %rest:path("xpr/expertises/{$id}/modify")
   %output:method("xml")
+  %perm:allow("expertises")
 function modifyExpertise($id) {
   let $content := map {
     'instance' : $id,
@@ -335,6 +338,24 @@ function modifyExpertise($id) {
     <?css-conversion no?>,
     xpr.models.xpr:wrapper($content, $outputParam)
     )
+};
+
+(:~
+ : Permissions: expertises
+ : Checks if the current user is granted; if not, redirects to the login page.
+ : @param $perm map with permission data
+ :)
+declare
+    %perm:check('xpr/expertises', '{$perm}')
+function permExpertise($perm) {
+  let $user := Session:get('id')
+  return
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+      then web:redirect('/xpr/login')
 };
 
 (:~
@@ -1433,6 +1454,99 @@ declare variable $xpr.xpr:style :=
 
             }}
           </style>;
+
+(:~
+ : This resource function edits a new user
+    : @return an xforms to edit a new user
+:)
+declare
+  %rest:path("xpr/users/new")
+  %output:method("xml")
+function newUser() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprUserModel.xml',
+    'trigger' : '',
+    'form' : 'xprUserForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This function creates new user in dba.
+ : @todo return creation message
+ : @todo control for duplicate user.
+ :)
+declare
+  %rest:path("xpr/users/put")
+  %output:method("xml")
+  %rest:header-param("Referer", "{$referer}", "none")
+  %rest:PUT("{$param}")
+  %updating
+function putUser($param, $referer) {
+  let $db := db:open("xpr")
+  let $user := $param
+  let $userName := fn:normalize-space($user/*:user/*:name)
+  let $userPwd := fn:normalize-space($user/*:user/*:password)
+  let $userPermission := fn:normalize-space($user/*:user/*:permission)
+  let $userInfo :=
+    <info xmlns="">{
+        for $right in $user/*:user/*:info/*:grant
+        return <grant type="{$right/@type}">{fn:normalize-space($right)}</grant>
+    }</info>
+  return
+    user:create(
+      $userName,
+      $userPwd,
+      $userPermission,
+      'xpr',
+      $userInfo)
+};
+
+
+(:~ Login page (visible to everyone). :)
+declare
+  %rest:path("xpr/login")
+  %output:method("html")
+function login() {
+  <html>
+    Please log in:
+    <form action="/xpr/login/check" method="post">
+      <input name="name"/>
+      <input type="password" name="pass"/>
+      <input type="submit"/>
+    </form>
+  </html>
+};
+
+declare
+  %rest:path("xpr/login/check")
+  %rest:query-param("name", "{$name}")
+  %rest:query-param("pass", "{$pass}")
+function login($name, $pass) {
+  try {
+    user:check($name, $pass),
+    Session:set('id', $name),
+    web:redirect("/main")
+  } catch user:* {
+    web:redirect("/")
+  }
+};
+
+declare
+  %rest:path("xpr/logout")
+function logout() {
+  Session:delete('id'),
+  web:redirect("/")
+};
+
 
 (:~
  : this function queries term in xpr databes
