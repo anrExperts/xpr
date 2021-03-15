@@ -1,0 +1,28 @@
+<form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:group ref="instance('sessionUser')">
+        <xf:label>Nouveau compte utilisateur</xf:label>
+        <xf:input ref="session:name">
+            <xf:label>Nom</xf:label>
+        </xf:input>
+        <xf:secret ref="session:password">
+            <xf:label>Mot de passe</xf:label>
+        </xf:secret>
+        <xf:select1 ref="session:permission">
+            <xf:label>Permission</xf:label>
+            <xf:itemset nodeset="instance('sessionPermissions')/session:permission">
+                <xf:label ref="@label"/>
+                <xf:value ref="@value"/>
+            </xf:itemset>
+        </xf:select1>
+        <xf:select ref="session:info" appearance="full">
+            <xf:label>Autorisations</xf:label>
+            <xf:itemset nodeset="instance('sessionGrant')/session:grant">
+                <xf:label ref="."/>
+                <xf:copy ref="."/>
+            </xf:itemset>
+        </xf:select>
+    </xf:group>
+    <xf:submit submission="submitUser">
+        <xf:label>Créer</xf:label>
+    </xf:submit>
+</form>

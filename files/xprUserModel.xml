@@ -1,0 +1,53 @@
+<xf:model id="user" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+
+    <xf:instance id="sessionUser" src="/xpr/files/_xprUserInstance.xml"/>
+
+    <xf:instance id="sessionPermissions">
+        <permissions xmlns="session">
+            <permission label="Aucune" value="none"/>
+            <permission label="Lecture" value="read"/>
+            <permission label="Écriture" value="write"/>
+            <permission label="Création" value="create"/>
+            <permission label="Administrateur" value="admin"/>
+        </permissions>
+    </xf:instance>
+
+    <xf:instance id="sessionGrant">
+        <grants xmlns="session">
+            <grant type="expertises">Expertises</grant>
+            <grant type="prosopography">Prosopographie</grant>
+            <grant type="posthumusIventory">Inventaire après décès</grant>
+        </grants>
+    </xf:instance>
+
+    <xf:bind nodeset="instance('sessionUser')/session:name" required="true()"/>
+    <xf:bind nodeset="instance('sessionUser')/session:password" required="true()"/>
+    <xf:bind nodeset="instance('sessionUser')/session:permission" required="true()"/>
+
+    <xf:submission id="submitUser"
+                   mode="synchronous"
+                   resource="/xpr/users/put"
+                   method="put"
+                   replace="none">
+        <xf:action ev:event="xforms-submit-done">
+            <xf:message level="modal">
+                La ressource a été enregistrée !
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>;
+                Body : <xf:output value="event('response-body')"/>.
+            </xf:message>
+        </xf:action>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:message level="modal">
+                Une erreur est apparue : <xf:output value="event('error-type')"/>;
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>
+                Body : <xf:output value="event('response-body')"/>.
+            </xf:message>
+        </xf:action>
+    </xf:submission>
+</xf:model>
