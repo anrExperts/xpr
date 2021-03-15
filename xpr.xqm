@@ -370,9 +370,11 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
+  %perm:allow("expertises")
   %updating
 function putExpertise($param, $referer) {
   let $db := db:open("xpr")
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
   return 
     if (fn:ends-with($referer, 'modify'))
     then 
@@ -382,6 +384,7 @@ function putExpertise($param, $referer) {
         copy $d := $param
         modify (
           replace value of node $d/expertise/@xml:id with $id,
+          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
           for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
           let $idPlace := fn:generate-id($place)
           where $place[fn:not(@xml:id)]
@@ -415,6 +418,7 @@ function putExpertise($param, $referer) {
         copy $d := $param
         modify (
           insert node attribute xml:id {$id} into $d/*,
+          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
           for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
           let $idPlace := fn:generate-id($place)
           return (
@@ -467,6 +471,24 @@ declare
   %output:method("xml")
 function getBiographies() {
   db:open('xpr')/xpr/bio
+};
+
+(:~
+ : Permissions: expertises
+ : Checks if the current user is granted; if not, redirects to the login page.
+ : @param $perm map with permission data
+ :)
+declare
+    %perm:check('xpr/biographies', '{$perm}')
+function permBiographies($perm) {
+  let $user := Session:get('id')
+  return
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+      then web:redirect('/xpr/login')
 };
 
 (:~
@@ -764,6 +786,24 @@ declare
   %output:method("xml")
 function getInventories() {
   db:open('xpr')/xpr/posthumousInventories
+};
+
+(:~
+ : Permissions: inventories
+ : Checks if the current user is granted; if not, redirects to the login page.
+ : @param $perm map with permission data
+ :)
+declare
+    %perm:check('xpr/inventories', '{$perm}')
+function permInventories($perm) {
+  let $user := Session:get('id')
+  return
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+      then web:redirect('/xpr/login')
 };
 
 (:~
