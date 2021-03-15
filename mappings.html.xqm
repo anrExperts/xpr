@@ -17,6 +17,7 @@ module namespace xpr.mappings.html = "xpr.mappings.html";
 
 import module namespace G = 'xpr.globals' at './globals.xqm' ;
 import module namespace functx = "http://www.functx.com";
+import module namespace Session = 'http://basex.org/modules/session';
 
 declare namespace db = "http://basex.org/modules/db" ;
 declare namespace file = "http://expath.org/ns/file" ;
@@ -647,11 +648,17 @@ declare function itemXpr2Html($expertise, $options){
   let $addresses := for $place in $expertise/xpr:description/xpr:places
     return fn:normalize-space($place) => fn:string-join(' ; ')
   let $dates := $expertise//xpr:sessions/xpr:date/@when => fn:string-join(' ; ')
+  let $user := if(Session:get('id') != '') then Session:get('id')
   return
     <li status="{$status}">
       <h3 class="cote">{$cote}</h3>
       <p class="date">{$dates}</p>
       <p>{$addresses}</p>
-      <p><a class="view" href="{$path || $id || '/view'}">Voir</a> | <a class="modify" href="{$path || $id || '/modify'}">Modifier</a></p>
+      <p>
+        <a class="view" href="{$path || $id || '/view'}">Voir</a>
+        {if ($user and user:list-details($user)/*:info/*:grant/@type = 'expertises') then
+         (' | ', <a class="modify" href="{$path || $id || '/modify'}">Modifier</a>)
+        }
+      </p>
     </li>
 };

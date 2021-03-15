@@ -16,7 +16,7 @@
         <grants xmlns="session">
             <grant type="expertises">Expertises</grant>
             <grant type="prosopography">Prosopographie</grant>
-            <grant type="posthumusIventory">Inventaire après décès</grant>
+            <grant type="posthumusInventory">Inventaire après décès</grant>
         </grants>
     </xf:instance>
 

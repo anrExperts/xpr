@@ -650,6 +650,7 @@ function getBiographyXforms($id) {
 declare 
   %rest:path("xpr/biographies/{$id}/modify")
   %output:method("xml")
+  %perm:allow("prosopography")
 function modifyEntity($id) {
   let $content := map {
     'instance' : $id,
@@ -675,6 +676,7 @@ function modifyEntity($id) {
 declare
   %rest:path("xpr/biographies/new")
   %output:method("xml")
+  %perm:allow("prosopography")
 function newBiography() {
   let $content := map {
     'instance' : '',
@@ -701,6 +703,7 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
+  %perm:allow("prosopography")
   %updating
 function putBiography($param, $referer) {
   let $db := db:open("xpr")
@@ -831,6 +834,7 @@ function getInventoriesHtml() {
 declare
   %rest:path("xpr/inventories/new")
   %output:method("xml")
+  %perm:allow("posthumusInventory")
 function newInventory() {
   let $content := map {
     'instance' : '',
@@ -858,6 +862,7 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
+  %perm:allow("posthumusInventory")
   %updating
 function putInventory($param, $referer) {
   let $db := db:open("xpr")
@@ -896,6 +901,7 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
+  %perm:allow("posthumusInventory")
   %updating
 function putRelation($param, $referer) {
   let $db := db:open("xpr")
@@ -1502,6 +1508,7 @@ declare variable $xpr.xpr:style :=
 declare
   %rest:path("xpr/users/new")
   %output:method("xml")
+  %perm:allow("admin")
 function newUser() {
   let $content := map {
     'instance' : '',
@@ -1529,6 +1536,7 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
+  %perm:allow("admin")
   %updating
 function putUser($param, $referer) {
   let $db := db:open("xpr")
@@ -1550,6 +1558,18 @@ function putUser($param, $referer) {
       $userInfo)
 };
 
+declare
+    %perm:check('xpr/users', '{$perm}')
+function permUsers($perm) {
+  let $user := Session:get('id')
+  return
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'new'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+      then web:redirect('/xpr/login')
+};
 
 (:~ Login page (visible to everyone). :)
 declare
@@ -1574,7 +1594,7 @@ function login($name, $pass) {
   try {
     user:check($name, $pass),
     Session:set('id', $name),
-    web:redirect("/main")
+    web:redirect("/xpr/expertises/view")
   } catch user:* {
     web:redirect("/")
   }
@@ -1584,7 +1604,7 @@ declare
   %rest:path("xpr/logout")
 function logout() {
   Session:delete('id'),
-  web:redirect("/")
+  web:redirect("/xpr/expertises/view")
 };
 
 

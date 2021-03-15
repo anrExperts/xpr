@@ -8,10 +8,12 @@
   xmlns:xpr="xpr"
   xmlns:eac="eac"
   xmlns:rico="rico"
+  xmlns:session="session"
   xpr:bogus="fix Firefox namespace issue"
   xlink:bogus="fix Firefox namespace issue"
   eac:bogus="fix Firefox namespace issue"
-  rico:bogus="fix Firefox namespace issue">
+  rico:bogus="fix Firefox namespace issue"
+  session:bogus="fix Firefox namespace issue">
   <head>
     <title>xpr</title>
     <meta
