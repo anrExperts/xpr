@@ -1508,7 +1508,7 @@ declare variable $xpr.xpr:style :=
 declare
   %rest:path("xpr/users/new")
   %output:method("xml")
-  %perm:allow("admin")
+  %perm:allow("admin", "write")
 function newUser() {
   let $content := map {
     'instance' : '',
@@ -1536,7 +1536,7 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
-  %perm:allow("admin")
+  %perm:allow("admin", "write")
   %updating
 function putUser($param, $referer) {
   let $db := db:open("xpr")
@@ -1563,11 +1563,11 @@ declare
 function permUsers($perm) {
   let $user := Session:get('id')
   return
-    if((fn:empty($user) or fn:not(user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'new'))
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow[2])) and fn:ends-with($perm?path, 'new'))
       then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
       then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'put'))
       then web:redirect('/xpr/login')
 };
 
