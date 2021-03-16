@@ -2,8 +2,7 @@
 <inventory
     xmlns="xpr"
     xmlns:eac="eac"
-    xmlns:xlink="http://www.w3.org/1999/xlink"
-    xml:id="">
+    xmlns:xlink="http://www.w3.org/1999/xlink">
     <control>
         <maintenanceStatus/>
         <publicationStatus/>
@@ -21,16 +20,12 @@
         </maintenanceHistory>
     </control>
     <sourceDesc>
-        <idno
-            unitid=""/>
+        <idno type="unitid"/>
         <location/>
-        <expert
-            ref=""/>
-        <date
-            standardDate=""/>
+        <expert ref=""/>
+        <date standardDate=""/>
     </sourceDesc>
-    <deathPlace
-        type="">
+    <deathPlace type="">
         <address>
             <street/>
             <buildingNumber/>

@@ -1,0 +1,76 @@
+<html lang="fr">
+  <head>
+    <title>xpr</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Application de l’ANR Experts" />
+    <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
+    <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
+    <link href="/xpr/files/css/main.css" rel="stylesheet" />
+  </head>
+  <body>
+    <nav id="navigation">
+      <ul>
+        <li><a href="/xpr">¡xpr!</a></li>
+        <li><a href="/xpr/expertises/view">pv</a></li>
+        <li><a href="/xpr/biographies/view">prosopo</a></li>
+        <li><a href="/xpr/inventories/view">iad</a></li>
+        <li><a href="/xpr/networks">dataviz</a></li>
+        <li><a href="/xpr/about">?</a></li>
+      </ul>
+    </nav>
+    <main>
+      <section class="alternate">
+        <button onclick="window.location.href='/xpr/inventories/new'">nouveau</button>
+        <h2>Liste des expertises</h2>
+        <div id="inventories">
+          <input id="filter" placeholder="Filtrer la liste" />
+          <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->
+          <button class="sort" data-sort="cote">cotes</button>
+          <button class="sort" data-sort="date">dates</button>
+          <ul id="list">{content}</ul>
+        </div>
+      </section>
+      <!-- <section>{data}</section> -->
+    </main>
+    <script>
+      /*function repeat() {
+      var element = document.querySelectorAll('div.xforms-group-content');
+      for (var i = 0; i &lt; element.length; i++) {
+      if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+      }
+      }*/
+      function repeat() {
+      var element = document.querySelectorAll('div.xforms-repeat');
+      for (var i = 0; i &lt; element.length; i++) {
+      if (element[i].querySelectorAll('div.xforms-repeat').length > 0) {
+      element[i].classList.add('repeat');
+      }
+      }
+      }
+    </script>
+    <script>
+      // Sticky navigation
+      const nav = document.querySelector('#navigation');
+      const navTop = nav.offsetTop;
+
+      function stickyNavigation() {
+      console.log('navTop = ' + navTop);
+      console.log('scrollY = ' + window.scrollY);
+      if (window.scrollY >= navTop) {
+      // nav offsetHeight = height of nav
+      document.body.style.paddingTop = nav.offsetHeight + 'px';
+      document.body.classList.add('fixed-nav');
+      }
+      else {
+      document.body.style.paddingTop = 0;
+      document.body.classList.remove('fixed-nav');
+      }
+      }
+      window.addEventListener('scroll', stickyNavigation);
+    </script>
+    <script src="/xpr/files/js/script.js"></script>
+  </body>
+</html>

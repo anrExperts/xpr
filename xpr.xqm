@@ -351,7 +351,7 @@ function permExpertise($perm) {
   let $user := Session:get('id')
   return
     if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
-      then web:redirect('/xpr/login')
+      then web:redirect('/xpr/login/')
     else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
       then web:redirect('/xpr/login')
     else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
@@ -707,15 +707,16 @@ declare
   %updating
 function putBiography($param, $referer) {
   let $db := db:open("xpr")
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
   return 
     if ($param/*/@xml:id)
     then
       let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
       let $id := $param//*:entityId
-      (: let $param := 
+      let $param :=
         copy $d := $param
-        modify replace value of node $d/@xml:id with $id
-        return $d :)
+        modify replace value of node $d/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent with $user
+        return $d
       return replace node $db/xpr/bio/eac:eac-cpf[@xml:id = $location] with $param  
     else
       let $xformsId := $param//eac:entityId
@@ -736,6 +737,7 @@ function putBiography($param, $referer) {
         modify 
         (
           insert node attribute xml:id {$id} into $d/*,
+          replace value of node $d/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent with $user,
           replace value of node $d//eac:entityId with $id
         )
         return $d
@@ -811,20 +813,23 @@ function permInventories($perm) {
 
 (:~
  : This resource function lists all the inventories
- : @return an ordered list of posthumous inventories
+ : @return an ordered list of inventories in html
  :)
-declare 
-%rest:path("/xpr/inventories/view")
-%rest:produces('text/html')
-%output:method("html")
+declare
+  %rest:path("/xpr/inventories/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
 function getInventoriesHtml() {
-  <html>
-    <head>Inventaires après-décès</head>
-    <body>
-      <h1>xpr Inventaire après-décès</h1>
-      <p><a href="/xpr/inventories/new">Nouvelle fiche</a></p>
-    </body>
-  </html>
+ let $content := map {
+    'title' : 'Liste des inventaires après-décès',
+    'data' : getInventories()
+  }
+  let $outputParam := map {
+    'layout' : "listeInventaires.xml",
+    'mapping' : xpr.mappings.html:listIad2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -853,6 +858,32 @@ function newInventory() {
 };
 
 (:~
+ : This resource function modify an inventory
+ : @return an xforms to modify an inventory
+ :)
+declare
+  %rest:path("xpr/inventories/{$id}/modify")
+  %output:method("xml")
+  %perm:allow("posthumusInventory")
+function modifyInventory($id) {
+  let $content := map {
+    'instance' : $id,
+    'path' : 'inventories',
+    'model' : ('xprInventoryModel.xml', 'xprProsopoModel.xml'),
+    'trigger' : 'xprInventoryTrigger.xml',
+    'form' : 'xprInventoryForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
  : This function consumes new inventory 
  : @param $param content
  : @todo modify
@@ -866,9 +897,73 @@ declare
   %updating
 function putInventory($param, $referer) {
   let $db := db:open("xpr")
-  return insert node $param into $db/xpr/posthumousInventories
+  let $id := fn:replace(fn:lower-case($param/inventory/sourceDesc/idno[@type="unitid"]), '/', '-') || 'f' || fn:format-integer($param/inventory/sourceDesc/location, '000') || $param/inventory/sourceDesc/expert/@ref
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
+    return
+      if (fn:ends-with($referer, 'modify'))
+      then
+        let $location := fn:analyze-string($referer, 'xpr/inventories/(.+?)/modify')//fn:group[@nr='1']
+        let $param :=
+          copy $d := $param
+          modify (
+            replace value of node $d/expertise/@xml:id with $id,
+            replace value of node $d/inventory/control/maintenanceHistory/maintenanceEvent[1]/agent with $user)
+          return $d
+        return (
+          replace node $db/xpr/posthumousInventories/inventory[@xml:id = $location] with $param,
+          update:output(
+           (
+            <rest:response>
+              <http:response status="200" message="test">
+                <http:header name="Content-Language" value="fr"/>
+                <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+              </http:response>
+            </rest:response>,
+            <result>
+              <id></id>
+              <message>L'inventaire {$location} a été modifié.</message>
+              <url></url>
+            </result>
+           )
+          )
+        )
+      else
+        let $param :=
+          copy $d := $param
+          modify (
+            insert node attribute xml:id {$id} into $d/*,
+            replace value of node $d/inventory/control/maintenanceHistory/maintenanceEvent[1]/agent with $user
+          )
+          return $d
+        return (
+          insert node $param into $db/xpr/posthumousInventories,
+          update:output(
+            (<rest:response>
+              <http:response status="200" message="test">
+                <http:header name="Content-Language" value="fr"/>
+                <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+              </http:response>
+            </rest:response>,
+            <result>
+              <id></id>
+              <message>L'inventaire {$id} a été enregistré.</message>
+              <url></url>
+            </result>)
+          )
+        )
 };
 
+(:~
+ : This resource function returns an expertise item
+ : @param $id the expertise id
+ : @return an expertise item in xml (xpr)
+ :)
+declare
+  %rest:path("xpr/inventories/{$id}")
+  %output:method("xml")
+function getInventory($id) {
+  db:open('xpr')//inventory[@xml:id=$id]
+};
 
 (:~
  : This function consumes new relations 
@@ -905,6 +1000,7 @@ declare
   %updating
 function putRelation($param, $referer) {
   let $db := db:open("xpr")
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
   let $expert := $param/inventory/sourceDesc/expert/@ref
   let $expertName := $db//eac:eac-cpf[@xml:id = $expert]//eac:nameEntry[eac:authorizedForm]/eac:part
   for $prosopography in $db//eac:eac-cpf[@xml:id = $expert]
@@ -920,7 +1016,7 @@ function putRelation($param, $referer) {
               <eventType>revision</eventType>
               <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
               <agentType>human</agentType>
-              <agent/>
+              <agent>{$user}</agent>
               <eventDescription>Documentation de la relation entre {$expertName} et {$relationName}</eventDescription>
             </maintenanceEvent>
         return (
@@ -935,7 +1031,7 @@ function putRelation($param, $referer) {
                     <eventType>revision</eventType>
                     <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
                     <agentType>human</agentType>
-                    <agent/>
+                    <agent>{$user}</agent>
                     <eventDescription>Ajout d'une relation entre {fn:normalize-space($expertName)} et {fn:normalize-space($relationName)}</eventDescription>
                   </maintenanceEvent>
         return (

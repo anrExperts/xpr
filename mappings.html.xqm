@@ -662,3 +662,41 @@ declare function itemXpr2Html($expertise, $options){
       </p>
     </li>
 };
+
+(:~
+ : This function serialise an expertises list
+ : @return an html list of expertises
+ :)
+declare function listIad2html($content, $options) {
+  <ul id="list">{
+    for $inventory in $content/xpr:inventory
+    return itemIad2Html($inventory, map{'path' : '/xpr/inventories/'})
+  }</ul>
+};
+
+(:~
+ : This function serialise an inventory item in a list
+ : @return an html item of inventory in a list
+ :)
+declare function itemIad2Html($inventory, $options){
+  let $id := $inventory/@xml:id => fn:string()
+  let $path := $options?path
+  let $status := $inventory/xpr:control/xpr:localControl/xpr:term
+  let $cote := $inventory/xpr:sourceDesc/xpr:idno[@type='unitid'] => fn:normalize-space()
+  let $date := $inventory/xpr:sourceDesc/xpr:date/@standardDate
+  let $expert := $inventory/xpr:sourceDesc/xpr:expert/@ref
+  let $expertName := $inventory/ancestor::xpr:xpr/xpr:bio/*:eac-cpf[@xml:id=$expert]/*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
+  let $user := if(Session:get('id') != '') then Session:get('id')
+  return
+    <li status="{$status}">
+      <h3 class="cote">{$cote}</h3>
+      <p class="date">{$date}</p>
+      <p>{$expertName}</p>
+      <p>
+        <a class="view" href="{$path || $id || '/view'}">Voir</a>
+        {if ($user and user:list-details($user)/*:info/*:grant/@type = 'posthumusInventory') then
+         (' | ', <a class="modify" href="{$path || $id || '/modify'}">Modifier</a>)
+        }
+      </p>
+    </li>
+};

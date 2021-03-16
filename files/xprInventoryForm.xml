@@ -2,7 +2,7 @@
     <xf:switch>
         <xf:case id="inventoryPanel" selected="true">
             <xf:group ref="xpr:sourceDesc">
-                <xf:input ref="xpr:idno/@unitid" incremental="true">
+                <xf:input ref="xpr:idno[@type='unitid']" incremental="true">
                     <xf:label>Cote</xf:label>
                 </xf:input>
                 <xf:input ref="xpr:date/@standardDate" incremental="true">
