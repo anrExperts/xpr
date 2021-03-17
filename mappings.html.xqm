@@ -684,14 +684,14 @@ declare function itemIad2Html($inventory, $options){
   let $status := $inventory/xpr:control/xpr:localControl/xpr:term
   let $cote := $inventory/xpr:sourceDesc/xpr:idno[@type='unitid'] => fn:normalize-space()
   let $date := $inventory/xpr:sourceDesc/xpr:date/@standardDate
-  let $expert := $inventory/xpr:sourceDesc/xpr:expert/@ref
-  let $expertName := $inventory/ancestor::xpr:xpr/xpr:bio/*:eac-cpf[@xml:id=$expert]/*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
+  let $expertId := $inventory/xpr:sourceDesc/xpr:expert/@ref => fn:substring-after('#')
+  let $expert := $inventory/ancestor::xpr:xpr/xpr:bio/*:eac-cpf[@xml:id=$expertId]/*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
   let $user := if(Session:get('id') != '') then Session:get('id')
   return
     <li status="{$status}">
       <h3 class="cote">{$cote}</h3>
       <p class="date">{$date}</p>
-      <p>{$expertName}</p>
+      <p>{$expert}</p>
       <p>
         <a class="view" href="{$path || $id || '/view'}">Voir</a>
         {if ($user and user:list-details($user)/*:info/*:grant/@type = 'posthumusInventory') then

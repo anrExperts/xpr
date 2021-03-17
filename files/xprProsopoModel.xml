@@ -192,7 +192,7 @@
             </type>
             <type>
                 <label>Descendance</label>
-                <value>rico:descendanceRelationHaseTarget</value>
+                <value>rico:descendanceRelationHasTarget</value>
             </type>
         </relations>
     </xf:instance>

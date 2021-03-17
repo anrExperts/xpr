@@ -15,10 +15,15 @@
                     <xf:label>Patronyme</xf:label>
                     <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity[@type='expert' or @type='altExpert']">
                         <xf:label ref="xpr:label"/>
-                        <xf:value ref="@xml:id"/>
+                        <xf:value value="concat('#', @xml:id)"/>
+                        <xf:dispatch ev:event="xforms-select" name="getData" targetid="inventory" delay="1000"/>
                     </xf:itemset>
                 </xf:select1>
             </xf:group>
+            <xf:trigger>
+                <xf:label>get expert</xf:label>
+                <xf:send ev:event="DOMActivate" submission="submitGetData"/>
+            </xf:trigger>
             <xf:group ref="xpr:deathPlace">
                 <xf:label>Adresse au moment du décès</xf:label>
                 <xf:input ref="xpr:address/xpr:street" incremental="true">
@@ -51,7 +56,7 @@
                     </xf:item>
                 </xf:select1>
             </xf:group>
-            <xf:group ref="instance('xprProsopo')/eac:cpfDescription/eac:relations">
+            <xf:group ref="eac:relations">
                 <xf:label>Relations</xf:label>
                 <xf:repeat id="repeatRelation" nodeset="eac:cpfRelation">
                     <xf:var name="relation" value="."/>
@@ -62,7 +67,7 @@
                             <xf:setvalue ref="." value="''" ev:event="DOMActivate"/>
                         </xf:trigger>
                     </xf:group>
-                    <xf:group ref="@xlink:href[.='' or . = instance('xprEntities')/xpr:entity[not(@localType='new')]/@xml:id]">
+                    <xf:group ref="@xlink:href[substring-after(., '#') = '' or substring-after(., '#') = instance('xprEntities')/xpr:entity[not(@localType='new')]/@xml:id]">
                         <xf:trigger>
                             <xf:label>Nouvelle personne</xf:label>
                             <xf:insert context="instance('xprEntities')"
@@ -76,20 +81,21 @@
                                        position="after"
                                        ev:event="DOMActivate"/>
                             <!-- set a temporary xml:id value for added entity -->
-                            <xf:setvalue ref=".
-                                                | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
-                                                | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id"
+                            <xf:setvalue ref="." value="concat('#local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))"
+                                         ev:event="DOMActivate"/>
+                            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
+                                              | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id"
                                          value="concat('local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))"
                                          ev:event="DOMActivate"/>
                         </xf:trigger>
                         <xf:select1 ref="." incremental="true">
                             <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity">
                                 <xf:label ref="xpr:label"/>
-                                <xf:value ref="@xml:id"/>
+                                <xf:value value="concat('#', @xml:id)"/>
                             </xf:itemset>
                         </xf:select1>
                     </xf:group>
-                    <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = $relation/@xlink:href]/eac:eac-cpf">
+                    <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = substring-after($relation/@xlink:href, '#')]/eac:eac-cpf">
                         <xf:var name="entityType" value="descendant::eac:entityType"/>
                         <xf:label>Nouvelle entrée</xf:label>
                         <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
@@ -617,7 +623,7 @@
             </xf:group>
             <xf:select1 ref="xpr:report">
                 <xf:label>Expertise z1j</xf:label>
-                <xf:itemset nodeset="instance('xprBoolean')/xpr:boolean/xpr:state">
+                <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
                     <xf:label ref="xpr:label"/>
                     <xf:value ref="xpr:value"/>
                 </xf:itemset>

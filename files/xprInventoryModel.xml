@@ -11,6 +11,23 @@
     <!--Instance principale-->
     <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
 
+    <xf:instance id="xprGetData">
+        <data xmlns="xpr"/>
+    </xf:instance>
+
+    <xf:bind id="getDataObs" nodeset="instance('xprGetData')" calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
+
+
+    <xf:send ev:event="getData" submission="submitGetData"/>
+
+
+    <xf:submission id="submitGetData"
+                   ref="instance('xprGetData')"
+                   method="get"
+                   resource="/xpr/xforms"
+                   replace="instance"
+                   instance="xprProsopo"/>
+
     <!-- @rmq bind pour verrouiller la modification -->
     <xf:bind nodeset="instance('xprInventory')//xpr:relation[not(@href = '')]//*
                     | instance('xprInventory')//xpr:relation[not(@href = '')]//@*"
@@ -21,7 +38,7 @@
              nodeset="instance('xprInventory')//xpr:relation/@href"/>
     <xf:bind nodeset="instance('xprInventory')//*[@owned]/xpr:desc"
              relevant="parent::*/@owned = 'true'"/>
-    <xf:bind nodeset="instance('xprEntities')/xpr:entity[@localType = 'new'][eac:eac-cpf][@xml:id = instance('xprInventory')//eac:cpfRelation/@xlink:href]/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:entityType"
+    <xf:bind nodeset="instance('xprEntities')/xpr:entity[@localType = 'new'][eac:eac-cpf][@xml:id = substring-after(instance('xprInventory')//eac:cpfRelation/@xlink:href, '#')]/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:entityType"
              required="true()"/>
 
     <xf:instance id="xprInventoryCopy" src="/xpr/files/_xprInventoryInstance.xml"/>
@@ -48,9 +65,9 @@
         But the first one (and the second one) is also altering the loop condition and it appears that, at the end, the 2 or 3 submissions are sent for the same event just before the latest event being caught.
         The easiest way to control this is to invert the order of the submissions: the one to be activated at the end is to be tested before the others to be activated repeatedly.
         -->
-        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprInventory')//@xlink:href[. != '']])"
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id = substring-after(instance('xprInventory')//@xlink:href[. != ''], '#')])"
                  submission="submitInventory"/>
-        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprInventory')//@xlink:href[. != '']]"
+        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id = substring-after(instance('xprInventory')//@xlink:href[. != ''], '#')]"
                  submission="submitNewEntity"/>
     </xf:action>
 
@@ -59,10 +76,6 @@
                    resource="/xpr/inventories/put"
                    method="put"
                    replace="none">
-        <xf:action ev:event="xforms-submit">
-            <xf:setvalue ref="instance('xprInventory')//eac:relations/eac:cpfRelation/xpr:source/@xlink:href"
-                         value="instance('xprInventory')/xpr:sourceDesc/xpr:idno/@unitid"/>
-        </xf:action>
         <xf:action ev:event="xforms-submit-done">
             <xf:message level="modal">
                 La ressource a été enregistrée !
@@ -72,6 +85,8 @@
                 Reason : <xf:output value="event('response-reason-phrase')"/>;
                 Body : <xf:output value="event('response-body')"/>.
             </xf:message>
+            <xf:setvalue ref="instance('xprInventory')//eac:relations/eac:cpfRelation/xpr:source/@xlink:href"
+                         value="concat('#', event('response-body')//xpr:id)"/>
             <xf:send submission="submitRelations"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-error">

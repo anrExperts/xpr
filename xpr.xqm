@@ -474,6 +474,21 @@ function getBiographies() {
 };
 
 (:~
+ : This resource function lists the persons or corporate bodies
+ : @return an xml list of persons/corporate bodies
+ :)
+declare
+  %rest:path("/xpr/xforms")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getDataFromXforms() {
+  let $id := request:query() => fn:substring-after('=')
+  return
+    db:open('xpr')/xpr/bio/eac:eac-cpf[@xml:id = $id]
+
+};
+
+(:~
  : Permissions: expertises
  : Checks if the current user is granted; if not, redirects to the login page.
  : @param $perm map with permission data
@@ -945,7 +960,7 @@ function putInventory($param, $referer) {
               </http:response>
             </rest:response>,
             <result>
-              <id></id>
+              <id>{$id}</id>
               <message>L'inventaire {$id} a été enregistré.</message>
               <url></url>
             </result>)
@@ -969,28 +984,7 @@ function getInventory($id) {
  : This function consumes new relations 
  : @param $param content
  : @
- :)
-(:declare
-  %rest:path("xpr/relations/put")
-  %output:method("xml")
-  %rest:header-param("Referer", "{$referer}", "none")
-  %rest:PUT("{$param}")
-  %updating
-function putRelation($param, $referer) {
-  let $db := db:open("xpr")
-  let $expert := $param/inventory/sourceDesc/expert/@ref
-  for $relation in $param//eac:relations/eac:cpfRelation
-  return 
-  if ($db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole])
-  then
-    for $source in $db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]/xpr:source/@xlink:href
-    return switch ($source)
-      case $relation/xpr:source/@xlink:href return ()
-      default return insert node $relation/xpr:source into $db//eac:eac-cpf[@xml:id = $expert]//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]
-  else
-    insert node $relation into $db//eac:eac-cpf[@xml:id = $expert]//eac:relations
-};:)
-
+ :)(:
 declare
   %rest:path("xpr/relations/put")
   %output:method("xml")
@@ -1001,45 +995,84 @@ declare
 function putRelation($param, $referer) {
   let $db := db:open("xpr")
   let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
-  let $expert := $param/inventory/sourceDesc/expert/@ref
-  let $expertName := $db//eac:eac-cpf[@xml:id = $expert]//eac:nameEntry[eac:authorizedForm]/eac:part
-  for $prosopography in $db//eac:eac-cpf[@xml:id = $expert]
+  let $expertId := $param/inventory/sourceDesc/expert/@ref => fn:substring-after('#')
+  let $expert := $db//eac:eac-cpf[@xml:id = $expertId]//eac:nameEntry[eac:authorizedForm]/eac:part => fn:normalize-space()
+  let $prosopography := $db//eac:eac-cpf[@xml:id = $expertId]
   return (
+    :)(:this condition controls if the inventory is already declared into sources control:)(:
+    if (fn:not($prosopography/eac:control/eac:sources/eac:source[@xlink:href = $relation/xpr:source/@xlink:href]))
+    then insert node $sourceEntry as last into $prosopography/eac:control/eac:sources,
+    :)(:for each relation declared into inventory, this loop checks if the relation is already described, if yes it checks is it is sourced:)(:
     for $relation in $param//eac:relations/eac:cpfRelation
-      let $relationName := $db//eac:eac-cpf[@xml:id = $relation/@xlink:href]//eac:nameEntry[eac:authorizedForm]/eac:part
-      return
-      if ($prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole])
-      then
-        for $source in $prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]/xpr:source/@xlink:href
-        let $event :=
+      let $relationName := $db//eac:eac-cpf[@xml:id = fn:substring-after($relation/@xlink:href, '#')]//eac:nameEntry[eac:authorizedForm]/eac:part => fn:normalize-space()
+      let $sourceEntry :=
+        <source xmlns="eac" xlink:href="{$relation/xpr:source/@xlink:href}">
+          <sourceEntry>{fn:normalize-space($relation/xpr:source/@xlink:href)}</sourceEntry>
+          <descriptiveNote>
+            <p/>
+          </descriptiveNote>
+        </source>
+      return(
+        if ($prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]) then
+          let $event :=
             <maintenanceEvent>
               <eventType>revision</eventType>
               <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
               <agentType>human</agentType>
               <agent>{$user}</agent>
-              <eventDescription>Documentation de la relation entre {$expertName} et {$relationName}</eventDescription>
+              <eventDescription>Documentation de la relation entre {$expert} et {$relationName}</eventDescription>
             </maintenanceEvent>
-        return (
-          switch ($source)
-          case $relation/xpr:source/@xlink:href return ()
-          default return insert node $relation/xpr:source into $prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole],
-          insert node $event before $prosopography/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]
-        )
-      else
-      let $event :=
-                  <maintenanceEvent>
-                    <eventType>revision</eventType>
-                    <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
-                    <agentType>human</agentType>
-                    <agent>{$user}</agent>
-                    <eventDescription>Ajout d'une relation entre {fn:normalize-space($expertName)} et {fn:normalize-space($relationName)}</eventDescription>
-                  </maintenanceEvent>
-        return (
+
+      )
+
+          for $source in $prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole]/xpr:source/@xlink:href
+
+          return (
+            switch ($source)
+            case $relation/xpr:source/@xlink:href return ()
+            default return
+              insert node $relation/xpr:source into $prosopography//eac:relations/eac:cpfRelation[@xlink:href = $relation/@xlink:href][@xlink:arcrole = $relation/@xlink:arcrole],
+              insert node $event as first into $prosopography/eac:control/eac:maintenanceHistory,
+              update:output((<rest:response>
+                <http:response status="200" message="test">
+                  <http:header name="Content-Language" value="fr"/>
+                  <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+                </http:response>
+              </rest:response>,
+              <result>
+                <id></id>
+                <message>La relation entre {$expert} et {$relationName} a été enregistrée.</message>
+                <url></url>
+              </result>))
+          )
+        else
+          let $event :=
+            <maintenanceEvent>
+              <eventType>revision</eventType>
+              <eventDateTime standardDateTime="{fn:current-dateTime()}">{fn:current-dateTime()}</eventDateTime>
+              <agentType>human</agentType>
+              <agent>{$user}</agent>
+              <eventDescription>Ajout d'une relation entre {fn:normalize-space($expert)} et {fn:normalize-space($relationName)}</eventDescription>
+            </maintenanceEvent>
+          return (
             insert node $relation into $prosopography//eac:relations,
-            insert node $event before $prosopography/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]
-        )
+            insert node $event as first into $prosopography/eac:control/eac:maintenanceHistory,
+            if (fn:not($prosopography/eac:control/eac:sources/eac:source[@xlink:href = $relation/xpr:source/@xlink:href]))
+            then insert node $sourceEntry as last into $prosopography/eac:control/eac:sources,
+            update:output((<rest:response>
+              <http:response status="200" message="test">
+                <http:header name="Content-Language" value="fr"/>
+                <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+              </http:response>
+            </rest:response>,
+            <result>
+              <id></id>
+              <message>La relation entre {$expert} et {$relationName} a été enregistrée.</message>
+              <url></url>
+            </result>))
+          )
   )
-};
+};:)
 
 (:~
  : This resource function lists all the sources
