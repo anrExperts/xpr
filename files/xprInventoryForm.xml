@@ -56,7 +56,7 @@
                     </xf:item>
                 </xf:select1>
             </xf:group>
-            <xf:group ref="eac:relations">
+            <xf:group ref="instance('xprProsopo')//eac:relations">
                 <xf:label>Relations</xf:label>
                 <xf:repeat id="repeatRelation" nodeset="eac:cpfRelation">
                     <xf:var name="relation" value="."/>

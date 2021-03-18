@@ -482,7 +482,7 @@ declare
   %rest:produces('application/xml')
   %output:method("xml")
 function getDataFromXforms() {
-  let $id := request:query() => fn:substring-after('=')
+  let $id := request:parameter('data')
   return
     db:open('xpr')/xpr/bio/eac:eac-cpf[@xml:id = $id]
 

@@ -15,7 +15,7 @@
         <data xmlns="xpr"/>
     </xf:instance>
 
-    <xf:bind id="getDataObs" nodeset="instance('xprGetData')" calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
+    <xf:bind nodeset="instance('xprGetData')" calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
 
 
     <xf:send ev:event="getData" submission="submitGetData"/>
@@ -26,7 +26,19 @@
                    method="get"
                    resource="/xpr/xforms"
                    replace="instance"
-                   instance="xprProsopo"/>
+                   instance="xprProsopo">
+        <xf:action ev:event="xforms-submit-done">
+            <xf:message level="modal">
+                La ressource a été enregistrée !
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>;
+                Body : <xf:output value="event('response-body')"/>.
+            </xf:message>
+            <xf:refresh ev:event="DOMActivate" model="inventory"/>
+        </xf:action>
+    </xf:submission>
 
     <!-- @rmq bind pour verrouiller la modification -->
     <xf:bind nodeset="instance('xprInventory')//xpr:relation[not(@href = '')]//*
