@@ -656,7 +656,7 @@ declare function itemXpr2Html($expertise, $options){
       <p>{$addresses}</p>
       <p>
         <a class="view" href="{$path || $id || '/view'}">Voir</a>
-        {if ($user and user:list-details($user)/*:info/*:grant/@type = 'expertises') then
+        {if ($user and user:list-details($user)/*:info/*:grant/@type = 'expertises' and user:list-details($user)/*:database[@pattern='xpr']/@permission = 'write') then
          (' | ', <a class="modify" href="{$path || $id || '/modify'}">Modifier</a>)
         }
       </p>

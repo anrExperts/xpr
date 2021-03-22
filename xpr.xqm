@@ -354,7 +354,7 @@ function permExpertise($perm) {
       then web:redirect('/xpr/login/')
     else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
       then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow[1] and user:list-details($user)/*:database[@pattern='xpr']/@permission = $perm?allow[2])) and fn:ends-with($perm?path, 'put'))
       then web:redirect('/xpr/login')
 };
 
@@ -370,7 +370,7 @@ declare
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
-  %perm:allow("expertises")
+  %perm:allow("expertises", "write")
   %updating
 function putExpertise($param, $referer) {
   let $db := db:open("xpr")
