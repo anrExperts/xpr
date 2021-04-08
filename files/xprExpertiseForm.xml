@@ -525,7 +525,7 @@
                         <xf:label>Patronyme</xf:label>
                         <xf:itemset nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert']">
                             <xf:label ref="xpr:label"/>
-                            <xf:value ref="@xml:id"/>
+                            <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
                     </xf:select1>
                     <!-- set new ref for opinion if disagreement is checked when expert is modified-->
@@ -713,9 +713,9 @@
                     </xf:select1>
                     <xf:select1 ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
-                        <xf:itemset nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert'][@xml:id = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
                             <xf:label ref="."/>
-                            <xf:value ref="@xml:id"/>
+                            <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
                     </xf:select1>
                     <xf:select1 ref="@presence">
@@ -930,7 +930,7 @@
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
                     <xf:textarea ref="." incremental="true">
                         <xf:label>
-                            <xf:output value="if(instance('xprExperts')/xpr:entity[@xml:id = current()/@ref], concat('Conlusions (', instance('xprExperts')/xpr:entity[@xml:id = current()/@ref]/xpr:label, ')'), 'Conclusions')"/>
+                            <xf:output value="if(instance('xprExperts')/xpr:entity[@xml:id = substring-after(current()/@ref, '#')], concat('Conlusions (', instance('xprExperts')/xpr:entity[@xml:id = substring-after(current()/@ref, '#')]/xpr:label, ')'), 'Conclusions')"/>
                         </xf:label>
                     </xf:textarea>
                 </xf:repeat>
@@ -1019,7 +1019,7 @@
                         <xf:label>Expert(s)</xf:label>
                         <xf:repeat nodeset="xpr:fee[@type='expert']">
                             <xf:label>
-                                <xf:output value="if(instance('xprExperts')/xpr:entity[@xml:id = current()/@ref], concat('Expert (', instance('xprExperts')/xpr:entity[@xml:id = current()/@ref]/xpr:label, ')'), 'Expert')"/>
+                                <xf:output value="if(instance('xprExperts')/xpr:entity[@xml:id = substring-after(current()/@ref, '#')], concat('Expert (', instance('xprExperts')/xpr:entity[@xml:id = substring-after(current()/@ref, '#')]/xpr:label, ')'), 'Expert')"/>
                             </xf:label>
                             <xf:input ref="@l" incremental="true">
                                 <xf:label>livres</xf:label>
