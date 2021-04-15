@@ -502,15 +502,138 @@
                         <xf:label>Cause de l’expertise</xf:label>
                     </xf:input>
                 </xf:group>
-                <xf:group ref="xpr:objects">
-                    <xf:select ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects" appearance="full">
+                <xf:group
+                    ref="instance('xprExpertiseObjects')">
+                    <xf:select
+                        ref="xpr:object"
+                        appearance="full">
+                        <!--@bug il existe l'attribut selection="open" pour ces cas mais il ne semble pas fonctionner. Il permet de préciser une valeur qui ne serait pas dans la liste.-->
+                        <!-- https://sourceforge.net/p/xsltforms/mailman/message/24465876/ -->
                         <xf:label>Objet de l’expertise</xf:label>
-                        <xf:itemset nodeset="instance('xprExpertiseObjects')/xpr:object[@type]">
-                            <xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>
-                            <xf:copy ref="."/>
-                        </xf:itemset>
+                        <xf:item>
+                            <xf:label>Maison</xf:label>
+                            <xf:value>house</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='house']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='house']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Terrain</xf:label>
+                            <xf:value>plot</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='plot']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='plot']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Ensemble de bâtiments</xf:label>
+                            <xf:value>buildings</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='buildings']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='buildings']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Domaine, terres, fief</xf:label>
+                            <xf:value>territory</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='territory']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='territory']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Mur</xf:label>
+                            <xf:value>wall</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='wall']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='wall']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Fosse d’aisance</xf:label>
+                            <xf:value>cesspool</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='cesspool']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='cesspool']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Puits</xf:label>
+                            <xf:value>well</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='well']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='well']"/>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Autre</xf:label>
+                            <xf:value>other</xf:value>
+                            <xf:action
+                                ev:event="xforms-select">
+                                <xf:insert
+                                    context="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects"
+                                    origin="instance('xprExpertiseObjects')/xpr:object[@type='other']"/>
+                            </xf:action>
+                            <xf:action
+                                ev:event="xforms-deselect">
+                                <xf:delete
+                                    ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"/>
+                            </xf:action>
+                        </xf:item>
                     </xf:select>
-                    <xf:input ref="xpr:object[@type='other']" incremental="true">
+                    <xf:input
+                        ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"
+                        incremental="true">
                         <xf:label>Autre, à préciser</xf:label>
                     </xf:input>
                 </xf:group>

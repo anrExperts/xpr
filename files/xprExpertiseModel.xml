@@ -38,6 +38,7 @@
     <!--<xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>-->
     <xf:instance id="xprExpertiseObjects">
         <objects xmlns="xpr">
+            <object/>
             <object type="house">Maison</object>
             <object type="plot">Terrain</object>
             <object type="buildings">Ensemble de bâtiments</object>
