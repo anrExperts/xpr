@@ -217,7 +217,7 @@
             <xf:group ref="xpr:description/xpr:places">
                 <xf:repeat id="repeatPlace" nodeset="xpr:place" appearance="full">
                     <xf:select1 ref="@type">
-                        <xf:label>Lieux de l’expertise</xf:label>
+                        <xf:label>Lieu de l’expertise</xf:label>
                         <xf:item>
                             <xf:label>Paris</xf:label>
                             <xf:value>paris</xf:value>
@@ -247,7 +247,7 @@
                         <xf:label>Voie</xf:label>
                     </xf:input>
                     <xf:input ref="xpr:address/xpr:buildingNumber" incremental="true">
-                        <xf:label>Numéro de la voie</xf:label>
+                        <xf:label>Numéro</xf:label>
                     </xf:input>
                     <xf:input ref="xpr:complement" incremental="true">
                         <xf:label>Précisions géographiques</xf:label>
@@ -519,7 +519,7 @@
         <xf:case id="participantsPanel" selected="false">
             <xf:label>Acteurs de l’expertise</xf:label>
             <xf:group ref="xpr:description/xpr:participants/xpr:experts">
-                <xf:label>Expert</xf:label>
+                <xf:label><xf:output value="if(count(xpr:expert) > 1, 'Experts', 'Expert')"/></xf:label>
                 <xf:repeat id="repeatExpert" nodeset="xpr:expert" appearance="full">
                     <xf:select1 ref="@ref" incremental="true">
                         <xf:label>Patronyme</xf:label>
@@ -539,7 +539,7 @@
                         <xf:label>Dénomination de l’expert dans l’acte</xf:label>
                     </xf:input>
                     <xf:select1 ref="@context" appearance="minimal">
-                        <xf:label>Expert nommé en</xf:label>
+                        <xf:label>Qualité de l’expert</xf:label>
                         <xf:item>
                             <xf:label>premier lieu</xf:label>
                             <xf:value>primary</xf:value>
@@ -554,7 +554,7 @@
                         </xf:item>
                     </xf:select1>
                     <xf:select1 ref="@appointment" appearance="minimal">
-                        <xf:label>Expert nommé</xf:label>
+                        <xf:label>Origine de la nomination</xf:label>
                         <xf:item>
                             <xf:label>d’office (par le lieutenant civil)</xf:label>
                             <xf:value>court-appointed</xf:value>
@@ -603,7 +603,7 @@
                 </xf:trigger>
             </xf:group>
             <xf:group ref="xpr:description/xpr:participants/xpr:clerks">
-                <xf:label>Greffier</xf:label>
+                <xf:label><xf:output value="if(count(xpr:clerk) > 1, 'Greffiers', 'Greffier')"/></xf:label>
                 <xf:repeat id="repeatClerk" nodeset="xpr:clerk" appearance="full">
                     <xf:label>Patronyme</xf:label>
                     <xf:input ref="xpr:persName/xpr:surname" incremental="true">
@@ -627,7 +627,7 @@
                 </xf:trigger>
             </xf:group>
             <xf:group ref="xpr:description/xpr:participants/xpr:parties">
-                <xf:label>Parties</xf:label>
+                <xf:label><xf:output value="if(count(xpr:party) > 1, 'Parties', 'Partie')"/></xf:label>
                 <xf:repeat id="repeatParty" nodeset="xpr:party" appearance="full">
                     <xf:repeat id="repeatPerson" nodeset="xpr:person" appearance="full">
                         <xf:label>Patronyme</xf:label>
@@ -741,7 +741,7 @@
                         </xf:item>
                     </xf:select1>
                     <xf:group>
-                        <xf:label>Représentants</xf:label>
+                        <xf:label><xf:output value="if(count(xpr:representative) > 1, 'Représentants', 'Représentant')"/></xf:label>
                         <xf:repeat id="repeatRepresentative" nodeset="xpr:representative" appearance="full">
                             <xf:label>Patronyme</xf:label>
                             <xf:input ref="xpr:persName/xpr:surname" incremental="true">
@@ -769,7 +769,7 @@
                         </xf:trigger>
                     </xf:group>
                     <xf:group>
-                        <xf:label>Procureur</xf:label>
+                        <xf:label><xf:output value="if(count(xpr:prosecutor) > 1, 'Procureurs', 'Procureur')"/></xf:label>
                         <xf:repeat id="repeatProsecutor" nodeset="xpr:prosecutor" appearance="full">
                             <xf:label>Patronyme</xf:label>
                             <xf:input ref="xpr:persName/xpr:surname" incremental="true">
@@ -809,7 +809,7 @@
                 </xf:trigger>
             </xf:group>
             <xf:group ref="xpr:description/xpr:participants/xpr:craftmen">
-                <xf:label>Entrepreneur, architecte ou maître d’œuvre</xf:label>
+                <xf:label><xf:output value="if(count(xpr:craftman) > 1, 'Entrepreneurs, architectes ou maîtres d’œuvre', 'Entrepreneur, architecte ou maître d’œuvre')"/></xf:label>
                 <xf:repeat id="repeatCraftman" nodeset="xpr:craftman" appearance="full">
                     <xf:label>Patronyme</xf:label>
                     <xf:input ref="xpr:persName/xpr:surname" incremental="true">
