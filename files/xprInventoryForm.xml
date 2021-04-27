@@ -20,10 +20,10 @@
                     </xf:itemset>
                 </xf:select1>
             </xf:group>
-            <xf:trigger>
+            <!--<xf:trigger>
                 <xf:label>get expert</xf:label>
                 <xf:send ev:event="DOMActivate" submission="submitGetData"/>
-            </xf:trigger>
+            </xf:trigger>-->
             <xf:group ref="xpr:deathPlace">
                 <xf:label>Adresse au moment du décès</xf:label>
                 <xf:input ref="xpr:address/xpr:street" incremental="true">
@@ -56,12 +56,12 @@
                     </xf:item>
                 </xf:select1>
             </xf:group>
-            <xf:group ref="instance('xprProsopo')//eac:relations">
+            <xf:group ref="eac:relations">
                 <xf:label>Relations</xf:label>
                 <xf:repeat id="repeatRelation" nodeset="eac:cpfRelation">
                     <xf:var name="relation" value="."/>
                     <xf:label>Relation</xf:label>
-                    <xf:group ref="@xlink:href[.!='' and .=instance('xprEntities')/xpr:entity[@localType='new']/@xml:id]">
+                    <xf:group ref="@xlink:href[.!='' and substring-after(., '#')=instance('xprEntities')/xpr:entity[@localType='new']/@xml:id]">
                         <xf:trigger>
                             <xf:label>Personne dans la base</xf:label>
                             <xf:setvalue ref="." value="''" ev:event="DOMActivate"/>
@@ -95,7 +95,7 @@
                             </xf:itemset>
                         </xf:select1>
                     </xf:group>
-                    <xf:group ref="instance('xprEntities')/xpr:entity[@xml:id = substring-after($relation/@xlink:href, '#')]/eac:eac-cpf">
+                    <xf:group ref="instance('xprEntities')/xpr:entity[concat('#', @xml:id) = $relation/@xlink:href]/eac:eac-cpf">
                         <xf:var name="entityType" value="descendant::eac:entityType"/>
                         <xf:label>Nouvelle entrée</xf:label>
                         <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">

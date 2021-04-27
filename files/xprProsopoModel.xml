@@ -432,7 +432,7 @@
             <xf:setvalue ref="instance('xprEntities')/xpr:entity[@xml:id=normalize-space(event('response-body')//xpr:xforms-id)]/@xml:id"
                          value="event('response-body')//xpr:id"/>
             <xf:setvalue ref="instance('xprProsopo')//@*[normalize-space(.)=normalize-space(event('response-body')//xpr:xforms-id)]"
-                         value="event('response-body')//xpr:id"/>
+                         value="concat('#',event('response-body')//xpr:id)"/>
             <xf:delete nodeset="instance('xprEntities')/xpr:entity[@xml:id=normalize-space(event('response-body')//xpr:id)]/@localType"/>
             <xf:delete nodeset="instance('xprEntities')/xpr:entity[@xml:id=normalize-space(event('response-body')//xpr:id)]/eac:eac-cpf"/>
 
