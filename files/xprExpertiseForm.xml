@@ -79,10 +79,10 @@
                                         <xf:setvalue ref="parent::xpr:type" ev:event="xforms-select">Dessin</xf:setvalue>
                                     </xf:item>
                                     <xf:item>
-                                        <xf:label>Plan</xf:label>
+                                        <xf:label>Plan, coupe, élévation</xf:label>
                                         <xf:value>plan</xf:value>
                                         <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="parent::xpr:type">Plan</xf:setvalue>
+                                            <xf:setvalue ref="parent::xpr:type">Plan, coupe, élévation</xf:setvalue>
                                         </xf:action>
                                     </xf:item>
                                     <xf:item>
