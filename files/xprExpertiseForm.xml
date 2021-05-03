@@ -582,16 +582,11 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter un expert</xf:label>
-                    <xf:action ev:event="DOMActivate">
-                        <xf:insert context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after" ev:event="DOMActivate"/>
-                    </xf:action>
-                    <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'"
-                               ev:event="DOMActivate">
-                        <xf:insert context="instance('xprExpertise')//xpr:conclusions"
-                                   origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:opinion"
-                                   nodeset="xpr:opinion[last()]"
-                                   position="after"/>
-                    </xf:action>
+
+                    <xf:insert if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after" ev:event="DOMActivate"/>
+
+                    <xf:show ev:event="DOMActivate" dialog="warningAgreement" if="count(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert) >= 1 and instance('xprExpertise')//xpr:conclusions/xpr:agreement[@type='conclusion']"/>
+
                     <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail= 'true'"
                                ev:event="DOMActivate">
                         <xf:insert context="instance('xprExpertise')//xpr:conclusions/xpr:fees"
@@ -601,6 +596,21 @@
                     </xf:action>
                     <xf:help>Ajouter un expert.</xf:help>
                 </xf:trigger>
+                <xf:dialog id="warningAgreement">
+                    <xf:label>Vous êtes sur le point d'ajouter un expert alors que le champ « Dispositif de l’expertise » est positionné sur « conclusion », si vous poursuivez ce champ sera réinitialisé.</xf:label>
+                    <xf:trigger>
+                        <xf:label>Annuler</xf:label>
+                        <xf:hide ev:event="DOMActivate" dialog="warningAgreement"/>
+                    </xf:trigger>
+                    <xf:trigger>
+                        <xf:label>Ajouter un expert</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after"/>
+                            <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:agreement" value="''"/>
+                            <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type" value="''"/>
+                        </xf:action>
+                    </xf:trigger>
+                </xf:dialog>
             </xf:group>
             <xf:group ref="xpr:description/xpr:participants/xpr:clerks">
                 <xf:label><xf:output value="if(count(xpr:clerk) > 1, 'Greffiers', 'Greffier')"/></xf:label>
@@ -846,12 +856,6 @@
                         <xf:value>Conclusion</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type" value="'conclusion'"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
-                            <xf:insert context="parent::xpr:conclusions"
-                                       origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:opinion"
-                                       nodeset="xpr:agreement"
-                                       position="after"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -859,7 +863,6 @@
                         <xf:value>Sans conclusion</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type" value="'noConclusion'"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -879,12 +882,6 @@
                         <xf:value>Accord</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type" value="'agreement'"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
-                            <xf:insert context="instance('xprExpertise')/xpr:description/xpr:conclusions"
-                                       origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:opinion"
-                                       nodeset="xpr:agreement"
-                                       position="after"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -892,16 +889,6 @@
                         <xf:value>Désaccord</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type" value="'disagreement'"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
-                            <xf:action while="count(instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion) &lt; count(instance('xprExpertise')//xpr:experts/xpr:expert)"
-                                       ev:event="DOMActivate">
-                                <xf:insert context="instance('xprExpertise')/xpr:description/xpr:conclusions"
-                                           origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:opinion"
-                                           nodeset="xpr:arrangement"
-                                           position="before"/>
-                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion[normalize-space(@ref) = '']/@ref"
-                                             value="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[not(@ref = instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref)]/@ref"/>
-                            </xf:action>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -909,7 +896,6 @@
                         <xf:value>Sans conclusion</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type" value="'noConclusion'"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
                         </xf:action>
                     </xf:item>
                     <xf:item>
@@ -917,23 +903,34 @@
                         <xf:value>Affaire inachevée</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type" value="'unfinished'"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
-                            <xf:insert context="parent::xpr:conclusions"
-                                       origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:opinion"
-                                       nodeset="xpr:agreement"
-                                       position="after"/>
-                            <xf:delete ref="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion/@ref"/>
                         </xf:action>
                     </xf:item>
                     <xf:help>ex. Sans conclusion : Alignement</xf:help>
                 </xf:select1>
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
+                    <xf:select ref="@ref">
+                        <xf:label>Expert(s)</xf:label>
+                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                            <xf:label ref="."/>
+                            <xf:value value="concat('#', @xml:id)"/>
+                        </xf:itemset>
+                    </xf:select>
                     <xf:textarea ref="." incremental="true">
-                        <xf:label>
-                            <xf:output value="if(instance('xprExperts')/xpr:entity[@xml:id = substring-after(current()/@ref, '#')], concat('Conlusions (', instance('xprExperts')/xpr:entity[@xml:id = substring-after(current()/@ref, '#')]/xpr:label, ')'), 'Conclusions')"/>
-                        </xf:label>
+                        <xf:label>Conclusions</xf:label>
                     </xf:textarea>
+                    <xf:trigger class="delete">
+                        <xf:label>Supprimer une conclusion</xf:label>
+                        <xf:delete nodeset="." at="1" ev:event="DOMActivate"/>
+                        <xf:help>Supprimer une conclusion.</xf:help>
+                    </xf:trigger>
                 </xf:repeat>
+                <xf:trigger>
+                    <xf:label>Ajouter une conclusion</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:opinion" nodeset="xpr:arrangement" position="before"/>
+                    </xf:action>
+                    <xf:help>Ajouter un entrepreneur, architecte ou maître d’œuvre.</xf:help>
+                </xf:trigger>
                 <xf:select ref="xpr:arrangement" appearance="full">
                     <xf:label>Accommodement</xf:label>
                     <xf:item>

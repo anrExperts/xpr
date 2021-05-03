@@ -6,6 +6,9 @@
         </xf:action>
         <xf:setvalue if="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']" ref="instance('xprExpertiseObjects')/xpr:object[@type='other']" value="instance('xprExpertise')//xpr:objects/xpr:object[@type='other']"/>
     </xf:action>
+    <xf:action ev:event="xforms-ready" if="not(/xpr:expertise/@xml:id)">
+        <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+    </xf:action>
     <xf:action ev:event="xforms-ready">
         <!--à supprimer une fois toutes les expertises reprises (toutes devraient avoir un control)-->
         <xf:insert if="/xpr:expertise[not(xpr:control)]" context="instance('xprExpertise')" origin="instance('xprExpertiseCopy')/xpr:control" nodeset="xpr:meta" at="1" position="after"/>
