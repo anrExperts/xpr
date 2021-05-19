@@ -435,8 +435,8 @@ declare function getAddress($node as node()*, $options as map(*)) as xs:string* 
 
 declare function getExpert($node as node()*, $options as map(*)) as node()* {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
-  let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/@ref)}/view">{ $expertName }</a>
+  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expert := <a href="/xpr/biographies/{fn:normalize-space(fn:substring-after($node/@ref, '#'))}/view">{ $expertName }</a>
   let $context :=
     switch ($node/@context[fn:normalize-space(.)!=''])
     case 'primary' return 'nommé en premier lieu'
