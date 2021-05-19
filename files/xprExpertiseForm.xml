@@ -572,6 +572,23 @@
                             <xf:value>unknown</xf:value>
                         </xf:item>
                     </xf:select1>
+                    <xf:group ref=".[not(@recalled)]">
+                        <xf:trigger>
+                            <xf:label>Expert rappelé</xf:label>
+                            <xf:insert ev:event="DOMActivate"
+                                       context="."
+                                       origin="instance('xprExpertiseCopy')//xpr:participants/xpr:experts/xpr:expert/@recalled"/>
+                            <xf:setvalue ev:event="DOMActivate" ref="@recalled" value="'true'"/>
+                        </xf:trigger>
+                    </xf:group>
+                    <xf:select ref="@recalled" appearance="full">
+                        <xf:label>Expert rappelé</xf:label>
+                        <xf:item>
+                            <xf:label>oui</xf:label>
+                            <xf:value>true</xf:value>
+                            <xf:delete ev:event="xforms-deselect" nodeset="."/>
+                        </xf:item>
+                    </xf:select>
                     <xf:trigger class="delete">
                         <xf:label>Supprimer un expert</xf:label>
                         <xf:delete nodeset="instance('xprExpertise')//xpr:conclusions/xpr:opinion[@ref = current()/@ref]" at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>

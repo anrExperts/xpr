@@ -8,6 +8,7 @@
     </xf:action>
     <xf:action ev:event="xforms-ready" if="not(/xpr:expertise/@xml:id)">
         <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:opinion"/>
+        <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@recalled"/>
     </xf:action>
     <xf:action ev:event="xforms-ready">
         <!--à supprimer une fois toutes les expertises reprises (toutes devraient avoir un control)-->
