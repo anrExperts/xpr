@@ -259,7 +259,7 @@ declare function getKeywords($node as node()*, $options as map(*)) as element() 
 
 declare function getFee($node as node()*, $options as map(*)) as xs:string {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
   let $type :=
   switch ($node/@type)
     case 'expert'
@@ -267,7 +267,7 @@ declare function getFee($node as node()*, $options as map(*)) as xs:string {
       ('Expert',
       if(fn:normalize-space($node/@ref)!='') then
         let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-        let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+        let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
         return '(' || $expertName || ')')) => fn:string-join(' ')
     case 'clerk' return 'Greffier'
     case 'rolls' return 'Rôles'
@@ -293,7 +293,7 @@ declare function getValue($node as node()*, $options as map(*)) as xs:string {
 
 declare function getOpinion($node as node()*, $options as map(*)) as node()* {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$node/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expertName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
   let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/@ref)}/view">{ $expertName }</a>
   let $opinion := $node/text()
   return (
@@ -329,7 +329,7 @@ declare function getParty($node as node()*, $options as map(*)) as element() {
     case 'true' return 'intervenante'
     case 'false' return 'non intervenante'
     default return ''
-  let $expertName := fn:normalize-space(db:open('xpr')/xpr:xpr/xpr:bio/eac:eac-cpf[@xml:id=$node/xpr:expert/@ref]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $expertName := fn:normalize-space(db:open('xpr')/xpr:xpr/xpr:bio/eac:eac-cpf[@xml:id=fn:substring-after($node/xpr:expert/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
   let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/xpr:expert/@ref)}/view">{ $expertName }</a>
   return
     <div class="party">{
@@ -343,9 +343,9 @@ declare function getParty($node as node()*, $options as map(*)) as element() {
         for $person in $node/xpr:person[fn:normalize-space(.)!='']
         return <li>{ getPersName($person/xpr:persName, $options) }</li>
       }</ul>,
-      if(fn:normalize-space($node/xpr:expert/@ref)!='') then
+      if($node/xpr:expert[fn:normalize-space(@ref)!='']) then
       <p>{ 'Expert : ', $expert }</p>,
-      if(fn:normalize-space($node/xpr:representative)!='') then
+      if($node/xpr:representative[fn:normalize-space(.)!='']) then
       <ul>{
         <lh>{ if(fn:count($node/xpr:representative[fn:normalize-space(.)!='']) > 1) then 'Représentants' else 'Représentant' }</lh>,
         for $representative in $node/xpr:representative
@@ -354,7 +354,7 @@ declare function getParty($node as node()*, $options as map(*)) as element() {
           if(fn:normalize-space($representative/xpr:occupation)!='') then fn:normalize-space($representative/xpr:occupation)
           ) => fn:string-join(', ')}</li>
       }</ul>,
-      if(fn:normalize-space($node/xpr:prosecutor)!='') then
+      if($node/xpr:prosecutor[fn:normalize-space(.)!='']) then
       <ul>{
         <lh>{ if(fn:count($node/xpr:prosecutor[fn:normalize-space(.)!='']) > 1) then 'Procureurs' else 'Procureur' }</lh>,
         for $prosecutor in $node/xpr:prosecutor
