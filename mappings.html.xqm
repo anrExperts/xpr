@@ -455,6 +455,152 @@ declare function getExpert($node as node()*, $options as map(*)) as node()* {
   return ($expert, text{', ' || ($node/xpr:title[fn:normalize-space(.)!=''], $context, $appointment) => fn:string-join(', ') || '.'})
 };
 
+
+(:~
+ : This function dispatches the treatment of the eac XML document
+ :)
+declare
+  %output:indent('no')
+function eac2html($node as node()*, $options as map(*)) as item()* {
+  <article>{
+    getIdentity($node/eac:cpfDescription/eac:identity, $options),
+    getDescription($node/eac:cpfDescription/eac:description, $options)
+    (: @todo si pas de date d’existance ou de sexe ne pas afficher getDescription() :)
+  }</article>
+};
+
+declare function getIdentity($node, $options){
+  <header>{(
+    getEntityType($node/eac:entityType, $options),
+    getNameEntry($node/eac:nameEntry[eac:authorizedForm], $options),
+    getEntityId($node/eac:entityId, $options),
+    for $nameEntry in $node/eac:nameEntry[fn:not(eac:authorizedForm)]
+    return getNameEntry($nameEntry, $options)
+  )}</header>
+};
+
+declare function getEntityType($node, $options){
+  <h3>{
+    switch ($node)
+    case $node[parent::eac:identity[@localType='expert']] return 'Fiche prosopographique d’expert'
+    case $node[parent::eac:identity[@localType='masson']] return 'Fiche prosopographique de maçon'
+    default return 'Fiche prosopographique'
+  }</h3>
+};
+
+declare function getNameEntry($node, $options){
+  if ($node/eac:authorizedForm)
+  then <h2>{$node/eac:part => fn:normalize-space()}</h2>
+  else for $nameEntry in $node return <div>
+    <h4>Forme attestée du nom</h4>
+    <ul>{
+      for $part in $nameEntry/eac:part[fn:normalize-space(.)!='']
+      return getPart($part, $options)
+    }</ul>
+  </div>
+};
+
+declare function getPart($node, $options){
+  let $part := $node => fn:normalize-space()
+  let $key :=
+    switch ($node/@localType => fn:normalize-space())
+    case 'surname' return 'Nom'
+    case 'forename' return 'Prénom'
+    case 'particle' return 'Particule'
+    case 'common' return 'Titre d’appel'
+    case 'formal' return 'Titre institutionnel'
+    case 'academic' return 'Titre académique'
+    case 'religious' return 'Titre religieux'
+    case 'nobiliary' return 'Titre nobiliaire'
+    default return ()
+
+  return <li>{$key || ' : ' || $part}</li>
+};
+
+declare function getEntityId($node, $options){
+  let $id := $node => fn:normalize-space()
+  return <span class="id">{$id}</span>
+};
+
+declare function getDescription($node, $options){
+  <div>
+    <h4>Description</h4>
+    <ul>{
+      getExistDates($node/eac:existDates, $options),
+      if(fn:normalize-space($node/eac:localDescription[@localType="sex"]) != '') then getSex($node/eac:localDescription[@localType="sex"], $options)
+    }</ul>
+  </div>,
+  getFunctions($node/eac:functions, $options),
+  getBiogHist($node/eac:biogHist, $options)
+};
+
+declare function getExistDates($node, $options){
+  <li>{ 'Dates d’existence : ' || getDate($node/eac:dateRange, $options)}</li>
+};
+
+declare function getDate($node, $options) as xs:string {
+  switch($node)
+  case $node[self::eac:dateRange] return fn:string-join(
+    ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
+    ' à ')
+  default return getPrecision($node/*, $options)
+  (: @todo mettre valeur vide en cas d’abs :)
+};
+
+declare function getPrecision($node, $options) as xs:string* {
+  switch ($node)
+  case $node[@notAfter] return ($node/@notAfter || ' ]')
+  case $node[@notBefore] return ('[ ', $node/@notBefore)
+  case $node[@standardDate] return ($node/@standardDate)
+  default return $node/@*
+};
+
+declare function getSex($node, $options){
+  let $sex :=
+    switch (fn:normalize-space($node))
+    case 'male' return 'Homme'
+    case 'female' return 'Femme'
+    default return ()
+  return
+  <li>{$sex}</li>
+  (: @todo restreindre l’appel au sex :)
+};
+
+declare function getFunctions($node, $options){
+  <div class="function">
+    <h4>Fonctions</h4>
+    {xpr.mappings.html:function($node/eac:function, $options)}
+  </div>
+};
+
+declare function xpr.mappings.html:function($node, $options){
+  <div>
+    <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
+  </div>
+  (: @todo prévoir cas où date fixe :)
+};
+
+declare function getBiogHist($node, $options){
+  <div class="biogHist">
+    <h4>Informations biographiques</h4>
+    { getChronList($node/eac:chronList, $options) }
+  </div>
+};
+
+declare function getChronList($node, $options){
+  for $chronItem in $node/eac:chronItem
+  return
+    <div>
+      <h5>{$chronItem/eac:event => fn:normalize-space()}</h5>
+      <p>Date : { getDate($chronItem/eac:date, $options) }</p>
+      <p>Participant : {$chronItem/eac:participant}</p>
+      <p>Involve : {$chronItem/eac:involve}</p>
+      <p>Source : {$chronItem/eac:source}</p>
+      <p>Coût : {$chronItem/eac:cost}</p>
+    </div>
+};
+
+
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
   typeswitch($node)
     case text() return $node[fn:normalize-unicode(.)!='']
@@ -475,7 +621,7 @@ function passthruXpr($nodes as node(), $options as map(*)) as item()* {
 (:~
  : This function dispatches the treatment of the eac XML document
  :)
-declare
+(:declare
   %output:indent('no')
 function eac2html($node as node()*, $options as map(*)) as item()* {
   typeswitch($node)
@@ -492,7 +638,7 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
     case element(eac:chronList) return chronList($node, $options)
     case element(eac:control) return ()
     default return passthru($node, $options)
-};
+};:)
 
 (:~
  : This function pass through child nodes (xsl:apply-templates
@@ -502,127 +648,6 @@ declare
 function passthru($nodes as node(), $options as map(*)) as item()* {
   for $node in $nodes/node()
   return eac2html($node, $options)
-};
-
-declare function eac-cpf($node, $options){
-  <article>{passthru($node, $options)}</article>
-};
-
-declare function cpfDescription($node, $options){
-  <div>{passthru($node, $options)}</div>
-};
-
-declare function identity($node, $options){
-  <header>{(
-    entityType($node/eac:entityType, $options),
-    nameEntry($node/eac:nameEntry[eac:authorizedForm], $options),
-    entityId($node/eac:entityId, $options),
-    for $nameEntry in$ node/eac:nameEntry[fn:not(eac:authorizedForm)] return nameEntry($nameEntry, $options)
-    )}</header>
-};
-
-declare function entityId($node, $options){
-  <span class="id">{passthru($node, $options)}</span>
-};
-declare function entityType($node, $options){
-  (:<h3>{
-    switch ($node)
-    case $node[parent::eac:identity[@localType='expert']] return 'Fiche prosopographique d’expert'
-    case $node[parent::eac:identity[@localType='masson']] return 'Fiche prosopographique de maçon'
-    default return 'Fiche prosopographique'
-  }</h3>:)
-  let $type := $node/parent::eac:identity/@localType
-  return <h3>{getMessage($type,'fr')}</h3>
-  (: @todo add other entry types :)
-};
-
-declare function nameEntry($node, $options){
-  if ($node/eac:authorizedForm)
-  then <h2>{passthru($node/eac:part, $options)}</h2>
-  else for $nameEntry in $node return <div>
-    <h4>{getMessage('nameEntry', 'fr')}</h4>
-    <ul>{part($node/eac:part, $options)}</ul>
-  </div>
-};
-
-declare function part($node, $options){
-    for $key in ('surname', 'forename', 'particle', 'common', 'formal', 'academic', 'religious', 'nobiliary')
-    let $message := getMessage($key, 'fr')
-    let $part := $node[@localType=$key]
-    where $part[fn:normalize-space(.)!='']
-    return <li>{$message || ' : ' || eac2html($part, $options)}</li>
-};
-
-declare function description($node, $options){
-  <div>
-    <h4>{getMessage('description', 'fr')}</h4>
-    <ul>{
-      eac2html($node/eac:existDates, $options),
-      eac2html($node/eac:localDescription[@localType="sex"], $options)
-    }</ul>
-  </div>,
-  eac2html($node/eac:functions, $options),
-  eac2html($node/eac:biogHist, $options)
-};
-
-declare function existDates($node, $options){
-  <li>{getMessage('existance', 'fr') || ' : ' || getDate($node/eac:dateRange, $options)}</li>
-};
-
-declare function functions($node, $options){
-  <div class="function">
-    <h4>{getMessage($node/fn:name(), 'fr')}</h4>
-    {passthru($node, $options)}
-  </div>
-};
-
-declare function xpr.mappings.html:function($node, $options){
-  <div>
-    <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
-  </div>
-  (: @todo prévoir cas où date fixe :)
-};
-
-declare function biogHist($node, $options){
-  <div class="biogHist">
-    <h4>{getMessage($node/fn:name(), 'fr')}</h4>
-    {passthru($node, $options)}
-  </div>
-};
-
-declare function chronList($node, $options){
-  for $chronItem in $node/eac:chronItem
-  return
-    <div>
-      <h5>{$node/eac:event}</h5>
-      <p>{getMessage($chronItem/eac:date/fn:name(),'fr')} : {getDate($chronItem/eac:date, $options)}</p>
-      <p>Participant : {$chronItem/eac:participant}</p>
-      <p>{'Involve :' || $chronItem/eac:involve}</p>
-      <p>Source : {$chronItem/eac:source}</p>
-      <p>Coût : {$chronItem/eac:cost}</p>
-    </div>
-};
-
-declare function getDate($node, $options) as xs:string {
-  switch($node)
-  case $node[self::eac:dateRange] return fn:string-join(
-    ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
-    ' à ')
-  default return getPrecision($node/*, $options)
-  (: @todo mettre valeur vide en cas d’abs :)
-};
-
-declare function getPrecision($node, $options) as xs:string* {
-  switch ($node)
-  case $node[@notAfter] return ($node/@notAfter || ' ]')
-  case $node[@notBefore] return ('[ ', $node/@notBefore)
-  case $node[@standardDate] return ($node/@standardDate)
-  default return $node/@*
-};
-
-declare function sex($node, $options){
-  <li>{getMessage($node, 'fr')}</li>
-  (: @todo restreindre l’appel au sex :)
 };
 
 (:~
