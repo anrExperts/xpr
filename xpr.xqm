@@ -1472,6 +1472,11 @@ function getReseauByYearHtml($year as xs:string, $format as xs:string) {
     return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
+(:
+ :display table
+ : 
+:)
+
 (:~
  : This resource function lists all the expertises with 2 or more categories
  : @return an ordered list of expertises in xml
