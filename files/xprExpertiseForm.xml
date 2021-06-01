@@ -521,12 +521,14 @@
             <xf:group ref="xpr:description/xpr:participants/xpr:experts">
                 <xf:label><xf:output value="if(count(xpr:expert) > 1, 'Experts', 'Expert')"/></xf:label>
                 <xf:repeat id="repeatExpert" nodeset="xpr:expert" appearance="full">
+                    <xf:var name="expert" value="."/>
                     <xf:select1 ref="@ref" incremental="true">
                         <xf:label>Patronyme</xf:label>
                         <xf:itemset nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert']">
                             <xf:label ref="xpr:label"/>
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
+                        <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref" value="normalize-space(replace(instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref, $expert/@ref , ''))" ev:event="xforms-select"/>
                     </xf:select1>
                     <!-- set new ref for opinion if disagreement is checked when expert is modified-->
                     <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'" ev:event="xforms-value-changed">
@@ -591,7 +593,8 @@
                     </xf:select>
                     <xf:trigger class="delete">
                         <xf:label>Supprimer un expert</xf:label>
-                        <xf:delete nodeset="instance('xprExpertise')//xpr:conclusions/xpr:opinion[@ref = current()/@ref]" at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
+                        <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref" value="normalize-space(replace(instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref, $expert/@ref , ''))" ev:event="DOMActivate"/>
+                        <!--<xf:delete nodeset="instance('xprExpertise')//xpr:conclusions/xpr:opinion[@ref = current()/@ref]" at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>-->
                         <xf:delete nodeset="instance('xprExpertise')//xpr:conclusions/xpr:fees/xpr:fee[@type='expert'][@ref = current()/@ref]" at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:experts/xpr:expert) > 1"/>
                         <xf:help>Supprimer un expert.</xf:help>
@@ -599,11 +602,9 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter un expert</xf:label>
-
                     <xf:insert if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after" ev:event="DOMActivate"/>
-
+                    <xf:delete if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[last()]/@recalled" ev:event="DOMActivate"/>
                     <xf:show ev:event="DOMActivate" dialog="warningAgreement" if="count(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert) >= 1 and instance('xprExpertise')//xpr:conclusions/xpr:agreement[@type='conclusion']"/>
-
                     <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail= 'true'"
                                ev:event="DOMActivate">
                         <xf:insert context="instance('xprExpertise')//xpr:conclusions/xpr:fees"
@@ -623,6 +624,7 @@
                         <xf:label>Ajouter un expert</xf:label>
                         <xf:action ev:event="DOMActivate">
                             <xf:insert context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after"/>
+                            <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[last()]/@recalled" ev:event="DOMActivate"/>
                             <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:agreement" value="''"/>
                             <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type" value="''"/>
                         </xf:action>
@@ -925,15 +927,16 @@
                     <xf:help>ex. Sans conclusion : Alignement</xf:help>
                 </xf:select1>
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
+                    <xf:label>Conclusion</xf:label>
                     <xf:select ref="@ref">
                         <xf:label>Expert(s)</xf:label>
-                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]" appearance="full">
                             <xf:label ref="."/>
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
                     </xf:select>
                     <xf:textarea ref="." incremental="true">
-                        <xf:label>Conclusions</xf:label>
+                        <xf:label>Avis</xf:label>
                     </xf:textarea>
                     <xf:trigger class="delete">
                         <xf:label>Supprimer une conclusion</xf:label>
