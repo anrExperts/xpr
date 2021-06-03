@@ -528,8 +528,18 @@
                             <xf:label ref="xpr:label"/>
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
-                        <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref" value="normalize-space(replace(instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref, $expert/@ref , ''))" ev:event="xforms-select"/>
+                        <xf:action ev:event="xforms-deselect">
+                            <xf:show dialog="warningOpinion" if="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[index('repeatExpert')]/@ref[normalize-space(.)!=''])]/@ref"/>
+                            <xf:setvalue  ref="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref" value="normalize-space(replace(instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref, $expert/@ref , ''))"/>
+                        </xf:action>
                     </xf:select1>
+                    <xf:dialog id="warningOpinion">
+                        <xf:label>Vous venez de modifier un expert alors qu’une ou plusieurs conclusions lui étaient associées. Merci de vérifier les différentes conclusions avant de sauvegarder la fiche.</xf:label>
+                        <xf:trigger>
+                            <xf:label>Ok</xf:label>
+                            <xf:hide ev:event="DOMActivate" dialog="warningOpinion"/>
+                        </xf:trigger>
+                    </xf:dialog>
                     <!-- set new ref for opinion if disagreement is checked when expert is modified-->
                     <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'" ev:event="xforms-value-changed">
                         <xf:setvalue ref="instance('xprExpertise')//xpr:opinion[not(@ref = instance('xprExpertise')//xpr:experts/xpr:expert/@ref)]/@ref" value="current()/@ref"/>
@@ -928,7 +938,7 @@
                 </xf:select1>
                 <xf:repeat id="repeatOpinion" nodeset="xpr:opinion">
                     <xf:label>Conclusion</xf:label>
-                    <xf:select ref="@ref">
+                    <xf:select ref="@ref" appearance="full">
                         <xf:label>Expert(s)</xf:label>
                         <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]" appearance="full">
                             <xf:label ref="."/>
