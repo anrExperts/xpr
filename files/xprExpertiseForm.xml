@@ -506,7 +506,8 @@
                     <xf:select ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects" appearance="full">
                         <xf:label>Objet de l’expertise</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseObjects')/xpr:object[@type]">
-                            <xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>
+                            <xf:label value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"></xf:label>
+                            <!--for xsltforms 1.5<xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>-->
                             <xf:copy ref="."/>
                         </xf:itemset>
                     </xf:select>
@@ -1173,7 +1174,8 @@
                     <xf:select ref="." appearance="full">
                         <xf:label>Bourse commune</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseExpenses')/xpr:expense">
-                            <xf:label><xf:output value="if(@type='expert' , 'Experts', 'Greffiers')"/></xf:label>
+                            <xf:label value="if(@type='expert' , 'Experts', 'Greffiers')"></xf:label>
+                            <!--FOR XSLTFORMS 1.5<xf:label><xf:output value="if(@type='expert' , 'Experts', 'Greffiers')"/></xf:label>-->
                             <xf:copy ref="."/>
                         </xf:itemset>
                         <xf:repeat nodeset="xpr:expense">
