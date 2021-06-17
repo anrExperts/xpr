@@ -19,6 +19,7 @@ import module namespace G = 'xpr.globals' at './globals.xqm' ;
 import module namespace xpr.mappings.html = 'xpr.mappings.html' at './mappings.html.xqm' ;
 import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' ;
 import module namespace xpr.models.networks = 'xpr.models.networks' at './models.networks.xqm' ;
+import module namespace xpr.autosave = 'xpr.autosave' at './autosave.xqm' ;
 import module namespace Session = 'http://basex.org/modules/session';
 
 declare namespace rest = "http://exquery.org/ns/restxq" ;
