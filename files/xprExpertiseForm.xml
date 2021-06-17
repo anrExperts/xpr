@@ -387,33 +387,33 @@
                             </xf:action>
                         </xf:item>
                         <xf:choices>
-                            <xf:label>B/ Saisie du lieutenant civil (ou autre, à préciser)</xf:label>
+                            <xf:label>B/ Saisie d’une institution</xf:label>
                             <xf:item>
-                                <xf:label>B1/ Requête auprès du LC pour qu’il demande une expertise</xf:label>
+                                <xf:label>B1/ Requête auprès d’une institution pour qu’elle demande une expertise</xf:label>
                                 <xf:value>b1</xf:value>
                                 <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="parent::xpr:framework">Requête auprès du lieutenant civil pour qu’il demande une expertise</xf:setvalue>
+                                    <xf:setvalue ref="parent::xpr:framework">Requête auprès d’une institution pour qu’elle demande une expertise</xf:setvalue>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Les parties'"/>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'parties'"/>
                                 </xf:action>
                             </xf:item>
                         </xf:choices>
                         <xf:choices>
-                            <xf:label>B2/ Le LC est saisi dans le cadre d’une procédure</xf:label>
+                            <xf:label>B2/ Une institution est saisie dans le cadre d’une procédure</xf:label>
                             <xf:item>
-                                <xf:label>B2a/ LC saisi dans le cadre d’une procédure (Les parties nomment chacune leur expert ou un expert commun)</xf:label>
+                                <xf:label>B2a/ Institution saisie dans le cadre d’une procédure (Les parties nomment chacune leur expert ou un expert commun)</xf:label>
                                 <xf:value>b2a</xf:value>
                                 <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="parent::xpr:framework">Le lieutenant civil est saisi dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</xf:setvalue>
+                                    <xf:setvalue ref="parent::xpr:framework">L’institution est saisie dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</xf:setvalue>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
                                 </xf:action>
                             </xf:item>
                             <xf:item>
-                                <xf:label>B2b/ LC saisi dans le cadre d’une procédure (Le LC nomme un ou deux experts)</xf:label>
+                                <xf:label>B2b/ Institution saisie dans le cadre d’une procédure (Le LC nomme un ou deux experts)</xf:label>
                                 <xf:value>b2b</xf:value>
                                 <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="parent::xpr:framework">Le lieutenant civil est saisi dans le cadre d’une procédure (le lieutenant civil nomme un ou deux experts)</xf:setvalue>
+                                    <xf:setvalue ref="parent::xpr:framework">L’institution est saisie civil est saisi dans le cadre d’une procédure (l’institution nomme un ou deux experts)</xf:setvalue>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
                                 </xf:action>
@@ -506,7 +506,8 @@
                     <xf:select ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects" appearance="full">
                         <xf:label>Objet de l’expertise</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseObjects')/xpr:object[@type]">
-                            <xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>
+                            <xf:label value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"></xf:label>
+                            <!--for xsltforms 1.5<xf:label><xf:output value="if(normalize-space(.[not(@type='other')])!='' , ., 'Autre')"/></xf:label>-->
                             <xf:copy ref="."/>
                         </xf:itemset>
                     </xf:select>
@@ -568,7 +569,7 @@
                     <xf:select1 ref="@appointment" appearance="minimal">
                         <xf:label>Origine de la nomination</xf:label>
                         <xf:item>
-                            <xf:label>d’office (par le lieutenant civil)</xf:label>
+                            <xf:label>d’office (par une institution)</xf:label>
                             <xf:value>court-appointed</xf:value>
                         </xf:item>
                         <xf:item>
@@ -578,6 +579,10 @@
                         <xf:item>
                             <xf:label>par les experts</xf:label>
                             <xf:value>experts</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>mixte</xf:label>
+                            <xf:value>mixed</xf:value>
                         </xf:item>
                         <xf:item>
                             <xf:label>indéterminé</xf:label>
@@ -1177,7 +1182,8 @@
                     <xf:select ref="." appearance="full">
                         <xf:label>Bourse commune</xf:label>
                         <xf:itemset nodeset="instance('xprExpertiseExpenses')/xpr:expense">
-                            <xf:label><xf:output value="if(@type='expert' , 'Experts', 'Greffiers')"/></xf:label>
+                            <xf:label value="if(@type='expert' , 'Experts', 'Greffiers')"></xf:label>
+                            <!--FOR XSLTFORMS 1.5<xf:label><xf:output value="if(@type='expert' , 'Experts', 'Greffiers')"/></xf:label>-->
                             <xf:copy ref="."/>
                         </xf:itemset>
                         <xf:repeat nodeset="xpr:expense">
