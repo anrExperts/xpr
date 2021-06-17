@@ -749,6 +749,10 @@
                             <xf:label>Fermier judiciaire</xf:label>
                             <xf:value>contractor</xf:value>
                         </xf:item>
+                        <xf:item>
+                            <xf:label>Police</xf:label>
+                            <xf:value>police</xf:value>
+                        </xf:item>
                     </xf:select1>
                     <xf:select1 ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
