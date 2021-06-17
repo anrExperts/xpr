@@ -1280,8 +1280,7 @@ function getCsvExpertises() {
     element facsimile {$expertise/sourceDesc/facsimile/(@from, @to) => fn:string-join(" | ")},
     element sketch {$expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space()},
     element extent {$expertise/sourceDesc/physDesc/extent => fn:normalize-space()},
-    element extent {$expertise/sourceDesc/physDesc/appendices/appendice => fn:count()}
-  }
+    element nbAppendice {$expertise/sourceDesc/physDesc/appendices/appendice => fn:count()}  }
  }</csv>
 };
 
