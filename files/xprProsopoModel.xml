@@ -281,11 +281,11 @@
         But the first one (and the second one) is also altering the loop condition and it appears that, at the end, the 2 or 3 submissions are sent for the same event just before the latest event being caught.
         The easiest way to control this is to invert the order of the submissions: the one to be activated at the end is to be tested before the others to be activated repeatedly.
         -->
-        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]) and not(instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])"
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href[. != '']]) and not(instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href])"
                  submission="submitBio"/>
-        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]"
+        <xf:send if="not(instance('xprEntities')/xpr:entity[@localType='new'][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href[. != '']]) and instance('xprSources')/xpr:source[@localType = 'new'][@xml:id[. != ''] = instance('xprProsopo')//xpr:source/@xlink:href]"
                  submission="submitNewSource"/>
-        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][@xml:id=instance('xprProsopo')//@xlink:href[. != '']]"
+        <xf:send if="instance('xprEntities')/xpr:entity[@localType='new'][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href[. != '']]"
                  submission="submitNewEntity"/>
     </xf:action>
 
@@ -390,41 +390,41 @@
 
     <xf:submission mode="synchronous"
                    id="submitNewEntity"
-                   ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href]/eac:eac-cpf"
+                   ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href]/eac:eac-cpf"
                    resource="/xpr/biographies/put"
                    method="put"
                    replace="none">
         <xf:action ev:event="xforms-submit">
             <!-- source if iad form -->
             <xf:setvalue if="instance('xprInventory')/xpr:sourceDesc"
-                         ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:places/eac:place/eac:dateSet/eac:date/xpr:source/@xlink:href
-                            | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/xpr:source/@xlink:href"
+                         ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:places/eac:place/eac:dateSet/eac:date/xpr:source/@xlink:href
+                            | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]/xpr:source/@xlink:href"
                          value="instance('xprInventory')/xpr:sourceDesc/xpr:idno/@unitid"/>
             <!-- date -->
             <xf:setvalue if="instance('xprInventory')/xpr:sourceDesc"
-                         ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:places/eac:place/eac:dateSet/eac:date/@standardDate"
+                         ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:places/eac:place/eac:dateSet/eac:date/@standardDate"
                          value="instance('xprInventory')/xpr:sourceDesc/xpr:date/@standardDate"/>
 
             <!--remove empty date attributes-->
-            <xf:delete nodeset="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//@standardDate[.='']
-                              | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//@notBefore[.='']
-                              | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//@notAfter[.='']"/>
+            <xf:delete nodeset="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//@standardDate[.='']
+                              | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//@notBefore[.='']
+                              | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//@notAfter[.='']"/>
 
             <!--remove empty relation-->
-            <xf:delete nodeset="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
+            <xf:delete nodeset="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf//eac:cpfRelation[@xlink:href = ''][eac:relationEntry = '']"/>
 
             <!--set value for maintenance event informations-->
-            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:localControl/eac:term"
+            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:localControl/eac:term"
                          value="'in progress'"/>
-            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceStatus"
+            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceStatus"
                          value="'new'"/>
-            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventType"
+            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventType"
                          value="'creation'"/>
-            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDescription"
+            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDescription"
                          value="concat('Création de la fiche (à partir de la fiche de ', instance('xprProsopo')//eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part, ').')"/>
             <xf:setvalue
-                ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDateTime/@standardDateTime
-                | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][@xml:id=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDateTime"
+                ref="instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDateTime/@standardDateTime
+                | instance('xprEntities')/xpr:entity[@localType='new'][eac:eac-cpf][concat('#', @xml:id)=instance('xprProsopo')//@xlink:href][1]/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDateTime"
                 value="now()"/>
         </xf:action>
 
