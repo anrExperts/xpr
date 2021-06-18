@@ -1,6 +1,6 @@
 <xf:model id="autosave" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
   <xf:action ev:event="xforms-ready">
-    <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+    <xf:dispatch name="transfert" targetid="autosave" delay="30000"/>
   </xf:action>
 
   <xf:instance id="xprAutosave">
@@ -16,7 +16,7 @@
   </xf:action>
 
   <xf:action ev:event="xforms-insert" ev:target="#xprAutosave" if="instance('xprAutosave')//xpr:sourceDesc[xpr:idno[@type='unitid']='' or xpr:idno[@type='item']='']">
-    <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+    <xf:dispatch name="transfert" targetid="autosave" delay="30000"/>
   </xf:action>
 
   <xf:action ev:event="save">
@@ -29,10 +29,10 @@
                  method="put"
                  replace="none">
     <xf:action ev:event="xforms-submit-done">
-      <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+      <xf:dispatch name="transfert" targetid="autosave" delay="180000"/>
     </xf:action>
     <xf:action ev:event="xforms-submit-error">
-      <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+      <xf:dispatch name="transfert" targetid="autosave" delay="180000"/>
     </xf:action>
   </xf:submission>
 
