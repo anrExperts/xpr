@@ -300,7 +300,7 @@ declare
 function newExpertise() {
   let $content := map {
     'instance' : '',
-    'model' : 'xprExpertiseModel.xml',
+    'model' : ('xprExpertiseModel.xml', 'xprAutosaveModel.xml'),
     'trigger' : 'xprExpertiseTrigger.xml',
     'form' : 'xprExpertiseForm.xml'
   }

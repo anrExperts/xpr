@@ -40,14 +40,13 @@ declare default collation "http://basex.org/collation?lang=fr" ;
 
 
 (:~
- : This function creates new expertises
+ : This function insert autosaved expertises in xprAutosave db
  : @param $param content to insert in the database
  : @param $refere the callback url
- : @return update the database with an updated content and an 200 http
- : @bug change of cote and dossier doesn’t work
+ : @return update the database with an updated content
  :)
 declare
-  %rest:path("xpr/autosave/expertises/put")
+  %rest:path("xpr/autosave/put")
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
@@ -56,9 +55,20 @@ declare
 function putExpertiseAutosave($param, $referer) {
   let $db := db:open("xprAutosave")
   return(
-    if($db/xpr/expertises/expertise[descendant::idno[@type='unitid']=$param//idno[@type='unitid'] and descendant::idno[@type='item']=$param//idno[@type='item']]) then
-      let $oldSave := $db/xpr/expertises/expertise[descendant::idno[@type='unitid']=$param//idno[@type='unitid'] and descendant::idno[@type='item']=$param//idno[@type='item']]
+    if($db//xpr:expertises/xpr:expertise[descendant::xpr:idno[@type='unitid']=$param//xpr:idno[@type='unitid'] and descendant::xpr:idno[@type='item']=$param//xpr:idno[@type='item']]) then
+      let $oldSave := $db//xpr:expertises/xpr:expertise[descendant::xpr:idno[@type='unitid']=$param//xpr:idno[@type='unitid'] and descendant::xpr:idno[@type='item']=$param//xpr:idno[@type='item']]
       return replace node $oldSave with $param
-    else insert node $param as first into $db/xpr/expertises
+    else insert node $param as first into $db//xpr:expertises
   )
+};
+
+(:~
+ : This function returns xprAutosave db
+ :)
+declare
+  %rest:path("xpr/autosave")
+  %output:method("xml")
+function getAutosave() {
+  let $db := db:open("xprAutosave")
+  return $db
 };

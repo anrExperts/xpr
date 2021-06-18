@@ -1,0 +1,40 @@
+<xf:model id="autosave" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+  <xf:action ev:event="xforms-ready">
+    <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+  </xf:action>
+
+  <xf:instance id="xprAutosave">
+    <autosave xmlns="xpr">
+      <data/>
+    </autosave>
+  </xf:instance>
+
+  <xf:insert context="instance('xprAutosave')/xpr:data" origin="instance('xprExpertise')" nodeset="." ev:event="transfert"/>
+
+  <xf:action ev:event="xforms-insert" ev:target="#xprAutosave" if="instance('xprAutosave')//xpr:sourceDesc[xpr:idno[@type='unitid']!='' and xpr:idno[@type='item']!='']">
+    <xf:dispatch name="save" targetid="autosave"/>
+  </xf:action>
+
+  <xf:action ev:event="xforms-insert" ev:target="#xprAutosave" if="instance('xprAutosave')//xpr:sourceDesc[xpr:idno[@type='unitid']='' or xpr:idno[@type='item']='']">
+    <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+  </xf:action>
+
+  <xf:action ev:event="save">
+    <xf:send submission="submitAuto"/>
+  </xf:action>
+
+  <xf:submission id="submitAuto"
+                 ref="instance('xprAutosave')/xpr:expertise"
+                 resource="/xpr/autosave/put"
+                 method="put"
+                 replace="none">
+    <xf:action ev:event="xforms-submit-done">
+      <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+    </xf:action>
+    <xf:action ev:event="xforms-submit-error">
+      <xf:dispatch name="transfert" targetid="autosave" delay="10000"/>
+    </xf:action>
+  </xf:submission>
+
+
+</xf:model>
