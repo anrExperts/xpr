@@ -1280,7 +1280,20 @@ function getCsvExpertises() {
     element facsimile {$expertise/sourceDesc/facsimile/(@from, @to) => fn:string-join(" | ")},
     element sketch {$expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space()},
     element extent {$expertise/sourceDesc/physDesc/extent => fn:normalize-space()},
-    element nbAppendice {$expertise/sourceDesc/physDesc/appendices/appendice => fn:count()}  }
+    element nbAppendice {$expertise/sourceDesc/physDesc/appendices/appendice => fn:count()},
+    element sessions {$expertise/description/sessions/date/fn:concat(@when, ' ; ', @type) => fn:string-join(" | ")},
+    (:tous les lieux n'ont pas la même structure s'ils sont à paris, banlieue, etc.:)
+    element places {$expertise/description/places/place/fn:concat(@type, ' ; ', fn:string-join(descendant::node()[fn:not(node())], " ; ")) => fn:string-join(" | ")},
+    element categories {$expertise/description/categories/category => fn:string-join(" | ")},
+    element designation {$expertise/description/categories/designation => fn:normalize-space()},
+    element rubric {$expertise/description/categories/designation/@rubric => fn:normalize-space()},
+    element framework {$expertise/description/procedure/framework => fn:normalize-space()},
+    element frameworkType {$expertise/description/procedure/framework/@type => fn:normalize-space()},
+    element origination {$expertise/description/procedure/origination => fn:normalize-space()},
+    element originationType {$expertise/description/procedure/origination/@type => fn:normalize-space()},
+    element sentences {$expertise/description/procedure/sentences/sentence/fn:concat(fn:normalize-space(orgName), " : ", fn:string-join(date/@when, ' ; ')) => fn:string-join(" | ")},
+    element sentences {$expertise/description/procedure/case => fn:normalize-space()},
+    element sentences {$expertise/description/procedure/objects/object => fn:string-join(' | ')}}
  }</csv>
 };
 
@@ -1715,6 +1728,40 @@ function putUser($param, $referer) {
       'xpr',
       $userInfo)
 };
+
+(:~
+ : This resource returns a xml file with all the expertises of a user
+ : @return an xml resource
+ :)
+declare
+  %rest:path("xpr/users/expertise/{$user}")
+  %rest:produces('application/html')
+  %output:method("xml")
+function getUsersExpertises($user) {
+  <expertises xmlns="xpr">{db:open('xpr')//expertise[descendant::agent[fn:normalize-space(.) = $user]]}</expertises>
+};
+
+(:~
+ : This resource returns a list with all the expertises of a user
+ : @return an ordered list of expertises in html
+ :)
+declare
+  %rest:path("xpr/users/expertise/{$user}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getUsersExpertisesHtml($user) {
+ let $content := map {
+    'title' : 'Liste des expertises',
+    'data' : getUsersExpertises($user)
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml",
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
 
 declare
     %perm:check('xpr/users', '{$perm}')
