@@ -1262,6 +1262,29 @@ function networks($year) {
 }; :)
 
 (:~
+ : This function
+ :)
+declare
+  %rest:path("xpr/csv/expertises")
+  %output:method("csv")
+  %output:csv("header=yes")
+  %rest:produces("text/plain")
+function getCsvExpertises() {
+ <csv>{
+  let $data := db:open('xpr')//expertises
+  for $expertise in $data/expertise
+  return element record {
+    element unitid {$expertise/sourceDesc/idno[@type="unitid"] => fn:normalize-space()},
+    element item {$expertise/sourceDesc/idno[@type="item"] => fn:normalize-space()},
+    element supplement {$expertise/sourceDesc/idno[@type="supplement"] => fn:normalize-space()},
+    element facsimile {$expertise/sourceDesc/facsimile/(@from, @to) => fn:string-join(" | ")},
+    element sketch {$expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space()},
+    element extent {$expertise/sourceDesc/physDesc/extent => fn:normalize-space()},
+    element nbAppendice {$expertise/sourceDesc/physDesc/appendices/appendice => fn:count()}  }
+ }</csv>
+};
+
+(:~
  : This function consumes 
  : @param $year content
  : 
@@ -1269,7 +1292,7 @@ function networks($year) {
 declare
   %rest:path("xpr/networks/{$year}")
   %output:method("json")
-  %rest:produces('application/json')
+  %rest:produces("application/json")
 function getNetworks($year) {
   let $expertises := db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
   let $experts := fn:distinct-values(db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
