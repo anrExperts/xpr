@@ -1734,7 +1734,7 @@ function putUser($param, $referer) {
  : @return an xml resource
  :)
 declare
-  %rest:path("xpr/users/expertise/{$user}")
+  %rest:path("xpr/users/expertises/{$user}")
   %rest:produces('application/html')
   %output:method("xml")
 function getUsersExpertises($user) {
@@ -1746,7 +1746,7 @@ function getUsersExpertises($user) {
  : @return an ordered list of expertises in html
  :)
 declare
-  %rest:path("xpr/users/expertise/{$user}/view")
+  %rest:path("xpr/users/expertises/{$user}/view")
   %rest:produces('application/html')
   %output:method("html")
   %output:html-version('5.0')
