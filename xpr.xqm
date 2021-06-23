@@ -327,7 +327,7 @@ function modifyExpertise($id) {
   let $content := map {
     'instance' : $id,
     'path' : 'expertises',
-    'model' : 'xprExpertiseModel.xml',
+    'model' : ('xprExpertiseModel.xml', 'xprAutosaveModel.xml'),
     'trigger' : 'xprExpertiseTrigger.xml',
     'form' : 'xprExpertiseForm.xml'
   }
