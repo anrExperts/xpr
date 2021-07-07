@@ -42,13 +42,27 @@
     <!--<xf:instance id="xprSupplement" src="/xpr/files/_xprSupplement.xml"/>-->
     <xf:instance id="xprExpertiseObjects">
         <objects xmlns="xpr">
-            <object type="house">Maison</object>
-            <object type="plot">Terrain</object>
-            <object type="buildings">Ensemble de bâtiments</object>
+            <object type="house">Maison(s)</object>
+            <object type="plot">Terrain(s)</object>
+            <object type="buildings">Ensemble de bâtiments (biens immeubles)</object>
             <object type="territory">Domaine, terres, fief</object>
-            <object type="wall">Mur</object>
-            <object type="cesspool">Fosse d'aisance</object>
+            <object type="wall">Mur(s)</object>
+            <object type="cesspool">Fosse(s) d'aisance</object>
             <object type="well">Puits</object>
+            <object type="repairs">Réparations</object>
+            <object type="masonry">Maçonnerie (ouvrage(s))</object>
+            <object type="carpentry">Charpenterie (ouvrage(s))</object>
+            <object type="roofing">Couverture (ouvrage(s))</object>
+            <object type="joinery">Menuiserie (ouvrage(s))</object>
+            <object type="sculpture">Sculpture (ouvrage(s))</object>
+            <object type="painting">Peinture (ouvrage(s))</object>
+            <object type="gilding">Dorure (ouvrage(s))</object>
+            <object type="marblework">Marbre (ouvrage(s))</object>
+            <object type="locks">Serrurerie (ouvrage(s))</object>
+            <object type="glasswork">Vitrerie (ouvrage(s))</object>
+            <object type="leadWork">Plomb (ouvrage(s))</object>
+            <object type="fees">Honoraires</object>
+            <object type="salary">Salaires</object>
             <object type="other"/>
         </objects>
     </xf:instance>

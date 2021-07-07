@@ -397,38 +397,16 @@
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'parties'"/>
                                 </xf:action>
                             </xf:item>
-                        </xf:choices>
-                        <xf:choices>
-                            <xf:label>B2/ Une institution est saisie dans le cadre d’une procédure</xf:label>
                             <xf:item>
-                                <xf:label>B2a/ Institution saisie dans le cadre d’une procédure (Les parties nomment chacune leur expert ou un expert commun)</xf:label>
-                                <xf:value>b2a</xf:value>
+                                <xf:label>B2/ Une institution est saisie dans le cadre d’une procédure</xf:label>
+                                <xf:value>b2</xf:value>
                                 <xf:action ev:event="xforms-select">
                                     <xf:setvalue ref="parent::xpr:framework">L’institution est saisie dans le cadre d’une procédure (les parties nomment chacune leur expert ou un expert en commun)</xf:setvalue>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
                                     <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
                                 </xf:action>
                             </xf:item>
-                            <xf:item>
-                                <xf:label>B2b/ Institution saisie dans le cadre d’une procédure (Le LC nomme un ou deux experts)</xf:label>
-                                <xf:value>b2b</xf:value>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="parent::xpr:framework">L’institution est saisie civil est saisi dans le cadre d’une procédure (l’institution nomme un ou deux experts)</xf:setvalue>
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
-                                    <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
-                                </xf:action>
-                            </xf:item>
                         </xf:choices>
-                        <xf:item>
-                            <xf:label>B3/ Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:label>
-                            <xf:value>b3</xf:value>
-                            <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="parent::xpr:framework">Saisie mixte (un expert est nommé par les parties, l'autre est nommé d'office)</xf:setvalue>
-                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination" value="'Une institution'"/>
-                                <xf:setvalue ref="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:origination/@type" value="'institution'"/>
-                            </xf:action>
-                        </xf:item>
-                        <!--@todo comment faire pour préciser si ce n'est pas le LC ?-->
                         <xf:item>
                             <xf:label>C/ Cas problématique</xf:label>
                             <xf:value>c</xf:value>
@@ -619,7 +597,7 @@
                     <xf:label>Ajouter un expert</xf:label>
                     <xf:insert if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after" ev:event="DOMActivate"/>
                     <xf:delete if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[last()]/@recalled" ev:event="DOMActivate"/>
-                    <xf:show ev:event="DOMActivate" dialog="warningAgreement" if="count(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert) >= 1 and instance('xprExpertise')//xpr:conclusions/xpr:agreement[@type='conclusion']"/>
+                    <xf:show ev:event="DOMActivate" dialog="warningAgreement" if="count(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert) >= 1 and not(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[@context='third-party']) and instance('xprExpertise')//xpr:conclusions/xpr:agreement[@type='conclusion']"/>
                     <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail= 'true'"
                                ev:event="DOMActivate">
                         <xf:insert context="instance('xprExpertise')//xpr:conclusions/xpr:fees"
@@ -642,6 +620,7 @@
                             <xf:delete nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[last()]/@recalled" ev:event="DOMActivate"/>
                             <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:agreement" value="''"/>
                             <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type" value="''"/>
+                            <xf:hide ev:event="DOMActivate" dialog="warningAgreement"/>
                         </xf:action>
                     </xf:trigger>
                 </xf:dialog>
@@ -761,7 +740,11 @@
                     </xf:select1>
                     <xf:select1 ref="xpr:expert/@ref">
                         <xf:label>Expert agissant pour cette partie</xf:label>
-                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert/@ref]">
+                        <xf:item>
+                            <xf:label/>
+                            <xf:value/>
+                        </xf:item>
+                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[@context!='third-party']/@ref]">
                             <xf:label ref="."/>
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
@@ -887,7 +870,7 @@
         <xf:case id="conclusionsPanel" selected="false">
             <xf:label>Conclusions ou dispositifs de l’expertise</xf:label>
             <xf:group ref="xpr:description/xpr:conclusions">
-                <xf:select1 ref="xpr:agreement[ancestor::xpr:description[count(xpr:participants/xpr:experts//xpr:expert) = 1]]" appearance="full">
+                <xf:select1 ref="xpr:agreement[ancestor::xpr:description[count(xpr:participants/xpr:experts//xpr:expert) = 1] or ancestor::xpr:description/xpr:participants/xpr:experts//xpr:expert[@context='third-party']]" appearance="full">
                     <xf:label>Dispositif de l’expertise</xf:label>
                     <xf:item>
                         <xf:label>Conclusion</xf:label>
@@ -912,7 +895,7 @@
                     </xf:item>
                     <xf:help>ex. Sans conclusion : Alignement</xf:help>
                 </xf:select1>
-                <xf:select1 ref="xpr:agreement[ancestor::xpr:description[count(xpr:participants/xpr:experts//xpr:expert) &gt; 1]]"
+                <xf:select1 ref="xpr:agreement[ancestor::xpr:description[count(xpr:participants/xpr:experts//xpr:expert) &gt; 1] and not(ancestor::xpr:description/xpr:participants/xpr:experts//xpr:expert[@context='third-party'])]"
                             appearance="full">
                     <xf:label>Dispositif de l’expertise</xf:label>
                     <xf:item>
