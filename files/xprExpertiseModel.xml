@@ -250,7 +250,7 @@
     <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()" readonly="true()"/>
     <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()"/>
     <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()"/>
-    <xf:bind nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1791-01-01'))"/>
+    <xf:bind nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1799-12-31'))"/>
     <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris'
       or ../@type='suburbs'
       or ../@type='province'
