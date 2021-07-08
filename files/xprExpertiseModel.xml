@@ -49,7 +49,7 @@
             <object type="wall">Mur(s)</object>
             <object type="cesspool">Fosse(s) d'aisance</object>
             <object type="well">Puits</object>
-            <object type="repairs">Réparations</object>
+            <!--<object type="repairs">Réparations</object>
             <object type="masonry">Maçonnerie (ouvrage(s))</object>
             <object type="carpentry">Charpenterie (ouvrage(s))</object>
             <object type="roofing">Couverture (ouvrage(s))</object>
@@ -62,7 +62,7 @@
             <object type="glasswork">Vitrerie (ouvrage(s))</object>
             <object type="leadWork">Plomb (ouvrage(s))</object>
             <object type="fees">Honoraires</object>
-            <object type="salary">Salaires</object>
+            <object type="salary">Salaires</object>-->
             <object type="other"/>
         </objects>
     </xf:instance>
