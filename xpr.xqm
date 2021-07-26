@@ -1195,6 +1195,7 @@ declare
   %updating
 function putSource($param, $referer) {
   let $db := db:open("xpr")
+  let $source := <source>{fn:normalize-space($param)}</source>
   let $origin := fn:analyze-string($referer, 'xpr/(.+?)/(.+?)/modify')//fn:group[@nr='1']
   return
     if (fn:ends-with($referer, 'modify'))
@@ -1202,9 +1203,9 @@ function putSource($param, $referer) {
       switch ($origin)
       case 'biographies' return insert node $param into $db/xpr/sources
       default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
-      return replace node $db/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $location] with $param 
+      return replace node $db/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $location] with $source
     else
-      insert node $param into $db/xpr/sources,
+      insert node $source into $db/xpr/sources,
       update:output(
         (
         <rest:response>

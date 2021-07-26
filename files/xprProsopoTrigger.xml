@@ -9,16 +9,10 @@
             ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Nouvelle(s) entité(s)</xf:label>
-        <xf:toggle
-            case="newEntitiesPanel"
-            ev:event="DOMActivate"/>
-    </xf:trigger>
-    <xf:trigger>
         <xf:label>Contrôle des sources</xf:label>
         <xf:action
             ev:event="DOMActivate"
-            while="instance('xprSources')//xpr:source[@xml:id = instance('xprProsopo')//xpr:source/@xlink:href or . = instance('xprProsopo')//xpr:source/@xlink:href][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]">
+            while="instance('xprSources')//xpr:source[. = instance('xprProsopo')//xpr:source/@xlink:href][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]">
             <!-- @todo supprimer les éventuelles sources vides dans control source ! -->
             <xf:insert
                 context="instance('xprProsopo')/eac:control/eac:sources"
@@ -27,7 +21,7 @@
                 position="after"/>
             <xf:setvalue
                 ref="instance('xprProsopo')//eac:sources/eac:source/@xlink:href[. = '']"
-                value="instance('xprSources')//xpr:source[@xml:id = instance('xprProsopo')//xpr:source/@xlink:href or . = instance('xprProsopo')//xpr:source/@xlink:href][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]"/>
+                value="instance('xprSources')//xpr:source[. = instance('xprProsopo')//xpr:source/@xlink:href][not(. = instance('xprProsopo')/eac:control//eac:source/@xlink:href)]"/>
             <xf:setvalue
                 ref="instance('xprProsopo')//eac:sources/eac:source/eac:sourceEntry[. = '']"
                 value="ancestor::eac:source/@xlink:href"/>
@@ -37,15 +31,21 @@
             ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
+        <xf:label>Nouvelle(s) entité(s)</xf:label>
+        <xf:toggle
+            case="newEntitiesPanel"
+            ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
         <xf:label>Nouvelle(s) source(s)</xf:label>
         <xf:toggle
             case="newSourcesPanel"
             ev:event="DOMActivate"/>
     </xf:trigger>
-    <xf:trigger>
+    <!--<xf:trigger>
         <xf:label>Ajouter une source</xf:label>
         <xf:toggle
             case="newSource"
             ev:event="DOMActivate"/>
-    </xf:trigger>
+    </xf:trigger>-->
 </nav>

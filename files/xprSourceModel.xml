@@ -36,7 +36,7 @@
 
     <xf:submission mode="synchronous"
                    id="submitNewSource"
-                   ref="instance('xprSources')/xpr:source[@localType='new'][@xml:id = instance('xprProsopo')//xpr:source/@xlink:href][1]"
+                   ref="instance('xprSources')/xpr:source[@localType='new'][normalize-space(.)!=''][normalize-space(.) = normalize-space(instance('xprProsopo')//xpr:source/@xlink:href)][1]"
                    resource="/xpr/sources/put"
                    method="put"
                    replace="none">
@@ -54,11 +54,11 @@
             </xf:message>
             <xf:setvalue ref="instance('xprSources')/xpr:source[@localType = 'new'][. = event('response-body')//*:id]/@localType"
                          value="'stored'"/>
-            <xf:setvalue ref="instance('xprProsopo')//xpr:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//xpr:id]/@xml:id]/@xlink:href
+            <!--<xf:setvalue ref="instance('xprProsopo')//xpr:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//xpr:id]/@xml:id]/@xlink:href
                             | instance('xprProsopo')//xpr:source[@xlink:href = instance('xprSources')/xpr:source[. = event('response-body')//xpr:id]]/@xlink:href"
                          value="event('response-body')//xpr:id"/>
             <xf:setvalue ref="instance('xprProsopo')//eac:source[@xlink:href = event('response-body')//xpr:id][not(@xlink:href = eac:sourceEntry)]/eac:sourceEntry"
-                         value="event('response-body')//xpr:id"/>
+                         value="event('response-body')//xpr:id"/>-->
             <xf:dispatch name="submission" targetid="prosopo" delay="1000"/>
         </xf:action>
 
