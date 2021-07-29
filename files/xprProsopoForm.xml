@@ -146,7 +146,7 @@
                                     <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                                         <xf:label ref="."/>
                                         <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                                        <xf:value ref="."/>
+                                        <xf:value value="concat('#', @xml:id)"/>
                                     </xf:itemset>
                                 </xf:select1>
                                 <xf:input ref=".">
@@ -374,7 +374,7 @@
                                         <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                                             <xf:label ref="."/>
                                             <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                                            <xf:value ref="."/>
+                                            <xf:value value="concat('#', @xml:id)"/>
                                         </xf:itemset>
                                     </xf:select1>
                                     <xf:input ref=".">
@@ -543,7 +543,7 @@
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                                     <xf:label ref="."/>
                                     <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                                    <xf:value ref="."/>
+                                    <xf:value value="concat('#', @xml:id)"/>
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref=".">
@@ -695,7 +695,7 @@
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                                     <xf:label ref="."/>
                                     <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                                    <xf:value ref="."/>
+                                    <xf:value value="concat('#', @xml:id)"/>
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref=".">
@@ -1021,7 +1021,7 @@
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                                     <xf:label ref="."/>
                                     <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                                    <xf:value ref="."/>
+                                    <xf:value value="concat('#', @xml:id)"/>
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref=".">
@@ -1289,7 +1289,7 @@
                                 <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                                     <xf:label ref="."/>
                                     <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                                    <xf:value ref="."/>
+                                    <xf:value value="concat('#', @xml:id)"/>
                                 </xf:itemset>
                             </xf:select1>
                             <xf:input ref=".">
@@ -1390,7 +1390,7 @@
                         <xf:itemset model="source" nodeset="instance('xprSources')/xpr:source">
                             <xf:label ref="."/>
                             <!--<xf:value ref="choose(@xml:id, @xml:id, .)"/>-->
-                            <xf:value ref="."/>
+                            <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
                     </xf:select1>
                     <xf:input ref="eac:descriptiveNote/eac:p">
@@ -1592,7 +1592,15 @@
                 </xf:repeat>
                 <xf:trigger>
                     <xf:label>Ajouter une nouvelle source</xf:label>
-                    <xf:insert context="instance('xprSources')" origin="instance('xprNewEntries')/xpr:source" nodeset="xpr:source" at="last()" position="before" ev:event="DOMActivate"/>
+                    <xf:insert context="instance('xprSources')"
+                               origin="instance('xprNewEntries')/xpr:source"
+                               nodeset="xpr:source"
+                               at="last()"
+                               position="after"
+                               ev:event="DOMActivate"/>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:send submission="submitGetSourceId"/>
+                    </xf:action>
                 </xf:trigger>
             </xf:group>
         </xf:case>

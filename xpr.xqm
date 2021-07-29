@@ -484,8 +484,11 @@ declare
   %output:method("xml")
 function getDataFromXforms() {
   let $id := request:parameter('data')
-  return
-    db:open('xpr')/xpr/bio/eac:eac-cpf[@xml:id = $id]
+  let $db := db:open('xpr')
+  return (
+    if($id = 'getSourceId') then <source localType="new" xml:id="{fn:generate-id($db)}"/>
+    else $db/xpr/bio/eac:eac-cpf[@xml:id = $id]
+  )
 
 };
 
@@ -1215,7 +1218,7 @@ function putSource($param, $referer) {
           </http:response>
         </rest:response>,
         <result>
-          <id>{$param/source/text()}</id>
+          <id>{$param/source/@xml:id => fn:normalize-space()}</id>
           <message>Une nouvelle source a été ajoutée : {$param/source/text()}.</message>
           <url></url>
         </result>
