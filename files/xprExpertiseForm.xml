@@ -288,8 +288,8 @@
                 <xf:trigger class="insert">
                     <xf:label>Ajouter un lieu</xf:label>
                     <xf:action ev:event="DOMActivate">
-                        <xf:insert context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:places/xpr:place" nodeset="xpr:place" at="index('repeatPlace')" position="after" ev:event="DOMActivate"/>
                         <xf:insert if="instance('xprExpertise')/xpr:description/xpr:categories/xpr:category[@type='estimation']" context="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:estimates" origin="instance('xprExpertiseCopy')/xpr:description/xpr:conclusions/xpr:estimates/xpr:place" nodeset="xpr:place" at="index('repeatPlace')" position="after" ev:event="DOMActivate"/>
+                        <xf:insert context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:places/xpr:place" nodeset="xpr:place" at="index('repeatPlace')" position="after" ev:event="DOMActivate"/>
                     </xf:action>
                     <xf:help>Ajouter un lieu.</xf:help>
                 </xf:trigger>
