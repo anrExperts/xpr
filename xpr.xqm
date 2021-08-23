@@ -1505,12 +1505,40 @@ function getReseauByYearHtml($year as xs:string, $format as xs:string) {
   let $content := map {
       'title' : 'Liste des expertises',
       'data' : xpr.models.networks:getExpertsCollaborations($year)
-    }
-    let $outputParam := map {
+  }
+  let $outputParam := map {
       'layout' : "listeExpertise.xml",
       'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
-    }
+  }
     return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+
+(:
+ : this function return the list of experts and expertise (with only 1 category) for a year.
+ :)
+declare
+  %rest:path("/xpr/data/{$year}")
+  %rest:produces("application/xml")
+  %output:method("xml")
+  %rest:query-param("format", "{$format}", "gexf")
+function getDataByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam),
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'network' : xpr.models.networks:getCategoriesExpertsNetworkByYear($queryParam, xpr.models.networks:getExpertsByYear($queryParam), xpr.models.networks:getExpertisesByYear($queryParam))
+    }
+
+    let $outputParam := map{}
+    return
+    <data xmlns="xpr">{
+        $content?network
+    }</data>
 };
 
 (:

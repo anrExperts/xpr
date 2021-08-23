@@ -37,6 +37,7 @@ declare namespace xlink = "http://www.w3.org/1999/xlink" ;
 
 declare namespace xpr = "xpr" ;
 declare namespace gexf = "http://www.gexf.net/1.2draft";
+declare default element namespace "xpr" ;
 declare default function namespace "xpr.models.networks" ;
 
 declare default collation "http://basex.org/collation?lang=fr" ;
@@ -67,6 +68,110 @@ declare function getExpertsCollaborations($queryParam as map(*)) as element() {
   if ($queryParam?format = 'graphml')
   then getExpertsCollaborationsGraphML($queryParam)
   else getExpertsCollaborationsGexf($queryParam)
+};
+
+(:~
+ : List of Experts by year
+ : @return a xml file
+ : @todo select experts by year
+ :)
+declare function getExpertsByYear($queryParam as map(*)) as element() {
+let $year := $queryParam?year
+let $xprDb := db:open('xpr')
+let $almanakDb := db:open('almanak')
+let $almanak := $almanakDb//*:TEI[fn:matches(descendant::*:titleStmt/*:title, $year)]
+let $expertsFromAlmanak := $almanak//*:item/*:persName[fn:normalize-space(@ref) != '']/@ref
+let $expertsFromZ1j := $xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]]//*:experts/*:expert[fn:normalize-space(@ref)!='']/@ref
+let $listExpert :=
+    for $expert in fn:distinct-values(($expertsFromZ1j | $expertsFromAlmanak))
+    let $expertId := fn:substring-after($expert, '#')
+    (:let $expertName := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
+    let $expertFunction := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:function[$year >= *:dateRange/*:fromDate/@standardDate and $year <= *:dateRange/*:toDate/@standardDate] => fn:normalize-space():)
+    return $xprDb//*:eac-cpf[@xml:id=$expertId]
+    (: <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>:)
+let $expertises := $xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1]
+let $categories :=
+    <categories>{
+        for $category in fn:distinct-values($expertises//*:category/@type)
+        return
+            <category>
+                <type>{$category}</type>
+                <count>{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category])}</count>
+                <experts>{
+                    for $exp in $listExpert
+                    return (
+                        if($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]]) then
+                        <expert ref="{$exp//*:id => fn:normalize-space()}" nb="{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]])}"/>
+                    )
+                }</experts>
+            </category>
+    }</categories>
+
+let $comment :=
+    let $countAlmanakExperts := fn:count($expertsFromAlmanak)
+    let $countZ1jExperts := fn:count(fn:distinct-values($expertsFromZ1j))
+    return
+        <comment>{
+            'Total experts almanak : ' || $countAlmanakExperts || ' ; total experts Z1J : ' || $countZ1jExperts || ' ; experts absents de l’almanak :',
+            for $expert in fn:distinct-values($expertsFromZ1j)
+            return
+                if($almanak//*:persName[@ref = $expert]) then ()
+                else $expert
+        }</comment>
+return
+  <experts xmlns="xpr">{
+    $comment,
+    $listExpert
+  }</experts>
+};
+
+(:~
+ : List of expertises by year (with only 1 category)
+ : @return a xml file
+ : @todo select expertises by year
+ : @todo multiple categories
+ :)
+declare function getExpertisesByYear($queryParam as map(*)) as element() {
+let $db := db:open('xpr')
+let $year := $queryParam?year
+let $expertises := $db//expertise[descendant::sessions/date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::categories/category) = 1]
+return <expertises xmlns="xpr">{$expertises}</expertises>
+};
+
+(:~
+ : categories - experts network for a year
+ : @return a xml file
+ : @todo select experts by year
+ :)
+declare function getCategoriesExpertsNetworkByYear($queryParam as map(*), $experts, $expertises) as element()* {
+let $year := $queryParam?year
+let $xprDb := db:open('xpr')
+let $listExpert :=
+    for $expert in $experts//*:eac-cpf
+    let $expertId := $expert/@xml:id => fn:normalize-space()
+    let $expertName := $expert//*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
+    let $expertFunction := $expert//*:function[$year >= *:dateRange/*:fromDate/@standardDate and $year <= *:dateRange/*:toDate/@standardDate] => fn:normalize-space()
+    return <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>
+let $listExpertises := $expertises
+let $categories :=
+    for $category in fn:distinct-values($expertises//*:category/@type)
+    return
+        <category>
+            <type>{$category}</type>
+            <count>{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category])}</count>
+            <experts>{
+                for $exp in $listExpert
+                return (
+                    if($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]]) then
+                    <expert name="{$exp//*:name}" ref="{$exp//*:id => fn:normalize-space()}" nb="{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]])}"/>
+                )
+            }</experts>
+        </category>
+
+return
+  <categories xmlns="xpr">{
+    $categories
+  }</categories>
 };
 
 (:~
