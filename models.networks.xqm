@@ -76,44 +76,29 @@ declare function getExpertsCollaborations($queryParam as map(*)) as element() {
  : @todo select experts by year
  :)
 declare function getExpertsByYear($queryParam as map(*)) as element() {
-let $year := $queryParam?year
-let $xprDb := db:open('xpr')
 let $almanakDb := db:open('almanak')
-let $almanak := $almanakDb//*:TEI[fn:matches(descendant::*:titleStmt/*:title, $year)]
-let $expertsFromAlmanak := $almanak//*:item/*:persName[fn:normalize-space(@ref) != '']/@ref
-let $expertsFromZ1j := $xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]]//*:experts/*:expert[fn:normalize-space(@ref)!='']/@ref
+let $year := $queryParam?year
+let $expertises := xpr.models.networks:getExpertisesByYear($queryParam)
+let $prosopo := db:open('xpr')/xpr/bio
+
+let $almanak := $almanakDb//*:TEI[fn:matches(descendant::*:titleStmt/*:title, $year) or fn:matches(descendant::*:titleStmt/*:title, fn:string(fn:number($year) + 1))]
+let $almanakExperts := $almanak//*:item/*:persName[fn:normalize-space(@ref) != '']/@ref
+let $z1jExperts := $expertises//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]]//*:experts/*:expert[fn:normalize-space(@ref)!='']/@ref
 let $listExpert :=
-    for $expert in fn:distinct-values(($expertsFromZ1j | $expertsFromAlmanak))
+    for $expert in fn:distinct-values(($z1jExperts | $almanakExperts))
     let $expertId := fn:substring-after($expert, '#')
     (:let $expertName := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
     let $expertFunction := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:function[$year >= *:dateRange/*:fromDate/@standardDate and $year <= *:dateRange/*:toDate/@standardDate] => fn:normalize-space():)
-    return $xprDb//*:eac-cpf[@xml:id=$expertId]
+    return $prosopo//*:eac-cpf[@xml:id=$expertId]
     (: <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>:)
-let $expertises := $xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1]
-let $categories :=
-    <categories>{
-        for $category in fn:distinct-values($expertises//*:category/@type)
-        return
-            <category>
-                <type>{$category}</type>
-                <count>{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category])}</count>
-                <experts>{
-                    for $exp in $listExpert
-                    return (
-                        if($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]]) then
-                        <expert ref="{$exp//*:id => fn:normalize-space()}" nb="{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]])}"/>
-                    )
-                }</experts>
-            </category>
-    }</categories>
 
 let $comment :=
-    let $countAlmanakExperts := fn:count($expertsFromAlmanak)
-    let $countZ1jExperts := fn:count(fn:distinct-values($expertsFromZ1j))
+    let $countAlmanakExperts := fn:count($almanakExperts)
+    let $countZ1jExperts := fn:count(fn:distinct-values($z1jExperts))
     return
         <comment>{
             'Total experts almanak : ' || $countAlmanakExperts || ' ; total experts Z1J : ' || $countZ1jExperts || ' ; experts absents de l’almanak :',
-            for $expert in fn:distinct-values($expertsFromZ1j)
+            for $expert in fn:distinct-values($z1jExperts)
             return
                 if($almanak//*:persName[@ref = $expert]) then ()
                 else $expert
@@ -141,38 +126,121 @@ return <expertises xmlns="xpr">{$expertises}</expertises>
 (:~
  : categories - experts network for a year
  : @return a xml file
- : @todo select experts by year
  :)
-declare function getCategoriesExpertsNetworkByYear($queryParam as map(*), $experts, $expertises) as element()* {
-let $year := $queryParam?year
-let $xprDb := db:open('xpr')
-let $listExpert :=
-    for $expert in $experts//*:eac-cpf
-    let $expertId := $expert/@xml:id => fn:normalize-space()
-    let $expertName := $expert//*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
-    let $expertFunction := $expert//*:function[$year >= *:dateRange/*:fromDate/@standardDate and $year <= *:dateRange/*:toDate/@standardDate] => fn:normalize-space()
-    return <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>
-let $listExpertises := $expertises
+declare function getBimodalNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+if ($queryParam?format = 'graphml')
+  then getBimodalNetworkGraphML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getBimodalNetworkDataFrame($queryParam, $content)
+  else getBimodalNetworkGexf($queryParam, $content)
+};
+
+declare function getBimodalNetworkGexf($queryParam as map(*), $content as map(*)) as element() {
+<toto/>
+};
+
+(:
+
+:)
+declare function getBimodalNetworkGraphML($queryParam as map(*), $content as map(*)) as element() {
+let $expertises := $content?expertises
+let $experts := $content?experts
 let $categories :=
-    for $category in fn:distinct-values($expertises//*:category/@type)
-    return
-        <category>
-            <type>{$category}</type>
-            <count>{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category])}</count>
-            <experts>{
-                for $exp in $listExpert
-                return (
-                    if($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]]) then
-                    <expert name="{$exp//*:name}" ref="{$exp//*:id => fn:normalize-space()}" nb="{fn:count($xprDb//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::*:categories/*:category) = 1][descendant::*:category/@type=$category][descendant::*:experts/*:expert[@ref = fn:concat('#', $exp//*:id)]])}"/>
-                )
-            }</experts>
-        </category>
+  let $labels := fn:distinct-values($expertises//*:category)
+  return
+    <categories>{
+      for $cat at $i in $labels
+      (:@todo faire beaucoup plus propre pour les @type:)
+      return <category xml:id="{fn:concat('cat', $i)}" type="{fn:distinct-values($expertises//*:category[fn:normalize-space(.) = $cat]/@type)}">{$cat}</category>
+    }</categories>
 
 return
-  <categories xmlns="xpr">{
-    $categories
-  }</categories>
+  <graphml
+    xmlns="http://graphml.graphdrawing.org/xmlns"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
+    <key id="d0" for="node" attr.name="nodeType" attr.type="string"/>
+    <key id="d1" for="node" attr.name="name" attr.type="string"/>
+    <key id="d2" for="node" attr.name="function" attr.type="string"/>
+    <key id="e1" for="edge" attr.name="weight" attr.type="int"/>
+    <graph edgedefault="undirected">{
+      for $expert in $experts/*:eac-cpf
+        let $label := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+        let $functions := $expert//*:functions
+        let $function :=
+        switch ($functions)
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+          default return 'unknown'
+      return(
+        <node id="{$expert/@xml:id}">
+          <data key="d0">expert</data>
+          <data key="d1">{$label/text()}</data>
+          <data key="d2">{$function}</data>
+        </node>),
+      for $category in $categories/*:category
+      return
+        <node id="{$category/@xml:id}">
+          <data key="d0">category</data>
+          <data key="d1">{$category => fn:normalize-space()}</data>
+        </node>
+    }
+    {
+      for $edge at $i in fn:distinct-values($expertises//*:experts/*:expert/@ref[fn:normalize-space(.)!=''])
+      let $expert := $edge => fn:substring-after('#')
+        return (
+          for $category in $categories/*:category
+          let $path := $expertises//*:expertise[*:description/*:participants/*:experts/*:expert/@ref=$edge][descendant::*:category/@type = $category/@type]
+          where $path
+          let $count := fn:count($path)
+          return
+            <edge id="{random:uuid()}" source="{$expert}" target="{$category/@xml:id}">
+              <data key="e1">{$count}</data>
+            </edge>
+        )
+    }
+        </graph>
+      </graphml>
 };
+
+declare function getBimodalNetworkDataFrame($queryParam as map(*), $content as map(*)) as element() {
+let $expertises := $content?expertises
+let $experts := $content?experts
+let $categories :=
+  let $labels := fn:distinct-values($expertises//*:category)
+  return
+    <categories>{
+      for $cat at $i in $labels
+      (:@todo faire beaucoup plus propre pour les @type:)
+      return <category xml:id="{fn:concat('cat', $i)}" type="{fn:distinct-values($expertises//*:category[fn:normalize-space(.) = $cat]/@type)}">{$cat}</category>
+    }</categories>
+
+return
+  <csv>
+    <record>
+      <cell>label</cell>
+      {for $category in $categories/*:category/@type return <cell>{fn:normalize-space($category)}</cell> }
+    </record>{
+    for $expert in $experts/*:eac-cpf
+    let $label := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+    return
+      <record>
+        <cell>{fn:normalize-space($label)}</cell>{
+        for $category in $categories/*:category/@type
+        return
+          <cell>{
+            let $countExpertises := fn:count($expertises//*:expertise[descendant::*:experts/*:expert/@ref = "#" || $expert/@xml:id][descendant::*:category/@type=$category])
+            return if($countExpertises)then $countExpertises else "0"
+          }</cell>
+        }
+      </record>
+    }
+  </csv>
+};
+
 
 (:~
  : Experts collaboration

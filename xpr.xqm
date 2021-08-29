@@ -1519,9 +1519,9 @@ function getReseauByYearHtml($year as xs:string, $format as xs:string) {
  :)
 declare
   %rest:path("/xpr/data/{$year}")
-  %rest:produces("application/xml")
-  %output:method("xml")
-  %rest:query-param("format", "{$format}", "gexf")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
 function getDataByYear($year as xs:string, $format as xs:string) {
     let $queryParam := map{
       'year' : $year,
@@ -1529,17 +1529,17 @@ function getDataByYear($year as xs:string, $format as xs:string) {
     }
 
     let $content := map{
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam),
       'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'network' : xpr.models.networks:getCategoriesExpertsNetworkByYear($queryParam, xpr.models.networks:getExpertsByYear($queryParam), xpr.models.networks:getExpertisesByYear($queryParam))
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
     }
 
-    let $outputParam := map{}
-    return
-    <data xmlns="xpr">{
-        $content?network
-    }</data>
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getBimodalNetwork($queryParam, $content, $outputParam)
 };
+
+
 
 (:
  :display table

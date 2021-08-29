@@ -977,7 +977,8 @@
                 <xf:group ref="xpr:estimates">
                     <xf:repeat id="estimatesPlace" nodeset="xpr:place">
                         <xf:label>
-                            <xf:output value="concat('Estimations pour ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:street, ', ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:buildingNumber)"/>
+<!--                            <xf:output value="concat('Estimations pour ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:street, ', ', instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]/xpr:address/xpr:buildingNumber)"/>-->
+                            <xf:output value="concat('Estimations pour ', string-join(instance('xprExpertise')/xpr:description/xpr:places/xpr:place[position() = count(current()/preceding-sibling::xpr:place) + 1]//node()[not(node())][normalize-space(.)!=''], ', '))"/>
                         </xf:label>
                         <xf:repeat nodeset="xpr:appraisal">
                             <xf:input ref="xpr:desc" incremental="true">
