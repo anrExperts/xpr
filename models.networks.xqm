@@ -93,7 +93,7 @@ let $listExpert :=
     (: <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>:)
 
 let $comment :=
-    let $countAlmanakExperts := fn:count($almanakExperts)
+    let $countAlmanakExperts := fn:count(fn:distinct-values($almanakExperts))
     let $countZ1jExperts := fn:count(fn:distinct-values($z1jExperts))
     return
         <comment>{
@@ -127,21 +127,34 @@ return <expertises xmlns="xpr">{$expertises}</expertises>
  : categories - experts network for a year
  : @return a xml file
  :)
-declare function getBimodalNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+declare function getCategoriesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
 if ($queryParam?format = 'graphml')
-  then getBimodalNetworkGraphML($queryParam, $content)
-  else if(($queryParam?format = 'csv')) then getBimodalNetworkDataFrame($queryParam, $content)
-  else getBimodalNetworkGexf($queryParam, $content)
+  then getCategoriesNetworkGraphML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getCategoriesNetworkDataFrame($queryParam, $content)
+  else getCategoriesNetworkGexf($queryParam, $content)
 };
 
-declare function getBimodalNetworkGexf($queryParam as map(*), $content as map(*)) as element() {
+(:~
+ : categories - experts network for a year
+ : @return a xml file
+ :)
+declare function getExpertisesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+if ($queryParam?format = 'graphml')
+  then getExpertisesNetworkGraphML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getExpertisesNetworkDataFrame($queryParam, $content)
+};
+
+declare function getCategoriesNetworkGexf($queryParam as map(*), $content as map(*)) as element() {
+<toto/>
+};
+declare function getExpertisesNetworkGraphML($queryParam as map(*), $content as map(*)) as element() {
 <toto/>
 };
 
 (:
 
 :)
-declare function getBimodalNetworkGraphML($queryParam as map(*), $content as map(*)) as element() {
+declare function getCategoriesNetworkGraphML($queryParam as map(*), $content as map(*)) as element() {
 let $expertises := $content?expertises
 let $experts := $content?experts
 let $categories :=
@@ -206,7 +219,7 @@ return
       </graphml>
 };
 
-declare function getBimodalNetworkDataFrame($queryParam as map(*), $content as map(*)) as element() {
+declare function getCategoriesNetworkDataFrame($queryParam as map(*), $content as map(*)) as element() {
 let $expertises := $content?expertises
 let $experts := $content?experts
 let $categories :=
@@ -222,19 +235,55 @@ return
   <csv>
     <record>
       <cell>label</cell>
+      <cell>colonne</cell>
       {for $category in $categories/*:category/@type return <cell>{fn:normalize-space($category)}</cell> }
     </record>{
     for $expert in $experts/*:eac-cpf
+    order by $expert/@xml:id
     let $label := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+    let $functions := $expert//*:functions
+    let $function :=
+      switch ($functions)
+        case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+        case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+        case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+        case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+        case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+        case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+        default return 'unknown'
     return
       <record>
-        <cell>{fn:normalize-space($label)}</cell>{
+        <cell>{fn:normalize-space($label)}</cell>
+        <cell>{$function}</cell>{
         for $category in $categories/*:category/@type
         return
           <cell>{
             let $countExpertises := fn:count($expertises//*:expertise[descendant::*:experts/*:expert/@ref = "#" || $expert/@xml:id][descendant::*:category/@type=$category])
             return if($countExpertises)then $countExpertises else "0"
           }</cell>
+        }
+      </record>
+    }
+  </csv>
+};
+
+declare function getExpertisesNetworkDataFrame($queryParam as map(*), $content as map(*)) as element() {
+let $expertises := $content?expertises
+let $experts := $content?experts
+return
+  <csv>
+    <record>
+      <cell>label</cell>
+      {for $expert in fn:sort($experts//*:eac-cpf/@xml:id) return <cell>{$expert => fn:normalize-space()}</cell>}
+    </record>{
+    for $expertise in $expertises/*:expertise
+    return
+      <record>
+        <cell>{fn:normalize-space($expertise/@xml:id)}</cell>{
+        for $expert in fn:sort($experts//*:eac-cpf/@xml:id)
+        return
+          if($expertise[descendant::*:experts/*:expert[@ref = "#"||$expert]]) then <cell>1</cell>
+          else <cell>0</cell>
         }
       </record>
     }
