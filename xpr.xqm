@@ -1547,32 +1547,31 @@ function getDataByYear($year as xs:string, $format as xs:string) {
  : this function returns csv resource for categories network by year.
  :)
 declare
-  %rest:path("/xpr/networks/{$year}/categories")
+  %rest:path("/xpr/data/{$year}/experts")
   %rest:produces("application/csv")
   %output:method("csv")
   %rest:query-param("format", "{$format}", "csv")
-function getCategoriesDataByYear($year as xs:string, $format as xs:string) {
+function getExpertsDataByYear($year as xs:string, $format as xs:string) {
     let $queryParam := map{
       'year' : $year,
       'format' : $format
     }
 
     let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
       'experts' : xpr.models.networks:getExpertsByYear($queryParam)
     }
 
     let $outputParam := map{
 
     }
-    return xpr.models.networks:getCategoriesNetwork($queryParam, $content, $outputParam)
+    return xpr.models.networks:getFormatedExpertsData($queryParam, $content, $outputParam)
 };
 
 (:
- : this function returns csv resource for expertises network by year.
+ : this function returns csv resource for categories network by year.
  :)
 declare
-  %rest:path("/xpr/networks/{$year}/expertises")
+  %rest:path("/xpr/data/{$year}/expertises")
   %rest:produces("application/csv")
   %output:method("csv")
   %rest:query-param("format", "{$format}", "csv")
@@ -1583,6 +1582,31 @@ function getExpertisesDataByYear($year as xs:string, $format as xs:string) {
     }
 
     let $content := map{
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam)
+    }
+
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getFormatedExpertisesData($queryParam, $content, $outputParam)
+};
+
+
+(:
+ : this function returns csv resource for categories network by year.
+ :)
+declare
+  %rest:path("/xpr/networks/{$year}/categories")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getCategoriesNetworkByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
       'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
       'experts' : xpr.models.networks:getExpertsByYear($queryParam)
     }
@@ -1590,7 +1614,34 @@ function getExpertisesDataByYear($year as xs:string, $format as xs:string) {
     let $outputParam := map{
 
     }
-    return xpr.models.networks:getExpertisesNetwork($queryParam, $content, $outputParam)
+    return xpr.models.networks:getFormatedCategoriesNetwork($queryParam, $content, $outputParam)
+};
+
+
+
+(:
+ : this function returns csv resource for expertises network by year.
+ :)
+declare
+  %rest:path("/xpr/networks/{$year}/expertises")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getExpertisesNetworkByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+    }
+
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getFormatedExpertisesNetwork($queryParam, $content, $outputParam)
 };
 
 

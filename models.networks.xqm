@@ -127,27 +127,13 @@ return <expertises xmlns="xpr">{$expertises}</expertises>
  : categories - experts network for a year
  : @return a xml file
  :)
-declare function getCategoriesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+declare function getFormatedCategoriesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
 if ($queryParam?format = 'graphml')
   then getCategoriesNetworkGraphML($queryParam, $content)
-  else if(($queryParam?format = 'csv')) then getCategoriesNetworkDataFrame($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getCategoriesNetworkCSV($queryParam, $content)
   else getCategoriesNetworkGexf($queryParam, $content)
 };
-
-(:~
- : categories - experts network for a year
- : @return a xml file
- :)
-declare function getExpertisesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
-if ($queryParam?format = 'graphml')
-  then getExpertisesNetworkGraphML($queryParam, $content)
-  else if(($queryParam?format = 'csv')) then getExpertisesNetworkDataFrame($queryParam, $content)
-};
-
 declare function getCategoriesNetworkGexf($queryParam as map(*), $content as map(*)) as element() {
-<toto/>
-};
-declare function getExpertisesNetworkGraphML($queryParam as map(*), $content as map(*)) as element() {
 <toto/>
 };
 
@@ -219,7 +205,7 @@ return
       </graphml>
 };
 
-declare function getCategoriesNetworkDataFrame($queryParam as map(*), $content as map(*)) as element() {
+declare function getCategoriesNetworkCSV($queryParam as map(*), $content as map(*)) as element() {
 let $expertises := $content?expertises
 let $experts := $content?experts
 let $categories :=
@@ -267,20 +253,35 @@ return
   </csv>
 };
 
-declare function getExpertisesNetworkDataFrame($queryParam as map(*), $content as map(*)) as element() {
+(:~
+ : categories - experts network for a year
+ : @return a xml file
+ :)
+declare function getFormatedExpertisesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+if ($queryParam?format = 'graphml')
+  then getExpertisesNetworkGraphML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getExpertisesNetworkCSV($queryParam, $content)
+};
+
+declare function getExpertisesNetworkGraphML($queryParam as map(*), $content as map(*)) as element() {
+<toto/>
+};
+
+declare function getExpertisesNetworkCSV($queryParam as map(*), $content as map(*)) as element() {
 let $expertises := $content?expertises
 let $experts := $content?experts
 return
   <csv>
     <record>
       <cell>id</cell>
-      {for $expert in fn:sort($experts//*:eac-cpf/@xml:id) return <cell>{$expert => fn:normalize-space()}</cell>}
+      {for $expertise in fn:sort($expertises/*:expertise/@xml:id) return <cell>{$expertise => fn:normalize-space()}</cell>}
     </record>{
-    for $expertise in $expertises/*:expertise
+    for $expert in fn:sort($experts/*:eac-cpf/@xml:id)
     return
       <record>
-        <cell>{fn:normalize-space($expertise/@xml:id)}</cell>{
-        for $expert in fn:sort($experts//*:eac-cpf/@xml:id)
+        <cell>{fn:normalize-space($expert)}</cell>{
+        for $expertise in $expertises/*:expertise
+        order by $expertise/@xml:id
         return
           if($expertise[descendant::*:experts/*:expert[@ref = "#"||$expert]]) then <cell>1</cell>
           else <cell>0</cell>
@@ -290,6 +291,111 @@ return
   </csv>
 };
 
+(:~
+ : experts data for a year
+ : @return a xml file
+ :)
+declare function getFormatedExpertsData($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+if ($queryParam?format = 'xml')
+  then getExpertsDataXML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getExpertsDataCSV($queryParam, $content)
+};
+
+declare function getExpertsDataXML($queryParam as map(*), $content as map(*)) as element() {
+    $content?experts
+};
+
+declare function getExpertsDataCSV($queryParam as map(*), $content as map(*)) as element() {
+let $experts := $content?experts
+return
+  <csv>
+    <record>
+      <cell>id</cell>
+      <cell>name</cell>
+      <cell>surname</cell>
+      <cell>forename</cell>
+      <cell>column</cell>
+      <cell>birth</cell>
+      <cell>death</cell>
+      <cell>almanach</cell>
+    </record>{
+    for $expert in $experts/*:eac-cpf
+        order by $expert/@xml:id
+        let $name := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+        let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[*:alternativeForm][1]/*:part[@localType='surname']
+        let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@* => fn:normalize-space()
+        let $death := $expert//*:existDates/*:dateRange/*:toDate/@* => fn:normalize-space()
+        let $functions := $expert//*:functions
+        let $column :=
+              switch ($functions)
+                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+                default return 'unknown'
+    return
+    <record>
+        <cell>{$expert/@xml:id => fn:normalize-space()}</cell>
+        <cell>{$name}</cell>
+        <cell>{$surname}</cell>
+        <cell>{$column}</cell>
+        <cell>{$birth}</cell>
+        <cell>{$death}</cell>
+        <cell>almanach</cell>
+    </record>
+    }
+  </csv>
+};
+
+(:~
+ : experts data for a year
+ : @return a xml file
+ :)
+declare function getFormatedExpertisesData($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+if ($queryParam?format = 'xml')
+  then getExpertisesDataXML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getExpertisesDataCSV($queryParam, $content)
+};
+
+declare function getExpertisesDataXML($queryParam as map(*), $content as map(*)) as element() {
+    $content?expertises
+};
+
+declare function getExpertisesDataCSV($queryParam as map(*), $content as map(*)) as element() {
+let $expertises := $content?expertises
+return
+  <csv>
+    <record>
+      <cell>id</cell>
+      <cell>third-party</cell>
+      <cell>litigation</cell>
+      <cell>origination</cell>
+      <cell>framework</cell>
+      <cell>categories</cell>
+      <cell>designation</cell>
+    </record>{
+    for $expertise in $expertises/*:expertise
+    order by $expertise/@xml:id
+    let $id := $expertise/@xml:id => fn:normalize-space()
+    let $thirdParty := fn:boolean($expertise/descendant::*:experts/*:expert[@context='third-party'])
+    let $origination := $expertise/descendant::*:origination => fn:normalize-space()
+    let $framework := $expertise/descendant::*:framework/@type => fn:normalize-space()
+    let $categories := fn:string-join($expertise/descendant::*:categories/*:category/@type, ', ') => fn:normalize-space()
+    let $designation := $expertise/descendant::*:categories/*:designation => fn:normalize-space()
+
+    return
+    <record>
+      <cell>{$id}</cell>
+      <cell>{$thirdParty}</cell>
+      <cell>{$origination}</cell>
+      <cell>{$framework}</cell>
+      <cell>{$categories}</cell>
+      <cell>{$designation}</cell>
+    </record>}
+  </csv>
+};
 
 (:~
  : Experts collaboration
