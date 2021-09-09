@@ -234,7 +234,7 @@ let $categories :=
 return
   <csv>
     <record>
-      <cell>label</cell>
+      <cell>id</cell>
       <cell>colonne</cell>
       {for $category in $categories/*:category/@type return <cell>{fn:normalize-space($category)}</cell> }
     </record>{
@@ -273,7 +273,7 @@ let $experts := $content?experts
 return
   <csv>
     <record>
-      <cell>label</cell>
+      <cell>id</cell>
       {for $expert in fn:sort($experts//*:eac-cpf/@xml:id) return <cell>{$expert => fn:normalize-space()}</cell>}
     </record>{
     for $expertise in $expertises/*:expertise
