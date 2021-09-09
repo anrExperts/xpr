@@ -308,8 +308,8 @@ return
     </record>{
     for $expert in $experts/*:eac-cpf
         order by $expert/@xml:id
-        let $name := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
-        let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[*:alternativeForm][1]/*:part[@localType='surname']
+        let $name := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
+        let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[*:alternativeForm][1]/*:part[@localType='surname'] => fn:normalize-space()
         let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@* => fn:normalize-space()
         let $death := $expert//*:existDates/*:dateRange/*:toDate/@* => fn:normalize-space()
         let $functions := $expert//*:functions
