@@ -221,26 +221,13 @@ return
   <csv>
     <record>
       <cell>id</cell>
-      <cell>colonne</cell>
       {for $category in $categories/*:category/@type return <cell>{fn:normalize-space($category)}</cell> }
     </record>{
     for $expert in $experts/*:eac-cpf
     order by $expert/@xml:id
-    let $label := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
-    let $functions := $expert//*:functions
-    let $function :=
-      switch ($functions)
-        case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
-        case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
-        case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
-        case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
-        case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
-        case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
-        default return 'unknown'
     return
       <record>
-        <cell>{fn:normalize-space($label)}</cell>
-        <cell>{$function}</cell>{
+        <cell>{fn:normalize-space($expert/@xml:id)}</cell>{
         for $category in $categories/*:category/@type
         return
           <cell>{
