@@ -300,7 +300,6 @@ return
       <cell>id</cell>
       <cell>name</cell>
       <cell>surname</cell>
-      <cell>forename</cell>
       <cell>column</cell>
       <cell>birth</cell>
       <cell>death</cell>
