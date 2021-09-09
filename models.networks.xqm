@@ -356,7 +356,6 @@ return
     <record>
       <cell>id</cell>
       <cell>third-party</cell>
-      <cell>litigation</cell>
       <!--<cell>origination</cell>-->
       <cell>framework</cell>
       <cell>categories</cell>
