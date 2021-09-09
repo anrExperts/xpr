@@ -366,7 +366,7 @@ return
     order by $expertise/@xml:id
     let $id := $expertise/@xml:id => fn:normalize-space()
     let $thirdParty := fn:boolean($expertise/descendant::*:experts/*:expert[@context='third-party'])
-    let $origination := $expertise/descendant::*:origination => fn:normalize-space()
+    (:let $origination := fn:translate($expertise/descendant::*:origination, ' ', ' ') => fn:normalize-space()):)
     let $framework := $expertise/descendant::*:framework/@type => fn:normalize-space()
     let $categories := fn:string-join($expertise/descendant::*:categories/*:category/@type, ', ') => fn:normalize-space()
     let $designation := $expertise/descendant::*:categories/*:designation => fn:normalize-space()
@@ -375,7 +375,7 @@ return
     <record>
       <cell>{$id}</cell>
       <cell>{$thirdParty}</cell>
-      <cell>{$origination}</cell>
+      <!--<cell>{$origination}</cell>-->
       <cell>{$framework}</cell>
       <cell>{$categories}</cell>
       <cell>{$designation}</cell>
