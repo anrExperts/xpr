@@ -498,6 +498,7 @@
         <xf:case id="participantsPanel" selected="false">
             <xf:label>Acteurs de l’expertise</xf:label>
             <xf:group ref="xpr:description/xpr:participants/xpr:experts">
+                <xf:var name="experts" value="."/>
                 <xf:label><xf:output value="if(count(xpr:expert) > 1, 'Experts', 'Expert')"/></xf:label>
                 <xf:repeat id="repeatExpert" nodeset="xpr:expert" appearance="full">
                     <xf:var name="expert" value="."/>
@@ -511,6 +512,17 @@
                             <xf:show dialog="warningOpinion" if="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[index('repeatExpert')]/@ref[normalize-space(.)!=''])]/@ref"/>
                             <xf:setvalue  ref="instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref" value="normalize-space(replace(instance('xprExpertise')//xpr:conclusions/xpr:opinion[contains(@ref, $expert/@ref)]/@ref, $expert/@ref , ''))"/>
                         </xf:action>
+                        <!-- set new ref for opinion if disagreement is checked when expert is modified-->
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'"
+                                         ref="instance('xprExpertise')//xpr:opinion[@ref!=''][not(@ref=instance('xprExpertise')//xpr:participants/xpr:experts/xpr:expert/@ref)]/@ref"
+                                         value="$expert/@ref"/>
+                            <xf:setvalue if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail='true'"
+                                         ref="instance('xprExpertise')//xpr:conclusions/xpr:fees/xpr:fee[@ref!=''][@type='expert'][not(@ref=instance('xprExpertise')//xpr:participants/xpr:experts/xpr:expert/@ref)]/@ref"
+                                         value="$expert/@ref"/>
+                            <xf:setvalue ref="instance('xprExpertise')//xpr:participants/xpr:parties/xpr:party/xpr:expert[@ref!=''][not(@ref=instance('xprExpertise')//xpr:participants/xpr:experts/xpr:expert/@ref)]/@ref"
+                                         value="$expert/@ref"/>
+                        </xf:action>
                     </xf:select1>
                     <xf:dialog id="warningOpinion">
                         <xf:label>Vous venez de modifier un expert alors qu’une ou plusieurs conclusions lui étaient associées. Merci de vérifier les différentes conclusions avant de sauvegarder la fiche.</xf:label>
@@ -519,13 +531,6 @@
                             <xf:hide ev:event="DOMActivate" dialog="warningOpinion"/>
                         </xf:trigger>
                     </xf:dialog>
-                    <!-- set new ref for opinion if disagreement is checked when expert is modified-->
-                    <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:agreement/@type = 'disagreement'" ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('xprExpertise')//xpr:opinion[not(@ref = instance('xprExpertise')//xpr:experts/xpr:expert/@ref)]/@ref" value="current()/@ref"/>
-                    </xf:action>
-                    <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail='true'" ev:event="xforms-value-changed">
-                        <xf:setvalue ref="instance('xprExpertise')//xpr:conclusions/xpr:fees/xpr:fee[@type='expert'][not(@ref = instance('xprExpertise')//xpr:experts/xpr:expert/@ref)]/@ref" value="current()/@ref"/>
-                    </xf:action>
                     <xf:input ref="xpr:title" incremental="true">
                         <xf:label>Dénomination de l’expert dans l’acte</xf:label>
                     </xf:input>
@@ -595,9 +600,19 @@
                 </xf:repeat>
                 <xf:trigger class="insert">
                     <xf:label>Ajouter un expert</xf:label>
-                    <xf:insert if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" context="." origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert" nodeset="xpr:expert" at="last()" position="after" ev:event="DOMActivate"/>
-                    <xf:delete if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]" nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[last()]/@recalled" ev:event="DOMActivate"/>
-                    <xf:show ev:event="DOMActivate" dialog="warningAgreement" if="count(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert) >= 1 and not(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[@context='third-party']) and instance('xprExpertise')//xpr:conclusions/xpr:agreement[@type='conclusion']"/>
+                    <xf:insert if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]"
+                               context="."
+                               origin="instance('xprExpertiseCopy')/xpr:description/xpr:participants/xpr:experts/xpr:expert"
+                               nodeset="xpr:expert"
+                               at="last()"
+                               position="after"
+                               ev:event="DOMActivate"/>
+                    <xf:delete if="instance('xprExpertise')//xpr:conclusions/xpr:agreement[not(@type='conclusion')]"
+                               nodeset="instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[last()]/@recalled"
+                               ev:event="DOMActivate"/>
+                    <xf:show ev:event="DOMActivate"
+                             dialog="warningAgreement"
+                             if="count(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert) >= 1 and not(instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[@context='third-party']) and instance('xprExpertise')//xpr:conclusions/xpr:agreement[@type='conclusion']"/>
                     <xf:action if="instance('xprExpertise')//xpr:conclusions/xpr:fees/@detail= 'true'"
                                ev:event="DOMActivate">
                         <xf:insert context="instance('xprExpertise')//xpr:conclusions/xpr:fees"

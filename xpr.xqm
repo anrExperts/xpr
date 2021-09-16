@@ -1158,7 +1158,7 @@ declare
   %rest:path("xpr/sources/{$id}")
   %output:method("xml")
 function getSource($id) {
-  db:open('xpr')/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $id]
+  db:open('xpr')/xpr/sources/source[@xml:id = $id]
 };
 
 (:~
@@ -1198,30 +1198,37 @@ declare
   %updating
 function putSource($param, $referer) {
   let $db := db:open("xpr")
-  let $source := <source>{fn:normalize-space($param)}</source>
   let $origin := fn:analyze-string($referer, 'xpr/(.+?)/(.+?)/modify')//fn:group[@nr='1']
   return
     if (fn:ends-with($referer, 'modify'))
     then
-      switch ($origin)
-      case 'biographies' return insert node $param into $db/xpr/sources
-      default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
-      return replace node $db/xpr/sources/source[fn:replace(., '[^a-zA-Z0-9]', '-') = $location] with $source
+      let $id := "xprSource" || fn:generate-id($param)
+      let $source := <source xml:id="{$id}">{fn:normalize-space($param)}</source>
+      return(
+        switch ($origin)
+        case 'biographies' return insert node $source into $db/xpr/sources
+        default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
+        return replace node $db/xpr/sources/source[@xml:id = $location] with $param
+      )
     else
-      insert node $source into $db/xpr/sources,
-      update:output(
-        (
-        <rest:response>
-          <http:response status="200" message="test">
-            <http:header name="Content-Language" value="fr"/>
-            <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
-          </http:response>
-        </rest:response>,
-        <result>
-          <id>{$param/source/@xml:id => fn:normalize-space()}</id>
-          <message>Une nouvelle source a été ajoutée : {$param/source/text()}.</message>
-          <url></url>
-        </result>
+      let $id := "xprSource" || fn:generate-id($param)
+      let $source := <source xml:id="{$id}">{fn:normalize-space($param)}</source>
+      return(
+        insert node $source into $db/xpr/sources,
+        update:output(
+          (
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{@xml:id => fn:normalize-space()}</id>
+            <message>Une nouvelle source a été ajoutée : {$source => fn:normalize-space()}.</message>
+            <url></url>
+          </result>
+          )
         )
       )
 };
@@ -1615,6 +1622,31 @@ function getCategoriesNetworkByYear($year as xs:string, $format as xs:string) {
 
     }
     return xpr.models.networks:getFormatedCategoriesNetwork($queryParam, $content, $outputParam)
+};
+
+(:
+ : this function returns csv resource for clerks network by year.
+ :)
+declare
+  %rest:path("/xpr/networks/{$year}/clerks")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getClerksNetworkByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+    }
+
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getFormatedClerksNetwork($queryParam, $content, $outputParam)
 };
 
 
