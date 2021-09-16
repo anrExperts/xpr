@@ -60,6 +60,7 @@
                    method="put"
                    replace="none">
         <xf:action ev:event="xforms-submit">
+            <!--@todo à supprimer (les sources sont envoyées directement avec le @ref du submission)-->
             <xf:delete ref="instance('xprSource')/@localType"/>
             <xf:delete ref="instance('xprSource')/@xlink:href"/>
         </xf:action>

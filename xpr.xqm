@@ -486,7 +486,7 @@ function getDataFromXforms() {
   let $id := request:parameter('data')
   let $db := db:open('xpr')
   return (
-    if($id = 'getSourceId') then <source localType="new" xml:id="{fn:generate-id($db)}"/>
+    if($id = 'getSourceId') then <source localType="new" xml:id="{'xprSource' || fn:generate-id($db)}"/>
     else $db/xpr/bio/eac:eac-cpf[@xml:id = $id]
   )
 
@@ -1198,37 +1198,31 @@ declare
   %updating
 function putSource($param, $referer) {
   let $db := db:open("xpr")
+  let $source := <source xml:id="{$param/source/@xml:id => fn:normalize-space()}">{$param => fn:normalize-space()}</source>
   let $origin := fn:analyze-string($referer, 'xpr/(.+?)/(.+?)/modify')//fn:group[@nr='1']
   return
     if (fn:ends-with($referer, 'modify'))
     then
-      let $id := "xprSource" || fn:generate-id($param)
-      let $source := <source xml:id="{$id}">{fn:normalize-space($param)}</source>
-      return(
-        switch ($origin)
-        case 'biographies' return insert node $source into $db/xpr/sources
-        default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
-        return replace node $db/xpr/sources/source[@xml:id = $location] with $param
-      )
+      switch ($origin)
+      case 'biographies' return insert node $source into $db/xpr/sources
+      default return let $location := fn:analyze-string($referer, 'xpr/sources/(.+?)/modify')//fn:group[@nr='1']
+      return replace node $db/xpr/sources/source[@xml:id = $location] with $source
+
     else
-      let $id := "xprSource" || fn:generate-id($param)
-      let $source := <source xml:id="{$id}">{fn:normalize-space($param)}</source>
-      return(
-        insert node $source into $db/xpr/sources,
-        update:output(
-          (
-          <rest:response>
-            <http:response status="200" message="test">
-              <http:header name="Content-Language" value="fr"/>
-              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
-            </http:response>
-          </rest:response>,
-          <result>
-            <id>{@xml:id => fn:normalize-space()}</id>
-            <message>Une nouvelle source a été ajoutée : {$source => fn:normalize-space()}.</message>
-            <url></url>
-          </result>
-          )
+      insert node $source into $db/xpr/sources,
+      update:output(
+        (
+        <rest:response>
+          <http:response status="200" message="test">
+            <http:header name="Content-Language" value="fr"/>
+            <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+          </http:response>
+        </rest:response>,
+        <result>
+          <id>{$param/source/@xml:id => fn:normalize-space()}</id>
+          <message>Une nouvelle source a été ajoutée : {$param => fn:normalize-space()}.</message>
+          <url></url>
+        </result>
         )
       )
 };
