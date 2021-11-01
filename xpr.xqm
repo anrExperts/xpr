@@ -66,7 +66,7 @@ function index() {
 declare
   %rest:path("/")
   %output:method("xml")
-function index() {
+function root() {
     web:redirect("/xpr/about")
 };
 
