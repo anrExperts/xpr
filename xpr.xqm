@@ -60,6 +60,17 @@ function index() {
 };
 
 (:~
+ : This resource function defines the application root
+ : @return redirect to the home page or to the install
+ :)
+declare
+  %rest:path("/")
+  %output:method("xml")
+function index() {
+    web:redirect("/xpr/about")
+};
+
+(:~
  : This resource function install
  : @return create the db
  :
@@ -1805,7 +1816,7 @@ function about() {
                             <h2>Partenaires</h2>
                             <ul>
                               <li><a href="https://anr.fr/Projet-ANR-17-CE26-0006">Agence nationale de recherche, projet ANR-17-CE26-0006</a></li>
-                              <li><a href="http://www.gip-recherche-justice.fr">Mission de recherche Droit & Justice (2015-2017)</a></li>
+                              <li><a href="http://www.gip-recherche-justice.fr">Mission de recherche Droit &amp; Justice (2015-2017)</a></li>
                               <li><a href="https://www.archives-nationales.culture.gouv.fr">Archives Nationales de France</a></li>
                               <li>Ce projet a bénéficié du soutien du <a href="https://sites.haa.pitt.edu/na-dah/">Getty Advanced Workshop on Network Analysis and Digital Art History (NA+DAH)</a></li>
                             </ul>
