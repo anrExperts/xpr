@@ -916,7 +916,7 @@ declare
   %updating
 function putInventory($param, $referer) {
   let $db := db:open("xpr")
-  let $id := fn:replace(fn:lower-case($param/inventory/sourceDesc/idno[@type="unitid"]), '/', '-') || 'f' || fn:format-integer($param/inventory/sourceDesc/location, '000') || $param/inventory/sourceDesc/expert/@ref
+  let $id := fn:replace(fn:lower-case($param/inventory/sourceDesc/idno[@type="unitid"]), '/', '-') || 'f' || fn:format-integer($param/inventory/sourceDesc/location, '000') || fn:substring-after($param/inventory/sourceDesc/expert/@ref, '#')
   let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
     return
       if (fn:ends-with($referer, 'modify'))
