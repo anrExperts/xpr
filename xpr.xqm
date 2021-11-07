@@ -60,6 +60,17 @@ function index() {
 };
 
 (:~
+ : This resource function defines the application root
+ : @return redirect to the home page or to the install
+ :)
+declare
+  %rest:path("/")
+  %output:method("xml")
+function root() {
+    web:redirect("/xpr/about")
+};
+
+(:~
  : This resource function install
  : @return create the db
  :
@@ -100,7 +111,7 @@ declare
   %rest:path("/xpr/home")
   %output:method("xml")
 function home() {
-  web:redirect("/xpr/expertises/view") 
+  web:redirect("/xpr/expertises/view")
 };
 
 (:~
@@ -1756,6 +1767,69 @@ function networkViz($year) {
 </html>
 
 }; :)
+
+(:~
+ : This resource function creates the about page
+ : @return an about page
+ :)
+declare
+  %rest:path("/xpr/about")
+  %output:method("html")
+function about() {
+  let $content := map {
+      'title' : 'À propos de l’ANR Experts',
+      'data' : <div>
+                          <section class="alternate">
+                          <br/>
+                          <br/>
+                          <h2>Pratiques des savoirs entre jugement et innovation. Experts, expertises du bâtiment, Paris 1690-1790 – ANR EXPERTS</h2>
+                          <p>Notre projet vise à examiner, à partir d’un secteur économique majeur — celui du bâtiment à l’époque moderne —, le mécanisme de l’expertise : comment la langue technique régulatrice des experts s’impose à la société, comment leur compétence se convertit en autorité, voire parfois en « abus d’autorité » ? L’existence d’un fonds d’archives exceptionnel (AN Z<sup>1J</sup>) qui conserve l’ensemble des procès-verbaux d’expertise du bâtiment parisien de 1643 à 1792 nous permet de lancer une enquête pluridisciplinaire d’envergure sur la question de l’expertise qui connaît, à partir de 1690, un tournant particulier. En effet, les experts, autrefois uniquement gens de métiers, se divisent en deux branches exerçant deux activités concurrentes, parfois complémentaires : l’architecture et l’entreprise de construction.</p>
+                        <p>La base de notre travail consistera d’abord à établir parallèlement deux corpus : d’une part, un dictionnaire prosopographique des 234 experts exerçant de 1690 à 1790 ; d’autre part, l’inventaire et l’analyse des procès-verbaux d’expertise sur la même période. Au regard de l’immensité du fond, nous travaillerons sur un groupe de près de 10 000 expertises par le biais d’un sondage au 1/10<sup>e</sup> sur les dix années de 1696 à 1786, espacées chacune de 10 ans. Chaque expertise sera inventoriée, indexée, numérisée et analysée dans le détail. L’ensemble fera l’objet d’une étude sérielle sur le siècle parcouru, mais surtout d’un travail approfondi sur son contenu. Deux questions seront résolues : 1° Comment la décision de l’expert se prend-elle ? Quels savoirs y sont convoqués ? 2° Comment ces experts parviennent à innover dans domaine de leur compétence ? Le projet correspond au moins à trois enjeux contemporains.</p>
+                        <p>Le premier concerne le rapport au risque et à l’innovation sociale. Comment affronter des situations à risque permet d’innover techniquement, voire socialement ? La confrontation à des incertitudes ouvre des possibilités de résoudre des conflits entre des communautés opposées. Tenant compte de la partition des fonctions d’experts, la mission d’expertise se différencie-t-elle selon la qualité de son auteur ? Les experts en viennent, souvent grâce à l’expertise, à innover dans le champ d’activité qui est le leur. Ainsi, pourquoi l’expertise induit-elle l’innovation ?</p>
+                        <p>Le second concerne la part du droit dans la prise de décision démocratique. Comment le droit peut-il servir entre les mains de non-juristes ? La diffusion des principes du droit dans la vie citoyenne permet un usage de ces derniers dans la vie publique mais également dans des domaines de la vie privée. Dans le cadre de notre projet, comment et pourquoi des experts, non juristes mais au fait du droit, argumenteront en droit et persuaderont le juge de leur position ?</p>
+                        <p>Le troisième concerne la régulation des valeurs de biens. Quels critères faut-il mettre en avant pour échafauder une hiérarchie des choses ? Une stricte normalisation objective de ces critères peut ne pas apparaître souhaitable face aux lois du marché qui par leur rigueur nécessiteraient un contrebalancement de règles subjectivées. Précisément, comment les experts du bâtiment ont-ils mis en place les critères objectifs et subjectifs d’estimation de la valeur des biens immobiliers ?</p>
+                        <p>Rejoignant l’idée d’« abus d’autorité » de l’expert, le fait que plusieurs types de savoirs, et plusieurs groupes sociaux, partagent l’expertise, diminuerait-il le risque d’abus d’autorité et au-delà le risque technique en général ?</p>
+                    <p>Les résultats de cette recherche sont présentés dans une base de connaissances collaborative accueillie sur un site dédié sur lequel l’ensemble des corpus seront accessibles à la communauté des chercheurs. L’analyse d’<em>exempla</em> fera l’objet d’une éditorialisation particulière sous forme d’exposition virtuelle pour le grand public. La synthèse de nos résultats sera consignée dans un ouvrage et deux rencontres nationale et internationale viendront clore le projet.</p></section>
+                        <section class="alternate">
+                          <div><h2>Responsables du projet</h2>
+                          <ul>
+                            <li>Robert Carvais, CNRS (UMR 7074)</li>
+                            <li>Emmanuel Chateau-Dutier, Université de Montréal (CRIHN)</li>
+                            <li>Valérie Nègre, Université Paris I (UMR 8066)</li>
+                            <li>Michela Barbot, CNRS (UMR 8533)</li>
+                          </ul></div>
+                          <div>
+                            <h2>Co-chercheurs</h2>
+                            <ul>
+                              <li>Juliette Hernu-Belaud (Chercheuse post-doctorale ANR Experts)</li>
+                              <li>Léonore Losserand (Chercheuse post-doctorale ANR Experts)</li>
+                              <li>Yvon Plouzennec (Chercheur post-doctorale ANR Experts)</li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h2>Ingénieur d’étude</h2>
+                            <ul>
+                              <li>Josselin Morvan</li>
+                            </ul>
+                          </div>
+                          <div>
+                            <h2>Partenaires</h2>
+                            <ul>
+                              <li><a href="https://anr.fr/Projet-ANR-17-CE26-0006">Agence nationale de recherche, projet ANR-17-CE26-0006</a></li>
+                              <li><a href="http://www.gip-recherche-justice.fr">Mission de recherche Droit &amp; Justice (2015-2017)</a></li>
+                              <li><a href="https://www.archives-nationales.culture.gouv.fr">Archives Nationales de France</a></li>
+                              <li>Ce projet a bénéficié du soutien du <a href="https://sites.haa.pitt.edu/na-dah/">Getty Advanced Workshop on Network Analysis and Digital Art History (NA+DAH)</a></li>
+                            </ul>
+                          </div>
+                        </section>
+                        </div>
+    }
+    let $outputParam := map {
+      'layout' : "template.xml"
+      (: 'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{}) :)
+    }
+    return xpr.models.xpr:wrapper($content, $outputParam)
+};
 
 
 (:~
