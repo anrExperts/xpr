@@ -2,21 +2,28 @@
     <xf:switch>
         <xf:case id="inventoryPanel" selected="true">
             <xf:group ref="xpr:sourceDesc">
+                <xf:label>Références</xf:label>
                 <xf:input ref="xpr:idno[@type='unitid']" incremental="true">
                     <xf:label>Cote</xf:label>
                 </xf:input>
                 <xf:input ref="xpr:date/@standardDate" incremental="true">
                     <xf:label>Date de l'inventaire</xf:label>
+                    <xf:alert>La date indiquée ne respecte pas le format requis.</xf:alert>
+                    <xf:hint>La date indiquée doit respecter les formats suivants : AAAA-MM-JJ ou JJ/MM/AAAA</xf:hint>
                 </xf:input>
                 <xf:input ref="xpr:location" incremental="true">
                     <xf:label>Pages, folios</xf:label>
                 </xf:input>
                 <xf:select1 ref="xpr:expert/@ref" incremental="true">
                     <xf:label>Patronyme</xf:label>
-                    <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity[@type='expert' or @type='altExpert']">
+                    <xf:itemset model="prosopo"
+                                nodeset="instance('xprEntities')/xpr:entity[@type='expert' or @type='altExpert']">
                         <xf:label ref="xpr:label"/>
                         <xf:value value="concat('#', @xml:id)"/>
-                        <xf:dispatch ev:event="xforms-select" name="getData" targetid="inventory" delay="1000"/>
+                        <xf:dispatch ev:event="xforms-select"
+                                     name="getData"
+                                     targetid="inventory"
+                                     delay="1000"/>
                     </xf:itemset>
                 </xf:select1>
             </xf:group>
@@ -67,133 +74,6 @@
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
                     </xf:select1>
-<!--
-                    <xf:group ref="@xlink:href[.!='' and substring-after(., '#')=instance('xprEntities')/xpr:entity[@localType='new']/@xml:id]">
-                        <xf:trigger>
-                            <xf:label>Personne dans la base</xf:label>
-                            <xf:setvalue ref="." value="''" ev:event="DOMActivate"/>
-                        </xf:trigger>
-                    </xf:group>
--->
-<!--
-                    <xf:group ref="@xlink:href[substring-after(., '#') = '' or substring-after(., '#') = instance('xprEntities')/xpr:entity[not(@localType='new')]/@xml:id]">
-                        <xf:trigger>
-                            <xf:label>Nouvelle personne</xf:label>
-                            <xf:insert context="instance('xprEntities')"
-                                       origin="instance('xprNewEntries')/xpr:entity"
-                                       nodeset="xpr:entity[1]"
-                                       position="before"
-                                       ev:event="DOMActivate"/>
-                            <xf:insert context="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']"
-                                       origin="instance('xprProsopoCopy')"
-                                       nodeset="xpr:label"
-                                       position="after"
-                                       ev:event="DOMActivate"/>
-                            &lt;!&ndash; set a temporary xml:id value for added entity &ndash;&gt;
-                            <xf:setvalue ref="." value="concat('#local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))"
-                                         ev:event="DOMActivate"/>
-                            <xf:setvalue ref="instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']//eac:entityId
-                                              | instance('xprEntities')/xpr:entity[@localType = 'new'][@xml:id = '']/@xml:id"
-                                         value="concat('local-id-participant', number(count(instance('xprEntities')/xpr:entity[@localType = 'new'])))"
-                                         ev:event="DOMActivate"/>
-                        </xf:trigger>
-                        <xf:select1 ref="." incremental="true">
-                            <xf:itemset model="prosopo" nodeset="instance('xprEntities')/xpr:entity">
-                                <xf:label ref="xpr:label"/>
-                                <xf:value value="concat('#', @xml:id)"/>
-                            </xf:itemset>
-                        </xf:select1>
-                    </xf:group>
--->
-<!--
-                    <xf:group ref="instance('xprEntities')/xpr:entity[concat('#', @xml:id) = $relation/@xlink:href]/eac:eac-cpf">
-                        <xf:var name="entityType" value="descendant::eac:entityType"/>
-                        <xf:label>Nouvelle entrée</xf:label>
-                        <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="minimal">
-                            <xf:label>Type d'entité</xf:label>
-                            <xf:item>
-                                <xf:label>personne</xf:label>
-                                <xf:value>person</xf:value>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
-                                    <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
-                                    <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
-                                    <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[@localType='officeName']"/>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>office</xf:label>
-                                <xf:value>corporateBody</xf:value>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/@localType" value="''"/>
-                                    <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
-                                    <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
-                                    <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='officeName')]"/>
-                                </xf:action>
-                            </xf:item>
-                            <xf:item>
-                                <xf:label>famille</xf:label>
-                                <xf:value>family</xf:value>
-                                <xf:action ev:event="xforms-select">
-                                    <xf:setvalue ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:identity/@localType" value="'family'"/>
-                                    <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:nameEntry[eac:alternativeForm]"/>
-                                    <xf:insert context="ancestor::eac:eac-cpf/eac:cpfDescription/eac:identity" origin="instance('xprProsopoCopy')/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]" nodeset="eac:nameEntry[eac:authorizedForm]" position="after"/>
-                                    <xf:delete ref="ancestor::eac:eac-cpf/eac:cpfDescription//eac:identity/eac:nameEntry[eac:alternativeForm]//eac:part[not(@localType='surname')]"/>
-                                </xf:action>
-                            </xf:item>
-                        </xf:select1>
-                        <xf:select1 ref="eac:cpfDescription/eac:identity/@localType" appearance="minimal">
-                            <xf:label>Répertoire</xf:label>
-                            <xf:itemset nodeset="instance('xprEntitiesTypes')/xpr:identity[@type=$entityType]">
-                                <xf:label ref="xpr:label"/>
-                                <xf:value ref="xpr:value"/>
-                            </xf:itemset>
-                        </xf:select1>
-                        <xf:input ref="eac:cpfDescription/eac:identity/eac:nameEntry[child::eac:authorizedForm]/eac:part">
-                            <xf:label>Nom</xf:label>
-                            <xf:action ev:event="xforms-value-changed">
-                                <xf:setvalue ref="ancestor::xpr:entity/xpr:label" value="current()"/>
-                            </xf:action>
-                        </xf:input>
-                        <xf:group ref="eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate">
-                            <xf:label>Naissance</xf:label>
-                            <xf:input ref="@standardDate">
-                                <xf:label>Certaine</xf:label>
-                            </xf:input>
-                            <xf:input ref="@notAfter">
-                                <xf:label>Avant le</xf:label>
-                            </xf:input>
-                            <xf:input ref="@notBefore">
-                                <xf:label>Après le</xf:label>
-                            </xf:input>
-                        </xf:group>
-                        <xf:group ref="eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate">
-                            <xf:label>Décès</xf:label>
-                            <xf:input ref="@standardDate">
-                                <xf:label>Certaine</xf:label>
-                            </xf:input>
-                            <xf:input ref="@notAfter">
-                                <xf:label>Avant le</xf:label>
-                            </xf:input>
-                            <xf:input ref="@notBefore">
-                                <xf:label>Après le</xf:label>
-                            </xf:input>
-                        </xf:group>
-                        <xf:group ref="eac:cpfDescription[eac:identity/eac:entityType = 'person']/eac:description/eac:localDescription[@localType='sex']">
-                            <xf:select1 ref="eac:term">
-                                <xf:label>Sexe</xf:label>
-                                <xf:item>
-                                    <xf:label>Homme</xf:label>
-                                    <xf:value>male</xf:value>
-                                </xf:item>
-                                <xf:item>
-                                    <xf:label>Femme</xf:label>
-                                    <xf:value>female</xf:value>
-                                </xf:item>
-                            </xf:select1>
-                        </xf:group>
-                    </xf:group>
--->
                     <xf:select1 ref="@xlink:arcrole" incremental="true">
                         <xf:label>Type de relation</xf:label>
                         <xf:itemset model="prosopo" nodeset="instance('xprRelationsTypes')/xpr:type">
@@ -203,7 +83,10 @@
                     </xf:select1>
                     <xf:trigger ref="." class="delete">
                         <xf:label>Supprimer une relation</xf:label>
-                        <xf:delete nodeset="." at="1" if="count(instance('xprProsopo')/eac:cpfDescription/eac:relations/eac:cpfRelation) &gt; 1" ev:event="DOMActivate"/>
+                        <xf:delete nodeset="."
+                                   at="1"
+                                   if="count(instance('xprProsopo')/eac:cpfDescription/eac:relations/eac:cpfRelation) &gt; 1"
+                                   ev:event="DOMActivate"/>
                         <xf:help>Supprimer une relation</xf:help>
                     </xf:trigger>
                 </xf:repeat>
@@ -258,41 +141,44 @@
                     <xf:label>Biens immobiliers</xf:label>
                     <xf:group ref="xpr:residences">
                         <xf:label>Résidences</xf:label>
-                        <xf:repeat id="repeatResidence" nodeset="xpr:residence">
+                        <xf:repeat id="repeatResidence"
+                                   nodeset="xpr:residence">
                             <xf:label>
                                 <xf:output value="choose(@type='main', 'Résidence principale', 'Autre résidence')"/>
                             </xf:label>
-                            <xf:group ref="xpr:address">
-                                <xf:label>Adresse</xf:label>
-                                <xf:select1 ref="xpr:place">
+                            <xf:group ref="xpr:place">
+                                <xf:select1 ref="@type">
                                     <xf:label>Localisation</xf:label>
                                     <xf:item>
                                         <xf:label>Paris</xf:label>
-                                        <xf:value>Paris</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">Paris</xf:setvalue>
-                                        </xf:action>
+                                        <xf:value>paris</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Banlieue</xf:label>
-                                        <xf:value>Banlieue</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">suburbs</xf:setvalue>
-                                        </xf:action>
+                                        <xf:value>suburbs</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Province</xf:label>
                                         <xf:value>province</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">province</xf:setvalue>
-                                        </xf:action>
                                     </xf:item>
                                 </xf:select1>
-                                <xf:input ref="xpr:street">
+                                <xf:input ref="xpr:address/xpr:street">
                                     <xf:label>Rue</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:buildingNumber">
+                                <xf:input ref="xpr:address/xpr:buildingNumber">
                                     <xf:label>Numéro</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:complement">
+                                    <xf:label>Complément</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:parish">
+                                    <xf:label>Paroisse</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:city">
+                                    <xf:label>Ville</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:district">
+                                    <xf:label>Département</xf:label>
                                 </xf:input>
                             </xf:group>
                             <xf:group ref="xpr:layout">
@@ -311,54 +197,65 @@
                             </xf:textarea>
                             <xf:trigger class="delete">
                                 <xf:label>&#10007;</xf:label>
-                                <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="not(@type = 'main')"/>
+                                <xf:delete nodeset="."
+                                           at="1"
+                                           if="not(@type = 'main')"
+                                           ev:event="DOMActivate"/>
                                 <xf:help>Supprimer une résidence.</xf:help>
                             </xf:trigger>
                         </xf:repeat>
                         <xf:trigger class="insert">
                             <xf:label>Ajouter une résidence</xf:label>
                             <xf:action ev:event="DOMActivate">
-                                <xf:insert context="." origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:residences/xpr:residence" nodeset="xpr:residence[last()]" position="after" ev:event="DOMActivate"/>
-                                <xf:setvalue ref="xpr:residence[last()]/@type" value="'other'"/>
+                                <xf:insert context="."
+                                           origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:residences/xpr:residence"
+                                           nodeset="xpr:residence[last()]"
+                                           position="after"
+                                           ev:event="DOMActivate"/>
+                                <xf:setvalue ref="xpr:residence[last()]/@type"
+                                             value="'other'"/>
                             </xf:action>
                             <xf:help>Ajouter une résidence.</xf:help>
                         </xf:trigger>
                     </xf:group>
                     <xf:group ref="xpr:workshops">
                         <xf:label>Ateliers</xf:label>
-                        <xf:repeat id="repeatWorkshop" nodeset="xpr:workshop">
+                        <xf:repeat id="repeatWorkshop"
+                                   nodeset="xpr:workshop">
                             <xf:label>Atelier</xf:label>
-                            <xf:group ref="xpr:address">
-                                <xf:label>Adresse</xf:label>
-                                <xf:select1 ref="xpr:place">
+                            <xf:group ref="xpr:place">
+                                <xf:select1 ref="@type">
                                     <xf:label>Localisation</xf:label>
                                     <xf:item>
                                         <xf:label>Paris</xf:label>
-                                        <xf:value>Paris</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">Paris</xf:setvalue>
-                                        </xf:action>
+                                        <xf:value>paris</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Banlieue</xf:label>
-                                        <xf:value>Banlieue</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">suburbs</xf:setvalue>
-                                        </xf:action>
+                                        <xf:value>suburbs</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Province</xf:label>
                                         <xf:value>province</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">province</xf:setvalue>
-                                        </xf:action>
                                     </xf:item>
                                 </xf:select1>
-                                <xf:input ref="xpr:street">
+                                <xf:input ref="xpr:address/xpr:street">
                                     <xf:label>Rue</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:buildingNumber">
+                                <xf:input ref="xpr:address/xpr:buildingNumber">
                                     <xf:label>Numéro</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:complement">
+                                    <xf:label>Complément</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:parish">
+                                    <xf:label>Paroisse</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:city">
+                                    <xf:label>Ville</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:district">
+                                    <xf:label>Département</xf:label>
                                 </xf:input>
                             </xf:group>
                             <xf:group ref="xpr:layout">
@@ -377,53 +274,62 @@
                             </xf:textarea>
                             <xf:trigger class="delete">
                                 <xf:label>&#10007;</xf:label>
-                                <xf:delete nodeset="." at="1" ev:event="DOMActivate" if=""/>
+                                <xf:delete nodeset="."
+                                           at="1"
+                                           ev:event="DOMActivate"/>
                                 <xf:help>Supprimer un atelier.</xf:help>
                             </xf:trigger>
                         </xf:repeat>
                         <xf:trigger class="insert">
                             <xf:label>Ajouter un atelier</xf:label>
                             <xf:action ev:event="DOMActivate">
-                                <xf:insert context="." origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:workshops/xpr:workshop" nodeset="xpr:workshop[last()]" position="after" ev:event="DOMActivate"/>
+                                <xf:insert context="."
+                                           origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:workshops/xpr:workshop"
+                                           nodeset="xpr:workshop[last()]"
+                                           position="after"
+                                           ev:event="DOMActivate"/>
                             </xf:action>
                             <xf:help>Ajouter un atelier.</xf:help>
                         </xf:trigger>
                     </xf:group>
                     <xf:group ref="xpr:buildingSites">
                         <xf:label>Chantiers</xf:label>
-                        <xf:repeat id="repeatBuildingSites" nodeset="xpr:buildingSite">
+                        <xf:repeat id="repeatBuildingSites"
+                                   nodeset="xpr:buildingSite">
                             <xf:label>Chantier</xf:label>
-                            <xf:group ref="xpr:address">
-                                <xf:label>Adresse</xf:label>
-                                <xf:select1 ref="xpr:place">
+                            <xf:group ref="xpr:place">
+                                <xf:select1 ref="@type">
                                     <xf:label>Localisation</xf:label>
                                     <xf:item>
                                         <xf:label>Paris</xf:label>
-                                        <xf:value>Paris</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">Paris</xf:setvalue>
-                                        </xf:action>
+                                        <xf:value>paris</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Banlieue</xf:label>
-                                        <xf:value>Banlieue</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">suburbs</xf:setvalue>
-                                        </xf:action>
+                                        <xf:value>suburbs</xf:value>
                                     </xf:item>
                                     <xf:item>
                                         <xf:label>Province</xf:label>
                                         <xf:value>province</xf:value>
-                                        <xf:action ev:event="xforms-select">
-                                            <xf:setvalue ref="@type">province</xf:setvalue>
-                                        </xf:action>
                                     </xf:item>
                                 </xf:select1>
-                                <xf:input ref="xpr:street">
+                                <xf:input ref="xpr:address/xpr:street">
                                     <xf:label>Rue</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:buildingNumber">
+                                <xf:input ref="xpr:address/xpr:buildingNumber">
                                     <xf:label>Numéro</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:complement">
+                                    <xf:label>Complément</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:parish">
+                                    <xf:label>Paroisse</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:city">
+                                    <xf:label>Ville</xf:label>
+                                </xf:input>
+                                <xf:input ref="xpr:district">
+                                    <xf:label>Département</xf:label>
                                 </xf:input>
                             </xf:group>
                             <xf:textarea ref="xpr:noteworthy">
@@ -431,14 +337,20 @@
                             </xf:textarea>
                             <xf:trigger class="delete">
                                 <xf:label>&#10007;</xf:label>
-                                <xf:delete nodeset="." at="1" ev:event="DOMActivate" if=""/>
+                                <xf:delete nodeset="."
+                                           at="1"
+                                           ev:event="DOMActivate"/>
                                 <xf:help>Supprimer un atelier.</xf:help>
                             </xf:trigger>
                         </xf:repeat>
                         <xf:trigger class="insert">
                             <xf:label>Ajouter un chantier</xf:label>
                             <xf:action ev:event="DOMActivate">
-                                <xf:insert context="." origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:buildingSites/xpr:buildingSite" nodeset="xpr:buildingSite[last()]" position="after" ev:event="DOMActivate"/>
+                                <xf:insert context="."
+                                           origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:buildingSites/xpr:buildingSite"
+                                           nodeset="xpr:buildingSite[last()]"
+                                           position="after"
+                                           ev:event="DOMActivate"/>
                             </xf:action>
                             <xf:help>Ajouter un chantier.</xf:help>
                         </xf:trigger>
@@ -588,7 +500,8 @@
             </xf:group>
             <xf:group ref="xpr:buildingWorks">
                 <xf:label>Constructions d'édifices</xf:label>
-                <xf:repeat id="repeatBuildingWork" nodeset="xpr:work">
+                <xf:repeat id="repeatBuildingWork"
+                           nodeset="xpr:work">
                     <xf:label>Réalisation (construction)</xf:label>
                     <xf:input ref="xpr:client">
                         <xf:label>Client</xf:label>
@@ -622,14 +535,20 @@
                     </xf:group>
                     <xf:trigger class="delete">
                         <xf:label>&#10007;</xf:label>
-                        <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:work) > 1"/>
+                        <xf:delete nodeset="."
+                                   at="1"
+                                   if="count(//xpr:work) > 1"
+                                   ev:event="DOMActivate"/>
                         <xf:help>Supprimer une réalisation.</xf:help>
                     </xf:trigger>
                 </xf:repeat>
                 <xf:trigger>
                     <xf:label>ajouter une réalisation</xf:label>
                     <xf:action ev:event="DOMActivate">
-                        <xf:insert context="." origin="instance('xprInventoryCopy')/xpr:buildingWorks/xpr:work" nodeset="xpr:work[last()]" position="after"/>
+                        <xf:insert context="."
+                                   origin="instance('xprInventoryCopy')/xpr:buildingWorks/xpr:work"
+                                   nodeset="xpr:work[last()]"
+                                   position="after"/>
                     </xf:action>
                 </xf:trigger>
             </xf:group>
@@ -648,7 +567,9 @@
                 </xf:textarea>
             </xf:group>
             <span class="save">
-                <xf:select1 ref="instance('xprInventory')/eac:control/eac:localControl/eac:term" appearance="full" incremental="true">
+                <xf:select1 ref="instance('xprInventory')/eac:control/eac:localControl/eac:term"
+                            appearance="full"
+                            incremental="true">
                     <xf:label>
                         <span>Statut</span>
                     </xf:label>
@@ -673,42 +594,31 @@
                     </xf:group>
                     <xf:trigger>
                         <xf:label>Annuler</xf:label>
-                        <xf:hide ev:event="DOMActivate" dialog="control"/>
+                        <xf:hide ev:event="DOMActivate"
+                                 dialog="control"/>
                     </xf:trigger>
                     <xf:trigger>
                         <xf:label>Enregistrer</xf:label>
                         <xf:action ev:event="DOMActivate">
-                            <xf:dispatch name="submission" targetid="inventory"/>
+                            <xf:dispatch name="submission"
+                                         targetid="inventory"/>
                         </xf:action>
                     </xf:trigger>
                 </xf:dialog>
                 <xf:trigger>
-                    <xf:label>toto</xf:label>
-                    <xf:send ev:event="DOMActivate" submission="submitNewEntity"/>
-                </xf:trigger>
-                <xf:trigger>
                     <xf:label>Enregistrer</xf:label>
                     <!--we are using xf:delete to distinguish which submission module we need (prosopo or inventory)-->
-                    <xf:delete nodeset="instance('xprProsopo')/*" ev:event="DOMActivate"/>
-                    <xf:action if="/eac:inventory/@xml:id" ev:event="DOMActivate">
+                    <xf:delete nodeset="instance('xprProsopo')/*"
+                               ev:event="DOMActivate"/>
+                    <xf:action if="/eac:inventory/@xml:id"
+                               ev:event="DOMActivate">
                         <xf:show dialog="control"/>
                     </xf:action>
-                    <xf:action if="not(/eac:inventory/@xml:id)" ev:event="DOMActivate">
-                        <xf:dispatch name="submission" targetid="inventory"/>
+                    <xf:action if="not(/eac:inventory/@xml:id)"
+                               ev:event="DOMActivate">
+                        <xf:dispatch name="submission"
+                                     targetid="inventory"/>
                     </xf:action>
-                    <!--<xf:action if="/eac:inventory/@xml:id" ev:event="DOMActivate">
-                        <xf:show dialog="control"/>
-                    </xf:action>
-                    <xf:action if="not(/eac:inventory/@xml:id)" ev:event="DOMActivate">
-                        <xf:action ev:event="DOMActivate">
-                            <xf:action while="instance('xprEntities')/xpr:entity[@localType = 'new'][@db = ''][eac:eac-cpf][@xml:id = instance('xprInventory')//eac:cpfRelation/@xlink:href]">
-                                <xf:send submission="submitNewEntity"/>
-                            </xf:action>
-                            <xf:action ev:event="xforms-value-changed" ev:observer="relationHrefOb" if="not(instance('xprInventory')/xpr:relations//xpr:relation[@href = ''])">
-                                <xf:send submission="submitInventory"/>
-                            </xf:action>
-                        </xf:action>
-                    </xf:action>-->
                 </xf:trigger>
             </span>
         </xf:case>
@@ -717,9 +627,11 @@
                 <xf:label>Nouvelle(s) entité(s)</xf:label>
                 <xf:repeat nodeset="instance('xprEntities')//xpr:entity[@localType='new']">
                     <xf:group ref="eac:eac-cpf">
-                        <xf:var name="newEntity" value="."/>
+                        <xf:var name="newEntity"
+                                value="."/>
                         <xf:label>Nouvelle entrée</xf:label>
-                        <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType" appearance="full">
+                        <xf:select1 ref="eac:cpfDescription/eac:identity/eac:entityType"
+                                    appearance="full">
                             <xf:label>Type d'entité</xf:label>
                             <xf:item>
                                 <xf:label>personne</xf:label>

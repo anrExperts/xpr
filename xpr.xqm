@@ -2035,7 +2035,7 @@ function login($name, $pass) {
   try {
     user:check($name, $pass),
     Session:set('id', $name),
-    web:redirect("/xpr/expertises/view")
+    web:redirect("/")
   } catch user:* {
     web:redirect("/")
   }
@@ -2045,7 +2045,7 @@ declare
   %rest:path("xpr/logout")
 function logout() {
   Session:delete('id'),
-  web:redirect("/xpr/expertises/view")
+  web:redirect("/")
 };
 
 

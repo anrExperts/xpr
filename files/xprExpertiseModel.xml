@@ -246,68 +246,114 @@
             </group>
         </index>
     </xf:instance>
-    <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned" calculate="if(ancestor::xpr:expenses/xpr:expense, 'true', 'false')"/>
-    <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()" readonly="true()"/>
-    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']" required="true()"/>
-    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='item']" required="true()"/>
-    <xf:bind nodeset="xpr:description/xpr:sessions/xpr:date/@when" type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1799-12-31'))"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street" relevant="../../@type='paris'
+    <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/@mentioned"
+             calculate="if(ancestor::xpr:expenses/xpr:expense, 'true', 'false')"/>
+    <xf:bind nodeset="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees/xpr:fee[@type='expert']/text()"
+             readonly="true()"/>
+    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='unitid']"
+             required="true()"/>
+    <xf:bind nodeset="xpr:sourceDesc/xpr:idno[@type='item']"
+             required="true()"/>
+    <xf:bind nodeset="xpr:description/xpr:sessions/xpr:date/@when"
+             type="xf:date" constraint="(.='') or ((. &gt;= '1690-01-01') and (. &lt;= '1799-12-31'))"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:street"
+             relevant="../../@type='paris'
       or ../@type='suburbs'
       or ../@type='province'
       or ../@type='indeterminate'"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber" relevant="../../@type='paris'
-      or ../@type='suburbs'
-      or ../@type='province'
-      or ../@type='indeterminate'"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:complement" relevant="../@type='paris'
-      or ../@type='suburbs'
-      or ../@type='province'
-      or ../@type='indeterminate'"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:parish" relevant="../@type='paris'"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:city" relevant="../@type='suburbs'
-      or ../@type='province'"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:district" relevant="../@type='suburbs'
-      or ../@type='province'"/>
-    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:owner" relevant="../@type='paris'
-      or ../@type='suburbs'
-      or ../@type='province'
-      or ../@type='indeterminate'"/>
-    <xf:bind nodeset="instance('xprExpertiseObjects')/xpr:object[@type='other']" calculate="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"/>
-    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@l" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@l"/>
-    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@s" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@s"/>
-    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@d" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@d"/>
-    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@l" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@l"/>
-    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@s" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@s"/>
-    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@d" calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@d"/>
-    <xf:bind id="addOtherFee" nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']" relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
-    <xf:bind id="addComment" nodeset="instance('xprExpertiseComment')" relevant="not(instance('xprExpertise')/xpr:comment)"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:address/xpr:buildingNumber"
+             relevant="../../@type='paris'
+             or ../@type='suburbs'
+             or ../@type='province'
+             or ../@type='indeterminate'"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:complement"
+             relevant="../@type='paris'
+             or ../@type='suburbs'
+             or ../@type='province'
+             or ../@type='indeterminate'"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:parish"
+             relevant="../@type='paris'"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:city"
+             relevant="../@type='suburbs'
+             or ../@type='province'"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:district"
+             relevant="../@type='suburbs'
+             or ../@type='province'"/>
+    <xf:bind nodeset="xpr:description/xpr:places/xpr:place/xpr:owner"
+             relevant="../@type='paris'
+             or ../@type='suburbs'
+             or ../@type='province'
+             or ../@type='indeterminate'"/>
+    <xf:bind nodeset="instance('xprExpertiseObjects')/xpr:object[@type='other']"
+             calculate="instance('xprExpertise')/xpr:description/xpr:procedure/xpr:objects/xpr:object[@type='other']"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@l"
+             calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@l"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@s"
+             calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@s"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='expert']/@d"
+             calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='expert']/@d"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@l"
+             calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@l"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@s"
+             calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@s"/>
+    <xf:bind nodeset="instance('xprExpertiseExpenses')/xpr:expense[@type='clerk']/@d"
+             calculate="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:expenses/xpr:expense[@type='clerk']/@d"/>
+    <xf:bind id="addOtherFee"
+             nodeset="instance('xprExpertiseFees')/xpr:fee[@type='other']"
+             relevant="instance('xprExpertise')/xpr:description/xpr:conclusions/xpr:fees[@detail='true']"/>
+    <xf:bind id="addComment"
+             nodeset="instance('xprExpertiseComment')"
+             relevant="not(instance('xprExpertise')/xpr:comment)"/>
 
 
-    <xf:submission id="submit" resource="/xpr/expertises/put" method="put" replace="none">
+    <xf:submission id="submit"
+                   resource="/xpr/expertises/put"
+                   method="put"
+                   replace="none">
         <xf:action ev:event="xforms-submit">
             <!--set value for maintenance event informations-->
             <xf:action if="/xpr:expertise/@xml:id">
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'revised'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'revised'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus"
+                             value="'revised'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType"
+                             value="'revised'"/>
             </xf:action>
             <xf:action if="not(/xpr:expertise/@xml:id)">
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus" value="'new'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType" value="'created'"/>
-                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDescription" value="'Création de la fiche.'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceStatus"
+                             value="'new'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventType"
+                             value="'created'"/>
+                <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDescription"
+                             value="'Création de la fiche.'"/>
             </xf:action>
             <xf:setvalue ref="instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime/@standardDateTime
-                            | instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime"
+                         | instance('xprExpertise')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]/xpr:eventDateTime"
                          value="now()"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-done">
             <xf:hide dialog="waitingMessage"/>
-            <xf:message level="modal">La ressource a été enregistrée ! Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
-            <xf:setvalue value="event('response-body')//*:id" ref="instance('response')"/>
-            <xf:load resource="/xpr/expertises/view" show="replace"/>
+            <xf:message level="modal">
+                La ressource a été enregistrée !
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>
+                Body : <xf:output value="event('response-body')"/>
+            </xf:message>
+            <xf:setvalue value="event('response-body')//*:id"
+                         ref="instance('response')"/>
+            <xf:load resource="/xpr/expertises/view"
+                     show="replace"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
             <xf:hide dialog="waitingMessage"/>
-            <xf:message level="modal">Une erreur est apparue : <xf:output value="event('error-type')"/>; Status : <xf:output value="event('response-status-code')"/>; URI : <xf:output value="event('resource-uri')"/>; Headers : <xf:output value="event('response-headers')"/>; Reason : <xf:output value="event('response-reason-phrase')"/> Body : <xf:output value="event('response-body')"/></xf:message>
+            <xf:message level="modal">
+                Une erreur est apparue : <xf:output value="event('error-type')"/>;
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>
+                Body : <xf:output value="event('response-body')"/></xf:message>
         </xf:action>
     </xf:submission>
 </xf:model>

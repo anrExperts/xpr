@@ -22,7 +22,7 @@
     <main>
       <section class="alternate">
         <button onclick="window.location.href='/xpr/inventories/new'">nouveau</button>
-        <h2>Liste des expertises</h2>
+        <h2>Liste des inventaires</h2>
         <div id="inventories">
           <input id="filter" placeholder="Filtrer la liste" />
           <!-- class="sort" automagically makes an element a sort buttons. The date-sort value decides what to sort by. -->

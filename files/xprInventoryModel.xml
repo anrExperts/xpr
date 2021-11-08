@@ -9,15 +9,43 @@
                    position="before"/>
     </xf:action>
     <!--Instance principale-->
-    <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
+    <xf:instance id="xprInventory"
+                 src="/xpr/files/_xprInventoryInstance.xml"/>
+
+    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:idno[@type='unitid']"
+             required="true()"/>
+    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:location"
+             required="true()"/>
+    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref"
+             required="true()"/>
+    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:date/@standardDate"
+             required="true()"
+             type="xf:date"/>
+
+
+    <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:parish"
+             relevant="parent::xpr:place/@type='paris'"/>
+    <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:city"
+             relevant="parent::xpr:place/@type='suburbs'
+             or parent::xpr:place/@type='province'"/>
+    <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:district"
+             relevant="parent::xpr:place/@type='suburbs'
+             or parent::xpr:place/@type='province'"/>
+
+    <xf:instance id="xprInventoryCopy"
+                 src="/xpr/files/_xprInventoryInstance.xml"/>
 
     <!-- get expert prosopo data from db when selected -->
     <xf:instance id="xprGetData">
         <data xmlns="xpr"/>
     </xf:instance>
-    <xf:bind nodeset="instance('xprGetData')" calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
 
-    <xf:send ev:event="getData" submission="submitGetData"/>
+    <xf:bind nodeset="instance('xprGetData')"
+             calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
+
+    <xf:send ev:event="getData"
+             submission="submitGetData"/>
+
     <xf:submission id="submitGetData"
                    ref="instance('xprGetData')"
                    method="get"
@@ -25,7 +53,8 @@
                    replace="instance"
                    instance="xprProsopo"/>
 
-    <!-- @rmq bind pour verrouiller la modification -->
+    <!--En attente mais à supprimer-->
+    <!-- @rmq bind pour verrouiller la modification
     <xf:bind nodeset="instance('xprInventory')//xpr:relation[not(@href = '')]//*
                     | instance('xprInventory')//xpr:relation[not(@href = '')]//@*"
              readonly="true()"/>
@@ -36,9 +65,7 @@
     <xf:bind nodeset="instance('xprInventory')//*[@owned]/xpr:desc"
              relevant="parent::*/@owned = 'true'"/>
     <xf:bind nodeset="instance('xprEntities')/xpr:entity[@localType = 'new'][eac:eac-cpf][@xml:id = substring-after(instance('xprInventory')//eac:cpfRelation/@xlink:href, '#')]/eac:eac-cpf/eac:cpfDescription/eac:identity/eac:entityType"
-             required="true()"/>
-
-    <xf:instance id="xprInventoryCopy" src="/xpr/files/_xprInventoryInstance.xml"/>
+             required="true()"/>-->
 
     <xf:instance id="xprBoolean">
         <boolean xmlns="xpr">
@@ -185,15 +212,10 @@
                 Reason : <xf:output value="event('response-reason-phrase')"/>;
                 Body : <xf:output value="event('response-body')"/>.
             </xf:message>
-            <xf:dispatch name="submission" targetid="inventory" delay="1000"/>
+            <xf:dispatch name="submission"
+                         targetid="inventory"
+                         delay="1000"/>
 
-            <!--<xf:delete if="not(instance('xprInventory')/xpr:sourceDesc)"
-                       nodeset="instance('xprProsopo')//*[@xlink:href=normalize-space(event('response-body')//xpr:id)]/@localType[.='new']"/>
-            <xf:setvalue if="instance('xprInventory')/xpr:sourceDesc"
-                         ref="instance('xprInventory')//*[@xlink:href = instance('xprEntities')/xpr:entity[@db = event('response-body')//*:id]/@xml:id]/@xlink:href"
-                         value="event('response-body')//*:id"/>
-            <xf:delete  if="instance('xprInventory')/xpr:sourceDesc"
-                        nodeset="instance('xprInventory')//*[@xlink:href = event('response-body')//*:id]/@localType[. = 'new']"/>-->
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
             <xf:message level="modal">
@@ -230,5 +252,4 @@
             </xf:action>
         </xf:action>
     </xf:submission>
-
 </xf:model>

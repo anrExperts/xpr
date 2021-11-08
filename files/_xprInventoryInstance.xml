@@ -58,12 +58,17 @@
                 <residences>
                     <residence
                         type="main">
-                        <address>
-                            <place
-                                type=""/>
-                            <street/>
-                            <buildingNumber/>
-                        </address>
+                        <place
+                            type="">
+                            <address>
+                                <street/>
+                                <buildingNumber/>
+                            </address>
+                            <complement/>
+                            <parish/>
+                            <city/>
+                            <district/>
+                        </place>
                         <layout>
                             <part
                                 n="">
@@ -167,12 +172,17 @@
                 </residences>
                 <workshops>
                     <workshop>
-                        <address>
-                            <place
-                                type=""/>
-                            <street/>
-                            <buildingNumber/>
-                        </address>
+                        <place
+                            type="">
+                            <address>
+                                <street/>
+                                <buildingNumber/>
+                            </address>
+                            <complement/>
+                            <parish/>
+                            <city/>
+                            <district/>
+                        </place>
                         <layout>
                             <part
                                 n="">
@@ -204,12 +214,17 @@
                 </workshops>
                 <buildingSites>
                     <buildingSite>
-                        <address>
-                            <place
-                                type=""/>
-                            <street/>
-                            <buildingNumber/>
-                        </address>
+                        <place
+                            type="">
+                            <address>
+                                <street/>
+                                <buildingNumber/>
+                            </address>
+                            <complement/>
+                            <parish/>
+                            <city/>
+                            <district/>
+                        </place>
                         <noteworthy/>
                     </buildingSite>
                 </buildingSites>
