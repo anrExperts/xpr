@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<inventory
-    xmlns="xpr"
-    xmlns:eac="eac"
-    xmlns:xlink="http://www.w3.org/1999/xlink">
+<inventory xmlns="xpr" xmlns:eac="eac" xmlns:xlink="http://www.w3.org/1999/xlink">
     <control>
         <maintenanceStatus/>
         <publicationStatus/>
@@ -35,31 +32,24 @@
         <city/>
         <district/>
     </deathPlace>
-    <relations
-        xmlns="eac">
-        <cpfRelation
-            xlink:href=""
-            xlink:arcrole="">
+    <relations xmlns="eac">
+        <cpfRelation xlink:href=""
+                     xlink:arcrole="">
             <relationEntry/>
-            <xpr:source
-                xmlns:xpr="xpr"
-                xlink:href=""/>
+            <xpr:source xmlns:xpr="xpr"
+                        xlink:href=""/>
         </cpfRelation>
     </relations>
     <wealth>
-        <state
-            type=""/>
+        <state type=""/>
         <possessions>
-            <movables
-                l=""
-                s=""
-                d=""/>
+            <movables l=""
+                      s=""
+                      d=""/>
             <estate>
                 <residences>
-                    <residence
-                        type="main">
-                        <place
-                            type="">
+                    <residence type="main">
+                        <place type="">
                             <address>
                                 <street/>
                                 <buildingNumber/>
@@ -70,100 +60,76 @@
                             <district/>
                         </place>
                         <layout>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cour</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Jardin</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Serre</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Ecurie</label>
+                            <part n="">
+                                <label>Écurie</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Remise / Hangard</label>
+                            <part n="">
+                                <label>Remise / Hangar</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Loge du portier</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cave</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cuisine</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Office</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Garde à manger</label>
+                            <part n="">
+                                <label>Garde-manger</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Pièce</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Antichambre</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Salle à manger</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Salle / salon / salon de compagnie</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Chambre</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Chambre de domestique </label>
+                            <part n="">
+                                <label>Chambre de domestique</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cabinet</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cabinet ou bureau désigné comme celui de l’expert</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Bureau</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Boudoir</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Alcove</label>
+                            <part n="">
+                                <label>Alcôve</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cabinet de toilette-Cabinet d’aisance</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Garde robe </label>
+                            <part n="">
+                                <label>Garde-robe</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Grenier</label>
                             </part>
                         </layout>
@@ -172,8 +138,7 @@
                 </residences>
                 <workshops>
                     <workshop>
-                        <place
-                            type="">
+                        <place type="">
                             <address>
                                 <street/>
                                 <buildingNumber/>
@@ -184,29 +149,23 @@
                             <district/>
                         </place>
                         <layout>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Cour</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Remise </label>
+                            <part n="">
+                                <label>Remise</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Magasin </label>
+                            <part n="">
+                                <label>Magasin</label>
                             </part>
-                            <part
-                                n="">
+                            <part n="">
                                 <label>Grenier</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Hangard </label>
+                            <part n="">
+                                <label>Hangar</label>
                             </part>
-                            <part
-                                n="">
-                                <label>Boutique </label>
+                            <part n="">
+                                <label>Boutique</label>
                             </part>
                         </layout>
                         <noteworthy/>
@@ -214,8 +173,7 @@
                 </workshops>
                 <buildingSites>
                     <buildingSite>
-                        <place
-                            type="">
+                        <place type="">
                             <address>
                                 <street/>
                                 <buildingNumber/>
@@ -230,61 +188,43 @@
                 </buildingSites>
             </estate>
         </possessions>
-        <dowry
-            l=""
-            s=""
-            d=""
-            privateIncome=""/>
+        <dowry l=""
+               s=""
+               d=""
+               privateIncome=""/>
         <contribution/>
     </wealth>
     <knowledge>
-        <books
-            quantity=""
-            l=""
-            s=""
-            d=""
-            bookseller=""/>
+        <books quantity=""
+               l=""
+               s=""
+               d=""
+               bookseller=""/>
         <maps/>
         <portraits>
-            <family
-                quantity=""/>
-            <expert
-                quantity=""/>
+            <family quantity=""/>
+            <expert quantity=""/>
         </portraits>
-        <drawings
-            quantity=""/>
-        <paintings
-            quantity=""/>
+        <drawings quantity=""/>
+        <paintings quantity=""/>
     </knowledge>
     <tools>
         <drawing
             owned=""/>
         <measurement/>
         <scientific>
-            <globe
-                owned="">Globe</globe>
-            <sphere
-                owned="">Sphère</sphere>
-            <worldMap
-                owned="">Mappemonde</worldMap>
-            <sundial
-                owned="">Cadran solaire</sundial> 
-            <compass
-                owned="">Boussole</compass>
-            <microscope
-                owned="">Microscope</microscope>
-            <glasses
-                owned="">Lorgnette / lunette</glasses>
-            <barometer
-                owned="">Baromètre</barometer>
-            <thermometer
-                owned="">Thermomètre</thermometer>
-            <samples
-                owned="">Echantillons (minéraux, coquillages)</samples>
-            <plants
-                owned="">Plantes</plants>
-            <animals
-                owned="">animaux</animals>
+            <globe owned="">Globe</globe>
+            <sphere owned="">Sphère</sphere>
+            <worldMap owned="">Mappemonde</worldMap>
+            <sundial owned="">Cadran solaire</sundial> 
+            <compass owned="">Boussole</compass>
+            <microscope owned="">Microscope</microscope>
+            <glasses owned="">Lorgnette / lunette</glasses>
+            <barometer owned="">Baromètre</barometer>
+            <thermometer owned="">Thermomètre</thermometer>
+            <samples owned="">Échantillons (minéraux, coquillages)</samples>
+            <plants owned="">Plantes</plants>
+            <animals owned="">animaux</animals>
             <noteworthy/>
         </scientific>
     </tools>
@@ -296,16 +236,14 @@
         <work>
             <client/>
             <type/>
-            <date
-                when=""/>
+            <date when=""/>
             <address>
                 <street/>
                 <buildingNumber/>
             </address>
-            <cost
-                l=""
-                s=""
-                d=""/>
+            <cost l=""
+                  s=""
+                  d=""/>
         </work>
     </buildingWorks>
     <report/>
