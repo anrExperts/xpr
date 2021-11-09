@@ -194,6 +194,10 @@
                 <label>Descendance</label>
                 <value>rico:descendanceRelationHasTarget</value>
             </type>
+            <type>
+                <label>Professionnelle</label>
+                <value>rico:descendanceRelationHasTarget</value>
+            </type>
         </relations>
     </xf:instance>
     

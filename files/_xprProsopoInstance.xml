@@ -104,6 +104,9 @@
         <relations>
             <cpfRelation xlink:href="" xlink:arcrole="">
                 <relationEntry/>
+                <descriptiveNote>
+                    <p/>
+                </descriptiveNote>
                 <xpr:source xlink:href=""/>
             </cpfRelation>
         </relations>

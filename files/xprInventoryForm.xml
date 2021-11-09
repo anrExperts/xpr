@@ -32,12 +32,9 @@
                 <xf:send ev:event="DOMActivate" submission="submitGetData"/>
             </xf:trigger>-->
             <xf:group ref="xpr:deathPlace">
-                <xf:label>Adresse au moment du décès</xf:label>
+                <xf:label>Lieu du décès</xf:label>
                 <xf:input ref="xpr:address/xpr:street" incremental="true">
                     <xf:label>Voie</xf:label>
-                </xf:input>
-                <xf:input ref="xpr:address/xpr:buildingNumber" incremental="true">
-                    <xf:label>Numéro de la voie</xf:label>
                 </xf:input>
                 <xf:input ref="xpr:complement" incremental="true">
                     <xf:label>Précisions géographiques</xf:label>
@@ -47,9 +44,6 @@
                 </xf:input>
                 <xf:input ref="xpr:city" incremental="true">
                     <xf:label>Ville</xf:label>
-                </xf:input>
-                <xf:input ref="xpr:district" incremental="true">
-                    <xf:label>Département</xf:label>
                 </xf:input>
                 <xf:select1 ref="@type" appearance="full">
                     <xf:label>Type de résidence</xf:label>
@@ -62,6 +56,9 @@
                         <xf:value>other</xf:value>
                     </xf:item>
                 </xf:select1>
+                <xf:input ref="xpr:noteworthy">
+                    <xf:label>remarques</xf:label>
+                </xf:input>
             </xf:group>
             <xf:group ref="eac:relations">
                 <xf:label>Relations</xf:label>
@@ -81,6 +78,9 @@
                             <xf:value ref="xpr:value"/>
                         </xf:itemset>
                     </xf:select1>
+                    <xf:input ref="eac:descriptiveNote/eac:p">
+                        <xf:label>Note</xf:label>
+                    </xf:input>
                     <xf:trigger ref="." class="delete">
                         <xf:label>Supprimer une relation</xf:label>
                         <xf:delete nodeset="."
@@ -115,6 +115,13 @@
                         </xf:action>
                     </xf:item>
                     <xf:item>
+                        <xf:label>Locataire principal</xf:label>
+                        <xf:value>Locataire principal</xf:value>
+                        <xf:action ev:event="xforms-select">
+                            <xf:setvalue ref="@type">mainOccupant</xf:setvalue>
+                        </xf:action>
+                    </xf:item>
+                    <xf:item>
                         <xf:label>Locataire</xf:label>
                         <xf:value>locataire</xf:value>
                         <xf:action ev:event="xforms-select">
@@ -122,21 +129,6 @@
                         </xf:action>
                     </xf:item>
                 </xf:select1>
-                <xf:group ref="xpr:possessions/xpr:movables">
-                    <xf:label>Biens mobiliers</xf:label>
-                    <xf:group>
-                        <xf:label>Somme totale</xf:label>
-                        <xf:input ref="@l">
-                            <xf:label>Livres</xf:label>
-                        </xf:input>
-                        <xf:input ref="@s">
-                            <xf:label>Sols</xf:label>
-                        </xf:input>
-                        <xf:input ref="@d">
-                            <xf:label>Deniers</xf:label>
-                        </xf:input>
-                    </xf:group>
-                </xf:group>
                 <xf:group ref="xpr:possessions/xpr:estate">
                     <xf:label>Biens immobiliers</xf:label>
                     <xf:group ref="xpr:residences">
@@ -165,9 +157,6 @@
                                 <xf:input ref="xpr:address/xpr:street">
                                     <xf:label>Rue</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:address/xpr:buildingNumber">
-                                    <xf:label>Numéro</xf:label>
-                                </xf:input>
                                 <xf:input ref="xpr:complement">
                                     <xf:label>Complément</xf:label>
                                 </xf:input>
@@ -176,9 +165,6 @@
                                 </xf:input>
                                 <xf:input ref="xpr:city">
                                     <xf:label>Ville</xf:label>
-                                </xf:input>
-                                <xf:input ref="xpr:district">
-                                    <xf:label>Département</xf:label>
                                 </xf:input>
                             </xf:group>
                             <xf:group ref="xpr:layout">
@@ -219,10 +205,10 @@
                         </xf:trigger>
                     </xf:group>
                     <xf:group ref="xpr:workshops">
-                        <xf:label>Ateliers</xf:label>
+                        <xf:label>Magasins</xf:label>
                         <xf:repeat id="repeatWorkshop"
                                    nodeset="xpr:workshop">
-                            <xf:label>Atelier</xf:label>
+                            <xf:label>Magasin</xf:label>
                             <xf:group ref="xpr:place">
                                 <xf:select1 ref="@type">
                                     <xf:label>Localisation</xf:label>
@@ -242,9 +228,6 @@
                                 <xf:input ref="xpr:address/xpr:street">
                                     <xf:label>Rue</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:address/xpr:buildingNumber">
-                                    <xf:label>Numéro</xf:label>
-                                </xf:input>
                                 <xf:input ref="xpr:complement">
                                     <xf:label>Complément</xf:label>
                                 </xf:input>
@@ -254,21 +237,10 @@
                                 <xf:input ref="xpr:city">
                                     <xf:label>Ville</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:district">
-                                    <xf:label>Département</xf:label>
-                                </xf:input>
                             </xf:group>
-                            <xf:group ref="xpr:layout">
-                                <xf:label>Liste des pièces</xf:label>
-                                <xf:repeat nodeset="xpr:part">
-                                    <xf:label>
-                                        <xf:output ref="xpr:label"/>
-                                    </xf:label>
-                                    <xf:input ref="@n">
-                                        <xf:label>Nombre</xf:label>
-                                    </xf:input>
-                                </xf:repeat>
-                            </xf:group>
+                            <xf:textarea ref="xpr:description">
+                                <xf:label>Contenu du magasin</xf:label>
+                            </xf:textarea>
                             <xf:textarea ref="xpr:noteworthy">
                                 <xf:label>Éléments remarquables</xf:label>
                             </xf:textarea>
@@ -277,11 +249,11 @@
                                 <xf:delete nodeset="."
                                            at="1"
                                            ev:event="DOMActivate"/>
-                                <xf:help>Supprimer un atelier.</xf:help>
+                                <xf:help>Supprimer un magasin.</xf:help>
                             </xf:trigger>
                         </xf:repeat>
                         <xf:trigger class="insert">
-                            <xf:label>Ajouter un atelier</xf:label>
+                            <xf:label>Ajouter un magasin</xf:label>
                             <xf:action ev:event="DOMActivate">
                                 <xf:insert context="."
                                            origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:workshops/xpr:workshop"
@@ -289,14 +261,14 @@
                                            position="after"
                                            ev:event="DOMActivate"/>
                             </xf:action>
-                            <xf:help>Ajouter un atelier.</xf:help>
+                            <xf:help>Ajouter un magasin.</xf:help>
                         </xf:trigger>
                     </xf:group>
                     <xf:group ref="xpr:buildingSites">
-                        <xf:label>Chantiers</xf:label>
+                        <xf:label>Chantiers (« ateliers »)</xf:label>
                         <xf:repeat id="repeatBuildingSites"
                                    nodeset="xpr:buildingSite">
-                            <xf:label>Chantier</xf:label>
+                            <xf:label>Chantier (« atelier »)</xf:label>
                             <xf:group ref="xpr:place">
                                 <xf:select1 ref="@type">
                                     <xf:label>Localisation</xf:label>
@@ -316,9 +288,6 @@
                                 <xf:input ref="xpr:address/xpr:street">
                                     <xf:label>Rue</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:address/xpr:buildingNumber">
-                                    <xf:label>Numéro</xf:label>
-                                </xf:input>
                                 <xf:input ref="xpr:complement">
                                     <xf:label>Complément</xf:label>
                                 </xf:input>
@@ -328,10 +297,10 @@
                                 <xf:input ref="xpr:city">
                                     <xf:label>Ville</xf:label>
                                 </xf:input>
-                                <xf:input ref="xpr:district">
-                                    <xf:label>Département</xf:label>
-                                </xf:input>
                             </xf:group>
+                            <xf:textarea ref="xpr:description">
+                                <xf:label>Contenu du chantier</xf:label>
+                            </xf:textarea>
                             <xf:textarea ref="xpr:noteworthy">
                                 <xf:label>Éléments remarquables</xf:label>
                             </xf:textarea>
@@ -340,7 +309,7 @@
                                 <xf:delete nodeset="."
                                            at="1"
                                            ev:event="DOMActivate"/>
-                                <xf:help>Supprimer un atelier.</xf:help>
+                                <xf:help>Supprimer un chantier.</xf:help>
                             </xf:trigger>
                         </xf:repeat>
                         <xf:trigger class="insert">
@@ -473,17 +442,45 @@
                 </xf:group>
                 <xf:group ref="xpr:scientific">
                     <xf:label>Objets scientifiques</xf:label>
-                    <xf:repeat nodeset="*[not(self::xpr:noteworthy)]">
+                    <xf:repeat nodeset="xpr:object">
+                        <xf:var name="objectType" value="@type"></xf:var>
+                        <xf:select1 ref="@type">
+                            <xf:label>Type</xf:label>
+                            <xf:itemset nodeset="instance('xprScientificObjects')/xpr:object">
+                                <xf:label ref="."/>
+                                <xf:value ref="@type"/>
+                            </xf:itemset>
+                            <xf:setvalue ev:event="xforms-value-changed"
+                                         ref="parent::xpr:object"
+                                         value="instance('xprScientificObjects')/xpr:object[@type=$objectType]"/>
+                        </xf:select1>
                         <xf:select1 ref="@owned">
-                            <xf:label>
-                                <xf:output ref="parent::*"/>
-                            </xf:label>
+                            <xf:label>Possession</xf:label>
                             <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
                                 <xf:label ref="xpr:label"/>
                                 <xf:value ref="xpr:value"/>
                             </xf:itemset>
                         </xf:select1>
+                        <xf:trigger class="delete">
+                            <xf:label>&#10007;</xf:label>
+                            <xf:delete nodeset="."
+                                       if="count(parent::xpr:scientific/xpr:object) > 1"
+                                       at="1"
+                                       ev:event="DOMActivate"/>
+                            <xf:help>Supprimer un objet.</xf:help>
+                        </xf:trigger>
                     </xf:repeat>
+                    <xf:trigger class="insert">
+                        <xf:label>Ajouter un objet</xf:label>
+                        <xf:action ev:event="DOMActivate">
+                            <xf:insert context="."
+                                       origin="instance('xprInventoryCopy')/xpr:wealth/xpr:tools/xpr:scientific/xpr:object"
+                                       nodeset="xpr:object[last()]"
+                                       position="after"
+                                       ev:event="DOMActivate"/>
+                        </xf:action>
+                        <xf:help>Ajouter un objet.</xf:help>
+                    </xf:trigger>
                     <xf:textarea ref="xpr:noteworthy">
                         <xf:label>Éléments remarquables</xf:label>
                     </xf:textarea>
@@ -517,9 +514,6 @@
                         <xf:input ref="xpr:street">
                             <xf:label>Voie</xf:label>
                         </xf:input>
-                        <xf:input ref="xpr:buildingNumber">
-                            <xf:label>Numéro</xf:label>
-                        </xf:input>
                     </xf:group>
                     <xf:group ref="xpr:cost">
                         <xf:label>Prix</xf:label>
@@ -552,13 +546,6 @@
                     </xf:action>
                 </xf:trigger>
             </xf:group>
-            <xf:select1 ref="xpr:report">
-                <xf:label>Expertise z1j</xf:label>
-                <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
-                    <xf:label ref="xpr:label"/>
-                    <xf:value ref="xpr:value"/>
-                </xf:itemset>
-            </xf:select1>
             <xf:group ref="xpr:comments">
                 <xf:label>Commentaires libres</xf:label>
                 <xf:textarea ref=".">
@@ -567,7 +554,7 @@
                 </xf:textarea>
             </xf:group>
             <span class="save">
-                <xf:select1 ref="instance('xprInventory')/eac:control/eac:localControl/eac:term"
+                <xf:select1 ref="instance('xprInventory')/xpr:control/xpr:localControl/xpr:term"
                             appearance="full"
                             incremental="true">
                     <xf:label>

@@ -12,16 +12,18 @@
     <xf:instance id="xprInventory"
                  src="/xpr/files/_xprInventoryInstance.xml"/>
 
-    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:idno[@type='unitid']"
-             required="true()"/>
-    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:location"
-             required="true()"/>
-    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref"
-             required="true()"/>
-    <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:date/@standardDate"
-             required="true()"
-             type="xf:date"/>
+        <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:idno[@type='unitid']"
+                 required="true()"/>
+        <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:location"
+                 required="true()"/>
+        <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref"
+                 required="true()"/>
+        <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:date/@standardDate"
+                 required="true()"
+                 type="xf:date"/>
 
+    <xf:bind nodeset="instance('xprInventory')//xpr:deathPlace/xpr:noteworthy"
+             relevant="parent::xpr:deathPlace/@type='other'"/>
 
     <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:parish"
              relevant="parent::xpr:place/@type='paris'"/>
@@ -38,6 +40,23 @@
     <!-- get expert prosopo data from db when selected -->
     <xf:instance id="xprGetData">
         <data xmlns="xpr"/>
+    </xf:instance>
+
+    <xf:instance id="xprScientificObjects">
+        <objects xmlns="xpr">
+            <object type="globe">Globe</object>
+            <object type="sphere">Sphère</object>
+            <object type="worldMap">Mappemonde</object>
+            <object type="sundial">Cadran solaire</object>
+            <object type="compass">Boussole</object>
+            <object type="microscope">Microscope</object>
+            <object type="glasses">Lorgnette / lunette</object>
+            <object type="barometer">Baromètre</object>
+            <object type="thermometer">Thermomètre</object>
+            <object type="samples">Échantillons (minéraux, coquillages)</object>
+            <object type="plants">Plantes</object>
+            <object type="animals">Animaux</object>
+        </objects>
     </xf:instance>
 
     <xf:bind nodeset="instance('xprGetData')"

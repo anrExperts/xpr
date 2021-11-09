@@ -25,17 +25,19 @@
     <deathPlace type="">
         <address>
             <street/>
-            <buildingNumber/>
         </address>
         <complement/>
         <parish/>
         <city/>
-        <district/>
+        <noteworthy/>
     </deathPlace>
     <relations xmlns="eac">
         <cpfRelation xlink:href=""
                      xlink:arcrole="">
             <relationEntry/>
+            <descriptiveNote>
+                <p/>
+            </descriptiveNote>
             <xpr:source xmlns:xpr="xpr"
                         xlink:href=""/>
         </cpfRelation>
@@ -43,21 +45,16 @@
     <wealth>
         <state type=""/>
         <possessions>
-            <movables l=""
-                      s=""
-                      d=""/>
             <estate>
                 <residences>
                     <residence type="main">
                         <place type="">
                             <address>
                                 <street/>
-                                <buildingNumber/>
                             </address>
                             <complement/>
                             <parish/>
                             <city/>
-                            <district/>
                         </place>
                         <layout>
                             <part n="">
@@ -141,33 +138,12 @@
                         <place type="">
                             <address>
                                 <street/>
-                                <buildingNumber/>
                             </address>
                             <complement/>
                             <parish/>
                             <city/>
-                            <district/>
                         </place>
-                        <layout>
-                            <part n="">
-                                <label>Cour</label>
-                            </part>
-                            <part n="">
-                                <label>Remise</label>
-                            </part>
-                            <part n="">
-                                <label>Magasin</label>
-                            </part>
-                            <part n="">
-                                <label>Grenier</label>
-                            </part>
-                            <part n="">
-                                <label>Hangar</label>
-                            </part>
-                            <part n="">
-                                <label>Boutique</label>
-                            </part>
-                        </layout>
+                        <description/>
                         <noteworthy/>
                     </workshop>
                 </workshops>
@@ -176,13 +152,12 @@
                         <place type="">
                             <address>
                                 <street/>
-                                <buildingNumber/>
                             </address>
                             <complement/>
                             <parish/>
                             <city/>
-                            <district/>
                         </place>
+                        <description/>
                         <noteworthy/>
                     </buildingSite>
                 </buildingSites>
@@ -213,18 +188,7 @@
             owned=""/>
         <measurement/>
         <scientific>
-            <globe owned="">Globe</globe>
-            <sphere owned="">Sphère</sphere>
-            <worldMap owned="">Mappemonde</worldMap>
-            <sundial owned="">Cadran solaire</sundial> 
-            <compass owned="">Boussole</compass>
-            <microscope owned="">Microscope</microscope>
-            <glasses owned="">Lorgnette / lunette</glasses>
-            <barometer owned="">Baromètre</barometer>
-            <thermometer owned="">Thermomètre</thermometer>
-            <samples owned="">Échantillons (minéraux, coquillages)</samples>
-            <plants owned="">Plantes</plants>
-            <animals owned="">animaux</animals>
+            <object type="" owned=""/>
             <noteworthy/>
         </scientific>
     </tools>
@@ -239,13 +203,11 @@
             <date when=""/>
             <address>
                 <street/>
-                <buildingNumber/>
             </address>
             <cost l=""
                   s=""
                   d=""/>
         </work>
     </buildingWorks>
-    <report/>
     <comments/>
 </inventory>

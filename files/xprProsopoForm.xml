@@ -1280,6 +1280,9 @@
                             <xf:value ref="xpr:value"/>
                         </xf:itemset>
                     </xf:select1>
+                    <xf:input ref="eac:descriptiveNote/eac:p">
+                        <xf:label>Note</xf:label>
+                    </xf:input>
                     <xf:group>
                         <xf:label>Sources</xf:label>
                         <xf:repeat id="repeatRelationSource" nodeset="xpr:source">
