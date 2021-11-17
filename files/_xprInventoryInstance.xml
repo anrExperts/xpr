@@ -22,6 +22,19 @@
         <expert ref=""/>
         <date standardDate=""/>
     </sourceDesc>
+    <identity>
+        <nameEntry>
+            <part localType=""/>
+        </nameEntry>
+    </identity>
+    <functions>
+        <function>
+            <term/>
+            <descriptiveNote>
+                <p/>
+            </descriptiveNote>
+        </function>
+    </functions>
     <deathPlace type="">
         <address>
             <street/>
@@ -31,17 +44,47 @@
         <city/>
         <noteworthy/>
     </deathPlace>
-    <relations xmlns="eac">
-        <cpfRelation xlink:href=""
-                     xlink:arcrole="">
-            <relationEntry/>
-            <descriptiveNote>
-                <p/>
-            </descriptiveNote>
-            <xpr:source xmlns:xpr="xpr"
-                        xlink:href=""/>
-        </cpfRelation>
-    </relations>
+    <executors>
+        <executor>
+            <nameEntry>
+                <part localType=""/>
+            </nameEntry>
+            <occupation/>
+            <note/>
+        </executor>
+    </executors>
+    <weddings>
+        <wedding>
+            <spouse>
+                <nameEntry>
+                    <part localType=""/>
+                </nameEntry>
+            </spouse>
+            <weddingDate standardDate=""/>
+            <weddingPlace/>
+            <note/>
+        </wedding>
+    </weddings>
+    <children>
+        <child>
+            <nameEntry>
+                <part localType=""/>
+            </nameEntry>
+            <birthDate standardDate=""/>
+            <birthPlace/>
+            <representative/>
+            <note/>
+        </child>
+    </children>
+    <persons>
+        <person>
+            <nameEntry>
+                <part localType=""/>
+            </nameEntry>
+            <occupation/>
+            <note/>
+        </person>
+    </persons>
     <wealth>
         <state type=""/>
         <possessions>

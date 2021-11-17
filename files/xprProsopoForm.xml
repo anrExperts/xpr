@@ -490,7 +490,7 @@
                             </xf:input>
                         </xf:group>
                     </xf:group>
-                    <xf:input ref="eac:descriptiveNote">
+                    <xf:input ref="eac:descriptiveNote/eac:p">
                         <xf:label>Note</xf:label>
                     </xf:input>
                     <xf:group>

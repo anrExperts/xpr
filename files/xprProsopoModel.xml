@@ -79,6 +79,11 @@
 
     <!-- xprProsopoCopy for repeated sections in the main form (avoid setvalue when repeating a section)-->
     <xf:instance id="xprProsopoCopy" src="/xpr/files/_xprProsopoInstance.xml"/>
+    <xf:instance id="xprRelationsSubtype">
+        <relations xmlns="eac" xmlns:xpr="xpr">
+            <cpfRelation xpr:representative=""/>
+        </relations>
+    </xf:instance>
     <!-- xprEntities list entities (served by Basex)-->
     <xf:instance id="xprEntities" src="/xpr/entities"/>
 
@@ -196,7 +201,11 @@
             </type>
             <type>
                 <label>Professionnelle</label>
-                <value>rico:descendanceRelationHasTarget</value>
+                <value>xpr:professionalRelationHasTarget</value>
+            </type>
+            <type>
+                <label>Tuteur des enfants</label>
+                <value>xpr:chosenGuardianForHisChildren</value>
             </type>
         </relations>
     </xf:instance>

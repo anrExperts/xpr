@@ -3,7 +3,7 @@
     xmlns:xf="http://www.w3.org/2002/xforms"
     xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:trigger>
-        <xf:label>Fiche biographique</xf:label>
+        <xf:label>Inventaire après-décès</xf:label>
         <xf:toggle
             case="inventoryPanel"
             ev:event="DOMActivate"/>
