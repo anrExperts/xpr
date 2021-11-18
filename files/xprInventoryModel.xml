@@ -26,13 +26,13 @@
              relevant="parent::xpr:deathPlace/@type='other'"/>
 
     <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:parish"
-             relevant="parent::xpr:place/@type='paris'"/>
+             relevant="ancestor::xpr:place/@type='paris'"/>
     <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:city"
-             relevant="parent::xpr:place/@type='suburbs'
+             relevant="ancestor::xpr:place/@type='suburbs'
              or parent::xpr:place/@type='province'"/>
     <xf:bind nodeset="instance('xprInventory')//xpr:place/xpr:district"
-             relevant="parent::xpr:place/@type='suburbs'
-             or parent::xpr:place/@type='province'"/>
+             relevant="ancestor::xpr:place/@type='suburbs'
+             or ancestor::xpr:place/@type='province'"/>
 
     <xf:instance id="xprInventoryCopy"
                  src="/xpr/files/_xprInventoryInstance.xml"/>
