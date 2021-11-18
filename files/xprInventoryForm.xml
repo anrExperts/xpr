@@ -128,9 +128,9 @@
                 </xf:trigger>
             </xf:group>
             <xf:group ref="xpr:deathDate">
-                <xs:input ref="@standardDate">
+                <xf:input ref="@standardDate">
                     <xf:label>Date du décès</xf:label>
-                </xs:input>
+                </xf:input>
             </xf:group>
             <xf:group ref="xpr:deathPlace">
                 <xf:label>Lieu du décès</xf:label>
