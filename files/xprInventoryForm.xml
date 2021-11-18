@@ -398,9 +398,29 @@
                     <xf:input ref="xpr:birthPlace">
                         <xf:label>Lieu de naissance</xf:label>
                     </xf:input>
-                    <xf:input ref="xpr:representative">
-                        <xf:label>Représentant</xf:label>
-                    </xf:input>
+                    <xf:repeat id="repeatRepresentative" nodeset="xpr:representative">
+                        <xf:label>Représentants</xf:label>
+                        <xf:input ref=".">
+                            <xf:label>Représentant</xf:label>
+                        </xf:input>
+                        <xf:trigger class="delete">
+                            <xf:label>&#10007;</xf:label>
+                            <xf:delete nodeset="."
+                                       at="1"
+                                       if="count(parent::xpr:child/xpr:representative) > 1"
+                                       ev:event="DOMActivate"/>
+                            <xf:help>supprimer un représentant</xf:help>
+                        </xf:trigger>
+                    </xf:repeat>
+                    <xf:trigger class="insert">
+                        <xf:label>ajouter un représentant</xf:label>
+                        <xf:insert ev:event="DOMActivate"
+                                   context="."
+                                   origin="instance('xprInventoryCopy')//xpr:child//xpr:representative"
+                                   nodeset="xpr:representative"
+                                   at="last()"
+                                   position="after"/>
+                    </xf:trigger>
                     <xf:input ref="xpr:note">
                         <xf:label>Note</xf:label>
                     </xf:input>
