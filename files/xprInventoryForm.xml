@@ -127,6 +127,11 @@
                     <xf:help>Ajouter une fonction</xf:help>
                 </xf:trigger>
             </xf:group>
+            <xf:group ref="xpr:deathDate">
+                <xs:input ref="@standardDate">
+                    <xf:label>Date du décès</xf:label>
+                </xs:input>
+            </xf:group>
             <xf:group ref="xpr:deathPlace">
                 <xf:label>Lieu du décès</xf:label>
                 <xf:input ref="xpr:address/xpr:street" incremental="true">
