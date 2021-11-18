@@ -936,7 +936,6 @@ function putInventory($param, $referer) {
         let $param :=
           copy $d := $param
           modify (
-            replace value of node $d/expertise/@xml:id with $id,
             replace value of node $d/inventory/control/maintenanceHistory/maintenanceEvent[1]/agent with $user)
           return $d
         return (

@@ -597,8 +597,8 @@
                         </xf:action>
                     </xf:item>
                     <xf:item>
-                        <xf:label>Locataire principal</xf:label>
-                        <xf:value>Locataire principal</xf:value>
+                        <xf:label>Principal locataire</xf:label>
+                        <xf:value>principal locataire</xf:value>
                         <xf:action ev:event="xforms-select">
                             <xf:setvalue ref="@type">mainOccupant</xf:setvalue>
                         </xf:action>
@@ -1056,8 +1056,8 @@
                     </xf:item>
                 </xf:select1>
                 <xf:dialog id="control">
-                    <xf:group ref="eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]">
-                        <xf:input ref="eac:eventDescription">
+                    <xf:group ref="xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent[1]">
+                        <xf:input ref="xpr:eventDescription">
                             <xf:label>Motif de la révision</xf:label>
                         </xf:input>
                     </xf:group>
@@ -1069,8 +1069,7 @@
                     <xf:trigger>
                         <xf:label>Enregistrer</xf:label>
                         <xf:action ev:event="DOMActivate">
-                            <xf:dispatch name="submission"
-                                         targetid="inventory"/>
+                            <xf:send submission="submitInventory"/>
                         </xf:action>
                     </xf:trigger>
                 </xf:dialog>
@@ -1079,19 +1078,20 @@
                     <!--we are using xf:delete to distinguish which submission module we need (prosopo or inventory)-->
                     <xf:delete nodeset="instance('xprProsopo')/*"
                                ev:event="DOMActivate"/>
-                    <xf:action if="/eac:inventory/@xml:id"
+                    <xf:action if="/xpr:inventory/@xml:id"
                                ev:event="DOMActivate">
                         <xf:show dialog="control"/>
                     </xf:action>
-                    <xf:action if="not(/eac:inventory/@xml:id)"
+                    <xf:action if="not(/xpr:inventory/@xml:id)"
                                ev:event="DOMActivate">
-                        <xf:dispatch name="submission"
-                                     targetid="inventory"/>
+                        <!--<xf:dispatch name="submission"
+                                     targetid="inventory"/>-->
+                        <xf:send submission="submitInventory"/>
                     </xf:action>
                 </xf:trigger>
             </span>
         </xf:case>
-        <xf:case id="newEntitiesPanel">
+        <!--<xf:case id="newEntitiesPanel">
             <xf:group ref="instance('xprEntities')">
                 <xf:label>Nouvelle(s) entité(s)</xf:label>
                 <xf:repeat nodeset="instance('xprEntities')//xpr:entity[@localType='new']">
@@ -1217,6 +1217,6 @@
                                  ev:event="DOMActivate"/>
                 </xf:trigger>
             </xf:group>
-        </xf:case>
+        </xf:case>-->
     </xf:switch>
 </form>
