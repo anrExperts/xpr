@@ -21,6 +21,8 @@
         <xf:bind nodeset="instance('xprInventory')/xpr:sourceDesc/xpr:date/@standardDate"
                  required="true()"
                  type="xf:date"/>
+        <xf:bind nodeset="instance('xprInventory')/xpr:actors/xpr:deceased/xpr:deathDate/@standardDate"
+                 type="xf:date"/>
 
     <xf:bind nodeset="instance('xprInventory')//xpr:deathPlace/xpr:noteworthy"
              relevant="parent::xpr:deathPlace/@type='other'"/>
