@@ -22,236 +22,190 @@
         <expert ref=""/>
         <date standardDate=""/>
     </sourceDesc>
-    <identity>
-        <nameEntry>
-            <part localType=""/>
-        </nameEntry>
-    </identity>
-    <functions>
-        <function>
-            <term/>
-            <descriptiveNote>
-                <p/>
-            </descriptiveNote>
-        </function>
-    </functions>
-    <deathDate standardDate=""/>
-    <deathPlace type="">
-        <address>
-            <street/>
-        </address>
-        <complement/>
-        <parish/>
-        <city/>
-        <noteworthy/>
-    </deathPlace>
-    <executors>
-        <executor>
-            <nameEntry>
-                <part localType=""/>
-            </nameEntry>
-            <occupation/>
-            <note/>
-        </executor>
-    </executors>
-    <weddings>
-        <wedding>
-            <spouse>
+    <actors>
+        <deceased>
+            <identity>
                 <nameEntry>
                     <part localType=""/>
                 </nameEntry>
-            </spouse>
-            <weddingDate standardDate=""/>
-            <weddingPlace/>
-            <note/>
-        </wedding>
-    </weddings>
-    <children>
-        <child>
+            </identity>
+            <functions>
+                <function>
+                    <term/>
+                    <descriptiveNote>
+                        <p/>
+                    </descriptiveNote>
+                </function>
+            </functions>
+            <deathDate standardDate=""/>
+            <deathPlace type="">
+                <address>
+                    <street/>
+                </address>
+                <complement/>
+                <parish/>
+                <city/>
+                <noteworthy/>
+            </deathPlace>
+        </deceased>
+        <notary>
             <nameEntry>
                 <part localType=""/>
             </nameEntry>
-            <birthDate standardDate=""/>
-            <birthPlace/>
-            <representative/>
-            <note/>
-        </child>
-    </children>
-    <persons>
-        <person>
-            <nameEntry>
-                <part localType=""/>
-            </nameEntry>
-            <occupation/>
-            <note/>
-        </person>
-    </persons>
-    <wealth>
-        <state type=""/>
-        <possessions>
-            <estate>
-                <residences>
-                    <residence type="main">
-                        <place type="">
-                            <address>
-                                <street/>
-                            </address>
-                            <complement/>
-                            <parish/>
-                            <city/>
-                        </place>
-                        <layout>
-                            <part n="">
-                                <label>Cour</label>
-                            </part>
-                            <part n="">
-                                <label>Jardin</label>
-                            </part>
-                            <part n="">
-                                <label>Serre</label>
-                            </part>
-                            <part n="">
-                                <label>Écurie</label>
-                            </part>
-                            <part n="">
-                                <label>Remise / Hangar</label>
-                            </part>
-                            <part n="">
-                                <label>Loge du portier</label>
-                            </part>
-                            <part n="">
-                                <label>Cave</label>
-                            </part>
-                            <part n="">
-                                <label>Cuisine</label>
-                            </part>
-                            <part n="">
-                                <label>Office</label>
-                            </part>
-                            <part n="">
-                                <label>Garde-manger</label>
-                            </part>
-                            <part n="">
-                                <label>Pièce</label>
-                            </part>
-                            <part n="">
-                                <label>Antichambre</label>
-                            </part>
-                            <part n="">
-                                <label>Salle à manger</label>
-                            </part>
-                            <part n="">
-                                <label>Salle / salon / salon de compagnie</label>
-                            </part>
-                            <part n="">
-                                <label>Chambre</label>
-                            </part>
-                            <part n="">
-                                <label>Chambre de domestique</label>
-                            </part>
-                            <part n="">
-                                <label>Cabinet</label>
-                            </part>
-                            <part n="">
-                                <label>Cabinet ou bureau désigné comme celui de l’expert</label>
-                            </part>
-                            <part n="">
-                                <label>Bureau</label>
-                            </part>
-                            <part n="">
-                                <label>Boudoir</label>
-                            </part>
-                            <part n="">
-                                <label>Alcôve</label>
-                            </part>
-                            <part n="">
-                                <label>Cabinet de toilette-Cabinet d’aisance</label>
-                            </part>
-                            <part n="">
-                                <label>Garde-robe</label>
-                            </part>
-                            <part n="">
-                                <label>Grenier</label>
-                            </part>
-                        </layout>
-                        <noteworthy/>
-                    </residence>
-                </residences>
-                <workshops>
-                    <workshop>
-                        <place type="">
-                            <address>
-                                <street/>
-                            </address>
-                            <complement/>
-                            <parish/>
-                            <city/>
-                        </place>
-                        <description/>
-                        <noteworthy/>
-                    </workshop>
-                </workshops>
-                <buildingSites>
-                    <buildingSite>
-                        <place type="">
-                            <address>
-                                <street/>
-                            </address>
-                            <complement/>
-                            <parish/>
-                            <city/>
-                        </place>
-                        <description/>
-                        <noteworthy/>
-                    </buildingSite>
-                </buildingSites>
-            </estate>
-        </possessions>
-        <dowry l=""
-               s=""
-               d=""
-               privateIncome=""/>
-        <contribution/>
-    </wealth>
-    <knowledge>
-        <books quantity=""
-               l=""
-               s=""
-               d=""
-               bookseller=""/>
-        <maps/>
-        <portraits>
-            <family quantity=""/>
-            <expert quantity=""/>
-        </portraits>
-        <drawings quantity=""/>
-        <paintings quantity=""/>
-    </knowledge>
-    <tools>
-        <drawing
-            owned=""/>
-        <measurement/>
-        <scientific>
-            <object type="" owned=""/>
-            <noteworthy/>
-        </scientific>
-    </tools>
-    <objects>
-        <artistic/>
-        <religious/>
-    </objects>
-    <buildingWorks>
-        <work>
-            <client/>
-            <type/>
-            <date when=""/>
-            <address>
-                <street/>
-            </address>
-            <cost l=""
-                  s=""
-                  d=""/>
-        </work>
-    </buildingWorks>
+        </notary>
+        <executors>
+            <executor>
+                <nameEntry>
+                    <part localType=""/>
+                </nameEntry>
+                <occupation/>
+                <note/>
+            </executor>
+        </executors>
+        <weddings>
+            <wedding>
+                <spouse>
+                    <nameEntry>
+                        <part localType=""/>
+                    </nameEntry>
+                </spouse>
+                <weddingDate standardDate=""/>
+                <weddingPlace/>
+                <note/>
+            </wedding>
+        </weddings>
+        <children>
+            <child>
+                <nameEntry>
+                    <part localType=""/>
+                </nameEntry>
+                <birthDate standardDate=""/>
+                <birthPlace/>
+                <representative/>
+                <note/>
+            </child>
+        </children>
+        <experts>
+            <expert ref="">
+                <nameEntry>
+                    <part localType=""/>
+                </nameEntry>
+                <occupation/>
+                <note/>
+            </expert>
+        </experts>
+        <persons>
+            <person>
+                <nameEntry>
+                    <part localType=""/>
+                </nameEntry>
+                <occupation/>
+                <note/>
+            </person>
+        </persons>
+    </actors>
+    <patrimony>
+        <wealth>
+            <state type=""/>
+            <possessions>
+                <estate>
+                    <residences>
+                        <residence type="main">
+                            <place type="">
+                                <address>
+                                    <street/>
+                                </address>
+                                <complement/>
+                                <parish/>
+                                <city/>
+                            </place>
+                            <layout>
+                                <part type="">
+                                    <label/>
+                                    <aspect/>
+                                    <floor/>
+                                    <description/>
+                                </part>
+                            </layout>
+                            <noteworthy/>
+                        </residence>
+                    </residences>
+                    <workshops>
+                        <workshop>
+                            <place type="">
+                                <address>
+                                    <street/>
+                                </address>
+                                <complement/>
+                                <parish/>
+                                <city/>
+                            </place>
+                            <description/>
+                            <noteworthy/>
+                        </workshop>
+                    </workshops>
+                    <buildingSites>
+                        <buildingSite>
+                            <place type="">
+                                <address>
+                                    <street/>
+                                </address>
+                                <complement/>
+                                <parish/>
+                                <city/>
+                            </place>
+                            <description/>
+                            <noteworthy/>
+                        </buildingSite>
+                    </buildingSites>
+                </estate>
+            </possessions>
+            <dowry l=""
+                   s=""
+                   d=""
+                   privateIncome=""/>
+            <contribution/>
+        </wealth>
+        <knowledge>
+            <books quantity=""
+                   l=""
+                   s=""
+                   d=""
+                   bookseller=""/>
+            <maps/>
+            <portraits>
+                <family quantity=""/>
+                <expert quantity=""/>
+            </portraits>
+            <drawings quantity=""/>
+            <paintings quantity=""/>
+        </knowledge>
+        <tools>
+            <drawing
+                owned=""/>
+            <measurement/>
+            <scientific>
+                <object type="" owned=""/>
+                <noteworthy/>
+            </scientific>
+        </tools>
+        <objects>
+            <artistic/>
+            <religious/>
+        </objects>
+        <buildingWorks>
+            <work>
+                <client/>
+                <type/>
+                <date when=""/>
+                <address>
+                    <street/>
+                </address>
+                <cost l=""
+                      s=""
+                      d=""/>
+            </work>
+        </buildingWorks>
+    </patrimony>
     <comments/>
 </inventory>

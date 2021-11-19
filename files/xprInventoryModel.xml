@@ -42,6 +42,36 @@
         <data xmlns="xpr"/>
     </xf:instance>
 
+    <xf:instance id="xprHouseParts">
+        <parts xmlns="xpr">
+            <part type="courtyard">Cour</part>
+            <part type="garden">Jardin</part>
+            <part type="greenhouse">Serre</part>
+            <part type="stable">Écurie</part>
+            <part type="shed">Remise / Hangar</part>
+            <part type="lodge">Loge du portier</part>
+            <part type="cellar">Cave</part>
+            <part type="kitchen">Cuisine</part>
+            <part type="butlery">Office</part>
+            <part type="pantry">Garde-manger</part>
+            <part type="room">Pièce</part>
+            <part type="anteroom">Antichambre</part>
+            <part type="diningRoom">Salle à manger</part>
+            <part type="livingRoom">Salle / salon / salon de compagnie</part>
+            <part type="bedroom">Chambre</part>
+            <part type="staffBedroom">Chambre de domestique</part>
+            <part type="closet">Cabinet</part>
+            <part type="expertStudy">Cabinet ou bureau désigné comme celui de l’expert</part>
+            <part type="study">Bureau</part>
+            <part type="boudoir">Boudoir</part>
+            <part type="alcove">Alcôve</part>
+            <part type="watercloset">Cabinet de toilette-Cabinet d’aisance</part>
+            <part type="wardrobe">Garde-robe</part>
+            <part type="attic">Grenier</part>
+            <part type="other">Autre</part>
+        </parts>
+    </xf:instance>
+
     <xf:instance id="xprScientificObjects">
         <objects xmlns="xpr">
             <object type="globe">Globe</object>

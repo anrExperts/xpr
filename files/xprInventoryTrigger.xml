@@ -9,9 +9,21 @@
             ev:event="DOMActivate"/>
     </xf:trigger>
     <xf:trigger>
-        <xf:label>Nouvelle(s) entité(s)</xf:label>
+        <xf:label>Acteurs</xf:label>
         <xf:toggle
-            case="newEntitiesPanel"
+            case="actorsPanel"
+            ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Patrimoine</xf:label>
+        <xf:toggle
+            case="patrimonyPanel"
+            ev:event="DOMActivate"/>
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Commentaires</xf:label>
+        <xf:toggle
+            case="commentPanel"
             ev:event="DOMActivate"/>
     </xf:trigger>
 </nav>
