@@ -778,6 +778,10 @@
                                         <xf:select1 ref="xpr:aspect">
                                             <xf:label>Orientation</xf:label>
                                             <xf:item>
+                                                <xf:label>Sans objet</xf:label>
+                                                <xf:value>Sans objet</xf:value>
+                                            </xf:item>
+                                            <xf:item>
                                                 <xf:label>Rue</xf:label>
                                                 <xf:value>rue</xf:value>
                                             </xf:item>
