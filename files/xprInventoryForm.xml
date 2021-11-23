@@ -17,7 +17,7 @@
                 <xf:select1 ref="xpr:expert/@ref" incremental="true">
                     <xf:label>Patronyme</xf:label>
                     <xf:itemset model="prosopo"
-                                nodeset="instance('xprEntities')/xpr:entity[@type='expert' or @type='altExpert']">
+                                nodeset="instance('xprEntities')/xpr:entity">
                         <xf:label ref="xpr:label"/>
                         <xf:value value="concat('#', @xml:id)"/>
                         <xf:dispatch ev:event="xforms-select"
