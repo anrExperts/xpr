@@ -1063,11 +1063,20 @@
                         <xf:input ref="@quantity">
                             <xf:label>Quantité</xf:label>
                         </xf:input>
+                        <xf:input ref="xpr:description">
+                            <xf:label>Description</xf:label>
+                        </xf:input>
                     </xf:group>
                     <xf:group ref="xpr:portraits/xpr:expert">
                         <xf:label>Portraits du défunt</xf:label>
                         <xf:input ref="@quantity">
                             <xf:label>Quantité</xf:label>
+                        </xf:input>
+                        <xf:input ref="xpr:room">
+                            <xf:label>Localisation</xf:label>
+                        </xf:input>
+                        <xf:input ref="xpr:description">
+                            <xf:label>Description</xf:label>
                         </xf:input>
                     </xf:group>
                     <xf:group ref="xpr:drawings">

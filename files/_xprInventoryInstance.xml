@@ -174,8 +174,13 @@
                    bookseller=""/>
             <maps/>
             <portraits>
-                <family quantity=""/>
-                <expert quantity=""/>
+                <family quantity="">
+                    <description/>
+                </family>
+                <expert quantity="">
+                    <room/>
+                    <description/>
+                </expert>
             </portraits>
             <drawings quantity=""/>
             <paintings quantity=""/>
