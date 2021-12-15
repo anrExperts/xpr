@@ -764,6 +764,10 @@
                                         <xf:label>Lieu</xf:label>
                                         <xf:var name="part" value="."/>
                                         <xf:select1 ref="@type">
+                                            <xf:item>
+                                                <xf:label/>
+                                                <xf:value/>
+                                            </xf:item>
                                             <xf:itemset nodeset="instance('xprHouseParts')/xpr:part">
                                                 <xf:label value="if(@type!='other', ., 'Autre')"/>
                                                 <xf:value ref="@type"/>
@@ -1040,6 +1044,12 @@
                                 <xf:label>Deniers</xf:label>
                             </xf:input>
                         </xf:group>
+                        <xf:input ref="xpr:room">
+                            <xf:label>Localisation</xf:label>
+                        </xf:input>
+                        <xf:input ref="xpr:noteworthy">
+                            <xf:label>Remarques</xf:label>
+                        </xf:input>
                         <xf:select1 ref="@bookseller">
                             <xf:label>Expert libraire</xf:label>
                             <xf:itemset nodeset="instance('xprBoolean')/xpr:state">

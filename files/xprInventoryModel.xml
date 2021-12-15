@@ -64,10 +64,12 @@
             <part type="staffBedroom">Chambre de domestique</part>
             <part type="closet">Cabinet</part>
             <part type="expertStudy">Cabinet ou bureau désigné comme celui de l’expert</part>
+            <part type="expertWorkingStudy">Cabinet où travaille l’expert</part>
             <part type="study">Bureau</part>
             <part type="boudoir">Boudoir</part>
             <part type="alcove">Alcôve</part>
-            <part type="watercloset">Cabinet de toilette-Cabinet d’aisance</part>
+            <part type="washroom">Cabinet de toilette</part>
+            <part type="toilet">Cabinet d’aisance</part>
             <part type="wardrobe">Garde-robe</part>
             <part type="attic">Grenier</part>
             <part type="other">Autre</part>
