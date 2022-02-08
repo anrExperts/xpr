@@ -1593,7 +1593,8 @@ function getExpertisesDataByYear($year as xs:string, $format as xs:string) {
     }
 
     let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam)
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
     }
 
     let $outputParam := map{

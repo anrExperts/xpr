@@ -585,6 +585,7 @@ declare function getExpertisesDataXML($queryParam as map(*), $content as map(*))
 
 declare function getExpertisesDataCSV($queryParam as map(*), $content as map(*)) as element() {
 let $expertises := $content?expertises
+let $experts := $content?experts
 return
   <csv>
     <record>
@@ -594,6 +595,9 @@ return
       <cell>framework</cell>
       <cell>categories</cell>
       <cell>designation</cell>
+      <cell>designation</cell>
+      <cell>nbExperts</cell>
+      <cell>columns</cell>
     </record>{
     for $expertise in $expertises/*:expertise
     order by $expertise/@xml:id
@@ -603,6 +607,18 @@ return
     let $framework := $expertise/descendant::*:framework/@type => fn:normalize-space()
     let $categories := fn:string-join($expertise/descendant::*:categories/*:category/@type, ', ') => fn:normalize-space()
     let $designation := $expertise/descendant::*:categories/*:designation => fn:normalize-space()
+    let $expertsId := $expertise//*:experts/*:expert/fn:substring-after(@ref, '#')
+    let $functions :=
+      for $expertId in $expertsId
+      return
+        switch ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions)
+        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+        default return 'unknown'
 
     return
     <record>
@@ -612,6 +628,8 @@ return
       <cell>{$framework}</cell>
       <cell>{$categories}</cell>
       <cell>{$designation}</cell>
+      <cell>{fn:count($expertsId)}</cell>
+      <cell>{for $function in fn:distinct-values($functions) order by $function return $function}</cell>
     </record>}
   </csv>
 };
