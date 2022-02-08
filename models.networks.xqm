@@ -606,7 +606,7 @@ return
     let $framework := $expertise/descendant::*:framework/@type => fn:normalize-space()
     let $categories := fn:string-join($expertise/descendant::*:categories/*:category/@type, ', ') => fn:normalize-space()
     let $designation := $expertise/descendant::*:categories/*:designation => fn:normalize-space()
-    let $expertsId := $expertise//*:experts/*:expert[fn:normalize-space(@xml:id)!='']/fn:substring-after(@ref, '#')
+    let $expertsId := $expertise//*:experts/*:expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#')
     let $functions :=
       for $expertId in $expertsId
       return
