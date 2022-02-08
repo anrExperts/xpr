@@ -595,7 +595,6 @@ return
       <cell>framework</cell>
       <cell>categories</cell>
       <cell>designation</cell>
-      <cell>designation</cell>
       <cell>nbExperts</cell>
       <cell>columns</cell>
     </record>{
