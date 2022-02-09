@@ -91,7 +91,9 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
             if (array:head($pair) = 'paris') then 'Paris'
             else if (array:head($pair) = 'suburbs') then 'Banlieue'
             else 'Province',
+            if (fn:normalize-space(array:tail($pair)) castable as xs:date) then
             fn:format-date(xs:date(array:tail($pair)), '[D01] [Mn] [Y0001]', 'en', (), ())
+            else 'date non renseignée'
           ),
           ' : ')}</li>
       }</ul>
@@ -389,14 +391,16 @@ return fn:string-join(
  : @todo translate dates in french (basex bug)
  :)
 declare function getInterval($node as node()*, $options as map(*)) as xs:string {
-let $interval := (
-    for $date in $node/xpr:date/@when
-    order by $date
-    return xs:date($date)
+  if($node/xpr:date/@when[fn:normalize-space(.) castable as xs:date]) then
+    let $interval := (
+      for $date in $node/xpr:date/@when[.!='']
+      order by $date
+      return xs:date($date)
     )[fn:position() = 1 or fn:position() = fn:last()]
-return fn:string-join(
-    $interval ! fn:format-date(., '[D01] [Mn] [Y0001]', 'en', (), ())
-    , ' au ')
+    return fn:string-join(
+      $interval ! fn:format-date(., '[D01] [Mn] [Y0001]', 'en', (), ())
+      , ' au ')
+  else 'date non renseignée'
 };
 
 declare function getPlace($node as node()*, $options as map(*)) as xs:string {
@@ -464,9 +468,25 @@ declare
 function eac2html($node as node()*, $options as map(*)) as item()* {
   <article>{
     getIdentity($node/eac:cpfDescription/eac:identity, $options),
-    getDescription($node/eac:cpfDescription/eac:description, $options)
+    getDescription($node/eac:cpfDescription/eac:description, $options),
+    getExpertises($node/@xml:id, $options)
     (: @todo si pas de date d’existance ou de sexe ne pas afficher getDescription() :)
   }</article>
+};
+
+declare function getExpertises($node, $options){
+  let $db := db:open('xpr')
+  let $expertises := $db//*:expertise[descendant::*:experts/*:expert[@ref = fn:concat('#', $node)]]
+  return(
+    <div>
+      <h4>Expertises</h4>
+      <ul>{
+      for $expertise in $expertises
+      order by fn:sort($expertise/descendant::*:sessions/*:date/@when[fn:normalize-space(.)!=''])[1]
+      return <li><a href="/xpr/expertises/{fn:normalize-space($expertise/@xml:id)}/view">{getReference($expertise, $options)}</a></li>
+      }</ul>
+    </div>
+  )
 };
 
 declare function getIdentity($node, $options){
@@ -569,7 +589,8 @@ declare function getSex($node, $options){
 declare function getFunctions($node, $options){
   <div class="function">
     <h4>Fonctions</h4>
-    {xpr.mappings.html:function($node/eac:function, $options)}
+    {for $function in $node/eac:function
+    return xpr.mappings.html:function($function, $options)}
   </div>
 };
 
