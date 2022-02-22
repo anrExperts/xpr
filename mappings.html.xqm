@@ -28,6 +28,7 @@ declare namespace user = "http://basex.org/modules/user" ;
 
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
 declare namespace eac = "eac" ;
+declare namespace rico = "rico" ;
 
 declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
 declare namespace xf = "http://www.w3.org/2002/xforms" ;
@@ -92,7 +93,7 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
             else if (array:head($pair) = 'suburbs') then 'Banlieue'
             else 'Province',
             if (fn:normalize-space(array:tail($pair)) castable as xs:date) then
-            fn:format-date(xs:date(array:tail($pair)), '[D01] [Mn] [Y0001]', 'en', (), ())
+            getFormatedDate(<date when="{array:tail($pair)}"/>, $options)
             else 'date non renseignée'
           ),
           ' : ')}</li>
@@ -116,7 +117,7 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
           return fn:concat(
             functx:capitalize-first($sentence/xpr:orgName),
             ' : ',
-            (for $date in $sentence/xpr:date/@when return getFormatedDate($date, $options)) => fn:string-join(', ')))
+            (for $date in $sentence/xpr:date return getFormatedDate($date, $options)) => fn:string-join(', ')))
           => fn:string-join(' | ')
         }</p>}
         <p>Cause de l’expertise : {fn:normalize-space($node/xpr:description/xpr:procedure/xpr:case)}</p>
@@ -366,7 +367,13 @@ declare function getParty($node as node()*, $options as map(*)) as element() {
 };
 
 declare function getFormatedDate($node as node()*, $options as map(*)) as xs:string {
-  fn:format-date(xs:date($node), '[D01] [Mn] [Y0001]', 'en', (), ())
+  (:@todo make it work with string and node:)
+  switch ($node)
+    case $node[(@when | @notAfter | @notBefore | @standardDate) castable as xs:date] return fn:format-date(xs:date($node/(@when | @notAfter | @notBefore | @standardDate)), '[D01] [Mn] [Y0001]', 'fr', (), ())
+    case $node[(@when | @notAfter | @notBefore | @standardDate) castable as xs:gYearMonth] return fn:format-date(xs:date($node/(@when | @notAfter | @notBefore | @standardDate) || '-01'), '[Mn] [Y0001]', 'fr', (), ())
+    case $node[(@when | @notAfter | @notBefore | @standardDate) castable as xs:gYear] return fn:format-date(xs:date($node/(@when | @notAfter | @notBefore | @standardDate) || '-01-01'), '[Y0001]', 'fr', (), ())
+    case $node[(@when | @notAfter | @notBefore | @standardDate) = ''] return '..'
+    default return $node/@when
 };
 
 declare function getPersName($node as node()*, $options as map(*)) as xs:string {
@@ -393,12 +400,12 @@ return fn:string-join(
 declare function getInterval($node as node()*, $options as map(*)) as xs:string {
   if($node/xpr:date/@when[fn:normalize-space(.) castable as xs:date]) then
     let $interval := (
-      for $date in $node/xpr:date/@when[.!='']
+      for $date in $node/xpr:date[@when!='' and @when castable as xs:date]
       order by $date
-      return xs:date($date)
+      return $date
     )[fn:position() = 1 or fn:position() = fn:last()]
     return fn:string-join(
-      $interval ! fn:format-date(., '[D01] [Mn] [Y0001]', 'en', (), ())
+      $interval ! getFormatedDate(., $options)
       , ' au ')
   else 'date non renseignée'
 };
@@ -563,16 +570,17 @@ declare function getDate($node, $options) as xs:string {
   case $node[self::eac:dateRange] return fn:string-join(
     ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
     ' à ')
-  default return getPrecision($node/*, $options)
+  case $node[self::eac:date[@*!='']] return getPrecision($node, $options)
+  default return 'aucune date mentionnée'
   (: @todo mettre valeur vide en cas d’abs :)
 };
 
 declare function getPrecision($node, $options) as xs:string* {
   switch ($node)
-  case $node[@notAfter] return ($node/@notAfter || ' ]')
-  case $node[@notBefore] return ('[ ', $node/@notBefore)
-  case $node[@standardDate] return ($node/@standardDate)
-  default return $node/@*
+  case $node[@notAfter] return (getFormatedDate($node, $options) || ' ]')
+  case $node[@notBefore] return ('[ ' || getFormatedDate($node, $options))
+  case $node[@standardDate] return (getFormatedDate($node, $options))
+  default return '..'
 };
 
 declare function getSex($node, $options){
@@ -613,14 +621,55 @@ declare function getChronList($node, $options){
   return
     <div>
       <h5>{$chronItem/eac:event => fn:normalize-space()}</h5>
-      <p>Date : { getDate($chronItem/eac:date, $options) }</p>
-      <p>Participant : {$chronItem/eac:participant}</p>
-      <p>Involve : {$chronItem/eac:involve}</p>
-      <p>Source : {$chronItem/eac:source}</p>
-      <p>Coût : {$chronItem/eac:cost}</p>
+      <p>Date : { getDate($chronItem/*[fn:local-name() = 'date' or fn:local-name() = 'dateRange'], $options) }</p>
+      {if($chronItem/rico:participant[@xlink:href!='']) then
+        <p>{if(fn:count($chronItem/rico:participant[@xlink:href!='']) > 1) then 'Participants : ' else 'Participant : '}
+          {for $participant in $chronItem/rico:participant[@xlink:href!='']
+          return(
+            switch($participant)
+            case $participant[following-sibling::rico:participant] return (getEntityName($participant, $options), ' | ')
+            default return getEntityName($participant, $options))}
+        </p>
+      }
+      {if($chronItem/rico:involve[@xlink:href!='']) then
+        <p>{if(fn:count($chronItem/rico:involve[@xlink:href!='']) > 1) then 'Entités mentionnées : ' else 'Entité mentionnée : '}
+          {for $involve in $chronItem/rico:involve[@xlink:href!='']
+          return(
+            switch($involve)
+            case $involve[following-sibling::rico:involve] return (getEntityName($involve, $options), ' | ')
+            default return getEntityName($involve, $options))}
+        </p>
+      }
+      {if($chronItem/xpr:cost[.!='']) then
+        <p>Coût : {$chronItem/eac:cost => fn:normalize-space()}</p>
+      }
+      {if($chronItem/xpr:source[@xlink:href!='']) then
+        <p>{if(fn:count($chronItem/xpr:source[@xlink:href!='']) > 1 ) then 'Sources : ' else 'Source : '}
+          {for $source in $chronItem/xpr:source[@xlink:href!='']
+            return(
+              switch($source)
+              case $source[following-sibling::xpr:source] return (getSource($source, $options), ' | ')
+              default return getSource($source, $options))}
+        </p>
+      }
     </div>
 };
 
+declare function getEntityName($node as node()*, $options as map(*)) as node()* {
+  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $id := $node/@*[fn:local-name() = 'href' or fn:local-name()='ref'] => fn:substring-after('#')
+  let $entityName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+  let $entity := <a href="/xpr/biographies/{$id}/view">{$entityName}</a>
+  return $entity
+};
+
+declare function getSource($node as node()*, $options as map(*)) as node()* {
+  let $sources := db:open('xpr')/xpr:xpr/xpr:sources
+  let $id := $node/@xlink:href => fn:substring-after('#')
+  let $cote := fn:normalize-space($sources/xpr:source[@xml:id=$id])
+  let $source := <a href="/xpr/sources/{$id}/view">{$cote}</a>
+  return $source
+};
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
   typeswitch($node)
@@ -745,4 +794,37 @@ declare function itemIad2Html($inventory, $options){
         }
       </p>
     </li>
+};
+
+(:~
+ : This function dispatches the treatment of the source XML document
+ :)
+declare
+  %output:indent('no')
+function source2html($node as node()*, $options as map(*)) as item()* {
+  <article>
+    <header>
+      <h2>{ $node => fn:normalize-space() }</h2>
+    </header>
+    <div class="meta">
+      <div class="citations">
+        <h3>Citations</h3>
+        { getCitations($node, $options) }
+      </div>
+    </div>
+  </article>
+};
+
+declare function getCitations($node as node()*, $options as map(*)) as node()* {
+  let $mark := $node/@xml:id => fn:normalize-space()
+  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  return(
+    <ul>{
+      for $entity in $prosopo/eac:eac-cpf[descendant::xpr:source[fn:substring-after(@xlink:href, '#') = $mark]]
+        let $id := $entity/@xml:id => fn:normalize-space()
+        let $entityName := fn:normalize-space($entity/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
+        let $entityLink := <a href="/xpr/biographies/{$id}/view">{$entityName}</a>
+        return <li>{ $entityLink }</li>
+    }</ul>
+  )
 };

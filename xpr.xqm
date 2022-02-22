@@ -526,7 +526,7 @@ function permBiographies($perm) {
  : @return an ordered list of expertises in html
  :)
 declare
-  %rest:path("/xpr/biographies/view")
+  %rest:path("xpr/biographies/view")
   %rest:produces('application/html')
   %output:method("html")
   %output:html-version('5.0')
@@ -1112,7 +1112,7 @@ function getSources() {
  : @return an ordered list of sources
  :)
 declare 
-  %rest:path("/xpr/sources/view")
+  %rest:path("xpr/sources/view")
   %rest:produces('text/html')
   %output:method("html")
 function getSourcesHtml() {
@@ -1169,6 +1169,29 @@ declare
   %output:method("xml")
 function getSource($id) {
   db:open('xpr')/xpr/sources/source[@xml:id = $id]
+};
+
+(:~
+ : This resource function returns a source item
+ : @param $id the source id
+ : @return an source item in html
+ : @todo use html templating
+ :)
+declare
+  %rest:path("xpr/sources/{$id}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+function getSourceHtml($id) {
+  let $content := map {
+    'data' : getSource($id),
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheSource.xml",
+    'mapping' : xpr.mappings.html:source2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -2046,6 +2069,65 @@ declare
 function logout() {
   Session:delete('id'),
   web:redirect("/")
+};
+
+
+(:~ Login page (visible to everyone). :)
+declare
+  %rest:path("xpr/meteo")
+  %output:method("html")
+function meteo() {
+  let $db := db:open('xpr')
+  return
+    <html>
+      <head>
+        <title>!xpr¡</title>
+        <meta charset="UTF-8"/>
+      </head>
+      <body>
+        <div>
+          <h1>Météo des experts</h1>
+          <div class="expertises">
+            <h2>Expertises</h2>
+            <ul>
+              <li>{ fn:count($db//expertise) || ' expertises enregistrées dans la base de données' }</li>
+              <li>{ fn:count($db//expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' expertises complètes' }</li>
+              <li>{ fn:count($db//expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' expertises en cours de dépouillement' }</li>
+              <li>{ fn:count($db//expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' expertises à revoir' }</li>
+              <li>{ fn:count(fn:distinct-values($db//expertise/descendant::idno[@type='unitid'])) || ' dossiers dépouillés' }
+                <ul>{
+                  for $unitid in fn:distinct-values($db//expertise/descendant::idno[@type='unitid'])
+                  return <li>{ fn:count($db//expertise/descendant::idno[@type='unitid'][. = $unitid]) || ' expertises cotées "' || $unitid || '"' }</li>
+                }</ul>
+              </li>
+            </ul>
+          </div>
+          <div class="prosopographie">
+            <h2>Prosopographie</h2>
+            <ul>
+              <li>{fn:count($db//bio/eac:eac-cpf) || ' fiches prosopographiques enregistrées dans la base de données'}
+                <ul>{
+                  for $entityType in fn:distinct-values($db//bio/descendant::eac:identity/@localType)
+                  return <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:identity[@localType = $entityType]]) || ' entités ayant pour qualité "' ||$entityType || '"' }</li>
+                }</ul>
+              </li>
+              <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'completed']]) || ' fiches complètes' }</li>
+              <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'in progress']]) || ' fiches en cours de dépouillement' }</li>
+              <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'to revise']]) || ' fiches à revoir' }</li>
+            </ul>
+          </div>
+          <div class="iad">
+            <h2>Inventaires après-décès</h2>
+            <ul>
+              <li>{ fn:count($db//posthumousInventories/inventory) || ' inventaires après-décès enregistrés dans la base de données' }</li>
+              <li>{ fn:count($db//posthumousInventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' inventaires complets' }</li>
+              <li>{ fn:count($db//posthumousInventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' inventaires en cours de dépouillement' }</li>
+              <li>{ fn:count($db//posthumousInventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' inventaires à revoir' }</li>
+            </ul>
+          </div>
+        </div>
+      </body>
+    </html>
 };
 
 
