@@ -205,8 +205,8 @@ function getExpertisesJson() {
       for $expertise in $content
       return map{
         'id' : fn:normalize-space($expertise/@xml:id),
-        'date' : $expertise//sessions/date[1],
-        'expert' : $expertise//experts/expert[1]/@ref => fn:substring-after('#')
+        'date' : $expertise//sessions/date[1]/@when => fn:normalize-space(),
+        'expert' : fn:substring-after($expertise//experts/expert[1]/@ref, '#') => fn:normalize-space()
         }
     }
 };
