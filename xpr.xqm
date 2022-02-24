@@ -200,7 +200,15 @@ declare
   %output:method('json')
 function getExpertisesJson() {
   let $content := db:open('xpr')//expertise
-  return map{'test' : 1}
+  return
+    array{
+      for $expertise in $content
+      return map{
+        'id' : fn:normalize-space($expertise/@xml:id),
+        'date' : $expertise//sessions/date[1],
+        'expert' : $expertise//experts/expert[1]/@ref => fn:substring-after('#')
+        }
+    }
 };
 
 (:~
