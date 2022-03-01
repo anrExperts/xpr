@@ -200,26 +200,27 @@ declare
   %rest:produces('application/json')
   %output:media-type('application/json')
   %output:method('json')
-function getExpertisesJson() {
-  let $content := db:open('xpr')//expertise
-  return
-    array{
-      for $expertise in $content
-      return map{
-        'id' : fn:normalize-space($expertise/@xml:id),
-        'dates' : if(fn:count($expertise//sessions/date[@when[. castable as xs:date]]) > 1)
-          then array{fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))}
-          else $expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]),
-        'experts' : if(fn:count($expertise//experts/expert[fn:normalize-space(@ref)!='']) > 1)
-          then array{xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))}
-          else xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#')),
-        'greffiers' : if(fn:count($expertise//clerks/clerk[fn:normalize-space(.)!='']) > 1)
-          then array{$expertise//clerks/clerk/persName/fn:string-join(*, ', ')}
-          else $expertise//clerks/clerk/persName/fn:string-join(*, ', '),
-        'case' : $expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space(),
-        'thirdParty' : if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'
-        }
-    }
+  %rest:query-param("start", "{$start}", 1)
+  %rest:query-param("count", "{$count}", 100)
+  %rest:query-param("filterDate", "{$filterDate}", 'all')
+function getExpertisesJson($start, $count, $filterDate) {
+  let $db := db:open('xpr')//expertise
+  let $content := for $expertise in $db
+    return map{
+      'id' : fn:normalize-space($expertise/@xml:id),
+      'dates' : array{
+        fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
+        },
+      'experts' : array{
+        xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))
+        },
+      'greffiers' : array{
+        $expertise//clerks/clerk/persName/fn:string-join(*, ', ')
+        },
+      'case' : $expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space(),
+      'thirdParty' : if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'
+      }
+  return array{ $content }
 };
 
 (:~
