@@ -220,7 +220,7 @@ function getExpertisesJson($start, $count, $filterDate) {
       'case' : $expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space(),
       'thirdParty' : if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'
       }
-  return array{ $content }
+  return array{ fn:subsequence($content, $start, $count) }
 };
 
 (:~
