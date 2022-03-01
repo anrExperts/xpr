@@ -149,9 +149,11 @@ function getExpertises($ids as xs:string) {
 declare
   %rest:path("/xpr/expertises/view")
   %rest:produces('application/html')
+  %rest:query-param("start", "{$start}", 1)
+  %rest:query-param("count", "{$count}", 50)
   %output:method("html")
   %output:html-version('5.0')
-function getExpertisesHtml() {
+function getExpertisesHtml($start as xs:integer, $count as xs:integer) {
  let $content := map {
     'title' : 'Liste des expertises',
     'data' : getExpertises()
@@ -205,8 +207,17 @@ function getExpertisesJson() {
       for $expertise in $content
       return map{
         'id' : fn:normalize-space($expertise/@xml:id),
-        'date' : $expertise//sessions/date[1]/@when => fn:normalize-space(),
-        'expert' : fn:substring-after($expertise//experts/expert[1]/@ref, '#') => fn:normalize-space()
+        'dates' : if(fn:count($expertise//sessions/date[@when[. castable as xs:date]]) > 1)
+          then array{fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))}
+          else $expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]),
+        'experts' : if(fn:count($expertise//experts/expert[fn:normalize-space(@ref)!='']) > 1)
+          then array{xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))}
+          else xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#')),
+        'greffiers' : if(fn:count($expertise//clerks/clerk[fn:normalize-space(.)!='']) > 1)
+          then array{$expertise//clerks/clerk/persName/fn:string-join(*, ', ')}
+          else $expertise//clerks/clerk/persName/fn:string-join(*, ', '),
+        'case' : $expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space(),
+        'thirdParty' : if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'
         }
     }
 };

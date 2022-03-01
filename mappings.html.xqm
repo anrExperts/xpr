@@ -627,8 +627,8 @@ declare function getChronList($node, $options){
           {for $participant in $chronItem/rico:participant[@xlink:href!='']
           return(
             switch($participant)
-            case $participant[following-sibling::rico:participant] return (getEntityName($participant, $options), ' | ')
-            default return getEntityName($participant, $options))}
+            case $participant[following-sibling::rico:participant] return (getEntityLink($participant, $options), ' | ')
+            default return getEntityLink($participant, $options))}
         </p>
       }
       {if($chronItem/rico:involve[@xlink:href!='']) then
@@ -636,8 +636,8 @@ declare function getChronList($node, $options){
           {for $involve in $chronItem/rico:involve[@xlink:href!='']
           return(
             switch($involve)
-            case $involve[following-sibling::rico:involve] return (getEntityName($involve, $options), ' | ')
-            default return getEntityName($involve, $options))}
+            case $involve[following-sibling::rico:involve] return (getEntityLink($involve, $options), ' | ')
+            default return getEntityLink($involve, $options))}
         </p>
       }
       {if($chronItem/xpr:cost[.!='']) then
@@ -655,12 +655,18 @@ declare function getChronList($node, $options){
     </div>
 };
 
-declare function getEntityName($node as node()*, $options as map(*)) as node()* {
+declare function getEntityName($node as xs:string*) {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $id := $node
+  let $entityName := $prosopo/eac:eac-cpf[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part/fn:normalize-space()
+  return $entityName
+};
+
+declare function getEntityLink($node as node()*, $options as map(*)) as node()* {
   let $id := $node/@*[fn:local-name() = 'href' or fn:local-name()='ref'] => fn:substring-after('#')
-  let $entityName := fn:normalize-space($prosopo/eac:eac-cpf[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part)
-  let $entity := <a href="/xpr/biographies/{$id}/view">{$entityName}</a>
-  return $entity
+  let $entityName := getEntityName($id)
+  let $entityLink := <a href="/xpr/biographies/{$id}/view">{$entityName}</a>
+  return $entityLink
 };
 
 declare function getSource($node as node()*, $options as map(*)) as node()* {
