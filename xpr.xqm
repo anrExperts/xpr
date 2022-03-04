@@ -204,8 +204,20 @@ declare
   %rest:query-param("count", "{$count}", 100)
   %rest:query-param("filterDate", "{$filterDate}", 'all')
 function getExpertisesJson($start, $count, $filterDate) {
-  let $db := db:open('xpr')//expertise
-  let $content := for $expertise in $db
+  let $expertises := db:open('xpr')/xpr/expertises
+  let $meta := map {
+      'start' : $start,
+      'count' : $count,
+      'totalExpertises' : fn:count($expertises/expertise),
+      'datesCount' : array {
+        for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
+        return array {
+          $date, fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]])
+        }
+      }
+  }
+  let $content := array{
+    for $expertise in fn:subsequence($expertises/expertise, $start, $count)
     return map{
       'id' : fn:normalize-space($expertise/@xml:id),
       'dates' : array{
@@ -220,7 +232,11 @@ function getExpertisesJson($start, $count, $filterDate) {
       'case' : $expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space(),
       'thirdParty' : if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'
       }
-  return array{ fn:subsequence($content, $start, $count) }
+    }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
 };
 
 (:~
