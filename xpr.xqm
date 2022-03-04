@@ -211,8 +211,8 @@ function getExpertisesJson($start, $count, $filterDate) {
       'totalExpertises' : fn:count($expertises/expertise),
       'datesCount' : array {
         for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
-        return array {
-          $date, fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]])
+        return map {
+          $date : fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]])
         }
       }
   }
