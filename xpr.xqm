@@ -32,6 +32,7 @@ declare namespace perm = "http://basex.org/modules/perm" ;
 declare namespace user = "http://basex.org/modules/user" ;
 declare namespace session = 'http://basex.org/modules/session' ;
 declare namespace http = "http://expath.org/ns/http-client" ;
+declare namespace json = "http://basex.org/modules/json" ;
 
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
 declare namespace eac = "eac" ;
@@ -197,31 +198,26 @@ function getExpertisesXforms() {
  :)
 declare 
   %rest:path("/xpr/expertises/json")
-  %rest:POST("$body")
+  %rest:POST("{$body}")
   %rest:produces('application/json')
   %output:media-type('application/json')
   %output:method('json')
 function getExpertisesJson($body) {
-  let $start := $body/start/text()
-  let $count := $body/count/text()
-  let $filterDate := $body/filterDate
+  let $body := json:parse( $body, map{"format" : "xquery"})
   let $expertises := db:open('xpr')/xpr/expertises
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
     for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
     return map { $date : fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]]) }
   )
-
   let $meta := map {
-      'start' : $start,
-      'count' : $count,
+      'start' : $body?start,
+      'count' : $body?count,
       'totalExpertises' : fn:count($expertises/expertise),
       'datesCount' : $dateCount
   }
-
-
   let $content := array{
-    for $expertise in fn:subsequence($expertises/expertise, $start, $count)
+    for $expertise in fn:subsequence($expertises/expertise, $body?start, $body?count)
     return map{
       'id' : fn:normalize-space($expertise/@xml:id),
       'dates' : array{
