@@ -197,13 +197,14 @@ function getExpertisesXforms() {
  :)
 declare 
   %rest:path("/xpr/expertises/json")
+  %rest:POST("$body")
   %rest:produces('application/json')
   %output:media-type('application/json')
   %output:method('json')
-  %rest:query-param("start", "{$start}", 1)
-  %rest:query-param("count", "{$count}", 100)
-  %rest:query-param("filterDate", "{$filterDate}", 'all')
-function getExpertisesJson($start, $count, $filterDate) {
+function getExpertisesJson($body) {
+  let $start := $body/start/text()
+  let $count := $body/count/text()
+  let $filterDate := $body/filterDate
   let $expertises := db:open('xpr')/xpr/expertises
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
