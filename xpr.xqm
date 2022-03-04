@@ -205,17 +205,20 @@ declare
   %rest:query-param("filterDate", "{$filterDate}", 'all')
 function getExpertisesJson($start, $count, $filterDate) {
   let $expertises := db:open('xpr')/xpr/expertises
+  (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
+  let $dateCount := map:merge(
+    for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
+    return map { $date : fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]]) }
+  )
+
   let $meta := map {
       'start' : $start,
       'count' : $count,
       'totalExpertises' : fn:count($expertises/expertise),
-      'datesCount' : array {
-        for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
-        return map {
-          $date : fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]])
-        }
-      }
+      'datesCount' : $dateCount
   }
+
+
   let $content := array{
     for $expertise in fn:subsequence($expertises/expertise, $start, $count)
     return map{
