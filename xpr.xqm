@@ -21,6 +21,7 @@ import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' 
 import module namespace xpr.models.networks = 'xpr.models.networks' at './models.networks.xqm' ;
 import module namespace xpr.autosave = 'xpr.autosave' at './autosave.xqm' ;
 import module namespace Session = 'http://basex.org/modules/session';
+import module namespace functx = "http://www.functx.com";
 
 declare namespace rest = "http://exquery.org/ns/restxq" ;
 declare namespace file = "http://expath.org/ns/file" ;
@@ -201,20 +202,26 @@ declare
   %rest:POST("{$body}")
   %rest:produces('application/json')
   %output:media-type('application/json')
-  %output:method('json')
 function getExpertisesJson($body) {
   let $body := json:parse( $body, map{"format" : "xquery"})
-  let $expertises := db:open('xpr')/xpr/expertises
+  let $db := db:open('xpr')
+  let $expertises := $db/xpr/expertises
+  let $prosopo := $db/xpr/bio
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
     for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
     return map { $date : fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]]) }
   )
+  let $experts := map:merge(
+    for $expert in $prosopo/eac:eac-cpf[descendant::eac:identity/@localType='expert']/@xml:id
+    return map { $expert : xpr.mappings.html:getEntityName($expert) }
+  )
   let $meta := map {
       'start' : $body?start,
       'count' : $body?count,
       'totalExpertises' : fn:count($expertises/expertise),
-      'datesCount' : $dateCount
+      'datesCount' : $dateCount,
+      'experts' : $experts
   }
   let $content := array{
     for $expertise in fn:subsequence($expertises/expertise, $body?start, $body?count)
@@ -222,17 +229,20 @@ function getExpertisesJson($body) {
       'id' : fn:normalize-space($expertise/@xml:id),
       'dates' : array{
         fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
-        },
+      },
       'experts' : array{
         xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))
-        },
+      },
+      'expertsId' : array{
+        $expertise//participants/experts/expert[fn:normalize-space(@ref)!='']/fn:normalize-space(@ref)
+      },
       'greffiers' : array{
         $expertise//clerks/clerk/persName/fn:string-join(*, ', ')
-        },
+      },
       'case' : $expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space(),
       'thirdParty' : if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'
-      }
     }
+  }
   return map{
     "meta": $meta,
     "content": $content
@@ -328,11 +338,84 @@ declare
   %output:method('json')
 function getExpertiseJson($id) {
   let $expertise := db:open('xpr')//expertise[@xml:id=$id]
-  return array{
-    map{
-    'type' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
-    'date' : $expertise/description/sessions/date/@when => fn:string()
+  let $meta := map{}
+  let $content := map{
+    'id' : fn:normalize-space($expertise/@xml:id),
+    'cote' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
+    'dossier' : $expertise/sourceDesc/idno[@type='item'] => fn:string(),
+    'supplement' : $expertise/sourceDesc/idno[@type='supplement'] => fn:string(),
+    'addresses' : array{
+      for $place in $expertise/description/places
+      return fn:normalize-space($place)
+    },
+    'dates' : array{
+      fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
+    },
+    'sessions' : array{
+    (:@rmq : use array instead of map:merge because the latter combine duplicate keys:)
+      for $session in $expertise/description/sessions/date
+      return map{
+        fn:normalize-space($session/@type) : fn:normalize-space($session/@when)
+      }
+    },
+    'experts' : array{
+      for $expert in $expertise//experts/expert[fn:normalize-space(@ref)!='']
+      return map{
+        'id' : $expert/fn:substring-after(@ref, '#'),
+        'name' : xpr.mappings.html:getEntityName($expert/fn:substring-after(@ref, '#')),
+        (:'quality' : ($expert/title[fn:normalize-space(.)!=''], $context, $appointment) => fn:string-join(', ') || '.',:)
+        'title' : $expert/title => fn:normalize-space(),
+        'context' : $expert/@context => fn:normalize-space(),
+        'appointment' : $expert/@appointment => fn:normalize-space()
+      }
+    },
+    'clerks' : array{
+      for $clerk in $expertise/description/participants/clerks/clerk
+      return fn:string-join($clerk/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', ')
+    },
+    'parties' : array {
+      for $party in $expertise/description/participants/parties/party
+      return map{
+        'role' : $party/@role => fn:normalize-space(),
+        'presence' : $party/@presence => fn:normalize-space(),
+        'intervention' : $party/@intervention => fn:normalize-space(),
+        'persons' : array{
+          for $person in $party/person
+          return map{
+            'name' : fn:string-join($person/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
+            'occupation' : $person/occupation => fn:normalize-space()
+          }
+        },
+        'status' : $party/status => fn:normalize-space(),
+        'expert' : map {
+          'id' : $party/expert/fn:substring-after(fn:normalize-space(@ref), '#'),
+          'name' : xpr.mappings.html:getEntityName($party/expert/fn:substring-after(@ref, '#'))
+        },
+        'representatives' : array{
+          for $representative in $party/representative
+          return map {
+              'name' : fn:string-join($representative/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
+              'occupation' : $representative/occupation => fn:normalize-space()
+            }
+        },
+        'prosecutors' : array{
+          for $prosecutor in $party/prosecutor
+          return fn:string-join($prosecutor/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', ')
+
+        }
+      }
+    },
+    'craftmen' : array{
+      for $craftman in $expertise/description/participants/craftmen/craftman[fn:normalize-space(.) != '']
+      return map{
+        'name' : fn:string-join($craftman/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
+        'occupation' : $craftman/occupation => fn:normalize-space()
+      }
     }
+  }
+  return map {
+      'meta' : $meta,
+      'content' : $content
   }
 };
 
@@ -626,6 +709,95 @@ function getEntitiesListSaxon() {
     'layout' : "listeProsopoSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function lists all the entities
+ : @return an ordered list of entities in json
+ :)
+declare
+  %rest:path("/xpr/biographies/json")
+  %rest:POST("{$body}")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getBiographiesJson($body) {
+  let $body := json:parse( $body, map{"format" : "xquery"})
+  let $db := db:open('xpr')
+  let $biographies := $db/xpr/bio
+
+  let $meta := map {
+    'start' : $body?start,
+    'count' : $body?count,
+    'qualities' : map:merge(
+      for $quality in fn:distinct-values($biographies/eac:eac-cpf//eac:identity/@localType[fn:normalize-space(.)!=''])
+      return map{
+        fn:normalize-space($quality) : switch($quality)
+          case 'expert' return 'expert (tableau)'
+          case 'mason' return 'maçon'
+          case 'altExpert' return 'expert (non inscrit)'
+          case 'person' return 'autre personne'
+          case 'office' return 'office d’expert'
+          case 'family' return 'famille'
+          case 'org' return 'institution'
+          default return ''
+      }
+    ),
+    'totalBiographies' : fn:count($biographies/eac:eac-cpf)
+  }
+  let $content := array{
+    for $biography in fn:subsequence($biographies/eac:eac-cpf, $body?start, $body?count)
+    let $quality := switch($biography//eac:identity/@localType)
+      case 'expert' return 'expert (tableau)'
+      case 'mason' return 'maçon'
+      case 'altExpert' return 'expert (non inscrit)'
+      case 'person' return 'autre personne'
+      case 'office' return 'office d’expert'
+      case 'family' return 'famille'
+      case 'org' return 'institution'
+      default return ''
+    return map{
+      'id' : fn:normalize-space($biography/@xml:id),
+      'name' : xpr.mappings.html:getEntityName($biography/@xml:id),
+      'quality' : $quality
+    }
+  }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
+};
+
+(:~
+ : This resource function lists all the entities
+ : @return an ordered list of entities in json
+ :)
+declare
+  %rest:path("/xpr/biographies/{$id}/json")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getBiographyJson($id) {
+  let $db := db:open('xpr')
+  let $biography := $db/xpr/bio/eac:eac-cpf[@xml:id=$id]
+  let $expertises := $db/xpr/expertises/expertise[descendant::experts/expert[@ref = '#' || $biography/@xml:id]]
+  let $meta := map {}
+  let $content := map{
+    'id' : fn:normalize-space($biography/@xml:id),
+    'name' : xpr.mappings.html:getEntityName($biography/@xml:id),
+    'expertises' : array{
+      for $expertise in $expertises order by $expertise/@xml:id return map {
+        'id' : $expertise/@xml:id => fn:normalize-space(),
+        'dates' : array{
+          fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
+        }
+      }
+    }
+  }
+  return map {
+    'meta' : $meta,
+    'content' : $content
+  }
 };
 
 (:~
