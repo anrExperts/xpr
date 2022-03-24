@@ -202,6 +202,7 @@ declare
   %rest:POST("{$body}")
   %rest:produces('application/json')
   %output:media-type('application/json')
+  %output:method('json')
 function getExpertisesJson($body) {
   let $body := json:parse( $body, map{"format" : "xquery"})
   let $db := db:open('xpr')
