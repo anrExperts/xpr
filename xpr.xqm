@@ -1681,6 +1681,65 @@ function modifySource($id) {
 };
 
 (:~
+ : This resource function lists all the sources
+ : @return an ordered list of sources in json
+ : @todo to develop
+ :)
+declare
+  %rest:path("/xpr/sources/json")
+  %rest:POST("{$body}")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getSourcesJson($body) {
+  let $body := json:parse( $body, map{"format" : "xquery"})
+  let $db := db:open('xpr')
+  let $sources := $db/xpr/sources
+
+  let $meta := map {
+      'start' : $body?start,
+      'count' : $body?count,
+      'totalSources' : fn:count($sources/source)
+  }
+  let $content := array{
+    for $source in fn:subsequence($sources/source, $body?start, $body?count)
+    return map{
+      'id' : fn:normalize-space($source/@xml:id),
+      'source' : fn:normalize-space($source)
+    }
+  }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
+};
+
+(:~
+ : This resource function returns a source
+ : @return a source in json
+ : @todo to develop
+ :)
+declare
+  %rest:path("/xpr/sources/{$id}/json")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getSourceJson($id) {
+  let $db := db:open('xpr')
+  let $source := $db/xpr/sources/source[@xml:id=$id]
+
+  let $meta := map {}
+  let $content := map{
+    'source' : $source => fn:normalize-space(),
+    'id' : $source/@xml:id => fn:normalize-space()
+  }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
+};
+
+(:~
  : This function consumes new source 
  : @param $param content
  : @todo mettre en place une routine pour empêcher l'ajout d'une référence si elle est déjà présente
