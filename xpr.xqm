@@ -1457,6 +1457,69 @@ function getInventory($id) {
 };
 
 (:~
+ : This resource function lists all the sources
+ : @return an ordered list of sources in json
+ : @todo to develop
+ :)
+declare
+  %rest:path("/xpr/inventories/json")
+  %rest:POST("{$body}")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getInventoriesJson($body) {
+  let $body := json:parse( $body, map{"format" : "xquery"})
+  let $db := db:open('xpr')
+  let $inventories := $db/xpr/posthumousInventories
+
+  let $meta := map {
+      'start' : $body?start,
+      'count' : $body?count,
+      'totalSources' : fn:count($inventories/inventory)
+  }
+  let $content := array{
+    for $inventory in fn:subsequence($inventories/inventory, $body?start, $body?count)
+    return map{
+      'id' : $inventory/@xml:id => fn:normalize-space(),
+      'mark' : $inventory/sourceDesc/idno[@type='unitid'] => fn:normalize-space(),
+      'expert' : xpr.mappings.html:getEntityName(fn:substring-after($inventory/sourceDesc/expert/@ref, '#')),
+      'date' : $inventory/sourceDesc/date/@standardDate => fn:normalize-space()
+    }
+  }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
+};
+
+(:~
+ : This resource function returns an inventory
+ : @return an inventory in json
+ : @todo to develop
+ :)
+declare
+  %rest:path("/xpr/inventories/{$id}/json")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getInventoryJson($id) {
+  let $db := db:open('xpr')
+  let $inventory := $db/xpr/posthumousInventories/inventory[@xml:id=$id]
+
+  let $meta := map {}
+  let $content := map{
+    'id' : $inventory/@xml:id => fn:normalize-space(),
+    'mark' : $inventory/sourceDesc/idno[@type='unitid'] => fn:normalize-space(),
+    'expert' : xpr.mappings.html:getEntityName(fn:substring-after($inventory/sourceDesc/expert/@ref, '#')),
+    'date' : $inventory/sourceDesc/date/@standardDate => fn:normalize-space()
+  }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
+};
+
+(:~
  : This function consumes new relations 
  : @param $param content
  : @
