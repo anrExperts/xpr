@@ -37,6 +37,7 @@ declare namespace json = "http://basex.org/modules/json" ;
 
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
 declare namespace eac = "eac" ;
+declare namespace rico = "rico" ;
 
 declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
 declare namespace xf = "http://www.w3.org/2002/xforms" ;
@@ -210,8 +211,10 @@ function getExpertisesJson($body) {
   let $prosopo := $db/xpr/bio
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
-    for $date in fn:sort(fn:distinct-values($expertises/expertise//sessions/date[@when castable as xs:date]/fn:year-from-date(@when)))
-    return map { $date : fn:count($expertises/expertise[descendant::sessions/date[fn:matches(@when, xs:string($date))]]) }
+    for $group in $expertises/expertise
+    for $year in $group/description/sessions/date/fn:year-from-date(@when[. castable as xs:date])
+    group by $year
+    return map { $year : fn:count($group/self::node()) }
   )
   let $experts := map:merge(
     for $expert in $prosopo/eac:eac-cpf[descendant::eac:identity/@localType='expert']/@xml:id
@@ -339,15 +342,34 @@ declare
   %output:method('json')
 function getExpertiseJson($id) {
   let $expertise := db:open('xpr')//expertise[@xml:id=$id]
-  let $meta := map{}
-  let $content := map{
+  let $meta := map{
     'id' : fn:normalize-space($expertise/@xml:id),
     'cote' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
     'dossier' : $expertise/sourceDesc/idno[@type='item'] => fn:string(),
     'supplement' : $expertise/sourceDesc/idno[@type='supplement'] => fn:string(),
+    'extent' : $expertise/sourceDesc/physDesc/extent => fn:normalize-space(),
+    'sketch' : $expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space(),
+    'appendices' : array{
+      for $appendice in $expertise/sourceDesc/physDesc/extent/appendices/appendice
+      return map{
+        'type' : array{
+          for $type in $appendice/type
+          return $type => fn:normalize-space()
+        },
+        'extent' : $appendice/extent => fn:normalize-space(),
+        'description' : $appendice/desc => fn:normalize-space(),
+        'note' : $appendice/note => fn:normalize-space()
+      }
+     },
+    'maintenance' : array {
+      for $maintenanceEvent in $expertise/control/maintenanceHistory/maintenanceEvent
+      return xpr.mappings.html:getMaintenanceEvent($maintenanceEvent, map{})
+    }
+  }
+  let $content := map{
     'addresses' : array{
-      for $place in $expertise/description/places
-      return fn:normalize-space($place)
+      for $place in $expertise/description/places/place[fn:normalize-space(.)!='']
+      return xpr.mappings.html:getAddress($place, map{}) => fn:string-join() => fn:normalize-space()
     },
     'dates' : array{
       fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
@@ -358,6 +380,30 @@ function getExpertiseJson($id) {
       return map{
         fn:normalize-space($session/@type) : fn:normalize-space($session/@when)
       }
+    },
+    'designation' : if($expertise/description/categories/designation[@rubric='true'])
+      then $expertise/description/categories/designation => fn:normalize-space() || ' (en rubrique)'
+      else $expertise/description/categories/designation => fn:normalize-space(),
+    'categories' : array{
+      for $category in $expertise/description/categories/category
+      return $category => fn:normalize-space()
+    },
+    'framework' : fn:concat($expertise/description/procedure/framework/@type, ' - ', fn:normalize-space($expertise/description/procedure/framework)),
+    'origination' : $expertise/description/procedure/origination => fn:normalize-space(),
+    'sentences' : array{
+      for $sentence in $expertise/description/procedure/sentences/sentence
+      return map {
+        'orgName' : $sentence/orgName => fn:normalize-space(),
+        'dates' : array{
+          for $date in $sentence/date[fn:normalize-space(@when)!='']
+          return $date/@when => fn:normalize-space()
+        }
+      }
+    },
+    'case' : $expertise/description/procedure/case => fn:normalize-space(),
+    'objects' : array{
+      for $object in $expertise/description/procedure/objects/object
+      return $object => fn:normalize-space()
     },
     'experts' : array{
       for $expert in $expertise//experts/expert[fn:normalize-space(@ref)!='']
@@ -412,7 +458,47 @@ function getExpertiseJson($id) {
         'name' : fn:string-join($craftman/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
         'occupation' : $craftman/occupation => fn:normalize-space()
       }
-    }
+    },
+    'agreement' : $expertise/description/conclusions/agreement => fn:normalize-space(),
+    'opinions' : array{
+      for $opinion in $expertise/description/conclusions/opinion
+      return map {
+        'experts' : array{
+          for $expert in fn:tokenize($opinion/@ref)
+          return  map{
+            'id': fn:substring-after($expert, '#'),
+            'name' : xpr.mappings.html:getEntityName(fn:substring-after($expert, '#'))
+          }
+        },
+        'opinion' : $opinion => fn:normalize-space()
+      }
+    },
+    'arrangement' : $expertise/description/conclusions/arrangement => fn:normalize-space(),
+    'estimate' : xpr.mappings.html:getValue($expertise/description/conclusions/estimate[fn:string-join(@*)!=''], map{}),
+    'estimates' : array{
+      for $place in $expertise/description/conclusions/estimates/place
+      let $ref := fn:substring-after($place/@ref, '#')
+      let $placeName := xpr.mappings.html:getAddress($expertise/description/places/place[@xml:id=$ref], map{}) => fn:string-join() => fn:normalize-space()
+      return map{
+        'placeName' : $placeName,
+        'appraisals' : array{
+          for $appraisal in $place/appraisal
+          return map{
+            'description' : fn:normalize-space($appraisal/desc),
+            'value' : xpr.mappings.html:getValue($appraisal, map{})
+          }
+        }
+      }
+    },
+    'fees' : array{
+      for $fee in $expertise/description/conclusions/fees/fee[fn:string-join((@l, @s, @d))!='']
+      return xpr.mappings.html:getFee($fee, map{})
+    },
+    'totalFees' : xpr.mappings.html:getValue($expertise/description/conclusions/fees/total, map{}),
+    'expertsExpense' : xpr.mappings.html:getValue($expertise/description/conclusions/expenses/expense[@type='expert'], map{}),
+    'clerksExpense' : xpr.mappings.html:getValue($expertise/description/conclusions/expenses/expense[@type='clerk'], map{}),
+    'analysis' : $expertise/description/analysis => fn:normalize-space(),
+    'noteworthy' : $expertise/description/noteworthy => fn:normalize-space()
   }
   return map {
       'meta' : $meta,
@@ -785,7 +871,174 @@ function getBiographyJson($id) {
   let $meta := map {}
   let $content := map{
     'id' : fn:normalize-space($biography/@xml:id),
-    'name' : xpr.mappings.html:getEntityName($biography/@xml:id),
+    'authorizedForm' : xpr.mappings.html:getEntityName($biography/@xml:id),
+    'alternativeForms' : array{
+      for $alternativeForm in $biography/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]
+      return (
+        map {
+          'sources' : array{
+            for $source in $alternativeForm/xpr:source[fn:normalize-space(@xlink:href)!='']
+            return map {
+              'id' : $source/@xlink:href => fn:substring-after('#'),
+              'source' : xpr.mappings.html:getSource($source, map{}),
+              'note' : $source => fn:normalize-space()
+            }
+          }
+        },
+        map:merge(
+          for $part in $alternativeForm/eac:part[fn:normalize-space(.)!='']
+          let $localType := fn:normalize-space($part/@localType)
+          return (map{$localType : $part => fn:normalize-space()})
+      ))
+    },
+    (:'existDates' : map{
+      'birth' : if(
+        fn:not($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*)
+        or fn:normalize-space($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*) = '') then ''
+        else map{
+          $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*/fn:local-name() :
+          $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@* => fn:normalize-space()
+        },
+      'death' : if(
+        fn:not($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*)
+        or fn:normalize-space($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*) = '') then ''
+        else map{
+        $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*/fn:local-name() :
+        $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@* => fn:normalize-space()
+      }
+    },:)
+    'existDates' : map{
+      'birth' : map {
+        'precision' : $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*/fn:local-name(),
+        'date' : $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@* => fn:normalize-space()
+      },
+      'death' : map {
+        'precision' : $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*/fn:local-name(),
+        'date' : $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@* => fn:normalize-space()
+      }
+    },
+    'sex' : $biography/eac:cpfDescription/eac:description/eac:localDescription[@localType='sex']/eac:term => fn:normalize-space(),
+    'places' : array{
+      for $place in $biography/eac:cpfDescription/eac:description/eac:places/eac:place
+      return map{
+        'placeRole' : $place/eac:placeRole => fn:normalize-space(),
+        'placeEntry' : $place/eac:placeEntry => fn:normalize-space(),
+        (:@todo for each dateRange or date in dateSet:)
+        'dates' : array{
+          for $date in $place/eac:dateSet/*[descendant-or-self::*/@standardDate != '' or descendant-or-self::*/@notAfter != '' or descendant-or-self::*/@notBefore != '']
+          return if($date/self::eac:dateRange) then map{
+            'from' : map{
+              'precision' : $date/eac:fromDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+              'date' : $date/eac:fromDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+            },
+            'to' : map{
+              'precision' : $date/eac:toDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+              'date' : $date/eac:toDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+            },
+            'sources' : array{
+              for $source in $date/xpr:source[@xlink:href!='']
+              return map{
+                'id' : $source/@xlink:href => fn:substring-after('#'),
+                'source' : xpr.mappings.html:getSource($source, map{}),
+                'note' : $source => fn:normalize-space()
+              }
+            }
+          } else map{
+            'precision' : $date/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $date/@*[fn:normalize-space(.)!=''] => fn:normalize-space(),
+            'sources' : array{
+              for $source in $date/xpr:source[@xlink:href!='']
+              return map{
+                'id' : $source/@xlink:href => fn:substring-after('#'),
+                'source' : xpr.mappings.html:getSource($source, map{}),
+                'note' : $source => fn:normalize-space()
+              }
+            }
+          }
+        },
+        'note' : $place/eac:descriptiveNote/eac:p => fn:normalize-space()
+      }
+    },
+    'occupations' : array{
+      for $occupation in $biography/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']
+      return map{
+        'occupation' : $occupation/eac:term => fn:normalize-space(),
+        'dates' : if($occupation/eac:dateRange) then map{
+          'from' : map{
+            'precision' : $occupation/eac:dateRange/eac:fromDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $occupation/eac:dateRange/eac:fromDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+          },
+          'to' : map{
+            'precision' : $occupation/eac:dateRange/eac:toDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $occupation/eac:dateRange/eac:toDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+          }
+        } else map{
+          'precision' : $occupation/eac:date/@*[fn:normalize-space(.)!='']/fn:local-name(),
+          'date' : $occupation/eac:date/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+        }
+      }
+    },
+    'functions' : array{
+      for $function in $biography/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']
+      return map{
+        'function' : $function/eac:term => fn:normalize-space(),
+        'dates' : if($function/eac:dateRange) then map{
+          'from' : map{
+            'precision' : $function/eac:dateRange/eac:fromDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $function/eac:dateRange/eac:fromDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+          },
+          'to' : map{
+            'precision' : $function/eac:dateRange/eac:toDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $function/eac:dateRange/eac:toDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+          }
+        } else map{
+          'precision' : $function/eac:date/@*[fn:normalize-space(.)!='']/fn:local-name(),
+          'date' : $function/eac:date/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+        }
+      }
+    },
+    'events' : array{
+      for $event in $biography/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']
+      return map{
+        'event' : $event/eac:event => fn:normalize-space(),
+        'place' : $event/eac:placeEntry => fn:normalize-space(),
+        'participants' : array{
+          for $participant in $event/rico:participant[@xlink:href!='']
+          return map{
+            'id' : $participant/@xlink:href => fn:substring-after('#'),
+            'name' : xpr.mappings.html:getEntityName($participant/@xlink:href => fn:substring-after('#'))
+          }
+        },
+        'involves' : array{
+          for $involve in $event/rico:involve[@xlink:href!='']
+          return map{
+            'id' : $involve/@xlink:href => fn:substring-after('#'),
+            'name' : xpr.mappings.html:getEntityName($involve/@xlink:href => fn:substring-after('#'))
+          }
+        },
+        'sources' : array{
+          for $source in $event/xpr:source[@xlink:href!='']
+          return map{
+            'id' : $source/@xlink:href => fn:substring-after('#'),
+            'source' : xpr.mappings.html:getSource($source, map{}),
+            'note' : $source => fn:normalize-space()
+          }
+        },
+        'dates' : if($event/eac:dateRange) then map{
+          'from' : map{
+            'precision' : $event/eac:dateRange/eac:fromDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $event/eac:dateRange/eac:fromDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+          },
+          'to' : map{
+            'precision' : $event/eac:dateRange/eac:toDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
+            'date' : $event/eac:dateRange/eac:toDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+          }
+        } else map{
+          'precision' : $event/eac:date/@*[fn:normalize-space(.)!='']/fn:local-name(),
+          'date' : $event/eac:date/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
+        }
+      }
+    },
     'expertises' : array{
       for $expertise in $expertises order by $expertise/@xml:id return map {
         'id' : $expertise/@xml:id => fn:normalize-space(),

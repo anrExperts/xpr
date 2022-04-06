@@ -669,12 +669,12 @@ declare function getEntityLink($node as node()*, $options as map(*)) as node()* 
   return $entityLink
 };
 
-declare function getSource($node as node()*, $options as map(*)) as node()* {
+declare function getSource($node as node()*, $options as map(*)) as xs:string {
   let $sources := db:open('xpr')/xpr:xpr/xpr:sources
   let $id := $node/@xlink:href => fn:substring-after('#')
   let $cote := fn:normalize-space($sources/xpr:source[@xml:id=$id])
   let $source := <a href="/xpr/sources/{$id}/view">{$cote}</a>
-  return $source
+  return $cote
 };
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
