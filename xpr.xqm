@@ -872,11 +872,11 @@ function getBiographyJson($id) {
   let $content := map{
     'id' : fn:normalize-space($biography/@xml:id),
     'authorizedForm' : xpr.mappings.html:getEntityName($biography/@xml:id),
-    'alternativeForms' : array{
-      for $alternativeForm in $biography/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm]
+    'alternativeForms' : if($biography/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm][fn:normalize-space(.)!='']) then array{
+      for $alternativeForm in $biography/eac:cpfDescription/eac:identity/eac:nameEntry[eac:alternativeForm][fn:normalize-space(.)!='']
       return (
         map {
-          'sources' : array{
+          'sources' : if($alternativeForm/xpr:source[fn:normalize-space(@xlink:href)!='']) then array{
             for $source in $alternativeForm/xpr:source[fn:normalize-space(@xlink:href)!='']
             return map {
               'id' : $source/@xlink:href => fn:substring-after('#'),
@@ -918,13 +918,12 @@ function getBiographyJson($id) {
       }
     },
     'sex' : $biography/eac:cpfDescription/eac:description/eac:localDescription[@localType='sex']/eac:term => fn:normalize-space(),
-    'places' : array{
-      for $place in $biography/eac:cpfDescription/eac:description/eac:places/eac:place
+    'places' : if($biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']) then array{
+      for $place in $biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']
       return map{
         'placeRole' : $place/eac:placeRole => fn:normalize-space(),
         'placeEntry' : $place/eac:placeEntry => fn:normalize-space(),
-        (:@todo for each dateRange or date in dateSet:)
-        'dates' : array{
+        'dates' : if($place/eac:dateSet/*[descendant-or-self::*/@standardDate != '' or descendant-or-self::*/@notAfter != '' or descendant-or-self::*/@notBefore != '']) then array{
           for $date in $place/eac:dateSet/*[descendant-or-self::*/@standardDate != '' or descendant-or-self::*/@notAfter != '' or descendant-or-self::*/@notBefore != '']
           return if($date/self::eac:dateRange) then map{
             'from' : map{
@@ -935,7 +934,7 @@ function getBiographyJson($id) {
               'precision' : $date/eac:toDate/@*[fn:normalize-space(.)!='']/fn:local-name(),
               'date' : $date/eac:toDate/@*[fn:normalize-space(.)!=''] => fn:normalize-space()
             },
-            'sources' : array{
+            'sources' : if($date/xpr:source[@xlink:href!='']) then array{
               for $source in $date/xpr:source[@xlink:href!='']
               return map{
                 'id' : $source/@xlink:href => fn:substring-after('#'),
@@ -946,7 +945,7 @@ function getBiographyJson($id) {
           } else map{
             'precision' : $date/@*[fn:normalize-space(.)!='']/fn:local-name(),
             'date' : $date/@*[fn:normalize-space(.)!=''] => fn:normalize-space(),
-            'sources' : array{
+            'sources' : if($date/xpr:source[@xlink:href!='']) then array{
               for $source in $date/xpr:source[@xlink:href!='']
               return map{
                 'id' : $source/@xlink:href => fn:substring-after('#'),
@@ -959,7 +958,7 @@ function getBiographyJson($id) {
         'note' : $place/eac:descriptiveNote/eac:p => fn:normalize-space()
       }
     },
-    'occupations' : array{
+    'occupations' : if($biography/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']) then array{
       for $occupation in $biography/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']
       return map{
         'occupation' : $occupation/eac:term => fn:normalize-space(),
@@ -978,7 +977,7 @@ function getBiographyJson($id) {
         }
       }
     },
-    'functions' : array{
+    'functions' : if($biography/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']) then array{
       for $function in $biography/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']
       return map{
         'function' : $function/eac:term => fn:normalize-space(),
@@ -997,26 +996,26 @@ function getBiographyJson($id) {
         }
       }
     },
-    'events' : array{
+    'events' : if($biography/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']) then array{
       for $event in $biography/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']
       return map{
         'event' : $event/eac:event => fn:normalize-space(),
         'place' : $event/eac:placeEntry => fn:normalize-space(),
-        'participants' : array{
+        'participants' : if($event/rico:participant[@xlink:href!='']) then array{
           for $participant in $event/rico:participant[@xlink:href!='']
           return map{
             'id' : $participant/@xlink:href => fn:substring-after('#'),
             'name' : xpr.mappings.html:getEntityName($participant/@xlink:href => fn:substring-after('#'))
           }
         },
-        'involves' : array{
+        'involves' : if($event/rico:involve[@xlink:href!='']) then array{
           for $involve in $event/rico:involve[@xlink:href!='']
           return map{
             'id' : $involve/@xlink:href => fn:substring-after('#'),
             'name' : xpr.mappings.html:getEntityName($involve/@xlink:href => fn:substring-after('#'))
           }
         },
-        'sources' : array{
+        'sources' : if($event/xpr:source[@xlink:href!='']) then array{
           for $source in $event/xpr:source[@xlink:href!='']
           return map{
             'id' : $source/@xlink:href => fn:substring-after('#'),
@@ -1039,10 +1038,10 @@ function getBiographyJson($id) {
         }
       }
     },
-    'expertises' : array{
+    'expertises' : if(fn:count($expertises) > 0) then array{
       for $expertise in $expertises order by $expertise/@xml:id return map {
         'id' : $expertise/@xml:id => fn:normalize-space(),
-        'dates' : array{
+        'dates' : if($expertise//sessions/date[fn:normalize-space(@when[. castable as xs:date])]) then array{
           fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
         }
       }
