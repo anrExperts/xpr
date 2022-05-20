@@ -349,8 +349,8 @@ function getExpertiseJson($id) {
     'supplement' : $expertise/sourceDesc/idno[@type='supplement'] => fn:string(),
     'extent' : $expertise/sourceDesc/physDesc/extent => fn:normalize-space(),
     'sketch' : $expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space(),
-    'appendices' : array{
-      for $appendice in $expertise/sourceDesc/physDesc/extent/appendices/appendice
+    'appendices' : if($expertise/sourceDesc/physDesc/extent/appendices/appendice[fn:normalize-space(.)!='']) then array{
+      for $appendice in $expertise/sourceDesc/physDesc/extent/appendices/appendice[fn:normalize-space(.)!='']
       return map{
         'type' : array{
           for $type in $appendice/type
@@ -361,22 +361,22 @@ function getExpertiseJson($id) {
         'note' : $appendice/note => fn:normalize-space()
       }
      },
-    'maintenance' : array {
-      for $maintenanceEvent in $expertise/control/maintenanceHistory/maintenanceEvent
+    'maintenance' : if($expertise/control/maintenanceHistory/maintenanceEvent[fn:normalize-space(.)!='']) then array {
+      for $maintenanceEvent in $expertise/control/maintenanceHistory/maintenanceEvent[fn:normalize-space(.)!='']
       return xpr.mappings.html:getMaintenanceEvent($maintenanceEvent, map{})
     }
   }
   let $content := map{
-    'addresses' : array{
+    'addresses' : if($expertise/description/places/place[fn:normalize-space(.)!='']) then array{
       for $place in $expertise/description/places/place[fn:normalize-space(.)!='']
       return xpr.mappings.html:getAddress($place, map{}) => fn:string-join() => fn:normalize-space()
     },
-    'dates' : array{
+    'dates' : if($expertise//sessions/date[fn:normalize-space(@when)!='']) then array{
       fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
     },
-    'sessions' : array{
+    'sessions' : if($expertise/description/sessions/date[fn:normalize-space(@type)!='' or fn:normalize-space(@when)!='']) then array{
     (:@rmq : use array instead of map:merge because the latter combine duplicate keys:)
-      for $session in $expertise/description/sessions/date
+      for $session in $expertise/description/sessions/date[fn:normalize-space(@type)!='' or fn:normalize-space(@when)!='']
       return map{
         fn:normalize-space($session/@type) : fn:normalize-space($session/@when)
       }
@@ -384,28 +384,28 @@ function getExpertiseJson($id) {
     'designation' : if($expertise/description/categories/designation[@rubric='true'])
       then $expertise/description/categories/designation => fn:normalize-space() || ' (en rubrique)'
       else $expertise/description/categories/designation => fn:normalize-space(),
-    'categories' : array{
-      for $category in $expertise/description/categories/category
+    'categories' : if($expertise/description/categories/category[fn:normalize-space(.)!='']) then array{
+      for $category in $expertise/description/categories/category[fn:normalize-space(.)!='']
       return $category => fn:normalize-space()
     },
-    'framework' : fn:concat($expertise/description/procedure/framework/@type, ' - ', fn:normalize-space($expertise/description/procedure/framework)),
+    'framework' : if($expertise/description/procedure/framework[fn:normalize-space(.)!='']) then $expertise/description/procedure/framework/@type || ' - ' || fn:normalize-space($expertise/description/procedure/framework) else '',
     'origination' : $expertise/description/procedure/origination => fn:normalize-space(),
-    'sentences' : array{
-      for $sentence in $expertise/description/procedure/sentences/sentence
+    'sentences' : if($expertise/description/procedure/sentences/sentence[fn:normalize-space(.)!='']) then array{
+      for $sentence in $expertise/description/procedure/sentences/sentence[fn:normalize-space(.)!='']
       return map {
         'orgName' : $sentence/orgName => fn:normalize-space(),
-        'dates' : array{
+        'dates' : if($sentence/date[fn:normalize-space(@when)!='']) then array{
           for $date in $sentence/date[fn:normalize-space(@when)!='']
           return $date/@when => fn:normalize-space()
         }
       }
     },
     'case' : $expertise/description/procedure/case => fn:normalize-space(),
-    'objects' : array{
-      for $object in $expertise/description/procedure/objects/object
+    'objects' : if($expertise/description/procedure/objects/object[fn:normalize-space(.)!='']) then array{
+      for $object in $expertise/description/procedure/objects/object[fn:normalize-space(.)!='']
       return $object => fn:normalize-space()
     },
-    'experts' : array{
+    'experts' : if($expertise//experts/expert[fn:normalize-space(@ref)!='']) then array{
       for $expert in $expertise//experts/expert[fn:normalize-space(@ref)!='']
       return map{
         'id' : $expert/fn:substring-after(@ref, '#'),
@@ -416,43 +416,43 @@ function getExpertiseJson($id) {
         'appointment' : $expert/@appointment => fn:normalize-space()
       }
     },
-    'clerks' : array{
-      for $clerk in $expertise/description/participants/clerks/clerk
+    'clerks' : if($expertise/description/participants/clerks/clerk[fn:normalize-space(.)!='']) then array{
+      for $clerk in $expertise/description/participants/clerks/clerk[fn:normalize-space(.)!='']
       return fn:string-join($clerk/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', ')
     },
-    'parties' : array {
-      for $party in $expertise/description/participants/parties/party
+    'parties' : if($expertise/description/participants/parties/party[fn:normalize-space(.)!='']) then array {
+      for $party in $expertise/description/participants/parties/party[fn:normalize-space(.)!='']
       return map{
         'role' : $party/@role => fn:normalize-space(),
         'presence' : $party/@presence => fn:normalize-space(),
         'intervention' : $party/@intervention => fn:normalize-space(),
-        'persons' : array{
-          for $person in $party/person
+        'persons' : if($party/person[fn:normalize-space(.)!='']) then array{
+          for $person in $party/person[fn:normalize-space(.)!='']
           return map{
             'name' : fn:string-join($person/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
             'occupation' : $person/occupation => fn:normalize-space()
           }
         },
         'status' : $party/status => fn:normalize-space(),
-        'expert' : map {
+        'expert' : if($party/expert[fn:normalize-space(@ref) !='']) then map {
           'id' : $party/expert/fn:substring-after(fn:normalize-space(@ref), '#'),
           'name' : xpr.mappings.html:getEntityName($party/expert/fn:substring-after(@ref, '#'))
         },
-        'representatives' : array{
-          for $representative in $party/representative
+        'representatives' : if($party/representative[fn:normalize-space(.)!='']) then array{
+          for $representative in $party/representative[fn:normalize-space(.)!='']
           return map {
               'name' : fn:string-join($representative/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
               'occupation' : $representative/occupation => fn:normalize-space()
             }
         },
-        'prosecutors' : array{
-          for $prosecutor in $party/prosecutor
+        'prosecutors' : if($party/prosecutor[fn:normalize-space(.)!='']) then array{
+          for $prosecutor in $party/prosecutor[fn:normalize-space(.)!='']
           return fn:string-join($prosecutor/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', ')
 
         }
       }
     },
-    'craftmen' : array{
+    'craftmen' : if($expertise/description/participants/craftmen/craftman[fn:normalize-space(.) != '']) then array{
       for $craftman in $expertise/description/participants/craftmen/craftman[fn:normalize-space(.) != '']
       return map{
         'name' : fn:string-join($craftman/persName/*[fn:normalize-space(.)!='']/functx:capitalize-first(fn:normalize-space()), ', '),
@@ -460,13 +460,13 @@ function getExpertiseJson($id) {
       }
     },
     'agreement' : $expertise/description/conclusions/agreement => fn:normalize-space(),
-    'opinions' : array{
-      for $opinion in $expertise/description/conclusions/opinion
+    'opinions' : if($expertise/description/conclusions/opinion[fn:normalize-space(.)!='']) then array{
+      for $opinion in $expertise/description/conclusions/opinion[fn:normalize-space(.)!='']
       return map {
-        'experts' : array{
+        'experts' : if($opinion[fn:normalize-space(@ref)!='']) then array{
           for $expert in fn:tokenize($opinion/@ref)
-          return  map{
-            'id': fn:substring-after($expert, '#'),
+          return map{
+            'id': fn:substring-after($expert, '#') => fn:normalize-space(),
             'name' : xpr.mappings.html:getEntityName(fn:substring-after($expert, '#'))
           }
         },
@@ -475,14 +475,14 @@ function getExpertiseJson($id) {
     },
     'arrangement' : $expertise/description/conclusions/arrangement => fn:normalize-space(),
     'estimate' : xpr.mappings.html:getValue($expertise/description/conclusions/estimate[fn:string-join(@*)!=''], map{}),
-    'estimates' : array{
-      for $place in $expertise/description/conclusions/estimates/place
+    'estimates' : if($expertise/description/conclusions/estimates/place[fn:normalize-space(.)!='' or appraisal[fn:string-join((@l, @s, @d))!='']]) then array{
+      for $place in $expertise/description/conclusions/estimates/place[fn:normalize-space(.)!='' or appraisal[fn:string-join((@l, @s, @d))!='']]
       let $ref := fn:substring-after($place/@ref, '#')
       let $placeName := xpr.mappings.html:getAddress($expertise/description/places/place[@xml:id=$ref], map{}) => fn:string-join() => fn:normalize-space()
       return map{
         'placeName' : $placeName,
-        'appraisals' : array{
-          for $appraisal in $place/appraisal
+        'appraisals' : if($place/appraisal[fn:normalize-space(.)!='' or fn:string-join((@l, @s, @d))!='']) then array{
+          for $appraisal in $place/appraisal[fn:normalize-space(.)!='' or fn:string-join((@l, @s, @d))!='']
           return map{
             'description' : fn:normalize-space($appraisal/desc),
             'value' : xpr.mappings.html:getValue($appraisal, map{})
@@ -490,7 +490,7 @@ function getExpertiseJson($id) {
         }
       }
     },
-    'fees' : array{
+    'fees' : if($expertise/description/conclusions/fees/fee[fn:string-join((@l, @s, @d))!='']) then array{
       for $fee in $expertise/description/conclusions/fees/fee[fn:string-join((@l, @s, @d))!='']
       return xpr.mappings.html:getFee($fee, map{})
     },
