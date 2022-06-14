@@ -44,6 +44,13 @@
         <data xmlns="xpr"/>
     </xf:instance>
 
+    <xf:instance id="xprCurrency">
+        <currency xmlns="xpr">
+            <lt l="" s="" d=""></lt>
+            <f f="" dec="" cent=""/>
+        </currency>
+    </xf:instance>
+
     <xf:instance id="xprHouseParts">
         <parts xmlns="xpr">
             <part type="courtyard">Cour</part>
@@ -76,6 +83,26 @@
         </parts>
     </xf:instance>
 
+    <xf:instance id="xprDrawingTools">
+        <objects xmlns="xpr">
+            <object type="compass">Compas</object>
+            <object type="pencilHolder">Porte-crayon</object>
+            <object type="square">Équerre</object>
+            <object type="rule">Règle</object>
+            <object type="other">Autre</object>
+        </objects>
+    </xf:instance>
+
+    <xf:instance id="xprMeasuringTools">
+        <objects xmlns="xpr">
+            <object type="heightGauge">Toise</object>
+            <object type="feetGauge">Pied</object>
+            <object type="waterFeetGauge">Pied d’eau</object>
+            <object type="chain">Chaîne</object>
+            <object type="other">Autre</object>
+        </objects>
+    </xf:instance>
+
     <xf:instance id="xprScientificObjects">
         <objects xmlns="xpr">
             <object type="globe">Globe</object>
@@ -90,6 +117,8 @@
             <object type="samples">Échantillons (minéraux, coquillages)</object>
             <object type="plants">Plantes</object>
             <object type="animals">Animaux</object>
+            <object type="">Télescope</object>
+            <object type="">Lunette d'approche</object>
         </objects>
     </xf:instance>
 

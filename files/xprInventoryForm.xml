@@ -12,7 +12,7 @@
                     <xf:hint>La date indiquée doit respecter les formats suivants : AAAA-MM-JJ ou JJ/MM/AAAA</xf:hint>
                 </xf:input>
                 <xf:input ref="xpr:location" incremental="true">
-                    <xf:label>Pages, folios</xf:label>
+                    <xf:label>Pages</xf:label>
                 </xf:input>
                 <xf:select1 ref="xpr:expert/@ref" incremental="true">
                     <xf:label>Patronyme</xf:label>
@@ -696,30 +696,47 @@
             <xf:group ref="xpr:patrimony">
                 <xf:group ref="xpr:wealth">
                     <xf:label>Fortune</xf:label>
-                    <xf:select1 ref="xpr:state" incremental="true">
+                    <xf:select1 ref="xpr:state/@type" incremental="true">
                         <xf:label>Propriétaire/locataire</xf:label>
                         <xf:item>
                             <xf:label>Propriétaire</xf:label>
-                            <xf:value>propriétaire</xf:value>
+                            <xf:value>owner</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="@type">owner</xf:setvalue>
+                                <xf:setvalue ref="ancestor::xpr:state/xpr:label">propriétaire</xf:setvalue>
                             </xf:action>
                         </xf:item>
                         <xf:item>
                             <xf:label>Principal locataire</xf:label>
-                            <xf:value>principal locataire</xf:value>
+                            <xf:value>mainOccupant</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="@type">mainOccupant</xf:setvalue>
+                                <xf:setvalue ref="ancestor::xpr:state/xpr:label">principal locataire</xf:setvalue>
                             </xf:action>
                         </xf:item>
                         <xf:item>
                             <xf:label>Locataire</xf:label>
-                            <xf:value>locataire</xf:value>
+                            <xf:value>occupant</xf:value>
                             <xf:action ev:event="xforms-select">
-                                <xf:setvalue ref="@type">occupant</xf:setvalue>
+                                <xf:setvalue ref="ancestor::xpr:state/xpr:label">locataire</xf:setvalue>
                             </xf:action>
                         </xf:item>
+                        <xf:item>
+                            <xf:label>Usufruitier</xf:label>
+                            <xf:value>beneficialOwner</xf:value>
+                            <xf:action ev:event="xforms-select">
+                                <xf:setvalue ref="ancestor::xpr:state/xpr:label">usufruitier</xf:setvalue>
+                            </xf:action>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>Autre</xf:label>
+                            <xf:value>other</xf:value>
+                        </xf:item>
                     </xf:select1>
+                    <xf:input ref="xpr:state[@type='other']/xpr:label">
+                        <xf:label>Autre</xf:label>
+                    </xf:input>
+                    <xf:textarea ref="xpr:state/xpr:description">
+                        <xf:label>Description</xf:label>
+                    </xf:textarea>
                     <xf:group ref="xpr:possessions/xpr:estate">
                         <xf:label>Biens immobiliers</xf:label>
                         <xf:group ref="xpr:residences">
@@ -825,16 +842,16 @@
                                                 <xf:value>5e étage</xf:value>
                                             </xf:item>
                                         </xf:select1>
-                                        <xf:input ref="xpr:description">
+                                        <xf:textarea ref="xpr:description">
                                             <xf:label>Description</xf:label>
-                                        </xf:input>
+                                        </xf:textarea>
                                         <xf:trigger class="delete">
                                             <xf:label>&#10007;</xf:label>
                                             <xf:delete nodeset="."
                                                        at="1"
                                                        if="count(parent::xpr:layout/xpr:part) > 1"
                                                        ev:event="DOMActivate"/>
-                                            <xf:help>Supprimer une lieu.</xf:help>
+                                            <xf:help>Supprimer un lieu.</xf:help>
                                         </xf:trigger>
                                     </xf:repeat>
                                     <xf:trigger class="insert">
@@ -846,7 +863,7 @@
                                                        position="after"
                                                        ev:event="DOMActivate"/>
                                         </xf:action>
-                                        <xf:help>Ajouter une lieu.</xf:help>
+                                        <xf:help>Ajouter un lieu.</xf:help>
                                     </xf:trigger>
                                 </xf:group>
                                 <xf:textarea ref="xpr:noteworthy">
@@ -865,7 +882,7 @@
                                 <xf:label>Ajouter une résidence</xf:label>
                                 <xf:action ev:event="DOMActivate">
                                     <xf:insert context="."
-                                               origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:residences/xpr:residence"
+                                               origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:wealth/xpr:possessions/xpr:estate/xpr:residences/xpr:residence"
                                                nodeset="xpr:residence[last()]"
                                                position="after"
                                                ev:event="DOMActivate"/>
@@ -927,7 +944,7 @@
                                 <xf:label>Ajouter un magasin</xf:label>
                                 <xf:action ev:event="DOMActivate">
                                     <xf:insert context="."
-                                               origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:workshops/xpr:workshop"
+                                               origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:wealth/xpr:possessions/xpr:estate/xpr:workshops/xpr:workshop"
                                                nodeset="xpr:workshop[last()]"
                                                position="after"
                                                ev:event="DOMActivate"/>
@@ -987,7 +1004,7 @@
                                 <xf:label>Ajouter un chantier</xf:label>
                                 <xf:action ev:event="DOMActivate">
                                     <xf:insert context="."
-                                               origin="instance('xprInventoryCopy')/xpr:wealth/xpr:possessions/xpr:estate/xpr:buildingSites/xpr:buildingSite"
+                                               origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:wealth/xpr:possessions/xpr:estate/xpr:buildingSites/xpr:buildingSite"
                                                nodeset="xpr:buildingSite[last()]"
                                                position="after"
                                                ev:event="DOMActivate"/>
@@ -1000,6 +1017,37 @@
                         <xf:label>Dot de la femme</xf:label>
                         <xf:group ref=".">
                             <xf:label>Argent comptant</xf:label>
+                            <xf:select1 ref="@currency">
+                                <xf:label>Unité monétaire</xf:label>
+                                <xf:item>
+                                    <xf:label>Livre tournoit</xf:label>
+                                    <xf:value>lt</xf:value>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:delete nodeset="ancestor::xpr:dowry/@f"/>
+                                        <xf:delete nodeset="ancestor::xpr:dowry/@dec"/>
+                                        <xf:delete nodeset="ancestor::xpr:dowry/@cent"/>
+                                    </xf:action>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:insert context="ancestor::xpr:dowry" origin="instance('xprCurrency')/xpr:lt/@l"/>
+                                        <xf:insert context="ancestor::xpr:dowry" origin="instance('xprCurrency')/xpr:lt/@s"/>
+                                        <xf:insert context="ancestor::xpr:dowry" origin="instance('xprCurrency')/xpr:lt/@d"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Franc</xf:label>
+                                    <xf:value>f</xf:value>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:delete nodeset="ancestor::xpr:dowry/@l"/>
+                                        <xf:delete nodeset="ancestor::xpr:dowry/@s"/>
+                                        <xf:delete nodeset="ancestor::xpr:dowry/@d"/>
+                                    </xf:action>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:insert context="ancestor::xpr:dowry" origin="instance('xprCurrency')/xpr:f/@f"/>
+                                        <xf:insert context="ancestor::xpr:dowry" origin="instance('xprCurrency')/xpr:f/@dec"/>
+                                        <xf:insert context="ancestor::xpr:dowry" origin="instance('xprCurrency')/xpr:f/@cent"/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:select1>
                             <xf:input ref="@l">
                                 <xf:label>Livres</xf:label>
                             </xf:input>
@@ -1008,6 +1056,15 @@
                             </xf:input>
                             <xf:input ref="@d">
                                 <xf:label>Deniers</xf:label>
+                            </xf:input>
+                            <xf:input ref="@f">
+                                <xf:label>Francs</xf:label>
+                            </xf:input>
+                            <xf:input ref="@dec">
+                                <xf:label>Décimes</xf:label>
+                            </xf:input>
+                            <xf:input ref="@cent">
+                                <xf:label>Centimes</xf:label>
                             </xf:input>
                         </xf:group>
                         <xf:select1 ref="@privateIncome">
@@ -1032,6 +1089,37 @@
                         <xf:input ref="@quantity">
                             <xf:label>Quantité</xf:label>
                         </xf:input>
+                        <xf:select1 ref="@currency">
+                            <xf:label>Unité monétaire</xf:label>
+                            <xf:item>
+                                <xf:label>Livre tournoit</xf:label>
+                                <xf:value>lt</xf:value>
+                                <xf:action ev:event="xforms-select">
+                                    <xf:delete nodeset="ancestor::xpr:books/@f"/>
+                                    <xf:delete nodeset="ancestor::xpr:books/@dec"/>
+                                    <xf:delete nodeset="ancestor::xpr:books/@cent"/>
+                                </xf:action>
+                                <xf:action ev:event="xforms-select">
+                                    <xf:insert context="ancestor::xpr:books" origin="instance('xprCurrency')/xpr:lt/@l"/>
+                                    <xf:insert context="ancestor::xpr:books" origin="instance('xprCurrency')/xpr:lt/@s"/>
+                                    <xf:insert context="ancestor::xpr:books" origin="instance('xprCurrency')/xpr:lt/@d"/>
+                                </xf:action>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Franc</xf:label>
+                                <xf:value>f</xf:value>
+                                <xf:action ev:event="xforms-select">
+                                    <xf:delete nodeset="ancestor::xpr:books/@l"/>
+                                    <xf:delete nodeset="ancestor::xpr:books/@s"/>
+                                    <xf:delete nodeset="ancestor::xpr:books/@d"/>
+                                </xf:action>
+                                <xf:action ev:event="xforms-select">
+                                    <xf:insert context="ancestor::xpr:books" origin="instance('xprCurrency')/xpr:f/@f"/>
+                                    <xf:insert context="ancestor::xpr:books" origin="instance('xprCurrency')/xpr:f/@dec"/>
+                                    <xf:insert context="ancestor::xpr:books" origin="instance('xprCurrency')/xpr:f/@cent"/>
+                                </xf:action>
+                            </xf:item>
+                        </xf:select1>
                         <xf:group ref=".">
                             <xf:label>Valeur totale des volumes</xf:label>
                             <xf:input ref="@l">
@@ -1042,6 +1130,15 @@
                             </xf:input>
                             <xf:input ref="@d">
                                 <xf:label>Deniers</xf:label>
+                            </xf:input>
+                            <xf:input ref="@f">
+                                <xf:label>Francs</xf:label>
+                            </xf:input>
+                            <xf:input ref="@dec">
+                                <xf:label>Décimes</xf:label>
+                            </xf:input>
+                            <xf:input ref="@cent">
+                                <xf:label>Centimes</xf:label>
                             </xf:input>
                         </xf:group>
                         <xf:input ref="xpr:room">
@@ -1058,15 +1155,24 @@
                             </xf:itemset>
                         </xf:select1>
                     </xf:group>
+                    <xf:group ref="xpr:documents">
+                        <xf:label>Autres documents relatifs au travail</xf:label>
+                        <xf:textarea ref="xpr:description">
+                            <xf:label>Description</xf:label>
+                        </xf:textarea>
+                    </xf:group>
                     <xf:group ref="xpr:maps">
                         <xf:label>Cartes</xf:label>
-                        <xf:select1 ref=".">
+                        <xf:select1 ref="@owned">
                             <xf:label>Présence de cartes</xf:label>
                             <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
                                 <xf:label ref="xpr:label"/>
                                 <xf:value ref="xpr:value"/>
                             </xf:itemset>
                         </xf:select1>
+                        <xf:textarea ref="xpr:description">
+                            <xf:label>Description</xf:label>
+                        </xf:textarea>
                     </xf:group>
                     <xf:group ref="xpr:portraits/xpr:family">
                         <xf:label>Portraits de famille</xf:label>
@@ -1098,6 +1204,15 @@
                             <xf:label>Description</xf:label>
                         </xf:textarea>
                     </xf:group>
+                    <xf:group ref="xpr:sculptures">
+                        <xf:label>Sculptures</xf:label>
+                        <xf:input ref="@quantity">
+                            <xf:label>Quantité</xf:label>
+                        </xf:input>
+                        <xf:textarea ref=".">
+                            <xf:label>Description</xf:label>
+                        </xf:textarea>
+                    </xf:group>
                     <xf:group ref="xpr:paintings">
                         <xf:label>Peintures</xf:label>
                         <xf:input ref="@quantity">
@@ -1111,7 +1226,79 @@
                 <xf:group ref="xpr:tools">
                     <xf:label>Instruments</xf:label>
                     <xf:group ref="xpr:drawing">
-                        <xf:label>Instruments à déssiner</xf:label>
+                        <xf:label>Meuble et matériel de dessin</xf:label>
+                        <xf:group ref="xpr:furniture">
+                            <xf:label>Table à dessin</xf:label>
+                            <xf:select1 ref="@owned">
+                                <xf:label>Possession</xf:label>
+                                <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
+                                    <xf:label ref="xpr:label"/>
+                                    <xf:value ref="xpr:value"/>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:textarea ref="xpr:description">
+                                <xf:label>Description</xf:label>
+                            </xf:textarea>
+                        </xf:group>
+                        <xf:group ref="xpr:drawingTools">
+                            <xf:label>Instruments à dessiner</xf:label>
+                            <xf:select1 ref="@owned">
+                                <xf:label>mention</xf:label>
+                                <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
+                                    <xf:label ref="xpr:label"/>
+                                    <xf:value ref="xpr:value"/>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:repeat nodeset="xpr:object">
+                                <xf:label>Instrument</xf:label>
+                                <xf:var name="objectType" value="@type"/>
+                                <xf:select1 ref="@type">
+                                    <xf:label>Type</xf:label>
+                                    <xf:itemset nodeset="instance('xprDrawingTools')/xpr:object">
+                                        <xf:label ref="."/>
+                                        <xf:value ref="@type"/>
+                                    </xf:itemset>
+                                    <xf:setvalue ev:event="xforms-value-changed"
+                                                 ref="parent::xpr:object"
+                                                 value="instance('xprDrawingTools')/xpr:object[@type=$objectType]"/>
+                                </xf:select1>
+                                <xf:select1 ref="@owned">
+                                    <xf:label>Possession</xf:label>
+                                    <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
+                                        <xf:label ref="xpr:label"/>
+                                        <xf:value ref="xpr:value"/>
+                                    </xf:itemset>
+                                </xf:select1>
+                                <xf:input ref="self::xpr:object[@type='other']">
+                                    <xf:label>type (autre)</xf:label>
+                                </xf:input>
+                                <xf:trigger class="delete">
+                                    <xf:label>&#10007;</xf:label>
+                                    <xf:delete nodeset="."
+                                               if="count(parent::xpr:drawingTools/xpr:object) > 1"
+                                               at="1"
+                                               ev:event="DOMActivate"/>
+                                    <xf:help>Supprimer un instrument.</xf:help>
+                                </xf:trigger>
+                            </xf:repeat>
+                            <xf:trigger class="insert">
+                                <xf:label>Ajouter un instrument</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:insert context="."
+                                               origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:tools/xpr:drawing/xpr:drawingTools/xpr:object"
+                                               nodeset="xpr:object[last()]"
+                                               position="after"
+                                               ev:event="DOMActivate"/>
+                                </xf:action>
+                                <xf:help>Ajouter un instrument.</xf:help>
+                            </xf:trigger>
+                            <xf:textarea ref="xpr:textarea">
+                                <xf:label>Description</xf:label>
+                            </xf:textarea>
+                        </xf:group>
+                    </xf:group>
+                    <xf:group ref="xpr:measurement">
+                        <xf:label>Instruments de mesure (chantier)</xf:label>
                         <xf:select1 ref="@owned">
                             <xf:label>mention</xf:label>
                             <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
@@ -1119,15 +1306,62 @@
                                 <xf:value ref="xpr:value"/>
                             </xf:itemset>
                         </xf:select1>
-                    </xf:group>
-                    <xf:group ref="xpr:measurement">
-                        <xf:label>Instruments de mesure</xf:label>
-                        <xf:textarea ref=".">
+                        <xf:repeat nodeset="xpr:object">
+                            <xf:label>Instrument</xf:label>
+                            <xf:var name="objectType" value="@type"/>
+                            <xf:select1 ref="@type">
+                                <xf:label>Type</xf:label>
+                                <xf:itemset nodeset="instance('xprMeasuringTools')/xpr:object">
+                                    <xf:label ref="."/>
+                                    <xf:value ref="@type"/>
+                                </xf:itemset>
+                                <xf:setvalue ev:event="xforms-value-changed"
+                                             ref="parent::xpr:object"
+                                             value="instance('xprMeasuringTools')/xpr:object[@type=$objectType]"/>
+                            </xf:select1>
+                            <xf:select1 ref="@owned">
+                                <xf:label>Possession</xf:label>
+                                <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
+                                    <xf:label ref="xpr:label"/>
+                                    <xf:value ref="xpr:value"/>
+                                </xf:itemset>
+                            </xf:select1>
+                            <xf:input ref="self::xpr:object[@type='other']">
+                                <xf:label>type (autre)</xf:label>
+                            </xf:input>
+                            <xf:trigger class="delete">
+                                <xf:label>&#10007;</xf:label>
+                                <xf:delete nodeset="."
+                                           if="count(parent::xpr:measurement/xpr:object) > 1"
+                                           at="1"
+                                           ev:event="DOMActivate"/>
+                                <xf:help>Supprimer un instrument.</xf:help>
+                            </xf:trigger>
+                        </xf:repeat>
+                        <xf:trigger class="insert">
+                            <xf:label>Ajouter un instrument</xf:label>
+                            <xf:action ev:event="DOMActivate">
+                                <xf:insert context="."
+                                           origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:tools/xpr:measurement/xpr:object"
+                                           nodeset="xpr:object[last()]"
+                                           position="after"
+                                           ev:event="DOMActivate"/>
+                            </xf:action>
+                            <xf:help>Ajouter un instrument.</xf:help>
+                        </xf:trigger>
+                        <xf:textarea ref="xpr:description">
                             <xf:label>Remarques</xf:label>
                         </xf:textarea>
                     </xf:group>
                     <xf:group ref="xpr:scientific">
                         <xf:label>Objets scientifiques</xf:label>
+                        <xf:select1 ref="@owned">
+                            <xf:label>mention</xf:label>
+                            <xf:itemset nodeset="instance('xprBoolean')/xpr:state">
+                                <xf:label ref="xpr:label"/>
+                                <xf:value ref="xpr:value"/>
+                            </xf:itemset>
+                        </xf:select1>
                         <xf:repeat nodeset="xpr:object">
                             <xf:var name="objectType" value="@type"></xf:var>
                             <xf:select1 ref="@type">
@@ -1160,15 +1394,15 @@
                             <xf:label>Ajouter un objet</xf:label>
                             <xf:action ev:event="DOMActivate">
                                 <xf:insert context="."
-                                           origin="instance('xprInventoryCopy')/xpr:wealth/xpr:tools/xpr:scientific/xpr:object"
+                                           origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:tools/xpr:scientific/xpr:object"
                                            nodeset="xpr:object[last()]"
                                            position="after"
                                            ev:event="DOMActivate"/>
                             </xf:action>
                             <xf:help>Ajouter un objet.</xf:help>
                         </xf:trigger>
-                        <xf:textarea ref="xpr:noteworthy">
-                            <xf:label>Éléments remarquables</xf:label>
+                        <xf:textarea ref="xpr:description">
+                            <xf:label>Description</xf:label>
                         </xf:textarea>
                     </xf:group>
                 </xf:group>
@@ -1203,6 +1437,37 @@
                         </xf:group>
                         <xf:group ref="xpr:cost">
                             <xf:label>Prix</xf:label>
+                            <xf:select1 ref="@currency">
+                                <xf:label>Unité monétaire</xf:label>
+                                <xf:item>
+                                    <xf:label>Livre tournoit</xf:label>
+                                    <xf:value>lt</xf:value>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:delete nodeset="ancestor::xpr:cost/@f"/>
+                                        <xf:delete nodeset="ancestor::xpr:cost/@dec"/>
+                                        <xf:delete nodeset="ancestor::xpr:cost/@cent"/>
+                                    </xf:action>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:insert context="ancestor::xpr:cost" origin="instance('xprCurrency')/xpr:lt/@l"/>
+                                        <xf:insert context="ancestor::xpr:cost" origin="instance('xprCurrency')/xpr:lt/@s"/>
+                                        <xf:insert context="ancestor::xpr:cost" origin="instance('xprCurrency')/xpr:lt/@d"/>
+                                    </xf:action>
+                                </xf:item>
+                                <xf:item>
+                                    <xf:label>Franc</xf:label>
+                                    <xf:value>f</xf:value>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:delete nodeset="ancestor::xpr:cost/@l"/>
+                                        <xf:delete nodeset="ancestor::xpr:cost/@s"/>
+                                        <xf:delete nodeset="ancestor::xpr:cost/@d"/>
+                                    </xf:action>
+                                    <xf:action ev:event="xforms-select">
+                                        <xf:insert context="ancestor::xpr:cost" origin="instance('xprCurrency')/xpr:f/@f"/>
+                                        <xf:insert context="ancestor::xpr:cost" origin="instance('xprCurrency')/xpr:f/@dec"/>
+                                        <xf:insert context="ancestor::xpr:cost" origin="instance('xprCurrency')/xpr:f/@cent"/>
+                                    </xf:action>
+                                </xf:item>
+                            </xf:select1>
                             <xf:input ref="@l">
                                 <xf:label>Livres</xf:label>
                             </xf:input>
@@ -1211,6 +1476,15 @@
                             </xf:input>
                             <xf:input ref="@d">
                                 <xf:label>Deniers</xf:label>
+                            </xf:input>
+                            <xf:input ref="@f">
+                                <xf:label>Francs</xf:label>
+                            </xf:input>
+                            <xf:input ref="@dec">
+                                <xf:label>Décimes</xf:label>
+                            </xf:input>
+                            <xf:input ref="@cent">
+                                <xf:label>Centimes</xf:label>
                             </xf:input>
                         </xf:group>
                         <xf:trigger class="delete">

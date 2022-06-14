@@ -106,7 +106,11 @@
     </actors>
     <patrimony>
         <wealth>
-            <state type=""/>
+            <!-- @todo modification state added label + description tags -->
+            <state type="">
+                <label></label>
+                <description></description>
+            </state>
             <possessions>
                 <estate>
                     <residences>
@@ -160,22 +164,24 @@
                     </buildingSites>
                 </estate>
             </possessions>
-            <dowry l=""
-                   s=""
-                   d=""
-                   privateIncome=""/>
+            <!-- @todo add currency -->
+            <dowry currency="lt" l="" s="" d="" privateIncome=""/>
             <contribution/>
         </wealth>
         <knowledge>
-            <books quantity=""
-                   l=""
-                   s=""
-                   d=""
-                   bookseller="">
+            <!-- @todo add currency -->
+            <books quantity="" currency="lt" l="" s="" d="" bookseller="">
                 <room/>
                 <noteworthy/>
             </books>
-            <maps/>
+            <!-- @todo update older forms (add documents)-->
+            <documents>
+                <description/>
+            </documents>
+            <!-- @todo update older forms (put maps content into @owned and description tag into maps)-->
+            <maps owned="">
+                <description/>
+            </maps>
             <portraits>
                 <family quantity="">
                     <description/>
@@ -186,15 +192,30 @@
                 </expert>
             </portraits>
             <drawings quantity=""/>
+            <!-- @todo update older forms (add sculptures tags) -->
+            <sculptures quantity=""/>
             <paintings quantity=""/>
         </knowledge>
         <tools>
-            <drawing
-                owned=""/>
-            <measurement/>
-            <scientific>
+            <!-- @todo add into drawing the following tags furniture + drawingTools-->
+            <drawing>
+                <furniture owned="">
+                    <description/>
+                </furniture>
+                <drawingTools owned="">
+                    <object type="" owned=""/>
+                    <description/>
+                </drawingTools>
+            </drawing>
+            <!-- @todo add @owned + content object + description -->
+            <measurement owned="">
                 <object type="" owned=""/>
-                <noteworthy/>
+                <description/>
+            </measurement>
+            <!-- @todo add @owned change noteworthy into description -->
+            <scientific owned="">
+                <object type="" owned=""/>
+                <description/>
             </scientific>
         </tools>
         <objects>
@@ -209,9 +230,8 @@
                 <address>
                     <street/>
                 </address>
-                <cost l=""
-                      s=""
-                      d=""/>
+                <!-- @todo add currency -->
+                <cost currency="lt" l="" s="" d=""/>
             </work>
         </buildingWorks>
     </patrimony>
