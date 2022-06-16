@@ -1350,7 +1350,7 @@
                             <xf:help>Ajouter un instrument.</xf:help>
                         </xf:trigger>
                         <xf:textarea ref="xpr:description">
-                            <xf:label>Remarques</xf:label>
+                            <xf:label>Description</xf:label>
                         </xf:textarea>
                     </xf:group>
                     <xf:group ref="xpr:scientific">
@@ -1381,6 +1381,9 @@
                                     <xf:value ref="xpr:value"/>
                                 </xf:itemset>
                             </xf:select1>
+                            <xf:input ref="self::xpr:object[@type='other']">
+                                <xf:label>type (autre)</xf:label>
+                            </xf:input>
                             <xf:trigger class="delete">
                                 <xf:label>&#10007;</xf:label>
                                 <xf:delete nodeset="."
@@ -1519,9 +1522,7 @@
         </xf:case>
     </xf:switch>
     <span class="save">
-        <xf:select1 ref="instance('xprInventory')/xpr:control/xpr:localControl/xpr:term"
-                    appearance="full"
-                    incremental="true">
+        <xf:select1 ref="instance('xprInventory')/xpr:control/xpr:localControl/xpr:term" appearance="full" incremental="true">
             <xf:label>
                 <span>Statut</span>
             </xf:label>
@@ -1546,12 +1547,12 @@
             </xf:group>
             <xf:trigger>
                 <xf:label>Annuler</xf:label>
-                <xf:hide ev:event="DOMActivate"
-                         dialog="control"/>
+                <xf:hide ev:event="DOMActivate" dialog="control"/>
             </xf:trigger>
             <xf:trigger>
                 <xf:label>Enregistrer</xf:label>
                 <xf:action ev:event="DOMActivate">
+                    <xf:show dialog="saveInProgress"/>
                     <xf:send submission="submitInventory"/>
                 </xf:action>
             </xf:trigger>
@@ -1569,8 +1570,12 @@
                        ev:event="DOMActivate">
                 <!--<xf:dispatch name="submission"
                              targetid="inventory"/>-->
+                <xf:show dialog="saveInProgress"/>
                 <xf:send submission="submitInventory"/>
             </xf:action>
         </xf:trigger>
+        <xf:dialog id="saveInProgress">
+            <p>Sauvegarde en cours</p>
+        </xf:dialog>
     </span>
 </form>

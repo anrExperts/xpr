@@ -106,7 +106,6 @@
     </actors>
     <patrimony>
         <wealth>
-            <!-- @todo modification state added label + description tags -->
             <state type="">
                 <label></label>
                 <description></description>
@@ -164,21 +163,17 @@
                     </buildingSites>
                 </estate>
             </possessions>
-            <!-- @todo add currency -->
             <dowry currency="lt" l="" s="" d="" privateIncome=""/>
             <contribution/>
         </wealth>
         <knowledge>
-            <!-- @todo add currency -->
             <books quantity="" currency="lt" l="" s="" d="" bookseller="">
                 <room/>
                 <noteworthy/>
             </books>
-            <!-- @todo update older forms (add documents)-->
             <documents>
                 <description/>
             </documents>
-            <!-- @todo update older forms (put maps content into @owned and description tag into maps)-->
             <maps owned="">
                 <description/>
             </maps>
@@ -192,12 +187,10 @@
                 </expert>
             </portraits>
             <drawings quantity=""/>
-            <!-- @todo update older forms (add sculptures tags) -->
             <sculptures quantity=""/>
             <paintings quantity=""/>
         </knowledge>
         <tools>
-            <!-- @todo add into drawing the following tags furniture + drawingTools-->
             <drawing>
                 <furniture owned="">
                     <description/>
@@ -207,12 +200,10 @@
                     <description/>
                 </drawingTools>
             </drawing>
-            <!-- @todo add @owned + content object + description -->
             <measurement owned="">
                 <object type="" owned=""/>
                 <description/>
             </measurement>
-            <!-- @todo add @owned change noteworthy into description -->
             <scientific owned="">
                 <object type="" owned=""/>
                 <description/>
@@ -230,7 +221,7 @@
                 <address>
                     <street/>
                 </address>
-                <!-- @todo add currency -->
+                <!-- @ok -->
                 <cost currency="lt" l="" s="" d=""/>
             </work>
         </buildingWorks>

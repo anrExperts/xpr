@@ -1388,7 +1388,7 @@ declare
   %updating
 function putInventory($param, $referer) {
   let $db := db:open("xpr")
-  let $id := fn:replace(fn:lower-case($param/inventory/sourceDesc/idno[@type="unitid"]), '/', '-') || 'f' || fn:format-integer($param/inventory/sourceDesc/location, '000') || fn:substring-after($param/inventory/sourceDesc/expert/@ref, '#')
+  let $id := fn:generate-id($param)
   let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
     return
       if (fn:ends-with($referer, 'modify'))
@@ -1396,8 +1396,7 @@ function putInventory($param, $referer) {
         let $location := fn:analyze-string($referer, 'xpr/inventories/(.+?)/modify')//fn:group[@nr='1']
         let $param :=
           copy $d := $param
-          modify (
-            replace value of node $d/inventory/control/maintenanceHistory/maintenanceEvent[1]/agent with $user)
+          modify (replace value of node $d/inventory/control/maintenanceHistory/maintenanceEvent[1]/agent with $user)
           return $d
         return (
           replace node $db/xpr/posthumousInventories/inventory[@xml:id = $location] with $param,
@@ -1409,11 +1408,7 @@ function putInventory($param, $referer) {
                 <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
               </http:response>
             </rest:response>,
-            <result>
-              <id></id>
-              <message>L'inventaire {$location} a été modifié.</message>
-              <url></url>
-            </result>
+            <result><message>L'inventaire {$location} a été modifié.</message></result>
            )
           )
         )
@@ -1437,7 +1432,6 @@ function putInventory($param, $referer) {
             <result>
               <id>{$id}</id>
               <message>L'inventaire {$id} a été enregistré.</message>
-              <url></url>
             </result>)
           )
         )
