@@ -189,6 +189,7 @@
             <drawings quantity=""/>
             <sculptures quantity=""/>
             <paintings quantity=""/>
+            <statesmanPortraits presence="" />
         </knowledge>
         <tools>
             <drawing>

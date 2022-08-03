@@ -134,7 +134,7 @@
                         </xf:input>
                     </xf:group>
                     <xf:group ref="xpr:deathPlace">
-                        <xf:label>Lieu du décès</xf:label>
+                        <xf:label>Maison habitée lors du décès</xf:label>
                         <xf:input ref="xpr:address/xpr:street" incremental="true">
                             <xf:label>Voie</xf:label>
                         </xf:input>
@@ -841,6 +841,10 @@
                                                 <xf:label>5e étage</xf:label>
                                                 <xf:value>5e étage</xf:value>
                                             </xf:item>
+                                            <xf:item>
+                                                <xf:label>6e étage</xf:label>
+                                                <xf:value>6e étage</xf:value>
+                                            </xf:item>
                                         </xf:select1>
                                         <xf:textarea ref="xpr:description">
                                             <xf:label>Description</xf:label>
@@ -1196,7 +1200,7 @@
                         </xf:input>
                     </xf:group>
                     <xf:group ref="xpr:drawings">
-                        <xf:label>Dessins</xf:label>
+                        <xf:label>Dessins / estampes</xf:label>
                         <xf:input ref="@quantity">
                             <xf:label>Quantité</xf:label>
                         </xf:input>
@@ -1218,6 +1222,23 @@
                         <xf:input ref="@quantity">
                             <xf:label>Quantité</xf:label>
                         </xf:input>
+                        <xf:textarea ref=".">
+                            <xf:label>Description</xf:label>
+                        </xf:textarea>
+                    </xf:group>
+                    <xf:group ref="xpr:statesmanPortraits">
+                        <xf:label>Portraits de roi ou de personnages de l’État (peintures / gravures)</xf:label>
+                        <xf:select1 ref="@presence">
+                            <xf:label>Présence</xf:label>
+                            <xf:item>
+                                <xf:label>Oui</xf:label>
+                                <xf:value>true</xf:value>
+                            </xf:item>
+                            <xf:item>
+                                <xf:label>Non</xf:label>
+                                <xf:value>false</xf:value>
+                            </xf:item>
+                        </xf:select1>
                         <xf:textarea ref=".">
                             <xf:label>Description</xf:label>
                         </xf:textarea>
@@ -1292,7 +1313,7 @@
                                 </xf:action>
                                 <xf:help>Ajouter un instrument.</xf:help>
                             </xf:trigger>
-                            <xf:textarea ref="xpr:textarea">
+                            <xf:textarea ref="xpr:description">
                                 <xf:label>Description</xf:label>
                             </xf:textarea>
                         </xf:group>

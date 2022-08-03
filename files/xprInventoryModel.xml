@@ -7,6 +7,13 @@
                    at="1"
                    position="before"
                    origin="instance('xprInventoryCopy')/xpr:control/xpr:maintenanceHistory/xpr:maintenanceEvent"/>
+
+        <xf:insert if="xpr:patrimony/xpr:knowledge[not(xpr:statesmanPortraits)]"
+                   context="xpr:patrimony/xpr:knowledge"
+                   nodeset="xpr:paintings"
+                   at="last()"
+                   position="after"
+                   origin="instance('xprInventoryCopy')/xpr:patrimony/xpr:knowledge/xpr:statesmanPortraits"/>
     </xf:action>
     <!--Instance principale-->
     <xf:instance id="xprInventory" src="/xpr/files/_xprInventoryInstance.xml"/>
@@ -63,8 +70,10 @@
             <part type="boudoir">Boudoir</part>
             <part type="alcove">Alcôve</part>
             <part type="washroom">Cabinet de toilette</part>
+            <part type="closetWashroom">Cabinet servant de cabinet de toilette</part>
             <part type="toilet">Cabinet d’aisance</part>
             <part type="wardrobe">Garde-robe</part>
+            <part type="closetWardrobe">Cabinet servant de garde-robe</part>
             <part type="attic">Grenier</part>
             <part type="other">Autre</part>
         </parts>
@@ -77,6 +86,7 @@
             <object type="pencilHolder">Porte-crayon</object>
             <object type="square">Équerre</object>
             <object type="rule">Règle</object>
+            <object type="mathematicsCase">Étui de mathématique</object>
             <object type="other">Autre</object>
         </objects>
     </xf:instance>
@@ -86,8 +96,10 @@
             <object type=""></object>
             <object type="heightGauge">Toise</object>
             <object type="feetGauge">Pied</object>
-            <object type="waterFeetGauge">Pied d’eau</object>
+            <object type="level">Niveau</object>
             <object type="chain">Chaîne</object>
+            <object type="pole">Perche</object>
+            <object type="graphometer">Graphomètre</object>
             <object type="other">Autre</object>
         </objects>
     </xf:instance>
@@ -104,6 +116,7 @@
             <object type="glasses">Lorgnette / lunette</object>
             <object type="barometer">Baromètre</object>
             <object type="thermometer">Thermomètre</object>
+            <object type="barometerThermometer">Baromètre-thermomètre</object>
             <object type="samples">Échantillons (minéraux, coquillages)</object>
             <object type="plants">Plantes</object>
             <object type="animals">Animaux</object>
