@@ -36,7 +36,8 @@ declare namespace http = "http://expath.org/ns/http-client" ;
 declare namespace json = "http://basex.org/modules/json" ;
 
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
-declare namespace eac = "eac" ;
+(:declare namespace eac = "eac" ;:)
+declare namespace eac = "https://archivists.org/ns/eac/v2" ;
 declare namespace rico = "rico" ;
 
 declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
@@ -699,11 +700,13 @@ declare
   %rest:path("/xpr/xforms")
   %rest:produces('application/xml')
   %output:method("xml")
-function getDataFromXforms() {
+function getDataXforms() {
   let $id := request:parameter('data')
+  let $param := request:parameter('param')
   let $db := db:open('xpr')
   return (
     if($id = 'getSourceId') then <source localType="new" xml:id="{'xprSource' || fn:generate-id($db)}"/>
+    else if ($param = 'getAgent') then <agent xmlns="">{fn:normalize-space(user:list-details(Session:get('id'))/@name)}</agent>
     else $db/xpr/bio/eac:eac-cpf[@xml:id = $id]
   )
 
@@ -1198,38 +1201,26 @@ declare
   %updating
 function putBiography($param, $referer) {
   let $db := db:open("xpr")
-  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
-  return 
+  (:let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name):)
+  return
     if ($param/*/@xml:id)
     then
       let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
-      let $id := $param//*:entityId
+      return replace node $db/xpr/bio/eac:eac[@xml:id = $location] with $param
+    else
+      let $type := switch ($param//eac:identity/eac:entityType/@value)
+        case 'person' return 'xprPerson'
+        case 'org' return 'xprOrg'
+        case 'family' return 'xprFamily'
+        default return 'xprOther'
+
+      let $id := $type || fn:generate-id($param)
       let $param :=
         copy $d := $param
-        modify replace value of node $d/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent with $user
-        return $d
-      return replace node $db/xpr/bio/eac:eac-cpf[@xml:id = $location] with $param  
-    else
-      let $xformsId := $param//eac:entityId
-      let $id :=
-        for $type in $param//eac:identity/@localType
-        return switch ($type)
-          case 'expert' return 'xpr' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'expert' or descendant::eac:identity/@localType = 'altExpert']) + 1, '0000')
-          case 'altExpert' return 'xpr' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'expert' or descendant::eac:identity/@localType = 'altExpert']) + 1, '0000')
-          case 'mason' return 'mas' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'mason']) + 1, '0000')
-          case 'person' return 'xprPerson' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'person']) + 1, '0000')
-          case 'office' return 'xprOffice' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'office']) + 1, '0000')
-          case 'notary' return 'xprNotary' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'notary']) + 1, '0000')
-          case 'org' return 'xprOrg' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'org']) + 1, '0000')
-          case 'family' return 'xprFamily' || fn:format-integer(fn:count($db//eac:eac-cpf[descendant::eac:identity/@localType = 'family']) + 1, '0000')
-          default return 'xprOther' || fn:format-integer(fn:count($db//eac:eac-cpf) + 1, '0000')
-      let $param := 
-        copy $d := $param
-        modify 
+        modify
         (
           insert node attribute xml:id {$id} into $d/*,
-          replace value of node $d/eac:eac-cpf/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent with $user,
-          replace value of node $d//eac:entityId with $id
+          replace value of node $d//eac:recordId with $id
         )
         return $d
       return (
@@ -1243,9 +1234,8 @@ function putBiography($param, $referer) {
             </http:response>
           </rest:response>,
           <result>
-            {if(fn:normalize-space($xformsId)!='') then <xforms-id>{$xformsId}</xforms-id>}
             <id>{$id}</id>
-            <message>Une nouvelle entité a été ajoutée : {$param//eac:nameEntry[eac:authorizedForm]/eac:part}.</message>
+            <message>Une nouvelle entité a été ajoutée : {$param//eac:nameEntry[@preferred='true']/eac:part}.</message>
           </result>
           )
         )
