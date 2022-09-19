@@ -27,7 +27,7 @@ declare namespace web = "http://basex.org/modules/web" ;
 declare namespace user = "http://basex.org/modules/user" ;
 
 declare namespace ev = "http://www.w3.org/2001/xml-events" ;
-declare namespace eac = "eac" ;
+declare namespace eac = "https://archivists.org/ns/eac/v2" ;
 declare namespace rico = "rico" ;
 
 declare namespace map = "http://www.w3.org/2005/xpath-functions/map" ;
@@ -56,9 +56,9 @@ declare function getMessage($id, $lang) {
  :)
 declare function listEac2html($node as node()*, $options as map(*)) as item()* {
   <ul id="list">{
-    for $entity in $node//eac:eac-cpf
+    for $entity in $node//eac:eac
     let $id := $entity/@xml:id => fn:normalize-unicode()
-    let $name := $entity//eac:nameEntry[eac:authorizedForm] => fn:normalize-unicode()
+    let $name := $entity//eac:nameEntry[@status='authorized'] => fn:normalize-unicode()
     let $type := $entity//eac:identity/@localType => getMessage($options)
     let $dates := $entity/@xml:id => fn:normalize-unicode()
     return

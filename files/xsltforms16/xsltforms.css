@@ -426,8 +426,8 @@ input {
 	font-size: 100%;
 }
 input[type='checkbox'] {
-  width: 1ex;
-  height: 1ex;
+  /*modif xpr width: 1ex;
+  height: 1ex;*/
 }
 input[xf-numeric] {
 	text-align: right;

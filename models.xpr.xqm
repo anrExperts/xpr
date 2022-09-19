@@ -91,7 +91,9 @@ declare function getModels($content as map(*)){
     if ($instances[$i])
     then (
       copy $doc := fn:doc(file:base-dir() || "files/" || $model)
-      modify replace value of node $doc/xf:model/xf:instance[@id=fn:substring-before($model, 'Model.xml')]/@src with '/xpr/' || $path || '/' || $instances[$i]
+      (:modify replace value of node $doc/xf:model/xf:instance[@id=fn:substring-before($model, 'Model.xml')]/@src with '/xpr/' || $path || '/' || $instances[$i]:)
+      (:modification avec le passage vers EAC V2:)
+      modify replace value of node $doc/xf:model/xf:instance[1]/@src with '/xpr/' || $path || '/' || $instances[$i]
       return $doc
     )
     else

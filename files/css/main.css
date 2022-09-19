@@ -252,7 +252,7 @@ textarea {
     padding-left: 0.3em;
 }
 
-input {
+.xforms-switch input {
     /* To give the same size to all text fields */
     width: 100%;
     box-sizing: border-box;
@@ -311,15 +311,15 @@ input:focus.xforms-valid {
 }
 
 /* Hide base elements */
-[type = "radio"],
-[type = "checkbox"] {
+.xforms-item [type = "radio"],
+.xforms-item [type = "checkbox"] {
     position: absolute;
     left: -9999px;
 }
 
 /* Position the <label> */
-[type = "radio"] + label,
-[type = "checkbox"] + label {
+.xforms-item [type = "radio"] + label,
+.xforms-item [type = "checkbox"] + label {
     position: relative;
     display: inline-block;
     height: 1em;
@@ -329,8 +329,8 @@ input:focus.xforms-valid {
 }
 
 /* SHARED STYLES - Radio & Checkbox - Unchecked */
-[type = "radio"] + label:before,
-[type = "checkbox"] + label:before {
+.xforms-item [type = "radio"] + label:before,
+.xforms-item [type = "checkbox"] + label:before {
     content: '';
     position: absolute;
     left: 0;
@@ -341,14 +341,14 @@ input:focus.xforms-valid {
 }
 
 /* RADIO - Unchecked */
-[type = "radio"]:checked + label:before,
-[type = "radio"]:not(:checked) + label:before {
+.xforms-item [type = "radio"]:checked + label:before,
+.xforms-item [type = "radio"]:not(:checked) + label:before {
     border-radius: 50%;
 }
 
 /* RADIO - Checked */
 /*@todo problème de centrage du point lorsqu'on zoom avec le navigateur*/
-[type = "radio"]:checked + label:after {
+.xforms-item [type = "radio"]:checked + label:after {
     position: absolute;
     content: '';
     top: 50%;
@@ -362,12 +362,12 @@ input:focus.xforms-valid {
 }
 
 /* CHECKBOX - Unchecked */
-[type = "checkbox"]:not(:checked) + label:before {
+.xforms-item [type = "checkbox"]:not(:checked) + label:before {
     /* Add styles if needed */
 }
 
 /* CHECKBOX - Checked ( CSS Tick ) */
-[type = "checkbox"]:checked + label:after {
+.xforms-item [type = "checkbox"]:checked + label:after {
     position: absolute;
     content: "";
     left: 0.375em;

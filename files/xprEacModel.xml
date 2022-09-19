@@ -276,7 +276,7 @@
 
     <!-- ETC -->
     <xf:instance id="relationTypes">
-        <relations>
+        <relations xmlns="">
             <!-- Ric-o -->
             <group type="family">
                 <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasChild">
@@ -373,7 +373,7 @@
         </relations>
     </xf:instance>
     <xf:instance id="eventTypes">
-        <events>
+        <events xmlns="">
             <group>
                 <event>Naissance</event>
                 <event>Baptême</event>
@@ -388,7 +388,7 @@
         </events>
     </xf:instance>
     <xf:instance id="nameParts">
-        <parts>
+        <parts xmlns="">
             <!-- https://en.wikipedia.org/wiki/Title -->
             <part>full</part>
             <part>surname</part>

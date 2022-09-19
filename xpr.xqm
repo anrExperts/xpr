@@ -1064,7 +1064,7 @@ declare
   %rest:path("xpr/biographies/{$id}")
   %output:method("xml")
 function getBiography($id) {
-  db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id]
+  db:open('xpr')//eac:eac[eac:control/eac:recordId=$id]
 };
 
 (:~
@@ -1077,7 +1077,7 @@ declare
   %output:method("html")
 function getBiographySaxon($id) {
   let $content := map {
-    'data' : db:open('xpr')//eac:eac-cpf[eac:cpfDescription/eac:identity/eac:entityId=$id],
+    'data' : db:open('xpr')//eac:eac[eac:control/eac:recordId=$id],
     'trigger' : '',
     'form' : ''
   }
@@ -1149,15 +1149,15 @@ function modifyEntity($id) {
   let $content := map {
     'instance' : $id,
     'path' : 'biographies',
-    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml', 'xprInventoryModel.xml'),
-    'trigger' : 'xprProsopoTrigger.xml',
-    'form' : 'xprProsopoForm.xml'
+    'model' : ('xprEacModel.xml', 'xprEacNoValidationModel.xml'),
+    'trigger' : 'xprEacTrigger.xml',
+    'form' : 'xprEacForm.xml'
   }
   let $outputParam := map {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltForms16Path, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     xpr.models.xpr:wrapper($content, $outputParam)
     )
