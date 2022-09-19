@@ -1,0 +1,251 @@
+/*
+ * CSS stylesheet for the xpr app
+ *
+ * @author emchateau & sardinecan (ANR Experts)
+ * @since 2022-07
+ * @licence GNU http://www.gnu.org/licenses
+ * @version 0.2
+ *
+ * xpr is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+:root {
+    --colorMain: #E73E0D;
+    --colorSub: /* #3f51b5; */ #fff;
+    --colorTint: #FFE1D5;
+    --colorAccent: /* #3f51b5; */ #E73E0D;
+    --baseline: 1.5; /* 1.5 * 18 = 27px*/
+    font-size: 1.125em; /* 18px */
+    line-height: var(--baseline);
+}
+
+body {
+    background-color: var(--colorSub);
+    color: var(--colorMain);
+}
+
+section {
+    background-color: var(--colorMain);
+    color: var(--colorSub);
+    width: 100%;
+    max-width: 60rem;
+    margin: auto;
+    margin-bottom: calc(var(--baseline)* 3rem);
+}
+
+form {
+    /* Just to center the form on the page */
+    margin: 0 auto;
+    width: 60em;
+    /* To see the outline of the form */
+    padding: 1em;
+}
+
+/*html form*/
+
+input:not([type=radio]),
+textarea {
+    /* To make sure that all text fields have the same font settings
+     By default, textareas have a monospace font */
+    font: 1em 'IBM Plex Serif';
+    /* To harmonize the look & feel of text field border */
+    border-radius: 0.1em;
+    border: 1px solid var(--colorMain);
+    padding-left: 0.3em;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+input:not([type=radio]) {
+    /* To give the same size to all text fields */
+    height: calc(var(--baseline)* 1.1rem); /*height: 1.6em;*/
+}
+
+textarea {
+    /* To properly align multiline text fields with their labels */
+    vertical-align: top;
+    /* To give enough room to type some text */
+    height: calc(var(--baseline)* 6rem);
+}
+
+/* This is our style for the invalid fields */
+input:invalid {
+    border-color: #900;
+    background-color: #FDD;
+}
+
+/* @todo verif class */
+input:focus.xforms-valid {
+    outline: none;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    /* To give a little highlight on active elements */
+    border-color: #000;
+}
+
+select {
+    font-family: 'IBM Plex Serif';
+    font-size: 1em;
+    width: 100%;
+    height: calc(var(--baseline)* 1.1rem); /*height: 1.6em;*/
+    border-radius: 0.1em;
+    border: 1px solid var(--colorMain);
+    /* needed */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    /* SVG background image */
+    background: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='rgb(231, 62, 13)'><polygon points='0,0 100,0 50,50'/></svg>") no-repeat;
+    background-size: 0.75em;
+    background-position: calc(100% - 0.75em) center;
+    background-repeat: no-repeat;
+    background-color: var(--colorTint);
+}
+
+button {
+    cursor:pointer;
+    line-height: calc(var(--baseline)* 1.1rem);
+    color: var(--colorMain) ;
+    background-color: var(--colorSub);
+    border:0.15em solid; /* border:0.15em solid; */
+    border-radius: 0.1em;
+    border-color:  var(--colorMain);
+    box-shadow: none;
+    outline: none;
+    margin-left: -0.15em;
+    font-family: 'IBM Plex Serif', serif;
+    font-weight: normal;
+    letter-spacing: 0.0em
+}
+
+button:hover {
+    background-color: var(--colorMain);
+    color: var(--colorSub);
+    transition: 0.2s;
+}
+
+/*
+xforms element
+*/
+
+.xsltforms-aid-button{
+    display: none;
+}
+
+xforms-group[xf-bound],
+xforms-repeat-item {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr);
+    column-gap: 1em;
+}
+
+xforms-group[xf-bound] xforms-group[xf-bound],
+xforms-group[xf-bound] xforms-repeat[xf-bound],
+xforms-case {
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+xforms-group:not([xf-ref]){
+    display: grid;
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+xforms-group[xf-bound] > xforms-label,
+xforms-repeat-item > xforms-label,
+xforms-group[xf-bound] > xforms-help-mark,
+xforms-repeat-item > xforms-help-mark,
+xforms-group[xf-bound] > .trigger,
+xforms-repeat-item > .trigger
+{
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+xforms-group[xf-bound] > xforms-hint-mark,
+xforms-group[xf-bound] > xforms-body
+{
+    display: none;
+}
+xforms-group[xf-bound] > xforms-hint-mark,
+xforms-group[xf-bound] > xforms-body
+{
+    display: none;
+}
+
+xforms-input[xf-bound],
+xforms-select1[xf-bound],
+xforms-select[xf-bound] {
+    grid-column: auto / span 2;
+}
+
+xforms-textarea[xf-bound] {
+    grid-column-start: 1;
+    grid-column-end: 5;
+}
+
+xforms-input[xf-bound]:not([xf-notrelevant]),
+xforms-select1[xf-bound]:not([xf-notrelevant]),
+xforms-select[xf-bound]:not([xf-notrelevant]),
+xforms-textarea[xf-bound]:not([xf-notrelevant]) {
+    display: inline !important;
+    flex-wrap: wrap;
+    align-content: flex-start;
+}
+
+xforms-input[xf-bound] > xforms-label,
+xforms-select1[xf-bound] > xforms-label,
+xforms-select[xf-bound] > xforms-label,
+xforms-textarea[xf-bound] > xforms-label {
+    order: 1;
+}
+
+xforms-input[xf-bound] > xforms-required,
+xforms-select1[xf-bound] > xforms-required,
+xforms-select[xf-bound] > xforms-required,
+xforms-textarea[xf-bound] > xforms-required {
+    order: 2;
+}
+
+xforms-input[xf-bound] > xforms-help-mark,
+xforms-select1[xf-bound] > xforms-help-mark,
+xforms-select[xf-bound] > xforms-help-mark,
+xforms-textarea[xf-bound] > xforms-hel-markp
+{
+    order: 3;
+}
+
+xforms-input[xf-bound] > xforms-alert-mark,
+xforms-select1[xf-bound] > xforms-alert-mark,
+xforms-select[xf-bound] > xforms-alert-mark,
+xforms-textarea[xf-bound] > xforms-alert-mark{
+    order: 4;
+}
+
+xforms-input[xf-bound] > xforms-body,
+xforms-select1[xf-bound] > xforms-body,
+xforms-select[xf-bound] > xforms-body,
+xforms-textarea[xf-bound] > xforms-body {
+    order: 5;
+    flex-basis: 100%;
+}
+
+xforms-input xforms-label,
+xforms-select xforms-label,
+xforms-select1 xforms-label,
+xforms-textarea xforms-label {
+    font-weight: normal;
+}

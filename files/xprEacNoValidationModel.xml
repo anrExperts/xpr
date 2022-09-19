@@ -1,0 +1,19 @@
+<xf:model id="noValidation" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:instance id="eacNoValidation">
+        <no xmlns=""/>
+    </xf:instance>
+
+    <xf:submission id="noValidationSubmission" ref="instance('eacNoValidation')" method="put" resource="file:" mediatype="application/xml" value="form-source()">
+        <xf:action ev:event="xforms-submit">
+            <xf:delete nodeset="instance('eacInstance')//@standardDate[. = '']"/>
+            <xf:delete nodeset="instance('eacInstance')//@notBefore[. = '']"/>
+            <xf:delete nodeset="instance('eacInstance')//@notAfter[. = '']"/>
+        </xf:action>
+        <xf:action ev:event="xforms-submit-done">
+
+        </xf:action>
+        <xf:action ev:event="xforms-submit-error">
+
+        </xf:action>
+    </xf:submission>
+</xf:model>

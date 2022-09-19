@@ -1,0 +1,502 @@
+<xf:model id="entity" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+
+    <xf:action ev:event="xforms-ready">
+        <xf:action while="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@standardDate)]">
+            <xf:insert context="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@standardDate)]"
+                       origin="instance('eacDates')/eac:date/@standardDate"/>
+        </xf:action>
+        <xf:action while="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notAfter)]">
+            <xf:insert context="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notAfter)]"
+                       origin="instance('eacDates')/eac:date/@notAfter"/>
+        </xf:action>
+        <xf:action while="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notBefore)]">
+            <xf:insert context="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notBefore)]"
+                       origin="instance('eacDates')/eac:date/@notBefore"/>
+        </xf:action>
+
+        <xf:insert if="@xml:id" context="." nodeset="eac:control/eac:maintenanceHistory/eac:maintenanceEvent" at="1" position="before" origin="instance('eacMaintenanceEvent')/eac:maintenanceEvent"/>
+        <xf:send submission="getData"/>
+    </xf:action>
+
+    <xf:submission id="getData" ref="instance('getAgent')/param" method="get" resource="/xpr/xforms" replace="instance" instance="getAgent" targetref="agent"/>
+
+    <xf:instance id="eacInstance" src="/xpr/files/_xprEacInstance.xml"/>
+
+    <xf:instance id="getAgent">
+        <data xmlns="">
+            <param>getAgent</param>
+            <agent/>
+        </data>
+    </xf:instance>
+
+    <xf:bind nodeset="instance('eacInstance')/eac:control/@maintenanceStatus" required="true()"/>
+    <!--<xf:bind nodeset="instance('eacInstance')/eac:control/eac:recordId" required="true()"/>-->
+    <xf:bind nodeset="instance('eacInstance')/eac:control/eac:maintenanceAgency" constraint="eac:agencyName | eac:agencyCode"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent/@maintenanceEventType" required="true()"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent/eac:agent/@agentType" required="true()"/>
+    <!-- <xf:bind nodeset="instance('eacInstance')/eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent" calculate="instance('getAgent')/agent"/> -->
+
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:identity" constraint="eac:entityType/@value and *[self::eac:nameEntry or self::eac:nameEntrySet]"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:identity/eac:entityType/@value" required="true()"/>
+
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:relations/eac:relation/eac:targetEntity/eac:part/@localType" readonly="true()"/>
+
+    <!--@rmq eac:part "cannot be empty and requires at least one non-whitespace character, such as a hyphen, if no actual name can be given." -->
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:identity//eac:part" type="eac:part"/>
+    <xs:schema targetNamespace="https://archivists.org/ns/eac/v2">
+        <xs:simpleType name="part">
+            <xs:restriction base="xs:string">
+                <xs:pattern value="(.|\n|\r)*\S(.|\n|\r)*"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:schema>
+
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:places/eac:place" constraint="eac:placeRole or eac:placeName or eac:address"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem" constraint="*[1][self::eac:date or self::eac:dateRange or self::eac:dateSet] and  *[2][self::eac:event or self::eac:chronItemSet]"/>
+
+    <!--   class="{if(is-valid(.), 'valid', 'invalid')}" -->
+    <!-- Dates -->
+    <xf:bind nodeset="instance('eacInstance')//@standardDateTime" type="xf:dateTime"/>
+    <xf:bind nodeset="instance('eacInstance')//eac:dateSet" constraint="count(*) > 1"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:existDates" constraint="eac:date or eac:dateRange or eac:dateSet"/>
+    <xf:bind nodeset="instance('eacInstance')//@standardDate" relevant="parent::*[@notAfter=''][@notBefore='']" type="xf:date"/>
+    <xf:bind nodeset="instance('eacInstance')//@notBefore" relevant="parent::*[@notAfter=''][@standardDate='']" type="xf:date"/>
+    <xf:bind nodeset="instance('eacInstance')//@notAfter" relevant="parent::*[@notBefore=''][@standardDate='']" type="xf:date"/>
+
+
+    <xf:instance id="eacMaintenanceAgency">
+        <maintenanceAgency xmlns="https://archivists.org/ns/eac/v2">
+            <agencyCode/>
+            <agencyName/>
+            <otherAgencyCode/>
+            <descriptiveNote>
+                <p></p>
+            </descriptiveNote>
+        </maintenanceAgency>
+    </xf:instance>
+
+    <xf:instance id="eacMaintenanceEvent">
+        <maintenanceHistory xmlns="https://archivists.org/ns/eac/v2">
+            <maintenanceEvent maintenanceEventType="">
+                <agent agentType=""/>
+                <eventDateTime standardDateTime=""/>
+                <eventDescription/>
+            </maintenanceEvent>
+        </maintenanceHistory>
+
+    </xf:instance>
+
+    <xf:instance id="eacSources">
+        <control xmlns="https://archivists.org/ns/eac/v2">
+            <sources>
+                <source id="">
+                    <reference href=""/>
+                    <citedRange/>
+                    <descriptiveNote>
+                        <p></p>
+                    </descriptiveNote>
+                </source>
+            </sources>
+        </control>
+    </xf:instance>
+
+    <xf:instance id="eacIdentity">
+        <identity xmlns="https://archivists.org/ns/eac/v2">
+            <entityType value=""/>
+            <nameEntry status="" preferredForm="" sourceReference="">
+                <part localType=""></part>
+            </nameEntry>
+            <nameEntrySet sourceReference="">
+                <nameEntry status="" preferredForm="" sourceReference="">
+                    <part localType=""></part>
+                </nameEntry>
+                <nameEntry status="" preferredForm="" sourceReference="">
+                    <part localType=""></part>
+                </nameEntry>
+            </nameEntrySet>
+            <otherEntityTypes>
+                <otherEntityType>
+                    <term></term>
+                </otherEntityType>
+            </otherEntityTypes>
+            <identityId target=""/>
+            <descriptiveNote>
+                <p></p>
+            </descriptiveNote>
+        </identity>
+    </xf:instance>
+
+    <xf:instance id="eacDates">
+        <dates xmlns="https://archivists.org/ns/eac/v2">
+            <useDates/>
+            <existDates/>
+            <date certainty="" standardDate="" notBefore="" notAfter="" sourceReference=""/>
+            <dateRange/>
+            <fromDate certainty="" standardDate="" notBefore="" notAfter="" status="" sourceReference=""/>
+            <toDate certainty="" standardDate="" notBefore="" notAfter="" status="" sourceReference=""/>
+            <dateSet/>
+        </dates>
+    </xf:instance>
+
+    <xf:instance id="eacDescription">
+        <cpfDescription xmlns="https://archivists.org/ns/eac/v2">
+            <description/>
+        </cpfDescription>
+    </xf:instance>
+
+    <xf:instance id="eacFunctions">
+        <description xmlns="https://archivists.org/ns/eac/v2">
+            <functions>
+                <function sourceReference="">
+                    <term></term>
+                    <!--optionnal (all below)-->
+                    <!--<date/> | <dateRange/> | <dateSet/>-->
+                    <placeName sourceReference=""/>
+                    <descriptiveNote>
+                        <p></p>
+                    </descriptiveNote>
+                </function>
+            </functions>
+        </description>
+    </xf:instance>
+
+    <xf:instance id="eacOccupations">
+        <description xmlns="https://archivists.org/ns/eac/v2">
+            <occupations>
+                <occupation sourceReference="">
+                    <term></term>
+                    <!--optionnal (all below)-->
+                    <!--<date/> | <dateRange/> | <dateSet/>-->
+                    <placeName sourceReference=""/>
+                    <descriptiveNote>
+                        <p></p>
+                    </descriptiveNote>
+                </occupation>
+            </occupations>
+        </description>
+    </xf:instance>
+
+    <xf:instance id="eacPlaces">
+        <description xmlns="https://archivists.org/ns/eac/v2">
+            <places>
+                <place sourceReference=""/>
+                <descriptiveNote>
+                    <p></p>
+                </descriptiveNote>
+            </places>
+        </description>
+    </xf:instance>
+
+    <xf:instance id="eacPlace">
+        <places xmlns="https://archivists.org/ns/eac/v2">
+            <place sourceReference="">
+                <placeName></placeName>
+                <placeRole></placeRole>
+                <address>
+                    <addressLine></addressLine>
+                </address>
+                <!-- <date/> | <dateRange/> | <dateSet/> -->
+                <descriptiveNote>
+                    <p></p>
+                </descriptiveNote>
+            </place>
+        </places>
+    </xf:instance>
+
+    <xf:instance id="eacBiogHist">
+        <description xmlns="https://archivists.org/ns/eac/v2">
+            <biogHist>
+                <head/>
+                <abstract/>
+                <!-- one or more -->
+                <chronList>
+                    <chronItem id="" sourceReference="">
+                        <date certainty="" standardDate="" notBefore="" notAfter="" sourceReference=""/>
+                        <event localType=""/>
+                        <place/>
+                    </chronItem>
+                </chronList>
+                <list/>
+                <p/>
+            </biogHist>
+        </description>
+    </xf:instance>
+
+    <xf:instance id="eacChronItem">
+        <chronList xmlns="https://archivists.org/ns/eac/v2">
+            <chronItem id="" sourceReference="">
+                <date certainty="" standardDate="" notBefore="" notAfter="" sourceReference=""/>
+                <event localType=""/>
+                <place/>
+            </chronItem>
+        </chronList>
+    </xf:instance>
+
+    <xf:instance id="eacChronItemSet">
+        <chronItem xmlns="https://archivists.org/ns/eac/v2" sourceReference="">
+            <chronItemSet>
+                <event localType=""/>
+                <event localType=""/>
+                <place/>
+            </chronItemSet>
+        </chronItem>
+    </xf:instance>
+
+    <xf:instance id="eacRelations">
+        <cpfDescription xmlns="https://archivists.org/ns/eac/v2">
+            <relations>
+                <relation target="" sourceReference="">
+                    <targetEntity targetType="">
+                        <part localType=""/>
+                    </targetEntity>
+                    <relationType id="" valueURI="" vocabularySource="" vocabularySourceURI=""/>
+                    <targetRole target=""/>
+                </relation>
+            </relations>
+        </cpfDescription>
+    </xf:instance>
+
+    <xf:instance id="eacRelation">
+        <relations xmlns="https://archivists.org/ns/eac/v2">
+            <relation target="" sourceReference="">
+                <targetEntity targetType="">
+                    <part localType=""></part>
+                </targetEntity>
+                <!--<date/> | <dateRange/> | <dateSet/>-->
+                <!-- repeatable -->
+                <place></place>
+                <relationType id="" valueURI="" vocabularySource="" vocabularySourceURI=""/>
+                <targetRole target=""></targetRole>
+                <descriptiveNote>
+                    <p></p>
+                </descriptiveNote>
+            </relation>
+        </relations>
+    </xf:instance>
+
+    <!-- ETC -->
+    <xf:instance id="relationTypes">
+        <relations>
+            <!-- Ric-o -->
+            <group type="family">
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasChild">
+                    <label>rico:hasChild</label>
+                    <roles>
+                        <role>fille</role>
+                        <role>fils</role>
+                    </roles>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isChildOf">
+                    <label>rico:isChildOf</label>
+                    <roles>
+                        <role>père</role>
+                        <role>mère</role>
+                    </roles>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadSpouse">
+                    <label>rico:hasOrHadSpouse</label>
+                    <roles>
+                        <role>époux</role>
+                        <role>épouse</role>
+                    </roles>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasSibling">
+                    <label>rico:hasSibling</label>
+                    <roles>
+                        <role>frère</role>
+                        <role>sœur</role>
+                        <role>demi-frère</role>
+                        <role>demi-sœur</role>
+                    </roles>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasDescendant">
+                    <label>rico:hasDescendant</label>
+                    <roles>
+                        <role>petit-fils</role>
+                        <role>petite-fille</role>
+                        <role>arrière-petit-fils</role>
+                        <role>arrière-petite-fille</role>
+                    </roles>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasAncestor">
+                    <label>rico:hasAncestor</label>
+                    <roles>
+                        <role>grand-père</role>
+                        <role>grand-mère</role>
+                        <role>arrière-grand-père</role>
+                        <role>arrière-grand-mère</role>
+                    </roles>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceUri="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasFamilyAssociationWith">
+                    <label>rico:hasFamilyAssociationWith</label>
+                    <roles>
+                        <role>oncle</role>
+                        <role>tante</role>
+                        <role>cousin</role>
+                        <role>cousine</role>
+                        <role>beau-père</role>
+                        <role>belle-mère</role>
+                        <role>beau-fils</role>
+                        <role>belle-fille</role>
+                        <role>bru</role>
+                        <role>gendre</role>
+                    </roles>
+                </type>
+            </group>
+            <group type="knowing">
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knowsOf">
+                    <label>rico:knowsOf</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy">
+                    <label>rico:knownBy</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knows">
+                    <label>rico:knows</label>
+                </type>
+            </group>
+            <group type="teaching">
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadTeacher">
+                    <label>rico:hasOrHadTeacher</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadStudent">
+                    <label>rico:hasOrHadStudent</label>
+                </type>
+            </group>
+            <group type="other">
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadCorrespondent">
+                    <label>rico:hasOrHadCorrespondent</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasOwnerOf">
+                    <label>rico:isOrWasOwnerOf</label>
+                </type>
+            </group>
+        </relations>
+    </xf:instance>
+    <xf:instance id="eventTypes">
+        <events>
+            <group>
+                <event>Naissance</event>
+                <event>Baptême</event>
+                <event>Marriage</event>
+                <event>Mort</event>
+                <event>Acquisition d'un office</event>
+                <event>Lettres de provision</event>
+                <event>Lettres de surannation</event>
+                <event>Réception</event>
+                <event>Autre</event>
+            </group>
+        </events>
+    </xf:instance>
+    <xf:instance id="nameParts">
+        <parts>
+            <!-- https://en.wikipedia.org/wiki/Title -->
+            <part>full</part>
+            <part>surname</part>
+            <part>forename</part>
+            <part>particle</part>
+            <part>Common title</part>
+            <part>Academic title</part>
+            <part>Ecclesiastical title</part>
+            <part>Aristocratic title</part>
+            <part>name</part>
+        </parts>
+    </xf:instance>
+    <xf:instance id="otherEntityTypes">
+        <entityTypes xmlns="">
+            <type>Expert (tableau)</type>
+            <type>Expert (non inscrit)</type>
+            <type>Maçon</type>
+            <type>Autre (person)</type>
+        </entityTypes>
+    </xf:instance>
+    <!-- /ETC -->
+
+    <xf:instance id="documentation" src="/xpr/files/EAC-CPF-v2-TL-eng.xml"/>
+
+    <xf:submission id="change-language" replace="instance" instance="documentation" method="get" serialization="none">
+        <xf:resource value="instance('language')/language"/>
+    </xf:submission>
+
+    <xf:submission id="save2file" ref="instance('eacInstance')" method="put" resource="file:eac" mediatype="application/xml" value="form-source()">
+        <xf:action ev:event="xforms-submit">
+            <xf:delete nodeset="instance('eacInstance')//@standardDate[normalize-space(.)='']"/>
+            <xf:delete nodeset="instance('eacInstance')//@notBefore[normalize-space(.)='']"/>
+            <xf:delete nodeset="instance('eacInstance')//@notAfter[normalize-space(.)='']"/>
+        </xf:action>
+
+        <xf:action ev:event="xforms-submit-done">
+            <xf:hide dialog="control"/>
+            <xf:message level="modal">
+                La ressource a été enregistrée !
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>;
+                Body : <xf:output value="event('response-body')"/>.
+            </xf:message>
+        </xf:action>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:message level="modal">
+                erreur :
+                error-type: <xf:output value="event('error-type')"/>
+                error-message: <xf:output value="event('error-message')"/>
+                response-status-code: <xf:output value="event('response-status-code')"/>
+                response-reason-phrase: <xf:output value="event('response-reason-phrase')"/>
+                resource-uri: <xf:output value="event('resource-uri')"/>
+            </xf:message>
+        </xf:action>
+    </xf:submission>
+
+    <xf:submission id="save2db" method="put" resource="/xpr/biographies/put">
+        <xf:action ev:event="xforms-submit">
+            <xf:delete nodeset="instance('eacInstance')//@standardDate[normalize-space(.)='']"/>
+            <xf:delete nodeset="instance('eacInstance')//@notBefore[normalize-space(.)='']"/>
+            <xf:delete nodeset="instance('eacInstance')//@notAfter[normalize-space(.)='']"/>
+        </xf:action>
+
+        <xf:action ev:event="xforms-submit-done">
+            <xf:hide dialog="control"/>
+            <xf:message level="modal">
+                La ressource a été enregistrée !
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>;
+                Body : <xf:output value="event('response-body')"/>.
+            </xf:message>
+        </xf:action>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:message level="modal">
+                erreur :
+                error-type: <xf:output value="event('error-type')"/>
+                error-message: <xf:output value="event('error-message')"/>
+                response-status-code: <xf:output value="event('response-status-code')"/>
+                response-reason-phrase: <xf:output value="event('response-reason-phrase')"/>
+                resource-uri: <xf:output value="event('resource-uri')"/>
+            </xf:message>
+        </xf:action>
+    </xf:submission>
+
+    <!--<xf:action ev:event="getid" while="//@id[.=''][parent::*[self::eac:source or self::eac:reference or self::eac:citedRange or self::eac:chronItem or self::eac:relationType]]">
+      <xf:load>
+        <xf:resource value="concat(
+        'javascript:generateid(''',
+        name(//@id[.=''][parent::*[self::eac:source or self::eac:reference or self::eac:citedRange or self::eac:chronItem or self::eac:relationType][not(ancestor::*[self::eac:source or self::eac:reference or self::eac:citedRange][@id=''] or preceding::*[self::eac:source or self::eac:reference or self::eac:citedRange or self::eac:chronItem][@id=''])]]/parent::*)
+        ,''')')"/>
+      </xf:load>
+    </xf:action>-->
+
+    <xf:action ev:event="getid" while="//@id[.=''][parent::*[self::eac:source or self::eac:chronItem or self::eac:relationType]]">
+        <xf:load>
+            <xf:resource value="concat(
+          'javascript:generateid(''',
+          name(//@id[.=''][parent::*[self::eac:source or self::eac:chronItem or self::eac:relationType][not(preceding::*[self::eac:source or self::eac:chronItem][@id=''])]]/parent::*)
+          ,''')')"/>
+        </xf:load>
+    </xf:action>
+
+    <xf:action ev:event="callbackevent">
+        <xf:setvalue ref="//@id[.=''][parent::*[self::eac:source or self::eac:chronItem or self::eac:relationType][not(preceding::*[self::eac:source or self::eac:chronItem or self::eac:relationType][@id=''])]]" value="event('response')"/>
+        <xf:setvalue if="//eac:targetRole[@target='']" ref="//@target[.=''][parent::eac:targetRole]" value="concat('#', event('response'))"/>
+    </xf:action>
+</xf:model>

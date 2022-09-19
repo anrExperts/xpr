@@ -6,13 +6,15 @@
   xmlns:xs="http://www.w3.org/2001/XMLSchema"
   xmlns:xlink="http://www.w3.org/1999/xlink"
   xmlns:xpr="xpr"
-  xmlns:eac="eac"
+  xmlns:eac="https://archivists.org/ns/eac/v2"
+  xmlns:tei="http://www.tei-c.org/ns/1.0"
   xmlns:rico="rico"
   xmlns:session="session"
   xpr:bogus="fix Firefox namespace issue"
   xlink:bogus="fix Firefox namespace issue"
   eac:bogus="fix Firefox namespace issue"
   rico:bogus="fix Firefox namespace issue"
+  tei:bogus="fix Firefox namespace issue"
   session:bogus="fix Firefox namespace issue">
   <head>
     <title>xpr</title>
@@ -32,6 +34,9 @@
       rel="stylesheet" />
     <link
       href="/xpr/files/css/main.css"
+      rel="stylesheet" />
+    <link
+      href="/xpr/files/css/eacForms.css"
       rel="stylesheet" />
     <instance>{model}</instance>
   </head>

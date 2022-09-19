@@ -1174,15 +1174,15 @@ declare
 function newBiography() {
   let $content := map {
     'instance' : '',
-    'model' : ('xprProsopoModel.xml', 'xprSourceModel.xml', 'xprInventoryModel.xml'),
-    'trigger' : 'xprProsopoTrigger.xml',
-    'form' : 'xprProsopoForm.xml'
+    'model' : ('xprEacModel.xml', 'xprEacNoValidationModel.xml'),
+    'trigger' : 'xprEacTrigger.xml',
+    'form' : 'xprEacForm.xml'
   }
   let $outputParam := map {
     'layout' : "template.xml"
   }
   return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltForms16Path, "'"), "type='text/xsl'"},
     <?css-conversion no?>,
     xpr.models.xpr:wrapper($content, $outputParam)
     )
