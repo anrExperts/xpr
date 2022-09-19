@@ -38,6 +38,7 @@
     <link
       href="/xpr/files/css/eacForms.css"
       rel="stylesheet" />
+    <jsfunction>{jsfunction}</jsfunction>
     <instance>{model}</instance>
   </head>
   <body

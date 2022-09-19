@@ -71,6 +71,22 @@ declare function wrapper($content as map(*), $outputParams as map(*)) as node()*
         case 'form' return replace node $node with getForms($content)
         case 'data' return replace node $node with $content?data
         case 'content' return replace node $node with $outputParams?mapping
+        case 'jsfunction' return replace node $node with     <script type="text/javascript">
+                                                               <![CDATA[function generateid(param) {
+                                                                 let id;
+                                                                 if(param !== null) {
+                                                                   /*id = `${param}_${(performance.now().toString(36)+Math.random().toString(36)).replace(/\./g,"")}`;*/
+                                                                   id = param + '_' + (performance.now().toString(36)+Math.random().toString(36)).replace(/\./g,"");
+                                                                 } else {
+                                                                   id = (performance.now().toString(36)+Math.random().toString(36)).replace(/\./g,"");
+                                                                 }
+                                                                 XsltForms_xmlevents.dispatch(document.getElementById("entity"),
+                                                                         "callbackevent", null, null, null, null,
+                                                                         {
+                                                                           response: id
+                                                                         });
+                                                               }]]>
+                                                             </script>
         default return associate($content, $outputParams, $node)
       )
 };
