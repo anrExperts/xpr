@@ -1254,10 +1254,10 @@ declare
 function getEntities() {
   <entities xmlns="xpr">
     {
-      for $entity in db:open('xpr')/xpr/bio/eac:eac-cpf
+      for $entity in db:open('xpr')/xpr/bio/eac:eac
       let $id := $entity/@xml:id
-      order by fn:lower-case($entity//eac:nameEntry[child::eac:authorizedForm])
-      return <entity xml:id="{$id}" type="{$entity//eac:identity/@localType}"><label>{$entity//eac:nameEntry[child::eac:authorizedForm]/eac:part/text()}</label></entity>
+      order by fn:lower-case($entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1])
+      return <entity xml:id="{$id}" type="{$entity//eac:otherEntityTypes/eac:otherEntityType[1]/eac:term/text()}"><label>{$entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part/text()}</label></entity>
     }
   </entities>
 };
