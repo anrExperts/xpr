@@ -1,34 +1,43 @@
 <nav id="navForm" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
     <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-sources']/tei:div[@type='fullName']"/>
+        <xf:label>Sources</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-sources']/tei:div[@type='fullName']"/>-->
         <xf:toggle case="sourcesPanel" ev:event="DOMActivate" />
     </xf:trigger>
     <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-identity']/tei:div[@type='fullName']"/>
+        <xf:label>Identité</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-identity']/tei:div[@type='fullName']"/>-->
         <xf:toggle case="identityPanel" ev:event="DOMActivate" />
     </xf:trigger>
     <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-functions']/tei:div[@type='fullName']"/>
-        <xf:toggle case="functionsPanel" ev:event="DOMActivate" />
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-occupations']/tei:div[@type='fullName']"/>
-        <xf:toggle case="occupationsPanel" ev:event="DOMActivate" />
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-places']/tei:div[@type='fullName']"/>
-        <xf:toggle case="placesPanel" ev:event="DOMActivate" />
-    </xf:trigger>
-    <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-existDates']/tei:div[@type='fullName']"/>
+        <xf:label>Dates d'existence</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-existDates']/tei:div[@type='fullName']"/>-->
         <xf:toggle case="existDatesPanel" ev:event="DOMActivate" />
     </xf:trigger>
     <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-biogHist']/tei:div[@type='fullName']"/>
+        <xf:label>Fonctions</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-functions']/tei:div[@type='fullName']"/>-->
+        <xf:toggle case="functionsPanel" ev:event="DOMActivate" />
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Professions</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-occupations']/tei:div[@type='fullName']"/>-->
+        <xf:toggle case="occupationsPanel" ev:event="DOMActivate" />
+    </xf:trigger>
+    <xf:trigger>
+        <xf:label>Lieux</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-places']/tei:div[@type='fullName']"/>-->
+        <xf:toggle case="placesPanel" ev:event="DOMActivate" />
+    </xf:trigger>
+
+    <xf:trigger>
+        <xf:label>Biographie</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-biogHist']/tei:div[@type='fullName']"/>-->
         <xf:toggle case="biogHistPanel" ev:event="DOMActivate" />
     </xf:trigger>
     <xf:trigger>
-        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relations']/tei:div[@type='fullName']"/>
+        <xf:label>Relations</xf:label>
+<!--        <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relations']/tei:div[@type='fullName']"/>-->
         <xf:toggle case="relationsPanel" ev:event="DOMActivate" />
     </xf:trigger>
     <xf:trigger>

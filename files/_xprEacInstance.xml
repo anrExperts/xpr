@@ -20,6 +20,11 @@
             <nameEntry status="" preferredForm="" sourceReference="">
                 <part localType=""></part>
             </nameEntry>
+            <otherEntityTypes>
+                <otherEntityType>
+                    <term/>
+                </otherEntityType>
+            </otherEntityTypes>
         </identity>
     </cpfDescription>
     <!---->

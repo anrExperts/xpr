@@ -148,10 +148,11 @@
         <description xmlns="https://archivists.org/ns/eac/v2">
             <functions>
                 <function sourceReference="">
-                    <term></term>
+                    <term/>
                     <!--optionnal (all below)-->
                     <!--<date/> | <dateRange/> | <dateSet/>-->
-                    <placeName sourceReference=""/>
+                    <!--<placeName sourceReference=""/>-->
+                    <placeName/>
                     <descriptiveNote>
                         <p></p>
                     </descriptiveNote>
@@ -213,7 +214,9 @@
                     <chronItem id="" sourceReference="" localType="">
                         <date certainty="" standardDate="" notBefore="" notAfter="" sourceReference=""/>
                         <event/>
-                        <place/>
+                        <place>
+                            <placeName/>
+                        </place>
                     </chronItem>
                 </chronList>
                 <list/>
@@ -227,7 +230,9 @@
             <chronItem id="" sourceReference=""  localType="">
                 <date certainty="" standardDate="" notBefore="" notAfter="" sourceReference=""/>
                 <event/>
-                <place/>
+                <place>
+                    <placeName/>
+                </place>
             </chronItem>
         </chronList>
     </xf:instance>

@@ -132,6 +132,38 @@ button:hover {
     transition: 0.2s;
 }
 
+.del {
+    margin-top:0;
+    margin-left: 0.5em;
+    margin-right:0.5em;
+}
+
+.del button{
+    width: 1em;
+    height: 1em;
+    border-radius: 100%;
+    line-height: 1em;
+    background-color: var(--colorMain);
+    color: var(--colorSub);
+    transition: 0.2s;
+}
+
+.del button:hover{
+
+    color: var(--colorMain) ;
+    background-color: var(--colorSub);
+    transition: 0.2s;
+}
+
+
+.del button xforms-label {
+    vertical-align:middle;
+    text-align: center;
+    left: -2.5px;
+    position: relative;
+    top: -4px;
+}
+
 /*
 xforms element
 */
