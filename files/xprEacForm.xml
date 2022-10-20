@@ -218,6 +218,15 @@
                     </xf:trigger>
                 </xf:repeat>
             </xf:group>
+            <xf:trigger>
+                <xf:label>Sauvegarder le fichier</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert nodeset="instance('eacNoValidation')" origin="instance('eacInstance')"/>
+                </xf:action>
+                <xf:action ev:event="DOMActivate">
+                    <xf:send submission="noValidationSubmission"/>
+                </xf:action>
+            </xf:trigger>
         </xf:group>
     </xf:case>
     <xf:case id="sourcesPanel" selected="true">
@@ -3637,6 +3646,9 @@
                                         <xf:value>uncertain</xf:value>
                                     </xf:item>
                                 </xf:select1>
+                                <xf:input ref="." incremental="true">
+                                    <xf:label>Intitulé</xf:label>
+                                </xf:input>
                                 <!--<xf:select ref="@sourceReference" appearance="full">
                                     <xf:label>
                                         <xf:output value="concat(
@@ -4320,6 +4332,7 @@
                     <xf:insert context="." nodeset="*" at="last()" position="after" origin="instance('eacRelations')/eac:relations"/>
                 </xf:action>
                 <xf:setvalue ref="eac:relations/eac:relation//eac:part/@localType" value="'full'" ev:event="DOMActivate"/>
+                <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
             </xf:trigger>
         </xf:group>
         <xf:group ref="eac:cpfDescription/eac:relations">
@@ -4424,7 +4437,7 @@
                     </xf:group>
                 </xf:group>
                 <xf:repeat nodeset="eac:relationType">
-                    <xf:select1 ref=".">
+                    <xf:select1 ref="." incremental="true">
                         <!--<xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relationType']/tei:div[@type='fullName']"/>-->
                         <xf:label>
                             <xf:output value="'Type de relation'"/>
@@ -4441,9 +4454,11 @@
                             <xf:label ref="label"/>
                             <xf:value ref="label"/>
                         </xf:itemset>
-                        <xf:setvalue ref="@valueURI" value="instance('relationTypes')//type[.=current()]/@valueURI" ev:event="xforms-value-changed"/>
-                        <xf:setvalue ref="@vocabularySource" value="instance('relationTypes')//type[.=current()]/@vocabularySource" ev:event="xforms-value-changed"/>
-                        <xf:setvalue ref="@vocabularySourceURI" value="instance('relationTypes')//type[.=current()]/@vocabularySourceURI" ev:event="xforms-value-changed"/>
+                        <xf:action ev:event="xforms-value-changed">
+                            <xf:setvalue ref="@valueURI" value="instance('relationTypes')//type[.=current()]/@valueURI"/>
+                            <xf:setvalue ref="@vocabularySource" value="instance('relationTypes')//type[.=current()]/@vocabularySource"/>
+                            <xf:setvalue ref="@vocabularySourceURI" value="instance('relationTypes')//type[.=current()]/@vocabularySourceURI"/>
+                        </xf:action>
                     </xf:select1>
                     <xf:select1 ref="following-sibling::*[1][self::eac:targetRole[preceding-sibling::*[1][self::eac:relationType] = instance('relationTypes')/group/type[roles]/label]]">
                         <xf:label>
@@ -4461,6 +4476,20 @@
                         </xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-targetRole']/tei:div[@type='description']"/></xf:help>
                     </xf:input>
+                    <xf:select ref="@sourceReference" appearance="full">
+                        <xf:label>
+                            <xf:output value="concat(
+                        'Référence(s)',
+                        if(normalize-space(parent::eac:relationType/following-sibling::*[1][self::eac:targetRole])!='', concat(' (', normalize-space(parent::eac:relationType/following-sibling::*[1][self::eac:targetRole]), ')') , '')
+                        )"/>
+                        </xf:label>
+                        <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
+                        <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
+                            <!--@todo Q° multiple references inside one source !-->
+                            <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
+                            <xf:value value="concat('#', @id)"/>
+                        </xf:itemset>
+                    </xf:select>
                     <!--<xf:group class="trigger">
                         <xf:trigger>
                             <xf:label><xf:output value="concat('- ', instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relationType']/tei:div[@type='fullName'])" /></xf:label>
@@ -5336,6 +5365,7 @@
                     <xf:action ev:event="DOMActivate">
                         <xf:setvalue ref="eac:relation[last()]//eac:part/@localType" value="'full'"/>
                     </xf:action>
+                    <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
                 </xf:trigger>
             </xf:group>
         </xf:group>
@@ -5383,16 +5413,7 @@
             <xf:label>Valider</xf:label>
         </xf:submit>
     </xf:dialog>
-    <xf:submit submission="save2file">
+    <!--<xf:submit submission="save2file">
         <xf:label>Save 2 file (with validation)</xf:label>
-    </xf:submit>
-    <xf:trigger>
-        <xf:label>Save 2 file (no validation)</xf:label>
-        <xf:action ev:event="DOMActivate">
-            <xf:insert nodeset="instance('eacNoValidation')" origin="instance('eacInstance')"/>
-        </xf:action>
-        <xf:action ev:event="DOMActivate">
-            <xf:send submission="noValidationSubmission"/>
-        </xf:action>
-    </xf:trigger>
+    </xf:submit>-->
 </form>

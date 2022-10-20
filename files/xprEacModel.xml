@@ -254,7 +254,7 @@
                     <targetEntity targetType="">
                         <part localType=""/>
                     </targetEntity>
-                    <relationType id="" valueURI="" vocabularySource="" vocabularySourceURI=""/>
+                    <relationType id="" valueURI="" vocabularySource="" vocabularySourceURI="" sourceReference=""/>
                     <targetRole target=""/>
                 </relation>
             </relations>
@@ -270,7 +270,7 @@
                 <!--<date/> | <dateRange/> | <dateSet/>-->
                 <!-- repeatable -->
                 <place></place>
-                <relationType id="" valueURI="" vocabularySource="" vocabularySourceURI=""/>
+                <relationType id="" valueURI="" vocabularySource="" vocabularySourceURI="" sourceReference=""/>
                 <targetRole target=""></targetRole>
                 <descriptiveNote>
                     <p></p>
@@ -502,6 +502,6 @@
 
     <xf:action ev:event="callbackevent">
         <xf:setvalue ref="//@id[.=''][parent::*[self::eac:source or self::eac:chronItem or self::eac:relationType][not(preceding::*[self::eac:source or self::eac:chronItem or self::eac:relationType][@id=''])]]" value="event('response')"/>
-        <xf:setvalue if="//eac:targetRole[@target='']" ref="//@target[.=''][parent::eac:targetRole]" value="concat('#', event('response'))"/>
+        <xf:setvalue if="//eac:targetRole[@target=''][preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]" ref="//@target[.=''][parent::eac:targetRole[preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]]" value="concat('#', event('response'))"/>
     </xf:action>
 </xf:model>
