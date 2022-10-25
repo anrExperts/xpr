@@ -49,6 +49,11 @@
                 <xs:pattern value="(.|\n|\r)*\S(.|\n|\r)*"/>
             </xs:restriction>
         </xs:simpleType>
+        <xs:simpleType name="datation">
+            <xs:restriction base="xs:string">
+                <xs:pattern value="((\d{4})(-(0[13578]|1[02])(-(0[1-9]|[12][0-9]|3[01]))?)?)|((\d{4})(-02(-(0[1-9]|[12][0-9]))?)?)|((\d{4})(-(0[469]|11)(-(0[1-9]|[12][0-9]|30))?)?)"/>
+            </xs:restriction>
+        </xs:simpleType>
     </xs:schema>
 
     <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:places/eac:place" constraint="eac:placeRole or eac:placeName or eac:address"/>
@@ -59,10 +64,9 @@
     <xf:bind nodeset="instance('eacInstance')//@standardDateTime" type="xf:dateTime"/>
     <xf:bind nodeset="instance('eacInstance')//eac:dateSet" constraint="count(*) > 1"/>
     <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:existDates" constraint="eac:date or eac:dateRange or eac:dateSet"/>
-    <xf:bind nodeset="instance('eacInstance')//@standardDate" relevant="parent::*[@notAfter=''][@notBefore='']" type="xf:date"/>
-    <xf:bind nodeset="instance('eacInstance')//@notBefore" relevant="parent::*[@notAfter=''][@standardDate='']" type="xf:date"/>
-    <xf:bind nodeset="instance('eacInstance')//@notAfter" relevant="parent::*[@notBefore=''][@standardDate='']" type="xf:date"/>
-
+    <xf:bind nodeset="instance('eacInstance')//@standardDate" relevant="parent::*[@notAfter=''][@notBefore='']" type="eac:datation"/>
+    <xf:bind nodeset="instance('eacInstance')//@notBefore" relevant="parent::*[@notAfter=''][@standardDate='']" type="eac:datation"/>
+    <xf:bind nodeset="instance('eacInstance')//@notAfter" relevant="parent::*[@notBefore=''][@standardDate='']" type="eac:datation"/>
 
     <xf:instance id="eacMaintenanceAgency">
         <maintenanceAgency xmlns="https://archivists.org/ns/eac/v2">
@@ -91,7 +95,7 @@
             <sources>
                 <source id="">
                     <reference href=""/>
-                    <citedRange/>
+                    <citedRange unit="page"/>
                     <descriptiveNote>
                         <p></p>
                     </descriptiveNote>

@@ -278,3 +278,14 @@ xforms-select1 xforms-label,
 xforms-textarea xforms-label {
     font-weight: normal;
 }
+
+xforms-repeat-item:not(:first-child)>xforms-label {
+    margin-top: 5em;
+}
+
+
+xforms-group[xf-bound] > xforms-group[xf-bound] + xforms-trigger,
+xforms-repeat[xf-bound] + xforms-trigger
+{
+    margin-top: 3em;
+}

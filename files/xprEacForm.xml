@@ -308,6 +308,35 @@
                     </xf:action>
                     <!-/-<xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>-/->
                 </xf:trigger>-->
+                <xf:group ref="eac:citedRange">
+                    <xf:input ref=".">
+                        <xf:label>
+                            Pagination/foliotation
+                            <xf:trigger class="del">
+                                <xf:label>×</xf:label>
+                                <xf:hint>Supprimer la foliotation</xf:hint>
+                                <xf:delete nodeset="." ev:event="DOMActivate"/>
+                            </xf:trigger>
+                        </xf:label>
+                        <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-citedRange']/tei:div[@type='description']"/></xf:help>
+                        <xf:hint><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-citedRange']/tei:div[@type='summary']"/></xf:hint>
+                    </xf:input>
+                    <xf:select1 ref="@unit">
+                        <xf:label>Unité</xf:label>
+                        <xf:item>
+                            <xf:label>tome</xf:label>
+                            <xf:value>tome</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>folio</xf:label>
+                            <xf:value>folio</xf:value>
+                        </xf:item>
+                        <xf:item>
+                            <xf:label>page</xf:label>
+                            <xf:value>page</xf:value>
+                        </xf:item>
+                    </xf:select1>
+                </xf:group>
                 <!--<xf:repeat nodeset="eac:citedRange">
                     <xf:input ref=".">
                         <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-citedRange']/tei:div[@type='fullName']"/>
@@ -329,6 +358,14 @@
                     </xf:action>
                     <!-/-<xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>-/->
                 </xf:trigger>-->
+                <xf:trigger class="trigger" ref="self::eac:source[not(eac:citedRange)]">
+                    <xf:label>Ajouter une pagination</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <!--<xf:insert if="eac:citedRange" context="." nodeset="eac:citedRange" origin="instance('eacSources')/eac:sources/eac:source/eac:citedRange" at="last()" position="after"/>-->
+                        <xf:insert context="." nodeset="eac:reference" origin="instance('eacSources')/eac:sources/eac:source/eac:citedRange" at="last()" position="after"/>
+                    </xf:action>
+                    <!--<xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>-->
+                </xf:trigger>
                 <xf:group ref="eac:descriptiveNote">
                     <xf:label>
                         <xf:output value=" concat(
@@ -410,7 +447,7 @@
                 </xf:trigger>
             </xf:group>
             <xf:trigger ref="self::eac:sources[not(eac:descriptiveNote)]" class="trigger">
-                <xf:label>Ajouter des notes générales sur le sources</xf:label>
+                <xf:label>Ajouter des notes générales sur les sources</xf:label>
                 <xf:insert context="." nodeset="eac:source"  at="last()" position="after" origin="instance('eacSources')/eac:sources/eac:source/eac:descriptiveNote" ev:event="DOMActivate"/>
             </xf:trigger>
         </xf:group>
@@ -518,23 +555,23 @@
                         <xf:label>Statut</xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-status']/tei:div[@type='description']"/></xf:help>
                         <xf:item>
-                            <xf:label>authorized</xf:label>
+                            <xf:label>Autorisée</xf:label>
                             <xf:value>authorized</xf:value>
                         </xf:item>
                         <xf:item>
-                            <xf:label>alternative</xf:label>
+                            <xf:label>Attestée</xf:label>
                             <xf:value>alternative</xf:value>
                         </xf:item>
                     </xf:select1>
-                    <xf:select1 ref="@preferredForm">
+                    <xf:select1 ref="@preferredForm" appearance="full">
                         <xf:label>Forme préférée</xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-preferredForm']/tei:div[@type='description']"/></xf:help>
                         <xf:item>
-                            <xf:label>true</xf:label>
+                            <xf:label>Oui</xf:label>
                             <xf:value>true</xf:value>
                         </xf:item>
                         <xf:item>
-                            <xf:label>false</xf:label>
+                            <xf:label>Non</xf:label>
                             <xf:value>false</xf:value>
                         </xf:item>
                         <xf:action if="current()='true'" ev:event="xforms-value-changed">
