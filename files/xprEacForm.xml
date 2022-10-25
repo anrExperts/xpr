@@ -3385,9 +3385,9 @@
                         <xf:select1 ref="@localType">
                             <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-localType']/tei:div[@type='fullName']"/>
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-localType']/tei:div[@type='description']"/></xf:help>
-                            <xf:itemset ref="instance('eventTypes')/group/event">
-                                <xf:label ref="."/>
-                                <xf:value ref="."/>
+                            <xf:itemset ref="instance('eventTypes')/event">
+                                <xf:label ref="label"/>
+                                <xf:value ref="value"/>
                             </xf:itemset>
                         </xf:select1>
                         <xf:select ref="@sourceReference" appearance="full">

@@ -383,17 +383,74 @@
     </xf:instance>
     <xf:instance id="eventTypes">
         <events xmlns="">
-            <group>
-                <event>Naissance</event>
-                <event>Baptême</event>
-                <event>Marriage</event>
-                <event>Mort</event>
-                <event>Acquisition d'un office</event>
-                <event>Lettres de provision</event>
-                <event>Lettres de surannation</event>
-                <event>Réception</event>
-                <event>Autre</event>
-            </group>
+            <event>
+                <label>Naissance</label>
+                <value>birth</value>
+            </event>
+            <event>
+                <label>Baptême</label>
+                <value>baptism</value>
+            </event>
+            <event>
+                <label>Mariage</label>
+                <value>marriage</value>
+            </event>
+            <event>
+                <label>Décès</label>
+                <value>death</value>
+            </event>
+            <event>
+                <label>Maîtrise</label>
+                <value>master</value>
+            </event>
+            <event>
+                <label>Achat d'office</label>
+                <value>officePurchase</value>
+            </event>
+            <event>
+                <label>Provision d'office</label>
+                <value>provision</value>
+            </event>
+            <event>
+                <label>Réception</label>
+                <value>reception</value>
+            </event>
+            <event>
+                <label>Présence dans les Almanachs</label>
+                <value>almanacs</value>
+            </event>
+            <event>
+                <label>Honorariat</label>
+                <value>honorary</value>
+            </event>
+            <event>
+                <label>Résignation</label>
+                <value>relinquishment</value>
+            </event>
+            <event>
+                <label>Vente d'office</label>
+                <value>officeSale</value>
+            </event>
+            <event>
+                <label>Suppression des offices</label>
+                <value>officesEnding</value>
+            </event>
+            <event>
+                <label>Dispense d'age</label>
+                <value>exemption</value>
+            </event>
+            <event>
+                <label>Sentence d'interdiction</label>
+                <value>barringFromOffice</value>
+            </event>
+            <event>
+                <label>Faillite</label>
+                <value>bankruptcy</value>
+            </event>
+            <event>
+                <label>Saisie réelle</label>
+                <value>seizure</value>
+            </event>
         </events>
     </xf:instance>
     <xf:instance id="nameParts">
