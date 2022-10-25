@@ -5410,7 +5410,7 @@
     <xf:case id="commentPanel" selected="false">
         <xf:group ref="comment()">
             <xf:textarea ref=".">
-                <xf:label>Commentaire</xf:label>
+                <xf:label>Commentaire sur le formulaire</xf:label>
             </xf:textarea>
         </xf:group>
     </xf:case>
