@@ -1122,11 +1122,18 @@
                     </xf:trigger>
                 </xf:label>
                 <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-function']/tei:div[@type='description']"/></xf:help>
-                <xf:group ref="eac:term">
-                    <xf:input ref=".">
+                <xf:group>
+                    <xf:input ref="eac:term">
                         <xf:label>Terme</xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-term']/tei:div[@type='description']"/></xf:help>
                     </xf:input>
+                    <xf:select ref="@localType" appearance="full" class="switch">
+                        <!--<xf:label>Function vérifiée</xf:label>-->
+                        <xf:item>
+                            <xf:label>Function vérifiée</xf:label>
+                            <xf:value>verified</xf:value>
+                        </xf:item>
+                    </xf:select>
                 </xf:group>
                 <xf:group ref="self::eac:function">
                     <xf:select ref="@sourceReference" appearance="full">
@@ -1687,11 +1694,18 @@
                     </xf:trigger>
                 </xf:label>
                 <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-occupation']/tei:div[@type='description']"/></xf:help>
-                <xf:group ref="eac:term">
-                    <xf:input ref=".">
+                <xf:group>
+                    <xf:input ref="eac:term">
                         <xf:label>Terme</xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-term']/tei:div[@type='description']"/></xf:help>
                     </xf:input>
+                    <xf:select ref="@localType" appearance="full" class="switch">
+                        <!--<xf:label>Function vérifiée</xf:label>-->
+                        <xf:item>
+                            <xf:label>Function vérifiée</xf:label>
+                            <xf:value>verified</xf:value>
+                        </xf:item>
+                    </xf:select>
                 </xf:group>
                 <xf:group ref="self::eac:occupation">
                     <xf:select ref="@sourceReference" appearance="full">
@@ -3389,7 +3403,54 @@
                                 <xf:label ref="label"/>
                                 <xf:value ref="value"/>
                             </xf:itemset>
+                            <xf:action ev:event="xforms-value-changed">
+                                <xf:show if=".='reception'" dialog="eventReception"/>
+                            </xf:action>
+                            <xf:action if=".='reception'" ev:event="xforms-deselect">
+                                <xf:show dialog="test"/>
+                            </xf:action>
                         </xf:select1>
+                        <xf:dialog id="test">
+                            <xf:trigger>
+                                <xf:label>Réinitialiser le champ date</xf:label>
+                                <xf:delete nodeset="eac:date" ev:event="DOMActivate"/>
+                                <xf:delete nodeset="eac:dateSet" ev:event="DOMActivate"/>
+                                <xf:delete nodeset="eac:dateRange" ev:event="DOMActivate"/>
+                                <xf:insert context="." nodeset="eac:event" position="before" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
+                                <xf:hide ev:event="DOMActivate" dialog="test"/>
+                            </xf:trigger>
+                            <xf:trigger>
+                                <xf:label>Annuler</xf:label>
+                                <xf:hide ev:event="DOMActivate" dialog="test"/>
+                            </xf:trigger>
+                        </xf:dialog>
+                        <xf:dialog id="eventReception">
+                            <xf:trigger>
+                                <xf:label>Préformater l'évènement</xf:label>
+                                <xf:action ev:event="DOMActivate">
+                                    <xf:delete nodeset="eac:date" ev:event="DOMActivate"/>
+                                    <xf:delete nodeset="eac:dateRange" ev:event="DOMActivate"/>
+                                    <xf:delete nodeset="eac:dateSet" ev:event="DOMActivate"/>
+                                    <xf:insert context="." nodeset="eac:event" position="before" origin="instance('eacDates')/eac:dateSet"/>
+                                    <xf:action while="eac:dateSet[count(*) &lt; 8]">
+                                        <xf:insert context="eac:dateSet" nodeset="*" origin="instance('eacDates')/eac:date"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 1" ref="eac:dateSet/eac:date[last()]" value="'Lettres de provision'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 2" ref="eac:dateSet/eac:date[last()]" value="'Lettres de surannation'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 3" ref="eac:dateSet/eac:date[last()]" value="'Supplique'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 4" ref="eac:dateSet/eac:date[last()]" value="'Ordonnance de soit montré au procureur du roy'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 5" ref="eac:dateSet/eac:date[last()]" value="'Examen'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 6" ref="eac:dateSet/eac:date[last()]" value="'Consentement de la communauté'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 7" ref="eac:dateSet/eac:date[last()]" value="'Information de vie et de mœurs'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 8" ref="eac:dateSet/eac:date[last()]" value="'Serment'"/>
+                                    </xf:action>
+                                    <xf:hide dialog="eventReception"/>
+                                </xf:action>
+                            </xf:trigger>
+                            <xf:trigger>
+                                <xf:label>Annuler</xf:label>
+                                <xf:hide ev:event="DOMActivate" dialog="eventReception"/>
+                            </xf:trigger>
+                        </xf:dialog>
                         <xf:select ref="@sourceReference" appearance="full">
                             <xf:label>Référence(s)</xf:label>
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>

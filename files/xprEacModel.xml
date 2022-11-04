@@ -151,7 +151,7 @@
     <xf:instance id="eacFunctions">
         <description xmlns="https://archivists.org/ns/eac/v2">
             <functions>
-                <function sourceReference="">
+                <function localType="" sourceReference="">
                     <term/>
                     <!--optionnal (all below)-->
                     <!--<date/> | <dateRange/> | <dateSet/>-->
@@ -168,7 +168,7 @@
     <xf:instance id="eacOccupations">
         <description xmlns="https://archivists.org/ns/eac/v2">
             <occupations>
-                <occupation sourceReference="">
+                <occupation localType="" sourceReference="">
                     <term></term>
                     <!--optionnal (all below)-->
                     <!--<date/> | <dateRange/> | <dateSet/>-->
@@ -378,7 +378,40 @@
                 <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasOwnerOf">
                     <label>rico:isOrWasOwnerOf</label>
                 </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isRelatedTo">
+                    <label>rico:isRelatedTo</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasUnderAuthorityOf">
+                    <label>rico:isOrWasUnderAuthorityOf</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadAuthorityOver">
+                    <label>rico:hasOrHadAuthorityOver</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController">
+                    <label>rico:hasOrHadController</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasControllerOf">
+                    <label>rico:isOrWasControllerOf</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasSubordinateTo">
+                    <label>rico:isOrWasSubordinateTo</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadSubordinate">
+                    <label>rico:hasOrHadSubordinate</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadWorkRelationWith">
+                    <label>rico:hasOrHadWorkRelationWith</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasSuccessor">
+                    <label>rico:hasSuccessor</label>
+                </type>
+                <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf">
+                    <label>rico:isSuccessorOf</label>
+                </type>
             </group>
+
+
+
         </relations>
     </xf:instance>
     <xf:instance id="eventTypes">
@@ -471,6 +504,7 @@
         <entityTypes xmlns="">
             <type>Expert (tableau)</type>
             <type>Expert (non inscrit)</type>
+            <type>Greffier</type>
             <type>Maçon</type>
             <type>Autre (person)</type>
         </entityTypes>
