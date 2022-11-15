@@ -4548,7 +4548,7 @@
                             </xf:trigger>
                         </xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relationType']/tei:div[@type='description']"/></xf:help>
-                        <xf:itemset ref="instance('relationTypes')/group/type">
+                        <xf:itemset ref="instance('relationTypes')/type">
                             <xf:label ref="label"/>
                             <xf:value ref="label"/>
                         </xf:itemset>
@@ -4558,17 +4558,17 @@
                             <xf:setvalue ref="@vocabularySourceURI" value="instance('relationTypes')//type[.=current()]/@vocabularySourceURI"/>
                         </xf:action>
                     </xf:select1>
-                    <xf:select1 ref="following-sibling::*[1][self::eac:targetRole[preceding-sibling::*[1][self::eac:relationType] = instance('relationTypes')/group/type[roles]/label]]">
+                    <xf:select1 ref="following-sibling::*[1][self::eac:targetRole[preceding-sibling::*[1][self::eac:relationType] = instance('relationTypes')/type[roles]/label]]">
                         <xf:label>
                             <xf:output value="'Rôle'"/>
                         </xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relationType']/tei:div[@type='description']"/></xf:help>
-                        <xf:itemset ref="instance('relationTypes')/group/type[label = current()/preceding-sibling::*[1][self::eac:relationType]]/roles/role">
+                        <xf:itemset ref="instance('relationTypes')/type[label = current()/preceding-sibling::*[1][self::eac:relationType]]/roles/role">
                             <xf:label ref="."/>
                             <xf:value ref="."/>
                         </xf:itemset>
                     </xf:select1>
-                    <xf:input ref="following-sibling::*[1][self::eac:targetRole[preceding-sibling::*[1][self::eac:relationType] = instance('relationTypes')/group/type[not(roles)]/label or preceding-sibling::*[1][self::eac:relationType] = '']]">
+                    <xf:input ref="following-sibling::*[1][self::eac:targetRole[preceding-sibling::*[1][self::eac:relationType] = instance('relationTypes')/type[not(roles)]/label or preceding-sibling::*[1][self::eac:relationType] = '']]">
                         <xf:label>
                             <xf:output value="'Rôle'"/>
                         </xf:label>
@@ -5462,6 +5462,19 @@
                     <!--  @todo ne set value ne fonctionne pas…-->
                     <xf:action ev:event="DOMActivate">
                         <xf:setvalue ref="eac:relation[last()]//eac:part/@localType" value="'full'"/>
+                    </xf:action>
+                    <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
+                </xf:trigger>
+            </xf:group>
+            <xf:group class="trigger">
+                <xf:trigger ref=".[ancestor::eac:cpfDescription//eac:chronItem[@localType='reception']]">
+                    <xf:label>Ajouter les relations citées dans le dossier de réception</xf:label>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relationType/@sourceReference" value="instance('eacInstance')/eac:cpfDescription//eac:chronItem[@localType='reception']/@sourceReference"/>
+                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relation/@target" value="concat('#', instance('eacInstance')/eac:cpfDescription//eac:chronItem[@localType='reception']/@id)"/>
+                    </xf:action>
+                    <xf:action ev:event="DOMActivate">
+                        <xf:insert context="." nodeset="eac:relation" at="last()" position="after" origin="instance('eacRelations4Reception')/eac:relations//eac:relation"/>
                     </xf:action>
                     <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
                 </xf:trigger>
