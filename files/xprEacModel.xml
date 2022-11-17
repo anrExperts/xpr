@@ -291,7 +291,7 @@
                         <part localType="full"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:isSuccessorOf</relationType>
-                    <targetRole target="">successeur</targetRole>
+                    <targetRole target="">prédécesseur</targetRole>
                     <descriptiveNote>
                         <p></p>
                     </descriptiveNote>
