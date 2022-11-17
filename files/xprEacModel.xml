@@ -290,6 +290,16 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                     </targetEntity>
+                    <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:isSuccessorOf</relationType>
+                    <targetRole target="">successeur</targetRole>
+                    <descriptiveNote>
+                        <p></p>
+                    </descriptiveNote>
+                </relation>
+                <relation target="" sourceReference="">
+                    <targetEntity targetType="person">
+                        <part localType="full"/>
+                    </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
                     <descriptiveNote>
