@@ -467,6 +467,46 @@ declare function getExpert($node as node()*, $options as map(*)) as node()* {
 };
 
 
+declare function getEacDates($node, $option) {  
+  switch($node)
+  case $node[self::eac:dateRange] return getEacDateRange($node, $option)
+  case $node[self::eac:dateSet] return getEacDateSet($node, $option)
+  default return getEacDate($node, $option)
+};
+
+declare function getEacDateSet($node, $option) {
+  array {
+    for $date in $node/*
+    return getEacDates($date, $option)
+  }
+};
+
+declare function getEacDateRange($node, $option) {
+  map {
+    'from' : getEacDate($node/eac:fromDate, $option),
+    'to' : getEacDate($node/eac:toDate, $option)
+  }
+};
+
+declare function getEacSourceReference($node, $option) {
+  if($node[fn:normalize-space(.)!='']) then array{
+    for $source in fn:tokenize($node, ' ')
+    return map {
+      'source' : $option/eac:source[@id = $source => fn:substring-after('#')] => fn:normalize-space(), 
+      'id' : ''
+    }
+  }
+};
+
+declare function getEacDate($node, $option) {  
+  map {
+    'precision' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!='']/fn:local-name(),
+    'date' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!=''] => fn:normalize-space(),
+    'certainty' : $node/@certainty => fn:normalize-space(),
+    'sources' : if($node[fn:normalize-space(@sourceReference)!='']) then getEacSourceReference($node/@sourceReference, $option)
+  }
+};
+
 (:~
  : This function dispatches the treatment of the eac XML document
  :)
@@ -480,6 +520,7 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
     (: @todo si pas de date d’existance ou de sexe ne pas afficher getDescription() :)
   }</article>
 };
+
 
 declare function getExpertises($node, $options){
   let $db := db:open('xpr')
@@ -658,7 +699,7 @@ declare function getChronList($node, $options){
 declare function getEntityName($node as xs:string*) {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
   let $id := $node
-  let $entityName := $prosopo/eac:eac-cpf[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[eac:authorizedForm]/eac:part/fn:normalize-space()
+  let $entityName := $prosopo/eac:eac[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true' and @status='authorized'][1]/eac:part/fn:normalize-space()
   return $entityName
 };
 
