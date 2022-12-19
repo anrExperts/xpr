@@ -3435,13 +3435,14 @@
                                     <xf:action while="eac:dateSet[count(*) &lt; 8]">
                                         <xf:insert context="eac:dateSet" nodeset="*" origin="instance('eacDates')/eac:date"/>
                                         <xf:setvalue if="count(eac:dateSet/*) = 1" ref="eac:dateSet/eac:date[last()]" value="'Lettres de provision'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 2" ref="eac:dateSet/eac:date[last()]" value="'Lettres de surannation'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 3" ref="eac:dateSet/eac:date[last()]" value="'Supplique'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 4" ref="eac:dateSet/eac:date[last()]" value="'Ordonnance de soit montré au procureur du roy'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 5" ref="eac:dateSet/eac:date[last()]" value="'Examen'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 6" ref="eac:dateSet/eac:date[last()]" value="'Consentement de la communauté'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 7" ref="eac:dateSet/eac:date[last()]" value="'Information de vie et de mœurs'"/>
-                                        <xf:setvalue if="count(eac:dateSet/*) = 8" ref="eac:dateSet/eac:date[last()]" value="'Serment'"/>
+                                        <!--<xf:setvalue if="count(eac:dateSet/*) = 2" ref="eac:dateSet/eac:date[last()]" value="'Lettres de surannation'"/>-->
+                                        <xf:setvalue if="count(eac:dateSet/*) = 2" ref="eac:dateSet/eac:date[last()]" value="'Supplique'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 3" ref="eac:dateSet/eac:date[last()]" value="'Ordonnance de soit montré au procureur du roy'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 4" ref="eac:dateSet/eac:date[last()]" value="'Examen'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 5" ref="eac:dateSet/eac:date[last()]" value="'Consentement de la communauté'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 6" ref="eac:dateSet/eac:date[last()]" value="'Information de vie et de mœurs'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 7" ref="eac:dateSet/eac:date[last()]" value="'Serment'"/>
+                                        <xf:setvalue if="count(eac:dateSet/*) = 8" ref="eac:dateSet/eac:date[last()]" value="'Réception'"/>
                                     </xf:action>
                                     <xf:hide dialog="eventReception"/>
                                 </xf:action>
@@ -4428,8 +4429,10 @@
                 <xf:label>Ajouter des relations</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:insert context="." nodeset="*" at="last()" position="after" origin="instance('eacRelations')/eac:relations"/>
+                    <xf:insert context="eac:relations/eac:relation/eac:targetEntity" nodeset="eac:part" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation/eac:targetEntity/eac:part"/>
                 </xf:action>
-                <xf:setvalue ref="eac:relations/eac:relation//eac:part/@localType" value="'full'" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[1]/@localType" value="'full'" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[last()]/@localType" value="'status'" ev:event="DOMActivate"/>
                 <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
             </xf:trigger>
         </xf:group>
@@ -4514,8 +4517,12 @@
                                 <xf:value>resource</xf:value>
                             </xf:item>-->
                         </xf:select1>
-                        <xf:input ref="eac:part">
-                            <xf:label>Dénomination complète</xf:label>
+                        <xf:input ref="eac:part[@localType='full']">
+                            <xf:label>Dénomination</xf:label>
+                            <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-part']/tei:div[@type='description']"/></xf:help>
+                        </xf:input>
+                        <xf:input ref="eac:part[@localType='status']">
+                            <xf:label>Qualités</xf:label>
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-part']/tei:div[@type='description']"/></xf:help>
                         </xf:input>
                         <!--<xf:group ref="eac:part">
@@ -5458,10 +5465,12 @@
                     <xf:label>Ajouter une relation</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert context="." nodeset="eac:relation" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation"/>
+                        <xf:insert context="eac:relation[last()]" nodeset="eac:targetEntity/eac:part" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation/eac:targetEntity/eac:part"/>
                     </xf:action>
                     <!--  @todo ne set value ne fonctionne pas…-->
                     <xf:action ev:event="DOMActivate">
-                        <xf:setvalue ref="eac:relation[last()]//eac:part/@localType" value="'full'"/>
+                        <xf:setvalue ref="eac:relation[last()]//eac:part[1]/@localType" value="'full'"/>
+                        <xf:setvalue ref="eac:relation[last()]//eac:part[last()]/@localType" value="'status'"/>
                     </xf:action>
                     <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
                 </xf:trigger>
