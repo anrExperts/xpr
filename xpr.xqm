@@ -20,6 +20,7 @@ import module namespace xpr.mappings.html = 'xpr.mappings.html' at './mappings.h
 import module namespace xpr.models.xpr = 'xpr.models.xpr' at './models.xpr.xqm' ;
 import module namespace xpr.models.networks = 'xpr.models.networks' at './models.networks.xqm' ;
 import module namespace xpr.autosave = 'xpr.autosave' at './autosave.xqm' ;
+import module namespace xpr.manifest = 'xpr.manifest' at './manifest.xqm' ;
 import module namespace Session = 'http://basex.org/modules/session';
 import module namespace functx = "http://www.functx.com";
 
