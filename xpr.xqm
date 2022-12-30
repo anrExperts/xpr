@@ -966,7 +966,7 @@ function getBiographyJson($id) {
     },
     'relations' : if(fn:count($biography/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!='']) > 0) then array{
       for $relation in $biography/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!=''] return map{
-        'relation' : $relation/eac:targetEntity/eac:part => fn:normalize-space(),
+        'relation' : $relation/eac:targetEntity/eac:part[@localType='full'] => fn:normalize-space(),
         'roles' : if($relation/eac:targetRole[fn:normalize-space(.)!='']) then array{
           for $role in $relation/eac:targetRole 
           let $sources := $relation/eac:relationType[@id = fn:substring-after($role/@target, '#')]/@sourceReference
