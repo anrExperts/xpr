@@ -37,66 +37,104 @@ module namespace xpr.manifest = "xpr.manifest";
  :)
 
 declare
-  %rest:path("xpr/iiif/{$file}/manifest.json")
-  %rest:produces('application/json')
-  %output:media-type('application/json')
-  %output:method('json')
-function getManifest($file) {
-  let $nakaIdentifier := db:open('xprImages')//*:unitid[*:idno=$file]/*:nakalaId => fn:normalize-space()
+  %rest:path("xpr/manifests")
+  %rest:produces('application/html')
+  %output:method("html")
+function getManifest() {
+  <html>
+    <head></head>
+    <body>
+      <form action="/xpr/manifests/write" method="post">
+          <label for="apikey">API-KEY</label>
+          <input type="apikey" name="apikey" id="apikey"/>
+          <input type="submit" value="Envoyer"/>
+      </form>
+    </body>
+  </html>
+};
 
-  let $data := http:send-request(<http:request method='get' href='https://api.nakala.fr/datas/{$nakaIdentifier}' />)/*:json
-  return (
-    map {
-      "@context" : "http://iiif.io/api/presentation/3/context.json",
-      (:@todo récupérer l'adresse ?:)
-      "id" : "http://localhost:8984/xpr/iiif/"|| $file ||"/manifest.json",
-      "type": "Manifest",
-      "label": map {
+declare
+  %rest:path("xpr/iiif/test")
+  %rest:produces('application/html')
+  %output:method("html")
+  %rest:query-param('apikey', '{$apikey}', 'test')
+function getToto($apikey) {
+  $apikey
+};
+
+declare function getUserDatas($apikey) {
+  let $apikey := $apikey
+  return
+    http:send-request(
+      <http:request method="post">
+        <http:header name="X-API-KEY" value="{$apikey}"/>
+      </http:request>,
+      'https://api.nakala.fr/users/datas/owned'
+  )/*:json
+};
+
+declare function createManifests($apikey) {
+  let $apikey := $apikey
+  let $datas := getUserDatas($apikey)
+  for $data in $datas/data/_
+    let $unitid := $data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value => fn:normalize-space()
+    let $nakaIdentifier := $data/identifier => fn:normalize-space()
+    let $data := http:send-request(<http:request method='get' href='https://api.nakala.fr/datas/{$nakaIdentifier}' />)/*:json
+  return
+    array{
+      $unitid,
+      map {
+        "@context" : "http://iiif.io/api/presentation/3/context.json",
+        (:@todo récupérer l'adresse ?:)
+        "id" : "http://localhost:8984/xpr/iiif/"|| $unitid ||"/manifest.json",
+        "type": "Manifest",
+        "label": map {
           "fr" : array {
             $data/*:metas/*[*:propertyUri = "http://nakala.fr/terms#title"]/*:value => fn:normalize-space()
           }
-      },
-      "behavior" : array {
-        "paged"
-      },
-      "items" : array {
-        for $f at $i in $data/*:files/*
-        let $nakaFileIdentifier := $f/*:sha1 => fn:normalize-space()
-        let $info := http:send-request(<http:request method='get' href="https://api.nakala.fr/iiif/{$nakaIdentifier}/{$nakaFileIdentifier}/info.json" />)/*:json
-        return map {
-          "id" : "https://xpr/iiif/" || $file || "/canvas/p" || fn:format-number($i, "0000"),
-          "type" : "Canvas",
-          "label" : map {
-            "fr" : array {
-              $f/*:name => fn:normalize-space()
-            }
-          },
-          "width" : fn:number($info/*:width => fn:normalize-space()),
-          "height" : fn:number($info/*:height => fn:normalize-space()),
-          "items" : array {
-            map {
-              "id" : "https://xpr/iiif/" || $file || "/page/p" || fn:format-number($i, "0000") || "/1",
-              "type" : "AnnotationPage",
-              "items" : array {
-                map {
-                  "id" : "https://xpr/iiif/" || $file || "/annotation/p" || fn:format-number($i, "0000") || "-image",
-                  "type" : "Annotation",
-                  "motivation" : "painting",
-                  "body" : map {
-                    "id" : "https://api.nakala.fr/iiif/" || fn:normalize-space($data/*:identifier) || "/" || $nakaFileIdentifier || "/full/max/0/default.jpg",
-                    "type" : "Image",
-                    "format" : "image/jpeg",
-                    "width" : fn:number($info/*:width => fn:normalize-space()),
-                    "height" : fn:number($info/*:height => fn:normalize-space()),
-                    "service" : array {
-                      map {
-                        "id": "https://api.nakala.fr/iiif/" || fn:normalize-space($data/*:identifier) || "/" || $nakaFileIdentifier || "/info.json",
-                        "type": "ImageService3",
-                        "profile": "level2"
+        },
+        "behavior" : array {
+          "paged"
+        },
+        "items" : array {
+          for $f at $i in $data/*:files/*
+          let $nakaFileIdentifier := $f/*:sha1 => fn:normalize-space()
+          let $info := http:send-request(<http:request method='get' href="https://api.nakala.fr/iiif/{$nakaIdentifier}/{$nakaFileIdentifier}/info.json" />)/*:json
+          return map {
+            "id" : "https://xpr/iiif/" || $unitid || "/canvas/p" || fn:format-number($i, "0000"),
+            "type" : "Canvas",
+            "label" : map {
+              "fr" : array {
+                $f/*:name => fn:normalize-space()
+              }
+            },
+            "width" : fn:number($info/*:width => fn:normalize-space()),
+            "height" : fn:number($info/*:height => fn:normalize-space()),
+            "items" : array {
+              map {
+                "id" : "https://xpr/iiif/" || $unitid || "/page/p" || fn:format-number($i, "0000") || "/1",
+                "type" : "AnnotationPage",
+                "items" : array {
+                  map {
+                    "id" : "https://xpr/iiif/" || $unitid || "/annotation/p" || fn:format-number($i, "0000") || "-image",
+                    "type" : "Annotation",
+                    "motivation" : "painting",
+                    "body" : map {
+                      "id" : "https://api.nakala.fr/iiif/" || fn:normalize-space($data/*:identifier) || "/" || $nakaFileIdentifier || "/full/max/0/default.jpg",
+                      "type" : "Image",
+                      "format" : "image/jpeg",
+                      "width" : fn:number($info/*:width => fn:normalize-space()),
+                      "height" : fn:number($info/*:height => fn:normalize-space()),
+                      "service" : array {
+                        map {
+                          "id": "https://api.nakala.fr/iiif/" || fn:normalize-space($data/*:identifier) || "/" || $nakaFileIdentifier || "/info.json",
+                          "type": "ImageService3",
+                          "profile": "level2"
+                        }
                       }
-                    }
-                  },
-                  "target" : "https://xpr/iiif/" || $file || "/canvas/p" || fn:format-number($i, "0000")
+                    },
+                    "target" : "https://xpr/iiif/" || $unitid || "/canvas/p" || fn:format-number($i, "0000")
+                  }
                 }
               }
             }
@@ -104,5 +142,18 @@ function getManifest($file) {
         }
       }
     }
+};
+
+declare
+  %rest:path("xpr/manifests/write")
+  %rest:produces('application/html')
+  %output:method("html")
+  %rest:query-param('apikey', '{$apikey}', 'test')
+ function writeManifest($apikey) {
+  let $manifests := createManifests($apikey)
+  for $manifest in $manifests
+  return (
+    file:write("/Users/josselinmorvan/files/dh/xpr/xpr/files/manifest/"||$manifest(1)||".manifest.json", json:serialize($manifest(2))),
+    $apikey
   )
 };
