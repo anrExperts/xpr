@@ -155,7 +155,7 @@ declare
     "Fichiers ajoutés:",
     for $manifest in $manifests
     return (
-      file:write("/Users/josselinmorvan/files/dh/xpr/xpr/files/manifest/"||$manifest(1)||".manifest.json", json:serialize($manifest(2))),
+      file:write(file:base-dir() || "files/manifest/"||$manifest(1)||".manifest.json", json:serialize($manifest(2))),
       $manifest(1)||".manifest.json"
     )
   )
