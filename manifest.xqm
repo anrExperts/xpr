@@ -53,15 +53,6 @@ function getManifest() {
   </html>
 };
 
-declare
-  %rest:path("xpr/iiif/test")
-  %rest:produces('application/html')
-  %output:method("html")
-  %rest:query-param('apikey', '{$apikey}', 'test')
-function getToto($apikey) {
-  $apikey
-};
-
 declare function getUserDatas($apikey) {
   let $apikey := $apikey
   return
