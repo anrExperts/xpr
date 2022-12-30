@@ -440,5 +440,5 @@
     ]
   },
   "type": "Manifest",
-  "id": "http:\/\/localhost:8984\/xpr\/iiif\/Z1J431\/manifest.json"
+  "id": "\/xpr\/iiif\/Z1J431\/manifest.json"
 }

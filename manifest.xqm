@@ -86,7 +86,7 @@ declare function createManifests($apikey) {
       map {
         "@context" : "http://iiif.io/api/presentation/3/context.json",
         (:@todo récupérer l'adresse ?:)
-        "id" : "http://localhost:8984/xpr/iiif/"|| $unitid ||"/manifest.json",
+        "id" : "/xpr/iiif/"|| $unitid ||"/manifest.json",
         "type": "Manifest",
         "label": map {
           "fr" : array {
@@ -151,9 +151,12 @@ declare
   %rest:query-param('apikey', '{$apikey}', 'test')
  function writeManifest($apikey) {
   let $manifests := createManifests($apikey)
-  for $manifest in $manifests
   return (
-    file:write("/Users/josselinmorvan/files/dh/xpr/xpr/files/manifest/"||$manifest(1)||".manifest.json", json:serialize($manifest(2))),
-    $apikey
+    "Fichiers ajoutés:",
+    for $manifest in $manifests
+    return (
+      file:write("/Users/josselinmorvan/files/dh/xpr/xpr/files/manifest/"||$manifest(1)||".manifest.json", json:serialize($manifest(2))),
+      $manifest(1)||".manifest.json"
+    )
   )
 };
