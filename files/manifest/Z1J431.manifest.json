@@ -1,0 +1,444 @@
+{
+  "items": [
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/3dc9b818b4849478b36bc1796c0e6b5d32c714a3\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/3dc9b818b4849478b36bc1796c0e6b5d32c714a3\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0001",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0001-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0001\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0001.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0001"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/dd9e63635af09e39afe79106d5fffa5e226f6569\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/dd9e63635af09e39afe79106d5fffa5e226f6569\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0002",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0002-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0002\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0002.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0002"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/b793080f8921434f82c1229e503860759648ed4f\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/b793080f8921434f82c1229e503860759648ed4f\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0003",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0003-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0003\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0003.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0003"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/4bdca93914f671ad268996fdf7029812b73e00e0\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/4bdca93914f671ad268996fdf7029812b73e00e0\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0004",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0004-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0004\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0004.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0004"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/6ae42da26dd0cf6ba24502c5340740abd9fc1611\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/6ae42da26dd0cf6ba24502c5340740abd9fc1611\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0005",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0005-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0005\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0005.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0005"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/c58d08539edd6a0197e41349e6ce8a3379ed5f09\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/c58d08539edd6a0197e41349e6ce8a3379ed5f09\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0006",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0006-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0006\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0006.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0006"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/90bee5713a82f94f467b9456b77aacd4a8c93680\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/90bee5713a82f94f467b9456b77aacd4a8c93680\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0007",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0007-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0007\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0007.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0007"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/4bc78183cceb3dd8e89e8507164ea054c02b3e4f\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/4bc78183cceb3dd8e89e8507164ea054c02b3e4f\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0008",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0008-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0008\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0008.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0008"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/718ac3f8b40ae77045fa56fccfddf39a97e2abbc\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/718ac3f8b40ae77045fa56fccfddf39a97e2abbc\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0009",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0009-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0009\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0009.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0009"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/2dc604cd05e99994ab8d2ca485fb45db3c324f27\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/2dc604cd05e99994ab8d2ca485fb45db3c324f27\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0010",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0010-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0010\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0010.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0010"
+    },
+    {
+      "items": [
+        {
+          "items": [
+            {
+              "body": {
+                "width": 6016,
+                "height": 4000,
+                "service": [
+                  {
+                    "profile": "level2",
+                    "type": "ImageService3",
+                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/7df7916c1d4ccac55697a2cee2bf89f5eaf4f5a8\/info.json"
+                  }
+                ],
+                "format": "image\/jpeg",
+                "type": "Image",
+                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.66411qf0\/7df7916c1d4ccac55697a2cee2bf89f5eaf4f5a8\/full\/max\/0\/default.jpg"
+              },
+              "target": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0011",
+              "motivation": "painting",
+              "type": "Annotation",
+              "id": "https:\/\/xpr\/iiif\/Z1J431\/annotation\/p0011-image"
+            }
+          ],
+          "type": "AnnotationPage",
+          "id": "https:\/\/xpr\/iiif\/Z1J431\/page\/p0011\/1"
+        }
+      ],
+      "width": 6016,
+      "height": 4000,
+      "label": {
+        "fr": [
+          "Z1J431_0011.JPG"
+        ]
+      },
+      "type": "Canvas",
+      "id": "https:\/\/xpr\/iiif\/Z1J431\/canvas\/p0011"
+    }
+  ],
+  "@context": "http:\/\/iiif.io\/api\/presentation\/3\/context.json",
+  "behavior": [
+    "paged"
+  ],
+  "label": {
+    "fr": [
+      "Z1J431_test"
+    ]
+  },
+  "type": "Manifest",
+  "id": "http:\/\/localhost:8984\/xpr\/iiif\/Z1J431\/manifest.json"
+}

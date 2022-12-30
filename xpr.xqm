@@ -348,6 +348,10 @@ function getExpertiseJson($id) {
     'id' : fn:normalize-space($expertise/@xml:id),
     'cote' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
     'dossier' : $expertise/sourceDesc/idno[@type='item'] => fn:string(),
+    'facsimile' : map {
+        'start' : $expertise/sourceDesc/facsimile/@from => fn:normalize-space(),
+        'end' : $expertise/sourceDesc/facsimile/@to => fn:normalize-space()
+      },
     'supplement' : $expertise/sourceDesc/idno[@type='supplement'] => fn:string(),
     'extent' : $expertise/sourceDesc/physDesc/extent => fn:normalize-space(),
     'sketch' : $expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space(),
