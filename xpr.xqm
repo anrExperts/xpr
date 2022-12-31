@@ -1204,7 +1204,7 @@ function getEntities() {
       for $entity in db:open('xpr')/xpr/bio/eac:eac
       let $id := $entity/@xml:id
       order by fn:lower-case($entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1])
-      return <entity xml:id="{$id}" type="{$entity//eac:otherEntityTypes/eac:otherEntityType[1]/eac:term/text()}"><label>{$entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part/text()}</label></entity>
+      return <entity xml:id="{$id}" type="{fn:string-join($entity//eac:otherEntityTypes/eac:otherEntityType/eac:term, ' ')}"><label>{$entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part/text()}</label></entity>
     }
   </entities>
 };

@@ -504,7 +504,7 @@
                     <xf:var name="expert" value="."/>
                     <xf:select1 ref="@ref" incremental="true">
                         <xf:label>Patronyme</xf:label>
-                        <xf:itemset nodeset="instance('xprExperts')/xpr:entity[@type='expert' or @type='altExpert']">
+                        <xf:itemset nodeset="instance('xprExperts')/xpr:entity[contains(@type, 'expert') or contains(@type, 'altExpert')]">
                             <xf:label ref="xpr:label"/>
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
@@ -650,6 +650,13 @@
                     <xf:input ref="xpr:persName/xpr:forename" incremental="true">
                         <xf:label>Prénom</xf:label>
                     </xf:input>
+                    <xf:select1 ref="@ref" incremental="true">
+                        <xf:label>Référence</xf:label>
+                        <xf:itemset nodeset="instance('xprExperts')/xpr:entity[contains(@type, 'clerk')]">
+                            <xf:label ref="xpr:label"/>
+                            <xf:value value="concat('#', @xml:id)"/>
+                        </xf:itemset>
+                    </xf:select1>
                     <xf:trigger class="delete">
                         <xf:label>Supprimer un greffier</xf:label>
                         <xf:delete nodeset="." at="1" ev:event="DOMActivate" if="count(//xpr:description/xpr:participants/xpr:clerks/xpr:clerk) > 1"/>

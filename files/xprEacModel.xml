@@ -599,13 +599,28 @@
         </parts>
     </xf:instance>
     <xf:instance id="otherEntityTypes">
-        <entityTypes xmlns="">
-            <type>Expert (tableau)</type>
-            <type>Expert (non inscrit)</type>
-            <type>Greffier</type>
-            <type>Maçon</type>
-            <type>Autre (person)</type>
-        </entityTypes>
+        <otherEntityTypes xmlns="">
+            <type>
+                <label>Expert (tableau)</label>
+                <otherEntityType><term>expert</term></otherEntityType>
+            </type>
+            <type>
+                <label>Expert (non inscrit)</label>
+                <otherEntityType><term>altExpert</term></otherEntityType>
+            </type>
+            <type>
+                <label>Greffier</label>
+                <otherEntityType><term>clerk</term></otherEntityType>
+            </type>
+            <type>
+                <label>Maçon</label>
+                <otherEntityType><term>mason</term></otherEntityType>
+            </type>
+            <type>
+                <label>Autre (personne)</label>
+                <otherEntityType><term>person</term></otherEntityType>
+            </type>
+        </otherEntityTypes>
     </xf:instance>
     <!-- /ETC -->
 

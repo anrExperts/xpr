@@ -72,7 +72,7 @@
                 </expert>
             </experts>
             <clerks>
-                <clerk>
+                <clerk ref="">
                     <persName>
                         <surname/>
                         <forename/>
