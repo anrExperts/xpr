@@ -687,6 +687,18 @@
                 response-reason-phrase: <xf:output value="event('response-reason-phrase')"/>
                 resource-uri: <xf:output value="event('resource-uri')"/>
             </xf:message>
+            <xf:action while="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@standardDate)]">
+                <xf:insert context="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@standardDate)]"
+                           origin="instance('eacDates')/eac:date/@standardDate"/>
+            </xf:action>
+            <xf:action while="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notAfter)]">
+                <xf:insert context="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notAfter)]"
+                           origin="instance('eacDates')/eac:date/@notAfter"/>
+            </xf:action>
+            <xf:action while="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notBefore)]">
+                <xf:insert context="instance('eacInstance')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notBefore)]"
+                           origin="instance('eacDates')/eac:date/@notBefore"/>
+            </xf:action>
         </xf:action>
     </xf:submission>
 
