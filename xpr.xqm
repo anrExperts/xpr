@@ -2882,6 +2882,7 @@ function xpr.xpr:status() {
               </tr>
               {
                 for $unitid in $data/file
+                order by $unitid
                 return (
                 <tr>
                   <td>{$unitid/unitid}</td>
