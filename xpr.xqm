@@ -2368,6 +2368,80 @@ function about() {
     return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises in json
+ : @todo to develop
+ :)
+declare
+  %rest:path("/xpr/{$year}/json")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getYearsJson($year) {
+  (:let $body := json:parse( $body, map{"format" : "xquery"}):)
+  let $db := db:open('xpr')
+  let $expertises := $db/xpr/expertises/expertise[descendant::sessions/date[@when castable as xs:date][fn:year-from-date(@when) = $year]]
+  let $appendiceTypes := fn:distinct-values($db/xpr/expertises/expertise/sourceDesc/physDesc/appendices/appendice/type[fn:normalize-space(@type)!=""]/@type)
+  let $sessionPlaces := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
+  let $prosopo := $db/xpr/bio
+  let $meta := map{
+    "year" : $year
+  }
+  let $content := map{
+    "expertises" : map{
+      "countExpertises" : fn:count($expertises),
+      (:@todo nb de feuillets par PV par tranche de 5f. => nécessite d'aligner les données…:)
+      "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices]),
+      "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices)]),
+      "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
+      "expertiseDuration_sessions" : fn:round((fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2),
+      "extent" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
+      "averageExtent" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
+      "distributionByExtent" : map:merge(
+        for $n in 1 to 20
+        let $multiplier := 5
+        let $step := $n * $multiplier
+        return (
+        if($n = 20) then
+          map{
+            $step : fn:count($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''][fn:number(.) >= $step])
+          }
+        else
+          map{
+            $step : fn:count($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''][fn:number(.) <= $step and fn:number(.) > $step - $multiplier])
+          }
+        )
+      )
+    },
+    "sessions" : map{
+      "countSessions" : fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']),
+      "averageSessions" : fn:round(fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises), 2),
+      "sessionsPlaces" : map:merge(
+        for $place in $sessionPlaces
+        return map{
+          $place : fn:count($expertises/description/sessions/date[@type=$place])
+        }
+      )
+      (:@todo durée moyenne d'une expertise:)
+    },
+    "appendices" : map{
+      "countAppendices" : fn:count($expertises/sourceDesc/physDesc/appendices/appendice),
+      "extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),
+      "distributionByType" : map:merge(
+        for $type in $appendiceTypes
+        return map{
+          $type : fn:count($expertises[sourceDesc/physDesc/appendices/appendice/type/@type=$type])
+        }
+      )
+    }
+  }
+  return map{
+    "meta": $meta,
+    "content": $content
+  }
+};
+
 
 (:~
  : ~:~:~:~:~:~:~:~:~
