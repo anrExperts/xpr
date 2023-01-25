@@ -766,7 +766,7 @@
                             <xf:label/>
                             <xf:value/>
                         </xf:item>
-                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[@type='expert' or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[@context!='third-party']/@ref]">
+                        <xf:itemset nodeset="instance('xprExperts')//xpr:entity[contains(@type, 'expert') or @type='altExpert'][concat('#', @xml:id) = instance('xprExpertise')/xpr:description/xpr:participants/xpr:experts/xpr:expert[@context!='third-party']/@ref]">
                             <xf:label ref="."/>
                             <xf:value value="concat('#', @xml:id)"/>
                         </xf:itemset>
