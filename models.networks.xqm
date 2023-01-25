@@ -89,7 +89,7 @@ let $listExpert :=
     let $expertId := fn:substring-after($expert, '#')
     (:let $expertName := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
     let $expertFunction := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:function[$year >= *:dateRange/*:fromDate/@standardDate and $year <= *:dateRange/*:toDate/@standardDate] => fn:normalize-space():)
-    return $prosopo//*:eac-cpf[@xml:id=$expertId]
+    return $prosopo//*:eac[@xml:id=$expertId]
     (: <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>:)
 
 let $comment :=
@@ -539,12 +539,12 @@ return
       <cell>death</cell>
       <cell>almanach</cell>
     </record>{
-    for $expert in $experts/*:eac-cpf
+    for $expert in $experts/*:eac
         order by $expert/@xml:id
-        let $name := $expert//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
-        let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[*:alternativeForm][1]/*:part[@localType='surname'] => fn:normalize-space()
-        let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@* => fn:normalize-space()
-        let $death := $expert//*:existDates/*:dateRange/*:toDate/@* => fn:normalize-space()
+        let $name := $expert//*:cpfDescription/*:identity/*:nameEntry[@preferredForm='true']/*:part => fn:normalize-space()
+        let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[@status='alternative'][1]/*:part[@localType='surname'] => fn:normalize-space()
+        let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
+        let $death := $expert//*:existDates/*:dateRange/*:toDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
         let $functions := $expert//*:functions
         let $column :=
               switch ($functions)
@@ -610,13 +610,13 @@ return
     let $functions :=
       for $expertId in $expertsId
       return
-        switch ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions)
-        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
-        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
-        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
-        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
-        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
-        case ($experts//*:eac-cpf[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+        switch ($experts//*:eac[@xml:id=$expertId]//*:functions)
+        case ($experts//*:eac[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+        case ($experts//*:eac[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+        case ($experts//*:eac[@xml:id=$expertId]//*:functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+        case ($experts//*:eac[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+        case ($experts//*:eac[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+        case ($experts//*:eac[@xml:id=$expertId]//*:functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
         default return 'unknown'
 
     return
