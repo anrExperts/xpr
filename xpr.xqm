@@ -2374,24 +2374,46 @@ function about() {
  : @todo to develop
  :)
 declare
-  %rest:path("/xpr/{$year}/json")
+  %rest:path("/xpr/statistics")
   %rest:produces('application/json')
   %output:media-type('application/json')
   %output:method('json')
-function getYearsJson($year) {
-  (:let $body := json:parse( $body, map{"format" : "xquery"}):)
+function getStatistics() {
+  let $db := db:open("xpr")
+  let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when))
+  let $expertises := map {
+    "corpus" : getExpertisesStatistics(""),
+    "expertisesByYear" : array{
+      for $year in $years
+      return map {
+        $year : getExpertisesStatistics($year)
+      }
+    }
+  }
+  let $experts := map{
+    "todo" : "todo"
+  }
+  return map{
+    "expertises" : $expertises,
+    "experts" : $experts
+  }
+};
+
+declare
+  %output:method('json')
+function getExpertisesStatistics($year) {
   let $db := db:open('xpr')
-  let $expertises := $db/xpr/expertises/expertise[descendant::sessions/date[@when castable as xs:date][fn:year-from-date(@when) = $year]]
+  let $year := fn:string($year)
+  let $expertises := (if($year = "")
+    then $db/xpr/expertises/expertise
+    else $db/xpr/expertises/expertise[descendant::sessions/date[@when castable as xs:date][fn:starts-with(@when, $year)]])
+
   let $appendiceTypes := fn:distinct-values($db/xpr/expertises/expertise/sourceDesc/physDesc/appendices/appendice/type[fn:normalize-space(@type)!=""]/@type)
   let $sessionPlaces := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
   let $prosopo := $db/xpr/bio
-  let $meta := map{
-    "year" : $year
-  }
   let $content := map{
     "expertises" : map{
       "countExpertises" : fn:count($expertises),
-      (:@todo nb de feuillets par PV par tranche de 5f. => nécessite d'aligner les données…:)
       "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices]),
       "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices)]),
       "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
@@ -2427,7 +2449,7 @@ function getYearsJson($year) {
     },
     "appendices" : map{
       "countAppendices" : fn:count($expertises/sourceDesc/physDesc/appendices/appendice),
-      "extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),
+(:      "extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),:)
       "distributionByType" : map:merge(
         for $type in $appendiceTypes
         return map{
@@ -2436,10 +2458,7 @@ function getYearsJson($year) {
       )
     }
   }
-  return map{
-    "meta": $meta,
-    "content": $content
-  }
+  return $content
 };
 
 
