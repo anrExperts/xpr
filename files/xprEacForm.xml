@@ -4429,10 +4429,14 @@
                 <xf:label>Ajouter des relations</xf:label>
                 <xf:action ev:event="DOMActivate">
                     <xf:insert context="." nodeset="*" at="last()" position="after" origin="instance('eacRelations')/eac:relations"/>
-                    <xf:insert context="eac:relations/eac:relation/eac:targetEntity" nodeset="eac:part" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation/eac:targetEntity/eac:part"/>
+                    <xf:action while="count(eac:relations/eac:relation/eac:targetEntity/eac:part) &lt; 4">
+                        <xf:insert context="eac:relations/eac:relation/eac:targetEntity" nodeset="eac:part" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation/eac:targetEntity/eac:part"/>
+                    </xf:action>
                 </xf:action>
                 <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[1]/@localType" value="'full'" ev:event="DOMActivate"/>
-                <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[last()]/@localType" value="'status'" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[2]/@localType" value="'status'" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[3]/@localType" value="'occupationType'" ev:event="DOMActivate"/>
+                <xf:setvalue ref="eac:relations/eac:relation/eac:targetEntity/eac:part[4]/@localType" value="'xprRef'" ev:event="DOMActivate"/>
                 <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
             </xf:trigger>
         </xf:group>
@@ -4525,6 +4529,20 @@
                             <xf:label>Qualités</xf:label>
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-part']/tei:div[@type='description']"/></xf:help>
                         </xf:input>
+                        <xf:select1 ref="eac:part[@localType='occupationType']">
+                            <xf:label>Type de profession</xf:label>
+                            <xf:itemset ref="instance('occupationTypes')//type">
+                                <xf:label ref="."/>
+                                <xf:value ref="."/>
+                            </xf:itemset>
+                        </xf:select1>
+                        <xf:select1 ref="eac:part[@localType='xprRef']">
+                            <xf:label>Identifiant base de données Experts</xf:label>
+                            <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
+                                <xf:label ref="xpr:label"/>
+                                <xf:value value="concat('#', @xml:id)"/>
+                            </xf:itemset>
+                        </xf:select1>
                         <!--<xf:group ref="eac:part">
                             <xf:input ref=".">
                                 <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-part']/tei:div[@type='fullName']"/>
@@ -4556,8 +4574,8 @@
                         </xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-relationType']/tei:div[@type='description']"/></xf:help>
                         <xf:itemset ref="instance('relationTypes')/type">
-                            <xf:label ref="label"/>
-                            <xf:value ref="label"/>
+                            <xf:label><xf:output value="concat(instance('eacInstance')/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true'][@status='authorized'][1], ' ', label)" /></xf:label>
+                            <xf:value ref="value"/>
                         </xf:itemset>
                         <xf:action ev:event="xforms-value-changed">
                             <xf:setvalue ref="@valueURI" value="instance('relationTypes')//type[.=current()]/@valueURI"/>
@@ -5465,12 +5483,15 @@
                     <xf:label>Ajouter une relation</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert context="." nodeset="eac:relation" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation"/>
-                        <xf:insert context="eac:relation[last()]" nodeset="eac:targetEntity/eac:part" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation/eac:targetEntity/eac:part"/>
+                        <xf:action while="count(eac:relation[last()]/eac:targetEntity/eac:part) &lt; 4">
+                            <xf:insert context="eac:relation[last()]" nodeset="eac:targetEntity/eac:part" at="last()" position="after" origin="instance('eacRelations')/eac:relations/eac:relation/eac:targetEntity/eac:part"/>
+                        </xf:action>
                     </xf:action>
-                    <!--  @todo ne set value ne fonctionne pas…-->
                     <xf:action ev:event="DOMActivate">
                         <xf:setvalue ref="eac:relation[last()]//eac:part[1]/@localType" value="'full'"/>
-                        <xf:setvalue ref="eac:relation[last()]//eac:part[last()]/@localType" value="'status'"/>
+                        <xf:setvalue ref="eac:relation[last()]//eac:part[2]/@localType" value="'status'"/>
+                        <xf:setvalue ref="eac:relation[last()]//eac:part[3]/@localType" value="'occupationType'"/>
+                        <xf:setvalue ref="eac:relation[last()]//eac:part[4]/@localType" value="'xprRef'"/>
                     </xf:action>
                     <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
                 </xf:trigger>

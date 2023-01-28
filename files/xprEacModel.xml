@@ -22,6 +22,8 @@
 
     <xf:instance id="eacInstance" src="/xpr/files/_xprEacInstance.xml"/>
 
+    <xf:instance id="xprEntities" src="/xpr/entities"/>
+
     <xf:instance id="getAgent">
         <data xmlns="">
             <param>getAgent</param>
@@ -289,6 +291,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:isSuccessorOf</relationType>
                     <targetRole target="">prédécesseur</targetRole>
@@ -299,6 +302,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
@@ -309,6 +313,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
@@ -319,6 +324,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
@@ -329,6 +335,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -336,6 +343,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -343,6 +351,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -350,6 +359,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -357,6 +367,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -364,6 +375,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -371,6 +383,7 @@
                 <relation target="" sourceReference="">
                     <targetEntity targetType="person">
                         <part localType="full"/>
+                        <part localType="status"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -384,28 +397,32 @@
         <relations xmlns="">
             <!-- Ric-o -->
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasChild">
-                <label>rico:hasChild</label>
+                <label>a pour enfant</label>
+                <value>rico:hasChild</value>
                 <roles>
                     <role>fille</role>
                     <role>fils</role>
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isChildOf">
-                <label>rico:isChildOf</label>
+                <label>est l’enfant de</label>
+                <value>rico:isChildOf</value>
                 <roles>
                     <role>père</role>
                     <role>mère</role>
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadSpouse">
-                <label>rico:hasOrHadSpouse</label>
+                <label>a ou avait pour époux/épouse</label>
+                <value>rico:hasOrHadSpouse</value>
                 <roles>
                     <role>époux</role>
                     <role>épouse</role>
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasSibling">
-                <label>rico:hasSibling</label>
+                <label>a pour frère/sœur</label>
+                <value>rico:hasSibling</value>
                 <roles>
                     <role>frère</role>
                     <role>sœur</role>
@@ -414,7 +431,8 @@
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasDescendant">
-                <label>rico:hasDescendant</label>
+                <label>a pour descendant</label>
+                <value>rico:hasDescendant</value>
                 <roles>
                     <role>petit-fils</role>
                     <role>petite-fille</role>
@@ -423,7 +441,8 @@
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasAncestor">
-                <label>rico:hasAncestor</label>
+                <label>a pour ascendant</label>
+                <value>rico:hasAncestor</value>
                 <roles>
                     <role>grand-père</role>
                     <role>grand-mère</role>
@@ -432,7 +451,8 @@
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceUri="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasFamilyAssociationWith">
-                <label>rico:hasFamilyAssociationWith</label>
+                <label>a une relation familiale avec</label>
+                <value>rico:hasFamilyAssociationWith</value>
                 <roles>
                     <role>oncle</role>
                     <role>tante</role>
@@ -448,66 +468,83 @@
             </type>
             <!-- connaissance -->
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isRelatedTo">
-                <label>rico:isRelatedTo</label>
-            </type>
-            <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knowsOf">
-                <label>rico:knowsOf</label>
-            </type>
-            <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy">
-                <label>rico:knownBy</label>
+                <label>est lié à</label>
+                <value>rico:isRelatedTo</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knows">
-                <label>rico:knows</label>
+                <label>connaît (réciprocité)</label>
+                <value>rico:knows</value>
+            </type>
+            <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knowsOf">
+                <label>a connaissance de</label>
+                <value>rico:knowsOf</value>
+            </type>
+            <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy">
+                <label>est connu de</label>
+                <value>rico:knownBy</value>
             </type>
             <!-- office  -->
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasOwnerOf">
-                <label>rico:isOrWasOwnerOf</label>
+                <label>est ou était le propriétaire de</label>
+                <value>rico:isOrWasOwnerOf</value>
                 <roles>
                     <role>propriétaire</role>
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasSuccessor">
-                <label>rico:hasSuccessor</label>
+                <label>a pour successeur</label>
+                <value>rico:hasSuccessor</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf">
-                <label>rico:isSuccessorOf</label>
+                <label>est le successeur de</label>
+                <value>rico:isSuccessorOf</value>
             </type>
             <!-- relations de travail -->
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasUnderAuthorityOf">
-                <label>rico:isOrWasUnderAuthorityOf</label>
+                <label>est ou était sous l'autorité de</label>
+                <value>rico:isOrWasUnderAuthorityOf</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadAuthorityOver">
-                <label>rico:hasOrHadAuthorityOver</label>
+                <label>a ou avait autorité sur</label>
+                <value>rico:hasOrHadAuthorityOver</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController">
-                <label>rico:hasOrHadController</label>
+                <label>a ou avait pour contrôleur</label>
+                <value>rico:hasOrHadController</value>
                 <roles>
                     <role>examinateur</role>
                     <role>observateur</role>
                 </roles>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasControllerOf">
-                <label>rico:isOrWasControllerOf</label>
+                <label>est ou était contrôleur de</label>
+                <value>rico:isOrWasControllerOf</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#isOrWasSubordinateTo">
-                <label>rico:isOrWasSubordinateTo</label>
+                <label>est ou était subordonné à</label>
+                <value>rico:isOrWasSubordinateTo</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadSubordinate">
-                <label>rico:hasOrHadSubordinate</label>
+                <label>a ou avait pour subordonné</label>
+                <value>rico:hasOrHadSubordinate</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadWorkRelationWith">
-                <label>rico:hasOrHadWorkRelationWith</label>
+                <label>a ou avait une relation de travail avec</label>
+                <value>rico:hasOrHadWorkRelationWith</value>
             </type>
             <!-- enseignement -->
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadTeacher">
-                <label>rico:hasOrHadTeacher</label>
+                <label>a ou avait pour professeur</label>
+                <value>rico:hasOrHadTeacher</value>
             </type>
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadStudent">
-                <label>rico:hasOrHadStudent</label>
+                <label>a ou avait pour étudiant</label>
+                <value>rico:hasOrHadStudent</value>
             </type>
             <!-- autre -->
             <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadCorrespondent">
-                <label>rico:hasOrHadCorrespondent</label>
+                <label>a ou avait pour correspondant</label>
+                <value>rico:hasOrHadCorrespondent</value>
             </type>
         </relations>
     </xf:instance>
@@ -598,6 +635,7 @@
             <part>name</part>
         </parts>
     </xf:instance>
+
     <xf:instance id="otherEntityTypes">
         <otherEntityTypes xmlns="">
             <type>
@@ -622,6 +660,22 @@
             </type>
         </otherEntityTypes>
     </xf:instance>
+
+    <xf:instance id="occupationTypes">
+        <occupationTypes xmlns="">
+            <group label="building">
+                <type>Architecte</type>
+            </group>
+            <group label="law">
+                <type>Avocat</type>
+            </group>
+            <group label="art">
+                <type>Peintre</type>
+            </group>
+        </occupationTypes>
+    </xf:instance>
+
+
     <!-- /ETC -->
 
     <xf:instance id="documentation" src="/xpr/files/EAC-CPF-v2-TL-eng.xml"/>
