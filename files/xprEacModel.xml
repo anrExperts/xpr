@@ -663,14 +663,48 @@
 
     <xf:instance id="occupationTypes">
         <occupationTypes xmlns="">
-            <group label="building">
+            <group>
+                <label>Bâtiment</label>
                 <type>Architecte</type>
+                <type>Architecte du roi</type>
+                <type>Entrepreneur des bâtiments du roi</type>
+                <type>Autre métier au service du roi</type>
+                <type>Architecte expert bourgeois</type>
+                <type>Expert entrepreneur</type>
+                <type>Entrepreneur architecte</type>
+                <type>Entrepreneur ou maître de métier</type>
+                <type>Compagnon</type>
+                <type>Autre</type>
             </group>
-            <group label="law">
+            <group>
+                <label>Droit</label>
                 <type>Avocat</type>
+                <type>Procureur</type>
+                <type>Greffier</type>
+                <type>Huissier</type>
+                <type>Notaire</type>
+                <type>Autres</type>
             </group>
-            <group label="art">
-                <type>Peintre</type>
+            <group>
+                <label>Commerce</label>
+                <type>Marchand Bourgeois</type>
+                <type>Marchand</type>
+                <type>Autres</type>
+            </group>
+            <group>
+                <label>Métiers (hors bâtiment)</label>
+                <type>Maître de métier au service du roi (hors bâtiment)</type>
+                <type>Maitre de métier (hors bâtiment)</type>
+            </group>
+            <group>
+                <label>Armée</label>
+                <type>Armée</type>
+            </group>
+            <group>
+                <label>Autres</label>
+                <type>Bourgeois de Paris</type>
+                <type>Laboureur</type>
+                <type>Autres</type>
             </group>
         </occupationTypes>
     </xf:instance>

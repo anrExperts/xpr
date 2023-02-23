@@ -2182,7 +2182,8 @@ function getClerksNetworkByYear($year as xs:string, $format as xs:string) {
 
     let $content := map{
       'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam),
+      'clerks' : xpr.models.networks:getClerksByYear($queryParam)
     }
 
     let $outputParam := map{
@@ -2453,6 +2454,7 @@ function getExpertisesStatistics($year) {
       "distributionByType" : map:merge(
         for $type in $appendiceTypes
         return map{
+        (:@todo /!\je compte ici les expertises:)
           $type : fn:count($expertises[sourceDesc/physDesc/appendices/appendice/type/@type=$type])
         }
       )

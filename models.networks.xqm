@@ -111,6 +111,36 @@ return
 };
 
 (:~
+ : List of Experts by year
+ : @return a xml file
+ : @todo select experts by year
+ :)
+declare function getClerksByYear($queryParam as map(*)) as element() {
+let $year := $queryParam?year
+let $expertises := xpr.models.networks:getExpertisesByYear($queryParam)
+let $prosopo := db:open('xpr')/xpr/bio
+
+let $clerks :=
+  let $dbClerk :=
+    for $clerk in $prosopo//*:eac[descendant::*:otherEntityType[fn:normalize-space(*:term) = 'clerk']]
+    where
+      $clerk//*:function[fn:normalize-space(*:term) = 'Greffier']/*:date[@standardDate = $year] or
+      $clerk//*:function[fn:normalize-space(*:term) = 'Greffier']/*:dateRange[*:fromDate/@standardDate <= $year][*:toDate/@standardDate >= $year]
+    return $clerk/@xml:id => fn:normalize-space()
+  let $z1jClerks := fn:distinct-values($expertises//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]]//*:clerks/*:clerk[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))
+return ($dbClerk, $z1jClerks)
+
+
+
+let $comment := <comment></comment>
+return
+  <clerks xmlns="xpr">{
+    for $clrk in fn:distinct-values($clerks)
+    return $prosopo//*:eac[@xml:id=$clrk]
+  }</clerks>
+};
+
+(:~
  : List of expertises by year (with only 1 category)
  : @return a xml file
  : @todo select expertises by year
@@ -263,7 +293,7 @@ return
       <cell>id</cell>
       {for $expertise in fn:sort($expertises/*:expertise/@xml:id) return <cell>{$expertise => fn:normalize-space()}</cell>}
     </record>{
-    for $expert in fn:sort($experts/*:eac-cpf/@xml:id)
+    for $expert in fn:sort($experts/*:eac/@xml:id)
     return
       <record>
         <cell>{fn:normalize-space($expert)}</cell>{
@@ -291,220 +321,22 @@ declare function getClerksNetworkGraphML($queryParam as map(*), $content as map(
 declare function getClerksNetworkCSV($queryParam as map(*), $content as map(*)) as element() {
 let $expertises := $content?expertises
 let $experts := $content?experts
-let $clerks :=
-  <list xmlns="xpr">
-    <clerk xml:id="xprClerk001">
-      <persName>De Varenne</persName>
-      <status>Doyen</status>
-      <address>rue S. Bont.</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk002">
-      <persName>Février</persName>
-      <status/>
-      <address>rue des vieilles Étuves S. Martin.</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk003">
-      <persName>Belot</persName>
-      <status/>
-      <address>rue de la Verrerie.</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk004">
-      <persName>Quirot L.</persName>
-      <status/>
-      <address>rue Jean pain mollet.</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk005">
-      <persName>Le Févre</persName>
-      <status/>
-      <address>rue des Maturins.</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk006">
-      <persName>Meley</persName>
-      <status/>
-      <address>rue de la Tisseranderie</address>
-      <forms>
-        <form>Meley, François</form>
-        <form>Melley, François</form>
-        <form>Nelet, François</form>
-        <form>Neley, François</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk007">
-      <persName>Boussart</persName>
-      <status/>
-      <address>rue de la Mortellerie</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk008">
-      <persName>Quirot J</persName>
-      <status/>
-      <address>rue de la Verrerie, près le Cémetière S. Jean</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk009">
-      <persName>Chastriot</persName>
-      <status/>
-      <address>rue des deux Écus</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk010">
-      <persName>Dupré</persName>
-      <status/>
-      <address>rue Patourelle.</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk011">
-      <persName>Le Couvreux</persName>
-      <status/>
-      <address>cul-de-sac de Guéméné</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk012">
-      <persName>Callou</persName>
-      <status/>
-      <address>rue de la Poterie</address>
-      <forms>
-        <form>Callon, Antoine Charles</form>
-        <form>Callot, Antoine Charles</form>
-        <form>Callou, Antoine</form>
-        <form>Callou, Antoine Charles</form>
-        <form>Callou, Antoine-Charles</form>
-        <form>Callou, Charles Antoine</form>
-        <form>Cassou, Antoine Charles</form>
-        <form>Collot, Antoine Charles</form>
-        <form>Collou, Antoine Charles</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk013">
-      <persName>Baudouin</persName>
-      <status/>
-      <address>Quay de Gesvres</address>
-      <forms>
-        <form>Baudoin, Antoine</form>
-        <form>Baudouin, Antoine</form>
-        <form>Baudouin, Etienne</form>
-        <form>Daudouin, Antoine</form>
-        <form>Haudoin, Antoine</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk014">
-      <persName>Tancart</persName>
-      <status/>
-      <address>rue Ste Croix de la Bretonnerie</address>
-      <forms>
-        <form>Tancart, Toussaint</form>
-        <form>Tancart, Toussaint ; Callou (deuxième vacation)</form>
-        <form>Tansart, Toussaint</form>
-        <form>Taucart, Toussaint</form>
-        <form>Toucard, Toussaint</form>
-        <form>Toucart, Toussaint</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk015">
-      <persName>Danjau</persName>
-      <status/>
-      <address>Montagne Ste Géneviéve</address>
-      <forms>
-        <form>Dangin, Pierre Paul</form>
-        <form>Danjan, Pierre Paul</form>
-        <form>Danjan, Pierre-Paul</form>
-        <form>Danjean, Pierre Paul</form>
-        <form>Danjon, Pierre-Paul</form>
-        <form>Dauhan, Pierre Paul</form>
-        <form>Daujan, Pierre Paul</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk016">
-      <persName>Mayer</persName>
-      <status/>
-      <address>rue de la Verrerie</address>
-      <forms/>
-    </clerk>
-    <clerk xml:id="xprClerk017">
-      <persName>Cochois, Jacques Richard</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>Cochois, Jacques Richard</form>
-        <form>Cochois, Jacques-Richard</form>
-        <form>Cochois, Richard</form>
-        <form>Richard, Jacques</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk019">
-      <persName>Le Brun, Jacques Charles</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>Le Brun, Jacques Charles</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk020">
-      <persName>Quirot, Estienne François</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>François, Etienne</form>
-        <form>Quirot, Estienne François</form>
-        <form>Quirot, Etienne</form>
-        <form>Quirot, Etienne François</form>
-        <form>Quirot, François Estienne</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk021">
-      <persName>Quirot, Jacques</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>Quirot, Jacques</form>
-        <form>Quiriot, Jacques</form>
-        <form>Quirot, [Jacques]</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk022">
-      <persName>Quirot, Jean</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>Quirot, Jean</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk023">
-      <persName>Quirot, Pierre</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>Quirot, Pierre</form>
-      </forms>
-    </clerk>
-    <clerk xml:id="xprClerk018">
-      <persName>Quirot</persName>
-      <status/>
-      <address/>
-      <forms>
-        <form>Quirot,</form>
-      </forms>
-    </clerk>
-  </list>
+let $clerks := $content?clerks
+
 return
   <csv>
     <record>
       <cell>id</cell>
-      {for $clerk in fn:sort($clerks/*:clerk/@xml:id) return <cell>{$clerk => fn:normalize-space()}</cell>}
+      {for $expert in fn:sort($experts//*:eac/@xml:id) return <cell>{fn:normalize-space($expert)}</cell>}
     </record>{
-    for $expert in fn:sort($experts/*:eac-cpf/@xml:id)
+    for $clerk in fn:sort($clerks//*:eac/@xml:id)
     return
       <record>
-        <cell>{fn:normalize-space($expert)}</cell>{
-        for $clerk in fn:sort($clerks/*:clerk/@xml:id)
+        <cell>{fn:normalize-space($clerk)}</cell>{
+        for $expert in fn:sort($experts//*:eac/@xml:id)
         return
-          if($expertises//*:expertise[descendant::*:clerk/*:persName[fn:string-join(*, ', ') = $clerks/*:clerk[@xml:id=$clerk]/*:forms/*:form]][descendant::*:experts/*:expert[@ref = "#"||$expert]])
-          then <cell>{fn:count($expertises//*:expertise[descendant::*:clerk/*:persName[fn:string-join(*, ', ') = $clerks/*:clerk[@xml:id=$clerk]/*:forms/*:form]][descendant::*:experts/*:expert[@ref = "#"||$expert]])}</cell>
+          if($expertises/*:expertise[descendant::*:experts/*:expert[@ref = "#"||$expert]][descendant::*:clerks/*:clerk[@ref = "#"||$clerk]])
+          then <cell>{fn:count($expertises/*:expertise[descendant::*:experts/*:expert[@ref = "#"||$expert]][descendant::*:clerks/*:clerk[@ref = "#"||$clerk]])}</cell>
           else <cell>0</cell>
         }
       </record>

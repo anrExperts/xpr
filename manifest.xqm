@@ -90,9 +90,12 @@ declare function createManifests($apikey) {
         "items" : array {
           for $f at $i in $data/*:files/*
           let $nakaFileIdentifier := $f/*:sha1 => fn:normalize-space()
+          (:let $page := fn:format-number($i, "0000"):)
+          let $fileName := fn:substring-before(fn:normalize-space($f/*:name), '.')
+          let $page := fn:substring($fileName, fn:string-length($fileName)-3)
           let $info := http:send-request(<http:request method='get' href="https://api.nakala.fr/iiif/{$nakaIdentifier}/{$nakaFileIdentifier}/info.json" />)/*:json
           return map {
-            "id" : "https://xpr/iiif/" || $unitid || "/canvas/p" || fn:format-number($i, "0000"),
+            "id" : "https://xpr/iiif/" || $unitid || "/canvas/p" || $page,
             "type" : "Canvas",
             "label" : map {
               "fr" : array {
@@ -103,11 +106,11 @@ declare function createManifests($apikey) {
             "height" : fn:number($info/*:height => fn:normalize-space()),
             "items" : array {
               map {
-                "id" : "https://xpr/iiif/" || $unitid || "/page/p" || fn:format-number($i, "0000") || "/1",
+                "id" : "https://xpr/iiif/" || $unitid || "/page/p" || $page || "/1",
                 "type" : "AnnotationPage",
                 "items" : array {
                   map {
-                    "id" : "https://xpr/iiif/" || $unitid || "/annotation/p" || fn:format-number($i, "0000") || "-image",
+                    "id" : "https://xpr/iiif/" || $unitid || "/annotation/p" || $page || "-image",
                     "type" : "Annotation",
                     "motivation" : "painting",
                     "body" : map {
@@ -124,7 +127,7 @@ declare function createManifests($apikey) {
                         }
                       }
                     },
-                    "target" : "https://xpr/iiif/" || $unitid || "/canvas/p" || fn:format-number($i, "0000")
+                    "target" : "https://xpr/iiif/" || $unitid || "/canvas/p" || $page
                   }
                 }
               }

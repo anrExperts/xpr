@@ -4531,10 +4531,48 @@
                         </xf:input>
                         <xf:select1 ref="eac:part[@localType='occupationType']">
                             <xf:label>Type de profession</xf:label>
-                            <xf:itemset ref="instance('occupationTypes')//type">
-                                <xf:label ref="."/>
-                                <xf:value ref="."/>
-                            </xf:itemset>
+                            <xf:choices>
+                                <xf:label>Bâtiment</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Bâtiment']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:label>Droit</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Droit']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:label>Commerce</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Commerce']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:label>Métiers (hors bâtiment)</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Métiers (hors bâtiment)']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:label>Armée</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Armée']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
+                            <xf:choices>
+                                <xf:label>Autres</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Autres']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
                         </xf:select1>
                         <xf:select1 ref="eac:part[@localType='xprRef']">
                             <xf:label>Identifiant base de données Experts</xf:label>
