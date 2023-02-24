@@ -327,13 +327,13 @@ return
   <csv>
     <record>
       <cell>id</cell>
-      {for $expert in fn:sort($experts//*:eac/@xml:id) return <cell>{fn:normalize-space($expert)}</cell>}
+      {for $clerk in fn:sort($clerks//*:eac/@xml:id) return <cell>{fn:normalize-space($clerk)}</cell>}
     </record>{
-    for $clerk in fn:sort($clerks//*:eac/@xml:id)
+    for $expert in fn:sort($experts//*:eac/@xml:id)
     return
       <record>
-        <cell>{fn:normalize-space($clerk)}</cell>{
-        for $expert in fn:sort($experts//*:eac/@xml:id)
+        <cell>{fn:normalize-space($expert)}</cell>{
+        for $clerk in fn:sort($clerks//*:eac/@xml:id)
         return
           if($expertises/*:expertise[descendant::*:experts/*:expert[@ref = "#"||$expert]][descendant::*:clerks/*:clerk[@ref = "#"||$clerk]])
           then <cell>{fn:count($expertises/*:expertise[descendant::*:experts/*:expert[@ref = "#"||$expert]][descendant::*:clerks/*:clerk[@ref = "#"||$clerk]])}</cell>
@@ -396,6 +396,51 @@ return
         <cell>{$birth}</cell>
         <cell>{$death}</cell>
         <cell>almanach</cell>
+    </record>
+    }
+  </csv>
+};
+
+(:~
+ : clerks data for a year
+ : @return a csv file
+ :)
+declare function getFormatedClerksData($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
+if ($queryParam?format = 'xml')
+  then getClerksDataXML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then getClerksDataCSV($queryParam, $content)
+};
+
+declare function getClerksDataXML($queryParam as map(*), $content as map(*)) as element() {
+    $content?clerks
+};
+
+declare function getClerksDataCSV($queryParam as map(*), $content as map(*)) as element() {
+let $clerks := $content?clerks
+return
+  <csv>
+    <record>
+      <cell>id</cell>
+      <cell>name</cell>
+      <cell>surname</cell>
+      <cell>column</cell>
+      <cell>birth</cell>
+      <cell>death</cell>
+    </record>{
+    for $clerk in $clerks/*:eac
+        order by $clerk/@xml:id
+        let $name := $clerk//*:cpfDescription/*:identity/*:nameEntry[@preferredForm='true']/*:part => fn:normalize-space()
+        let $surname := $clerk//*:cpfDescription/*:identity/*:nameEntry[@status='alternative'][1]/*:part[@localType='surname'] => fn:normalize-space()
+        let $birth := $clerk//*:existDates/*:dateRange/*:fromDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
+        let $death := $clerk//*:existDates/*:dateRange/*:toDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
+        let $functions := $clerk//*:functions
+    return
+    <record>
+        <cell>{$clerk/@xml:id => fn:normalize-space()}</cell>
+        <cell>{$name}</cell>
+        <cell>{$surname}</cell>
+        <cell>{$birth}</cell>
+        <cell>{$death}</cell>
     </record>
     }
   </csv>
