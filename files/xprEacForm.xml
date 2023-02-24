@@ -4529,7 +4529,7 @@
                             <xf:label>Qualités</xf:label>
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-part']/tei:div[@type='description']"/></xf:help>
                         </xf:input>
-                        <xf:select1 ref="eac:part[@localType='occupationType']">
+                        <!--<xf:select1 ref="eac:part[@localType='occupationType']">
                             <xf:label>Type de profession</xf:label>
                             <xf:choices>
                                 <xf:label>Bâtiment</xf:label>
@@ -4573,7 +4573,7 @@
                                     <xf:value value="concat(parent::group/label, ';', .)"/>
                                 </xf:itemset>
                             </xf:choices>
-                        </xf:select1>
+                        </xf:select1>-->
                         <xf:select1 ref="eac:part[@localType='xprRef']">
                             <xf:label>Identifiant base de données Experts</xf:label>
                             <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
