@@ -222,7 +222,7 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
         <div class="canvas-container">
         	<sequence-panel
         		id='sequence'
-        		manifest-id="http://localhost:8984/xpr/files/manifest/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}.manifest.json"
+        		manifest-id="/xpr/files/manifest/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}.manifest.json"
         		start-canvas="https://xpr/iiif/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}/canvas/p{$node/xpr:sourceDesc/xpr:facsimile/@from => fn:normalize-space()}"
         		margin='30'>
         	</sequence-panel>
