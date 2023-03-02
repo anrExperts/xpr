@@ -1,0 +1,15 @@
+{
+  "items": [
+  ],
+  "@context": "http:\/\/iiif.io\/api\/presentation\/3\/context.json",
+  "behavior": [
+    "paged"
+  ],
+  "label": {
+    "fr": [
+      ""
+    ]
+  },
+  "type": "Manifest",
+  "id": "\/xpr\/iiif\/Z1J433\/manifest.json"
+}

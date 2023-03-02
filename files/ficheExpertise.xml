@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css?family=IBM+Plex+Mono:400,400i|IBM+Plex+Sans+Condensed:400,400i|IBM+Plex+Sans:100,100i,400,400i,700,700i|IBM+Plex+Serif:400,400i" rel="stylesheet" />
     <link href="/xpr/files/css/normalize.css" rel="stylesheet" />
     <link href="/xpr/files/css/main.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/@digirati/canvas-panel-web-components@latest" class="s-woLiymgGylJd" data-svelte="svelte-12s9bss"></script>
     <script type="text/javascript" language="javascript"> 
       const path = window.location.href
     </script>
@@ -50,6 +51,35 @@ function stickyNavigation() {
     }
   }
 window.addEventListener('scroll', stickyNavigation);
+    </script>
+    <script>
+      const seq = document.getElementById("sequence");
+      const next = document.getElementById("next");
+      const prev = document.getElementById("prev");
+
+      seq.addEventListener("sequence", () => {
+      console.log("sequence", seq.sequence);
+      });
+
+      next.addEventListener("click", () => {
+      seq.sequence.nextCanvas();
+      });
+      prev.addEventListener("click", () => {
+      seq.sequence.previousCanvas();
+      });
+
+      seq.addEventListener("sequence-change", (e) => {
+      if (e.detail.index === 0) {
+      prev.setAttribute("disabled", "true");
+      } else {
+      prev.removeAttribute("disabled");
+      }
+      if (e.detail.total - 1 &lt;= e.detail.index) {
+      next.setAttribute("disabled", "true");
+      } else {
+      next.removeAttribute("disabled");
+      }
+      });
     </script>
   </body>
 </html>
