@@ -66,14 +66,16 @@ function getNakalaDatas($apikey) {
         <label for="apikey">API-KEY</label>
         <input type="text" name="apikey" id="apikey" value="{$apikey}"/>
         <label for="dataId">Data ID</label>
-        <input type="text" name="dataId" id="dataId"/>
+        <select name="dataId" id="dataId">
+            <option value="">--Please choose an option--</option>
+            {
+                for $data in getUserDatas($apikey)//data/_
+                order by $data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value
+                return <option value="{$data/identifier}">{$data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value}</option>
+            }
+        </select>
         <input type="submit" value="Envoyer"/>
       </form>
-      <ul>{
-        for $data in getUserDatas($apikey)//data/_
-        order by $data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value
-        return <li>{$data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value || " — " || $data/identifier}</li>
-      }</ul>
     </body>
   </html>
 };
