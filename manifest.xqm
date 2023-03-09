@@ -37,18 +37,36 @@ module namespace xpr.manifest = "xpr.manifest";
  :)
 
 declare
-  %rest:path("xpr/manifests")
+  %rest:path("xpr/nakala")
   %rest:produces('application/html')
   %output:method("html")
-function getManifest() {
+function getNakala() {
   <html>
     <head></head>
     <body>
-      <form action="/xpr/manifests/write" method="post">
+      <form action="/xpr/nakala/datas" method="post">
           <label for="apikey">API-KEY</label>
           <input type="apikey" name="apikey" id="apikey"/>
           <input type="submit" value="Envoyer"/>
       </form>
+    </body>
+  </html>
+};
+
+declare
+  %rest:path("xpr/nakala/datas")
+  %rest:produces('application/html')
+  %output:method("html")
+  %rest:query-param('apikey', '{$apikey}', 'test')
+function getNakalaDatas($apikey) {
+  <html>
+    <head></head>
+    <body>
+    <ul>{
+        for $data in getUserDatas($apikey)//data/_
+        order by $data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value
+        return <li>{$data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value || " — " || $data/identifier}</li>
+    }</ul>
     </body>
   </html>
 };
@@ -64,10 +82,11 @@ declare function getUserDatas($apikey) {
   )/*:json
 };
 
-declare function createManifests($apikey) {
+declare function createManifests($apikey, $dataId) {
   let $apikey := $apikey
+  let $dataId := $dataId
   let $datas := getUserDatas($apikey)
-  for $data in $datas/data/_
+  for $data in $datas/data/_[identifier = $dataId]
     let $unitid := $data/metas/_[propertyUri = "http://nakala.fr/terms#title"]/value => fn:normalize-space()
     let $nakaIdentifier := $data/identifier => fn:normalize-space()
     let $data := http:send-request(<http:request method='get' href='https://api.nakala.fr/datas/{$nakaIdentifier}' />)/*:json
@@ -143,8 +162,9 @@ declare
   %rest:produces('application/html')
   %output:method("html")
   %rest:query-param('apikey', '{$apikey}', 'test')
- function writeManifest($apikey) {
-  let $manifests := createManifests($apikey)
+  %rest:query-param('dataId', '{$dataId}', 'test')
+ function writeManifest($apikey, $dataId) {
+  let $manifests := createManifests($apikey, $dataId)
   return (
     "Fichiers ajoutés:",
     for $manifest in $manifests
