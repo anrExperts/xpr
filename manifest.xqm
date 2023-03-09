@@ -66,7 +66,7 @@ function getNakalaDatas($apikey) {
         <label for="apikey">API-KEY</label>
         <input type="text" name="apikey" id="apikey" value="{$apikey}"/>
         <label for="dataId">Data ID</label>
-        <select name="dataId" id="dataId">
+        <select multiple="true" name="dataId" id="dataId">
             <option value="">--Please choose an option--</option>
             {
                 for $data in getUserDatas($apikey)//data/_
@@ -98,7 +98,7 @@ declare
   %rest:query-param('apikey', '{$apikey}', 'test')
   %rest:query-param('dataId', '{$dataId}', 'test')
  function writeManifest($apikey, $dataId) {
-  let $manifests := createManifests($apikey, $dataId)
+  let $manifests := for $data in $dataId return createManifests($apikey, $data)
   return (
     "Fichiers ajoutés:",
     for $manifest in $manifests
