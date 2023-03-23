@@ -688,6 +688,7 @@
             <group>
                 <label>Commerce</label>
                 <type>Marchand Bourgeois</type>
+                <type>Maître et marchand</type>
                 <type>Marchand</type>
                 <type>Autres</type>
             </group>
