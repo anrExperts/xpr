@@ -672,9 +672,14 @@
                 <type>Architecte expert bourgeois</type>
                 <type>Expert entrepreneur</type>
                 <type>Entrepreneur architecte</type>
+                <type>Architecte et entrepreneur</type>
                 <type>Entrepreneur ou maître de métier</type>
                 <type>Compagnon</type>
                 <type>Autre</type>
+            </group>
+            <group>
+                <label>Expert et juriste</label>
+                <type>Expert et juriste</type>
             </group>
             <group>
                 <label>Droit</label>
