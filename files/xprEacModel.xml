@@ -710,7 +710,6 @@
         </occupationTypes>
     </xf:instance>
 
-
     <!-- /ETC -->
 
     <xf:instance id="documentation" src="/xpr/files/EAC-CPF-v2-TL-eng.xml"/>
@@ -749,7 +748,7 @@
         </xf:action>
     </xf:submission>
 
-    <xf:submission id="save2db" method="put" resource="/xpr/biographies/put">
+    <xf:submission id="save2db" method="put" resource="/xpr/biographies/put" replace="none">
         <xf:action ev:event="xforms-submit">
             <xf:delete nodeset="instance('eacInstance')//@standardDate[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacInstance')//@notBefore[normalize-space(.)='']"/>
@@ -766,6 +765,7 @@
                 Reason : <xf:output value="event('response-reason-phrase')"/>;
                 Body : <xf:output value="event('response-body')"/>.
             </xf:message>
+            <xf:load resource="/xpr/biographies/view" show="replace"/>
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
             <xf:message level="modal">
