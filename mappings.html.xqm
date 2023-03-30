@@ -51,28 +51,7 @@ declare function getMessage($id, $lang) {
 };
 
 (:~
- : This function is a list of entities
- : @param
- :)
-declare function listEac2html($node as node()*, $options as map(*)) as item()* {
-  <ul id="list">{
-    for $entity in $node//eac:eac
-    let $id := $entity/@xml:id => fn:normalize-unicode()
-    let $name := $entity//eac:nameEntry[@status='authorized'] => fn:normalize-unicode()
-    let $type := $entity//eac:identity/@localType => getMessage($options)
-    let $dates := $entity/@xml:id => fn:normalize-unicode()
-    return
-      <li>
-        <h3 class="name">{$name}</h3>
-        <p class="date">{$dates}</p>
-        <p class="type">{$type}</p>
-        <p><a class="view" href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a class="modify" href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
-      </li>
-  }</ul>
-};
-
-(:~
- : This function dispatches the treatment of the xpr XML document
+ : This function dispatches the treatment of the xpr XML document (expertises)
  :)
 declare
   %output:indent('no')
@@ -83,7 +62,16 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
       <h3>{ fn:string-join(
       for $place in $node/xpr:description/xpr:places/xpr:place return getPlace($place, $options),
       ' | ') }</h3>
-      <p>(: lien vers les images, description annexes :)</p>
+      <div class="canvas-container">
+        <sequence-panel
+          id='sequence'
+          manifest-id="/xpr/files/manifest/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}.manifest.json"
+          start-canvas="https://xpr/iiif/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}/canvas/p{$node/xpr:sourceDesc/xpr:facsimile/@from => fn:normalize-space()}"
+          margin='30'>
+        </sequence-panel>
+        <button id='prev'>prev</button>
+        <button id='next'>next</button>
+      </div>
       <ul>{
         <lh>Liste des vacations</lh>,
         for $pair in $node/xpr:description/xpr:sessions/xpr:date ! array{./@type , ./@when}
@@ -219,16 +207,6 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
           fn:normalize-space($node/xpr:description/xpr:noteworthy)
         }</div>}
     </div>
-        <div class="canvas-container">
-        	<sequence-panel
-        		id='sequence'
-        		manifest-id="/xpr/files/manifest/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}.manifest.json"
-        		start-canvas="https://xpr/iiif/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}/canvas/p{$node/xpr:sourceDesc/xpr:facsimile/@from => fn:normalize-space()}"
-        		margin='30'>
-        	</sequence-panel>
-        	<button id='prev'>prev</button>
-        	<button id='next'>next</button>
-        </div>
     <div class="control">{
       <h3>Historique des modifications</h3>,
       <ul>{
@@ -243,7 +221,7 @@ declare function getMaintenanceEvent($node as node()*, $options as map(*)) as xs
   let $dateTime := $node/xpr:eventDateTime/@standardDateTime
   return (
     $dateTime, fn:normalize-space($node/xpr:eventDescription), 'par', fn:normalize-space($node/xpr:agent)
-    ) => fn:string-join(' ')
+  ) => fn:string-join(' ')
 };
 
 declare function getKeywords($node as node()*, $options as map(*)) as element() {
@@ -265,9 +243,12 @@ declare function getKeywords($node as node()*, $options as map(*)) as element() 
     case 'transformation' return 'Transformation du bâti/Travaux (type de)'
     default return ()
   return
-    <p>{$label || ' : ',
+    <p>{
+      $label || ' : ',
       for $term in $node/xpr:term
-      return <a href="/xpr/index/{$term/@value}">{ fn:normalize-space($term) }</a>}</p>
+      return
+        <a href="/xpr/index/{$term/@value}">{ fn:normalize-space($term) }</a>
+    }</p>
 };
 
 declare function getFee($node as node()*, $options as map(*)) as xs:string {
@@ -405,7 +386,7 @@ return fn:string-join(
 };
 
 (:~
- : @todo translate dates in french (basex bug)
+ : @todo translate dates in french (basex)
  :)
 declare function getInterval($node as node()*, $options as map(*)) as xs:string {
   if($node/xpr:date/@when[fn:normalize-space(.) castable as xs:date]) then
@@ -456,7 +437,7 @@ declare function getAddress($node as node()*, $options as map(*)) as xs:string* 
 
 declare function getExpert($node as node()*, $options as map(*)) as node()* {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  let $expertName := fn:normalize-space($prosopo/eac:eac[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
+  let $expertName := getEntityName(fn:substring-after($node/@ref, '#'))
   let $expert := <a href="/xpr/biographies/{fn:normalize-space(fn:substring-after($node/@ref, '#'))}/view">{ $expertName }</a>
   let $context :=
     switch ($node/@context[fn:normalize-space(.)!=''])
@@ -527,61 +508,81 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
     getIdentity($node/eac:cpfDescription/eac:identity, $options),
     getDescription($node/eac:cpfDescription/eac:description, $options),
     getExpertises($node/@xml:id, $options)
-    (: @todo si pas de date d’existance ou de sexe ne pas afficher getDescription() :)
   }</article>
-};
-
-
-declare function getExpertises($node, $options){
-  let $db := db:open('xpr')
-  let $expertises := $db//*:expertise[descendant::*:experts/*:expert[@ref = fn:concat('#', $node)]]
-  return(
-    <div>
-      <h4>Expertises</h4>
-      <ul>{
-      for $expertise in $expertises
-      order by fn:sort($expertise/descendant::*:sessions/*:date/@when[fn:normalize-space(.)!=''])[1]
-      return <li><a href="/xpr/expertises/{fn:normalize-space($expertise/@xml:id)}/view">{getReference($expertise, $options)}</a></li>
-      }</ul>
-    </div>
-  )
 };
 
 declare function getIdentity($node, $options){
   <header>{(
     getEntityType($node/eac:entityType, $options),
-    getNameEntry($node/eac:nameEntry[@status='authorized'], $options),
-    getEntityId($node/eac:entityId, $options),
-    for $nameEntry in $node/eac:nameEntry[@status!='authorized']
-    return getNameEntry($nameEntry, $options)
+    <h2>{getEntityName($node/eac:identityId)}</h2>,
+    <span class="id">{getEntityId($node/eac:identityId, $options)}</span>,
+    for $nameEntry in $node/eac:nameEntry[@preferredForm!='true']
+    let $name := getNameEntry($nameEntry, $options)
+    return
+      <div>
+        <h4>Forme attestée du nom</h4>
+        <ul>{
+          for $part in $name?parts
+          return <li>{$part?key || ' : ' || $part?value}</li>
+        }</ul>
+        <ul>
+          <lh>Sources</lh>
+        {
+          for $source in $name?sources
+          return <li>{$source}</li>
+        }</ul>
+      </div>
   )}</header>
 };
 
+declare function getEntityName($node as xs:string*) {
+  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $id := $node
+  let $entityName := $prosopo/eac:eac[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true' and @status='authorized'][1]/eac:part/fn:normalize-space()
+  return $entityName
+};
+
+(:@todo reprise:)
 declare function getEntityType($node, $options){
   <h3>{
     switch ($node)
-    case $node[parent::eac:identity[@localType='expert']] return 'Fiche prosopographique d’expert'
-    case $node[parent::eac:identity[@localType='masson']] return 'Fiche prosopographique de maçon'
+    case $node[parent::eac:identity/eac:otherEntityTypes[eac:otherEntityType/eac:term='expert']] return 'Fiche prosopographique d’expert'
+    case $node[parent::eac:identity/eac:otherEntityTypes[eac:otherEntityType/eac:term='clerk']][fn:not(eac:otherEntityType/eac:term='expert')] return 'Fiche prosopographique de greffier'
+    case $node[parent::eac:identity/eac:otherEntityTypes[eac:otherEntityType/eac:term='masson']] return 'Fiche prosopographique de maçon'
     default return 'Fiche prosopographique'
   }</h3>
 };
 
 declare function getNameEntry($node, $options){
-  if ($node/@status='authorized')
-  then <h2>{$node/eac:part => fn:normalize-space()}</h2>
-  else for $nameEntry in $node return <div>
-    <h4>Forme attestée du nom</h4>
-    <ul>{
-      for $part in $nameEntry/eac:part[fn:normalize-space(.)!='']
-      return getPart($part, $options)
-    }</ul>
-  </div>
+  let $sources := getSources($node/@sourceReference, $options)
+  let $nameParts := for $part in $node/eac:part return getPart($part, $options)
+
+  return
+    map{
+      'sources' : $sources,
+      'parts' :
+        for $part in $nameParts
+        return map{'key' : $part?key, 'value' : $part?value}
+
+    }
 };
 
+declare function getSources($refs, $sources){
+let $refs := fn:tokenize($refs, ' ')
+for $ref in $refs
+return getSource($ref, $sources)
+};
+
+declare function getSource($ref, $sources){
+let $source := $sources/eac:source[@id = fn:substring-after($ref, '#')]/eac:reference => fn:normalize-space()
+return $source
+};
+
+
+
 declare function getPart($node, $options){
-  let $part := $node => fn:normalize-space()
-  let $key :=
-    switch ($node/@localType => fn:normalize-space())
+  let $value := $node => fn:normalize-space()
+  let $key := switch ($node/@localType => fn:normalize-space())
     case 'surname' return 'Nom'
     case 'forename' return 'Prénom'
     case 'particle' return 'Particule'
@@ -590,14 +591,14 @@ declare function getPart($node, $options){
     case 'academic' return 'Titre académique'
     case 'religious' return 'Titre religieux'
     case 'nobiliary' return 'Titre nobiliaire'
-    default return ()
+    default return 'Partie du nom indéterminée'
 
-  return <li>{$key || ' : ' || $part}</li>
+  return ($key, $value)
 };
 
 declare function getEntityId($node, $options){
   let $id := $node => fn:normalize-space()
-  return <span class="id">{$id}</span>
+  return $id
 };
 
 declare function getDescription($node, $options){
@@ -605,7 +606,8 @@ declare function getDescription($node, $options){
     <h4>Description</h4>
     <ul>{
       getExistDates($node/eac:existDates, $options),
-      if(fn:normalize-space($node/eac:localDescription[@localType="sex"]) != '') then getSex($node/eac:localDescription[@localType="sex"], $options)
+      if(fn:normalize-space($node/eac:localDescriptions/eac:localDescription[@localType="sex"]) != '') then
+      <li>{getSex($node/eac:localDescriptions/eac:localDescription[@localType="sex"], $options)}</li>
     }</ul>
   </div>,
   getFunctions($node/eac:functions, $options),
@@ -640,8 +642,7 @@ declare function getSex($node, $options){
     case 'male' return 'Homme'
     case 'female' return 'Femme'
     default return ()
-  return
-  <li>{$sex}</li>
+  return $sex
   (: @todo restreindre l’appel au sex :)
 };
 
@@ -649,11 +650,11 @@ declare function getFunctions($node, $options){
   <div class="function">
     <h4>Fonctions</h4>
     {for $function in $node/eac:function
-    return xpr.mappings.html:function($function, $options)}
+    return getFunction($function, $options)}
   </div>
 };
 
-declare function xpr.mappings.html:function($node, $options){
+declare function getFunction($node, $options){
   <div>
     <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
   </div>
@@ -673,60 +674,24 @@ declare function getChronList($node, $options){
     <div>
       <h5>{$chronItem/eac:event => fn:normalize-space()}</h5>
       <p>Date : { getDate($chronItem/*[fn:local-name() = 'date' or fn:local-name() = 'dateRange'], $options) }</p>
-      {if($chronItem/rico:participant[@xlink:href!='']) then
-        <p>{if(fn:count($chronItem/rico:participant[@xlink:href!='']) > 1) then 'Participants : ' else 'Participant : '}
-          {for $participant in $chronItem/rico:participant[@xlink:href!='']
-          return(
-            switch($participant)
-            case $participant[following-sibling::rico:participant] return (getEntityLink($participant, $options), ' | ')
-            default return getEntityLink($participant, $options))}
-        </p>
-      }
-      {if($chronItem/rico:involve[@xlink:href!='']) then
-        <p>{if(fn:count($chronItem/rico:involve[@xlink:href!='']) > 1) then 'Entités mentionnées : ' else 'Entité mentionnée : '}
-          {for $involve in $chronItem/rico:involve[@xlink:href!='']
-          return(
-            switch($involve)
-            case $involve[following-sibling::rico:involve] return (getEntityLink($involve, $options), ' | ')
-            default return getEntityLink($involve, $options))}
-        </p>
-      }
-      {if($chronItem/xpr:cost[.!='']) then
-        <p>Coût : {$chronItem/eac:cost => fn:normalize-space()}</p>
-      }
-      {if($chronItem/xpr:source[@xlink:href!='']) then
-        <p>{if(fn:count($chronItem/xpr:source[@xlink:href!='']) > 1 ) then 'Sources : ' else 'Source : '}
-          {for $source in $chronItem/xpr:source[@xlink:href!='']
-            return(
-              switch($source)
-              case $source[following-sibling::xpr:source] return (getSource($source, $options), ' | ')
-              default return getSource($source, $options))}
-        </p>
-      }
     </div>
 };
 
-declare function getEntityName($node as xs:string*) {
-  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  let $id := $node
-  let $entityName := $prosopo/eac:eac[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true' and @status='authorized'][1]/eac:part/fn:normalize-space()
-  return $entityName
+declare function getExpertises($node, $options){
+  let $db := db:open('xpr')
+  let $expertises := $db//*:expertise[descendant::*:experts/*:expert[@ref = fn:concat('#', $node)]]
+  return(
+    <div>
+      <h4>Expertises</h4>
+      <ul>{
+      for $expertise in $expertises
+      order by fn:sort($expertise/descendant::*:sessions/*:date/@when[fn:normalize-space(.)!=''])[1]
+      return <li><a href="/xpr/expertises/{fn:normalize-space($expertise/@xml:id)}/view">{getReference($expertise, $options)}</a></li>
+      }</ul>
+    </div>
+  )
 };
 
-declare function getEntityLink($node as node()*, $options as map(*)) as node()* {
-  let $id := $node/@*[fn:local-name() = 'href' or fn:local-name()='ref'] => fn:substring-after('#')
-  let $entityName := getEntityName($id)
-  let $entityLink := <a href="/xpr/biographies/{$id}/view">{$entityName}</a>
-  return $entityLink
-};
-
-declare function getSource($node as node()*, $options as map(*)) as xs:string {
-  let $sources := db:open('xpr')/xpr:xpr/xpr:sources
-  let $id := $node/@xlink:href => fn:substring-after('#')
-  let $cote := fn:normalize-space($sources/xpr:source[@xml:id=$id])
-  let $source := <a href="/xpr/sources/{$id}/view">{$cote}</a>
-  return $cote
-};
 
 declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
   typeswitch($node)
@@ -778,21 +743,21 @@ function passthru($nodes as node(), $options as map(*)) as item()* {
 };
 
 (:~
- : This function serialise an expertises list
+ : This function serialize an expertises list
  : @return an html list of expertises
  :)
 declare function listXpr2html($content, $options) {
   <ul id="list">{
     for $expertise in $content/xpr:expertise
-    return itemXpr2Html($expertise, map{'path' : '/xpr/expertises/'})
+    return itemXpr2html($expertise, map{'path' : '/xpr/expertises/'})
   }</ul>
 };
 
 (:~
- : This function serialise an expertise item in a list
+ : This function serialize an expertise item in a list
  : @return an html item of expertises in a list
  :)
-declare function itemXpr2Html($expertise, $options){
+declare function itemXpr2html($expertise, $options){
   let $id := $expertise/@xml:id => fn:string()
   let $path := $options?path
   let $status := $expertise/xpr:control/xpr:localControl/xpr:term
@@ -816,8 +781,29 @@ declare function itemXpr2Html($expertise, $options){
 };
 
 (:~
- : This function serialise an expertises list
- : @return an html list of expertises
+ : This function serialize a list of entities
+ : @param
+ :)
+declare function listEac2html($node as node()*, $options as map(*)) as item()* {
+  <ul id="list">{
+    for $entity in $node//eac:eac
+    let $id := $entity/@xml:id => fn:normalize-unicode()
+    let $name := $entity//eac:nameEntry[@status='authorized'] => fn:normalize-unicode()
+    let $type := $entity//eac:identity/@localType => getMessage($options)
+    let $dates := $entity/@xml:id => fn:normalize-unicode()
+    return
+      <li>
+        <h3 class="name">{$name}</h3>
+        <p class="date">{$dates}</p>
+        <p class="type">{$type}</p>
+        <p><a class="view" href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a class="modify" href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
+      </li>
+  }</ul>
+};
+
+(:~
+ : This function serialize a list of IAD
+ : @return an html list of IAD
  :)
 declare function listIad2html($content, $options) {
   <ul id="list">{
@@ -827,8 +813,8 @@ declare function listIad2html($content, $options) {
 };
 
 (:~
- : This function serialise an inventory item in a list
- : @return an html item of inventory in a list
+ : This function serialise an IAD item in a list
+ : @return an html item of iad in a list
  :)
 declare function itemIad2Html($inventory, $options){
   let $id := $inventory/@xml:id => fn:string()
@@ -851,37 +837,4 @@ declare function itemIad2Html($inventory, $options){
         }
       </p>
     </li>
-};
-
-(:~
- : This function dispatches the treatment of the source XML document
- :)
-declare
-  %output:indent('no')
-function source2html($node as node()*, $options as map(*)) as item()* {
-  <article>
-    <header>
-      <h2>{ $node => fn:normalize-space() }</h2>
-    </header>
-    <div class="meta">
-      <div class="citations">
-        <h3>Citations</h3>
-        { getCitations($node, $options) }
-      </div>
-    </div>
-  </article>
-};
-
-declare function getCitations($node as node()*, $options as map(*)) as node()* {
-  let $mark := $node/@xml:id => fn:normalize-space()
-  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  return(
-    <ul>{
-      for $entity in $prosopo/eac:eac[descendant::xpr:source[fn:substring-after(@xlink:href, '#') = $mark]]
-        let $id := $entity/@xml:id => fn:normalize-space()
-        let $entityName := fn:normalize-space($entity/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
-        let $entityLink := <a href="/xpr/biographies/{$id}/view">{$entityName}</a>
-        return <li>{ $entityLink }</li>
-    }</ul>
-  )
 };
