@@ -544,7 +544,7 @@ declare function getEntityId($node as node(), $options as map(*)) as xs:string {
   return $id
 };
 
-declare function getDescription($node, $options){
+declare function getDescription($node as node()*, $options as map(*)) as item()*{
   <div>
     <h4>Description</h4>
     <ul>{
@@ -557,7 +557,7 @@ declare function getDescription($node, $options){
   getBiogHist($node/eac:biogHist, $options)
 };
 
-declare function getSex($node, $options){
+declare function getSex($node as node(), $options as map(*)) as xs:string {
   let $sex :=
     switch (fn:normalize-space($node))
     case 'male' return 'Homme'
@@ -567,7 +567,7 @@ declare function getSex($node, $options){
   (: @todo restreindre l’appel au sex :)
 };
 
-declare function getFunctions($node, $options){
+declare function getFunctions($node as node(), $options as map(*)) as node(){
   <div class="function">
     <h4>Fonctions</h4>
     {for $function in $node/eac:function
@@ -575,21 +575,21 @@ declare function getFunctions($node, $options){
   </div>
 };
 
-declare function getFunction($node, $options){
+declare function getFunction($node as node(), $options as map(*)) as node() {
   <div>
     <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
   </div>
   (: @todo prévoir cas où date fixe :)
 };
 
-declare function getBiogHist($node, $options){
+declare function getBiogHist($node as node()*, $options as map(*)) as node()* {
   <div class="biogHist">
     <h4>Informations biographiques</h4>
     { getChronList($node/eac:chronList, $options) }
   </div>
 };
 
-declare function getChronList($node, $options){
+declare function getChronList($node as node(), $options as map(*)) as node()* {
   for $chronItem in $node/eac:chronItem
   return
     <div>
@@ -598,7 +598,7 @@ declare function getChronList($node, $options){
     </div>
 };
 
-declare function getExpertises($node, $options){
+declare function getExpertises($node as node(), $options as map(*)) as node(){
   let $db := db:open('xpr')
   let $expertises := $db//*:expertise[descendant::*:experts/*:expert[@ref = fn:concat('#', $node)]]
   return(
@@ -613,11 +613,11 @@ declare function getExpertises($node, $options){
   )
 };
 
-declare function getExistDates($node, $options) {
-  <li>{ 'Dates d’existence : ' || getDate($node, $options)}</li>
+declare function getExistDates($node as node(), $options as map(*)) as node() {
+  <li>{ 'Dates d’existence : ' || getDate($node/eac:dateRange, $options)}</li>
 };
 
-declare function getDate($node, $options) as xs:string {
+declare function getDate($node as node(), $options as map(*)) as xs:string {
   switch($node)
   case $node[self::eac:dateRange] return fn:string-join(
     ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
@@ -627,7 +627,7 @@ declare function getDate($node, $options) as xs:string {
   (: @todo mettre valeur vide en cas d’abs :)
 };
 
-declare function getPrecision($node, $options) as xs:string* {
+declare function getPrecision($node as node(), $options as map(*)) as xs:string* {
   switch ($node)
   case $node[@notAfter] return (getFormatedDate($node, $options) || ' ]')
   case $node[@notBefore] return ('[ ' || getFormatedDate($node, $options))
@@ -635,33 +635,33 @@ declare function getPrecision($node, $options) as xs:string* {
   default return '..'
 };
 
-declare function getEacDates($node, $option) {
+declare function getEacDates($node as node(), $sources as node(), $option as map(*)) {
   switch($node)
-  case $node[self::eac:dateRange] return getEacDateRange($node, $option)
-  case $node[self::eac:dateSet] return getEacDateSet($node, $option)
-  default return getEacDate($node, $option)
+  case $node[self::eac:dateRange] return getEacDateRange($node, $sources, map{})
+  case $node[self::eac:dateSet] return getEacDateSet($node, $sources, map{})
+  default return getEacDate($node, $sources, map{})
 };
 
-declare function getEacDate($node, $option) {
+declare function getEacDate($node as node(), $sources as node(), $option as map(*)) as map(*) {
   map {
     'precision' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!='']/fn:local-name(),
     'date' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!=''] => fn:normalize-space(),
     'certainty' : $node/@certainty => fn:normalize-space(),
-    'sources' : if($node[fn:normalize-space(@sourceReference)!='']) then getEacSourceReference($node/@sourceReference, $option)
+    'sources' : if($node[fn:normalize-space(@sourceReference)!='']) then getEacSourceReference($node/@sourceReference, $sources)
   }
 };
 
-declare function getEacDateRange($node, $option) {
+declare function getEacDateRange($node as node(), $sources as node(), $option as map(*)) as map(*) {
   map {
-    'from' : getEacDate($node/eac:fromDate, $option),
-    'to' : getEacDate($node/eac:toDate, $option)
+    'from' : getEacDate($node/eac:fromDate, $sources, map{}),
+    'to' : getEacDate($node/eac:toDate, $sources, map{})
   }
 };
 
-declare function getEacDateSet($node, $option) {
+declare function getEacDateSet($node, $sources as node(), $option as map(*)) {
   array {
     for $date in $node/*
-    return getEacDates($date, $option)
+    return getEacDates($date, $sources, map{})
   }
 };
 
@@ -692,29 +692,6 @@ function passthruXpr($nodes as node(), $options as map(*)) as item()* {
   return serializeXpr($node, $options)
 };
 
-
-(:~
- : This function dispatches the treatment of the eac XML document
- :)
-(:declare
-  %output:indent('no')
-function eac2html($node as node()*, $options as map(*)) as item()* {
-  typeswitch($node)
-    case text() return $node[fn:normalize-space(.)!='']
-    case element(eac:eac-cpf) return eac-cpf($node, $options)
-    case element(eac:cpfDescription) return cpfDescription($node, $options)
-    case element(eac:identity) return identity($node, $options)
-    case element(eac:description) return description($node, $options)
-    case element(eac:existDates) return existDates($node, $options)
-    case element(eac:localDescription) return sex($node, $options)
-    case element(eac:functions) return functions($node, $options)
-    case element(eac:function) return xpr.mappings.html:function($node, $options)
-    case element(eac:biogHist) return biogHist($node, $options)
-    case element(eac:chronList) return chronList($node, $options)
-    case element(eac:control) return ()
-    default return passthru($node, $options)
-};:)
-
 (:~
  : This function pass through child nodes (xsl:apply-templates
  :)
@@ -740,7 +717,7 @@ declare function listXpr2html($content, $options) {
  : This function serialize an expertise item in a list
  : @return an html item of expertises in a list
  :)
-declare function itemXpr2html($expertise, $options){
+declare function itemXpr2html($expertise as node(), $options as map(*)) as node() {
   let $id := $expertise/@xml:id => fn:string()
   let $path := $options?path
   let $status := $expertise/xpr:control/xpr:localControl/xpr:term
@@ -788,7 +765,7 @@ declare function listEac2html($node as node()*, $options as map(*)) as item()* {
  : This function serialize a list of IAD
  : @return an html list of IAD
  :)
-declare function listIad2html($content, $options) {
+declare function listIad2html($content as node()*, $options as map(*)) as item()* {
   <ul id="list">{
     for $inventory in $content/xpr:inventory
     return itemIad2Html($inventory, map{'path' : '/xpr/inventories/'})
@@ -799,7 +776,7 @@ declare function listIad2html($content, $options) {
  : This function serialise an IAD item in a list
  : @return an html item of iad in a list
  :)
-declare function itemIad2Html($inventory, $options){
+declare function itemIad2Html($inventory as node(), $options as map(*)) as node() {
   let $id := $inventory/@xml:id => fn:string()
   let $path := $options?path
   let $status := $inventory/xpr:control/xpr:localControl/xpr:term

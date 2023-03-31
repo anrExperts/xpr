@@ -884,16 +884,16 @@ function getBiographyJson($id) {
       for $alternativeForm in $biography/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm != 'true'][fn:normalize-space(.)!='']
       return
       map:merge((
-          map{'sources' : array{xpr.mappings.html:getSources($alternativeForm/@sourceReference, $biography/eac:control/eac:sources, '')}},
+          map{'sources' : array{xpr.mappings.html:getSources($alternativeForm/@sourceReference, $biography/eac:control/eac:sources, map{})}},
           map{'parts' : array{
             for $part in $alternativeForm/eac:part
-            let $d := xpr.mappings.html:getPart($part, '')
+            let $d := xpr.mappings.html:getPart($part, map{})
             return
               map{'key' : $d[1], 'part': $d[2]}
           }}
       ))
     },
-    'existDates' : xpr.mappings.html:getEacDates($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange, $biography/eac:control/eac:sources),
+    'existDates' : xpr.mappings.html:getEacDates($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange, $biography/eac:control/eac:sources, map{}),
     'sex' : $biography/eac:cpfDescription/eac:description/eac:localDescriptions/eac:localDescription[@localType='sex']/eac:term => fn:normalize-space(),
     (:'places' : if($biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']) then array{
       for $place in $biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']
@@ -931,7 +931,7 @@ function getBiographyJson($id) {
       for $occupation in $biography/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']
       return map{
         'occupation' : $occupation/eac:term => fn:normalize-space(),
-        'dates' : if($occupation/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then array { xpr.mappings.html:getEacDates($occupation/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources)},
+        'dates' : if($occupation/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then array { xpr.mappings.html:getEacDates($occupation/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources, map{})},
         'sources' : if(fn:normalize-space($occupation/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($occupation/@sourceReference, $biography/eac:control/eac:sources)
       }
     },
@@ -939,7 +939,7 @@ function getBiographyJson($id) {
       for $function in $biography/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']
       return map{
         'function' : $function/eac:term => fn:normalize-space(),
-        'dates' : if($function/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($function/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources),
+        'dates' : if($function/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($function/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources, map{}),
         'sources' : if(fn:normalize-space($function/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($function/@sourceReference, $biography/eac:control/eac:sources)
       }
     },
@@ -950,7 +950,7 @@ function getBiographyJson($id) {
         'place' : if($event/eac:place[fn:normalize-space(.)!='']) then $event/eac:place => fn:normalize-space(),
         (:@todo participants ?:)
         'sources' : if(fn:normalize-space($event/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($event/@sourceReference, $biography/eac:control/eac:sources),
-        'dates' : if($event/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($event/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources)
+        'dates' : if($event/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($event/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources, map{})
       }
     },
     'relations' : if(fn:count($biography/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!='']) > 0) then array{
