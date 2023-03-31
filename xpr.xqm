@@ -884,7 +884,7 @@ function getBiographyJson($id) {
       for $alternativeForm in $biography/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm != 'true'][fn:normalize-space(.)!='']
       return
       map:merge((
-          map{'sources' : array{xpr.mappings.html:getSources($alternativeForm/@sourceReference, $biography/eac:control/eac:sources)}},
+          map{'sources' : array{xpr.mappings.html:getSources($alternativeForm/@sourceReference, $biography/eac:control/eac:sources, '')}},
           map{'parts' : array{
             for $part in $alternativeForm/eac:part
             let $d := xpr.mappings.html:getPart($part, '')

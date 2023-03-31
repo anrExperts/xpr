@@ -470,7 +470,7 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
   }</article>
 };
 
-declare function getIdentity($node, $options){
+declare function getIdentity($node as node()*, $options as map(*)) as node()*{
   <header>{(
     getEntityType($node/eac:entityType, $options),
     <h2>{getEntityName($node/eac:identityId)}</h2>,
@@ -481,12 +481,12 @@ declare function getIdentity($node, $options){
         <h4>Forme attestée du nom</h4>
         <ul>{
           for $part in $alternativeForm/eac:part
-          return <li>{getPart($part, '')[1] || ' : ' || getPart($part, '')[2]}</li>
+          return <li>{getPart($part, $options)[1] || ' : ' || getPart($part, $options)[2]}</li>
         }</ul>
         {if($alternativeForm/@sourceReference != '') then
         <ul>
           <lh>{if(fn:tokenize(fn:normalize-space($alternativeForm/@sourceReference))[2]) then 'Sources' else 'Source'}</lh>
-          {for $source in getSources($alternativeForm/@sourceReference, $alternativeForm/ancestor::eac:eac/eac:control/eac:sources)
+          {for $source in getSources($alternativeForm/@sourceReference, $alternativeForm/ancestor::eac:eac/eac:control/eac:sources, $options)
           return
             <li>{$source}</li>}
         </ul>}
@@ -494,15 +494,15 @@ declare function getIdentity($node, $options){
   )}</header>
 };
 
-declare function getEntityName($node as xs:string*) {
+declare function getEntityName($str as xs:string*) as xs:string {
   let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
-  let $id := $node
+  let $id := $str
   let $entityName := $prosopo/eac:eac[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true' and @status='authorized'][1]/eac:part/fn:normalize-space()
   return $entityName
 };
 
 (:@todo reprise:)
-declare function getEntityType($node, $options){
+declare function getEntityType($node as node(), $options as map(*)) as xs:string {
   <h3>{
     switch ($node)
     case $node[parent::eac:identity/eac:otherEntityTypes[eac:otherEntityType/eac:term='expert']] return 'Fiche prosopographique d’expert'
@@ -512,18 +512,18 @@ declare function getEntityType($node, $options){
   }</h3>
 };
 
-declare function getSources($refs, $sources){
-let $refs := fn:tokenize($refs, ' ')
+declare function getSources($str as xs:string, $sources as node()*, $options as map(*)) as xs:string* {
+let $refs := fn:tokenize($str, ' ')
 for $ref in $refs
-return getSource($ref, $sources)
+return getSource($ref, $sources, $options)
 };
 
-declare function getSource($ref, $sources){
-let $source := $sources/eac:source[@id = fn:substring-after($ref, '#')]/eac:reference => fn:normalize-space()
+declare function getSource($str as xs:string, $node as node(), $options as map(*)) as xs:string {
+let $source := $node/eac:source[@id = fn:substring-after($str, '#')]/eac:reference => fn:normalize-space()
 return $source
 };
 
-declare function getPart($node, $options){
+declare function getPart($node as node(), $options as map(*)) as xs:string+ {
   let $value := $node => fn:normalize-space()
   let $key := switch ($node/@localType => fn:normalize-space())
     case 'surname' return 'Nom'
@@ -539,7 +539,7 @@ declare function getPart($node, $options){
   return ($key, $value)
 };
 
-declare function getEntityId($node, $options){
+declare function getEntityId($node as node(), $options as map(*)) as xs:string {
   let $id := $node => fn:normalize-space()
   return $id
 };
