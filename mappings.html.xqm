@@ -457,47 +457,6 @@ declare function getExpert($node as node()*, $options as map(*)) as node()* {
   return ($expert, text{', ' || ($node/xpr:title[fn:normalize-space(.)!=''], $context, $appointment) => fn:string-join(', ') || '.'})
 };
 
-
-declare function getEacDates($node, $option) {  
-  switch($node)
-  case $node[self::eac:dateRange] return getEacDateRange($node, $option)
-  case $node[self::eac:dateSet] return getEacDateSet($node, $option)
-  default return getEacDate($node, $option)
-};
-
-declare function getEacDateSet($node, $option) {
-  array {
-    for $date in $node/*
-    return getEacDates($date, $option)
-  }
-};
-
-declare function getEacDateRange($node, $option) {
-  map {
-    'from' : getEacDate($node/eac:fromDate, $option),
-    'to' : getEacDate($node/eac:toDate, $option)
-  }
-};
-
-declare function getEacSourceReference($node, $option) {
-  if($node[fn:normalize-space(.)!='']) then array{
-    for $source in fn:tokenize($node, ' ')
-    return map {
-      'source' : $option/eac:source[@id = $source => fn:substring-after('#')] => fn:normalize-space(), 
-      'id' : ''
-    }
-  }
-};
-
-declare function getEacDate($node, $option) {  
-  map {
-    'precision' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!='']/fn:local-name(),
-    'date' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!=''] => fn:normalize-space(),
-    'certainty' : $node/@certainty => fn:normalize-space(),
-    'sources' : if($node[fn:normalize-space(@sourceReference)!='']) then getEacSourceReference($node/@sourceReference, $option)
-  }
-};
-
 (:~
  : This function dispatches the treatment of the eac XML document
  :)
@@ -516,21 +475,21 @@ declare function getIdentity($node, $options){
     getEntityType($node/eac:entityType, $options),
     <h2>{getEntityName($node/eac:identityId)}</h2>,
     <span class="id">{getEntityId($node/eac:identityId, $options)}</span>,
-    for $nameEntry in $node/eac:nameEntry[@preferredForm!='true']
-    let $name := getNameEntry($nameEntry, $options)
+    for $alternativeForm in $node/eac:nameEntry[@preferredForm!='true']
     return
       <div>
         <h4>Forme attestée du nom</h4>
         <ul>{
-          for $part in $name?parts
-          return <li>{$part?key || ' : ' || $part?value}</li>
+          for $part in $alternativeForm/eac:part
+          return <li>{getPart($part, '')[1] || ' : ' || getPart($part, '')[2]}</li>
         }</ul>
+        {if($alternativeForm/@sourceReference != '') then
         <ul>
-          <lh>Sources</lh>
-        {
-          for $source in $name?sources
-          return <li>{$source}</li>
-        }</ul>
+          <lh>{if(fn:tokenize(fn:normalize-space($alternativeForm/@sourceReference))[2]) then 'Sources' else 'Source'}</lh>
+          {for $source in getSources($alternativeForm/@sourceReference, $alternativeForm/ancestor::eac:eac/eac:control/eac:sources)
+          return
+            <li>{$source}</li>}
+        </ul>}
       </div>
   )}</header>
 };
@@ -553,20 +512,6 @@ declare function getEntityType($node, $options){
   }</h3>
 };
 
-declare function getNameEntry($node, $options){
-  let $sources := getSources($node/@sourceReference, $options)
-  let $nameParts := for $part in $node/eac:part return getPart($part, $options)
-
-  return
-    map{
-      'sources' : $sources,
-      'parts' :
-        for $part in $nameParts
-        return map{'key' : $part?key, 'value' : $part?value}
-
-    }
-};
-
 declare function getSources($refs, $sources){
 let $refs := fn:tokenize($refs, ' ')
 for $ref in $refs
@@ -577,8 +522,6 @@ declare function getSource($ref, $sources){
 let $source := $sources/eac:source[@id = fn:substring-after($ref, '#')]/eac:reference => fn:normalize-space()
 return $source
 };
-
-
 
 declare function getPart($node, $options){
   let $value := $node => fn:normalize-space()
@@ -612,28 +555,6 @@ declare function getDescription($node, $options){
   </div>,
   getFunctions($node/eac:functions, $options),
   getBiogHist($node/eac:biogHist, $options)
-};
-
-declare function getExistDates($node, $options){
-  <li>{ 'Dates d’existence : ' || getDate($node/eac:dateRange, $options)}</li>
-};
-
-declare function getDate($node, $options) as xs:string {
-  switch($node)
-  case $node[self::eac:dateRange] return fn:string-join(
-    ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
-    ' à ')
-  case $node[self::eac:date[@*!='']] return getPrecision($node, $options)
-  default return 'aucune date mentionnée'
-  (: @todo mettre valeur vide en cas d’abs :)
-};
-
-declare function getPrecision($node, $options) as xs:string* {
-  switch ($node)
-  case $node[@notAfter] return (getFormatedDate($node, $options) || ' ]')
-  case $node[@notBefore] return ('[ ' || getFormatedDate($node, $options))
-  case $node[@standardDate] return (getFormatedDate($node, $options))
-  default return '..'
 };
 
 declare function getSex($node, $options){
@@ -690,6 +611,68 @@ declare function getExpertises($node, $options){
       }</ul>
     </div>
   )
+};
+
+declare function getExistDates($node, $options) {
+  <li>{ 'Dates d’existence : ' || getDate($node, $options)}</li>
+};
+
+declare function getDate($node, $options) as xs:string {
+  switch($node)
+  case $node[self::eac:dateRange] return fn:string-join(
+    ($node/eac:fromDate, $node/eac:toDate) ! getPrecision(., $options),
+    ' à ')
+  case $node[self::eac:date[@*!='']] return getPrecision($node, $options)
+  default return 'aucune date mentionnée'
+  (: @todo mettre valeur vide en cas d’abs :)
+};
+
+declare function getPrecision($node, $options) as xs:string* {
+  switch ($node)
+  case $node[@notAfter] return (getFormatedDate($node, $options) || ' ]')
+  case $node[@notBefore] return ('[ ' || getFormatedDate($node, $options))
+  case $node[@standardDate] return (getFormatedDate($node, $options))
+  default return '..'
+};
+
+declare function getEacDates($node, $option) {
+  switch($node)
+  case $node[self::eac:dateRange] return getEacDateRange($node, $option)
+  case $node[self::eac:dateSet] return getEacDateSet($node, $option)
+  default return getEacDate($node, $option)
+};
+
+declare function getEacDate($node, $option) {
+  map {
+    'precision' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!='']/fn:local-name(),
+    'date' : $node/@*[fn:local-name()='standardDate' or fn:local-name()='notBefore' or fn:local-name()='notAfter'][fn:normalize-space(.)!=''] => fn:normalize-space(),
+    'certainty' : $node/@certainty => fn:normalize-space(),
+    'sources' : if($node[fn:normalize-space(@sourceReference)!='']) then getEacSourceReference($node/@sourceReference, $option)
+  }
+};
+
+declare function getEacDateRange($node, $option) {
+  map {
+    'from' : getEacDate($node/eac:fromDate, $option),
+    'to' : getEacDate($node/eac:toDate, $option)
+  }
+};
+
+declare function getEacDateSet($node, $option) {
+  array {
+    for $date in $node/*
+    return getEacDates($date, $option)
+  }
+};
+
+declare function getEacSourceReference($node, $option) {
+  if($node[fn:normalize-space(.)!='']) then array{
+    for $source in fn:tokenize($node, ' ')
+    return map {
+      'source' : $option/eac:source[@id = $source => fn:substring-after('#')] => fn:normalize-space(),
+      'id' : ''
+    }
+  }
 };
 
 

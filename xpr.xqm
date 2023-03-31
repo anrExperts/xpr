@@ -890,26 +890,9 @@ function getBiographyJson($id) {
             let $d := xpr.mappings.html:getPart($part, '')
             return
               map{'key' : $d[1], 'part': $d[2]}
-          }
-        }
+          }}
       ))
     },
-    (:'existDates' : map{
-      'birth' : if(
-        fn:not($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*)
-        or fn:normalize-space($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*) = '') then ''
-        else map{
-          $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@*/fn:local-name() :
-          $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:fromDate/@* => fn:normalize-space()
-        },
-      'death' : if(
-        fn:not($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*)
-        or fn:normalize-space($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*) = '') then ''
-        else map{
-        $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@*/fn:local-name() :
-        $biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange/eac:toDate/@* => fn:normalize-space()
-      }
-    },:)
     'existDates' : xpr.mappings.html:getEacDates($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange, $biography/eac:control/eac:sources),
     'sex' : $biography/eac:cpfDescription/eac:description/eac:localDescriptions/eac:localDescription[@localType='sex']/eac:term => fn:normalize-space(),
     (:'places' : if($biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']) then array{
