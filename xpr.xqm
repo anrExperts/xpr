@@ -2056,6 +2056,13 @@ function getExpertisesStatistics($year) {
 
   let $appendiceTypes := fn:distinct-values($db/xpr/expertises/expertise/sourceDesc/physDesc/appendices/appendice/type[fn:normalize-space(@type)!=""]/@type)
   let $sessionPlaces := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
+  let $duration :=  for $expertise in $expertises/description/sessions
+                    let $dates := for $session in $expertise/date[@when castable as xs:date]
+                                  order by $session/@when
+                                  return xs:date($session/@when)
+                    let $duration := $dates[fn:last()] - $dates[1]
+                    return fn:days-from-duration($duration)
+  let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
   let $prosopo := $db/xpr/bio
   let $content := map{
     "expertises" : map{
@@ -2063,24 +2070,12 @@ function getExpertisesStatistics($year) {
       "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices]),
       "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices)]),
       "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
-      "expertiseDuration_sessions" : fn:round((fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2),
+      "expertisesDuration_sessions" : fn:round((fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2),
+      "expertisesDuration_day" : fn:sum($duration) div fn:count($expertises),
+      "distributionByDuration" : map:merge(getDistribution($duration, 5, 20)),
       "extent" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
       "averageExtent" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
-      "distributionByExtent" : map:merge(
-        for $n in 1 to 20
-        let $multiplier := 5
-        let $step := $n * $multiplier
-        return (
-        if($n = 20) then
-          map{
-            $step : fn:count($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''][fn:number(.) >= $step])
-          }
-        else
-          map{
-            $step : fn:count($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''][fn:number(.) <= $step and fn:number(.) > $step - $multiplier])
-          }
-        )
-      )
+      'distributionByExtent' : map:merge(getDistribution($extent, 5, 20))
     },
     "sessions" : map{
       "countSessions" : fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']),
@@ -2108,6 +2103,23 @@ function getExpertisesStatistics($year) {
   return $content
 };
 
+
+declare function getDistribution($seq, $step, $max) {
+  for $n in 1 to $max
+  let $multiplier := $step
+  let $step := $n * $multiplier
+  return (
+    if($n = 20) then map{
+        $step : fn:count($seq[fn:number(.) >= $step])
+    }
+    else if ($n = 1) then map {
+      $step : fn:count($seq[fn:number(.) <= $step and fn:number(.) >= $step - $multiplier])
+    }
+    else map{
+      $step : fn:count($seq[fn:number(.) <= $step and fn:number(.) > $step - $multiplier])
+    }
+  )
+};
 
 (:~
  : ~:~:~:~:~:~:~:~:~

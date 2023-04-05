@@ -470,7 +470,7 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
   }</article>
 };
 
-declare function getIdentity($node as node()*, $options as map(*)) as node()*{
+declare function getIdentity($node as node()*, $options as map(*)) as node()* {
   <header>{(
     getEntityType($node/eac:entityType, $options),
     <h2>{getEntityName($node/eac:identityId)}</h2>,
