@@ -292,6 +292,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:isSuccessorOf</relationType>
                     <targetRole target="">prédécesseur</targetRole>
@@ -303,6 +305,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
@@ -314,6 +318,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
@@ -325,6 +331,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
                     <targetRole target="">témoin</targetRole>
@@ -336,6 +344,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -344,6 +354,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -352,6 +364,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -360,6 +374,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -368,6 +384,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -376,6 +394,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
@@ -384,6 +404,8 @@
                     <targetEntity targetType="person">
                         <part localType="full"/>
                         <part localType="status"/>
+                        <part localType="occupationType"/>
+                        <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
                     <targetRole target="">examinateur</targetRole>
