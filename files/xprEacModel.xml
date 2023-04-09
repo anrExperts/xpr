@@ -293,6 +293,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:isSuccessorOf</relationType>
@@ -306,6 +308,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
@@ -319,6 +323,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
@@ -332,6 +338,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
@@ -345,6 +353,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -355,6 +365,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -365,6 +377,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -375,6 +389,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -385,6 +401,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -395,6 +413,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -405,6 +425,8 @@
                         <part localType="full"/>
                         <part localType="status"/>
                         <part localType="occupationType"/>
+                        <part localType="age"/>
+                        <part localType="address"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
