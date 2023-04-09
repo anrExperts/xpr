@@ -2054,53 +2054,102 @@ function getExpertisesStatistics($year) {
     then $db/xpr/expertises/expertise
     else $db/xpr/expertises/expertise[descendant::sessions/date[@when castable as xs:date][fn:starts-with(@when, $year)]])
 
-  let $appendiceTypes := fn:distinct-values($db/xpr/expertises/expertise/sourceDesc/physDesc/appendices/appendice/type[fn:normalize-space(@type)!=""]/@type)
-  let $sessionPlaces := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
-  let $duration :=  for $expertise in $expertises/description/sessions
-                    let $dates := for $session in $expertise/date[@when castable as xs:date]
-                                  order by $session/@when
-                                  return xs:date($session/@when)
-                    let $duration := $dates[fn:last()] - $dates[1]
-                    return fn:days-from-duration($duration)
+  let $sessionPlaces :=
+    for $place in fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
+    let $label := switch ($place)
+      case 'paris' return 'Paris'
+      case 'suburbs' return 'Banlieue'
+      case 'province' return 'Province'
+      default return 'Indéterminé'
+    return [$place, $label]
+
+  let $duration :=
+    for $expertise in $expertises/description/sessions
+    let $dates :=
+      for $session in $expertise/date[@when castable as xs:date]
+      order by $session/@when
+      return xs:date($session/@when)
+    let $duration := $dates[fn:last()] - $dates[1]
+    return fn:days-from-duration($duration)
+
+let $places :=
+    let $listPlace := fn:distinct-values(db:open('xpr')//*:expertise//*:places/*:place/@type)
+    let $seq := ('paris', 'suburbs', 'province')
+    let $pairs :=
+      for $i at $pos in $seq
+      for $j in fn:subsequence($seq, $pos+1, fn:count($seq))
+      return [$i, $j]
+    return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
+
   let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
+  let $appendiceTypes :=
+    for $type in fn:distinct-values($expertises//sourceDesc/physDesc/appendices/appendice/type/@type[fn:normalize-space(.)!=''])
+    let $label := if($type!='other') then ($expertises//type[@type=$type])[1] => fn:normalize-space() else 'Autre'
+    return [$type, $label]
   let $prosopo := $db/xpr/bio
   let $content := map{
     "expertises" : map{
-      "countExpertises" : fn:count($expertises),
-      "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices]),
-      "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices)]),
-      "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
-      "expertisesDuration_sessions" : fn:round((fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2),
-      "expertisesDuration_day" : fn:sum($duration) div fn:count($expertises),
-      "distributionByDuration" : map:merge(getDistribution($duration, 5, 20)),
-      "extent" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
-      "averageExtent" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
-      'distributionByExtent' : map:merge(getDistribution($extent, 5, 20))
-    },
-    "sessions" : map{
-      "countSessions" : fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']),
-      "averageSessions" : fn:round(fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises), 2),
-      "sessionsPlaces" : map:merge(
-        for $place in $sessionPlaces
-        return map{
-          $place : fn:count($expertises/description/sessions/date[@type=$place])
+      "total" : fn:count($expertises),
+      "extent" : map{
+        "total" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
+        "averageByExpertise" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
+        "extentDistribution" : map:merge(getDistribution($extent, 5, 20))
+      },
+      "sketches" : map{
+        "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
+        "expertisesWithoutSketch" : fn:count($expertises[descendant::extent[@sketch != 'true']])
+      },
+      "appendices" : map{
+        "total" : fn:count($expertises/sourceDesc/physDesc/appendices/appendice[fn:normalize-space(.)!='']),
+        "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices[fn:normalize-space(.)!='']]),
+        "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices[fn:normalize-space(.)!=''])]),
+        "types" : array{ for $type in $appendiceTypes return  map{
+          "type" : array:get($type, 1),
+          "label" : array:get($type, 2),
+          "total" : fn:count($expertises//appendice[type/@type=array:get($type, 1)]),
+          "expertises" : fn:count($expertises[sourceDesc/physDesc/appendices/appendice/type/@type=$type])
+          (:"extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),:)
+        }}
+      },
+      "sessions" : map{
+        "total" : fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']),
+        "averageByExpertise" : fn:round(fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises), 2),
+        "places" : array{ for $place in $sessionPlaces return map{
+          "place" : array:get($place, 1),
+          "label" : array:get($place, 2),
+          "total" : fn:count($expertises/description/sessions/date[@type=array:get($place, 1)])
+        }}
+      },
+      "duration" : map{
+        "days" : map{
+          "total" : fn:sum($duration),
+          "averageByExpertise" : fn:sum($duration) div fn:count($expertises),
+          "distributionByDays" : map:merge(getDistribution($duration, 5, 20))
+        },
+        "sessions" : map{
+          "total" : fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']),
+          "averageByExpertise" : fn:round((fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2)
         }
-      )
-      (:@todo durée moyenne d'une expertise:)
-    },
-    "appendices" : map{
-      "countAppendices" : fn:count($expertises/sourceDesc/physDesc/appendices/appendice),
-(:      "extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),:)
-      "distributionByType" : map:merge(
-        for $type in $appendiceTypes
+      },
+      (:@todo revoir avec EC le fonctionnement + fonction:)
+      "places" : array{
+        for $place in $places
         return map{
-        (:@todo /!\je compte ici les expertises:)
-          $type : fn:count($expertises[sourceDesc/physDesc/appendices/appendice/type/@type=$type])
+          "place" : array{
+            $place
+          },
+          "total" : countExpertisesByPlaces($expertises, $place)
         }
-      )
+      }
     }
   }
   return $content
+};
+
+declare function countExpertisesByPlaces($expertises, $place) {
+  if($place castable as xs:string) then fn:count($expertises//places[place[@type = $place]][fn:not(place[@type != $place])])
+  else if(array:size($place) = 2) then fn:count($expertises//places[place[@type = array:get($place, 1)] and place[@type = array:get($place, 2)]][fn:not(place[@type != array:get($place, 1) and @type != array:get($place, 2)])])
+  else if(array:size($place) = 3) then fn:count($expertises//places[place[@type = 'paris'] and place[@type = 'suburbs'] and place[@type = 'province']])
 };
 
 
