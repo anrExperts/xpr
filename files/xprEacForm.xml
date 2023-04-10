@@ -4555,6 +4555,13 @@
                                 </xf:itemset>
                             </xf:choices>
                             <xf:choices>
+                                <xf:label>Religion</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Religion']/type">
+                                    <xf:label ref="."/>
+                                    <xf:value value="concat(parent::group/label, ';', .)"/>
+                                </xf:itemset>
+                            </xf:choices>
+                            <xf:choices>
                                 <xf:label>Commerce</xf:label>
                                 <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Commerce']/type">
                                     <xf:label ref="."/>

@@ -735,6 +735,10 @@
                 <type>Autres</type>
             </group>
             <group>
+                <label>Religion</label>
+                <type>Religion</type>
+            </group>
+            <group>
                 <label>Commerce</label>
                 <type>Marchand Bourgeois</type>
                 <type>Maître et marchand</type>
