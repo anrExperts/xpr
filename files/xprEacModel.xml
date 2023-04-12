@@ -295,6 +295,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#isSuccessorOf" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:isSuccessorOf</relationType>
@@ -310,6 +311,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
@@ -325,6 +327,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
@@ -340,6 +343,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#knownBy" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:knownBy</relationType>
@@ -355,6 +359,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -367,6 +372,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -379,6 +385,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -391,6 +398,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -403,6 +411,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -415,6 +424,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -427,6 +437,7 @@
                         <part localType="occupationType"/>
                         <part localType="age"/>
                         <part localType="address"/>
+                        <part localType="origPlace"/>
                         <part localType="xprRef"/>
                     </targetEntity>
                     <relationType id="" valueURI="https://www.ica.org/standards/RiC/ontology#hasOrHadController" vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" sourceReference="">rico:hasOrHadController</relationType>
@@ -722,8 +733,10 @@
                 <type>Autre</type>
             </group>
             <group>
-                <label>Expert et juriste</label>
+                <label>Bâtiment et Droit</label>
                 <type>Expert et juriste</type>
+                <type>Maître général</type>
+                <type>Maître général et expert</type>
             </group>
             <group>
                 <label>Droit</label>
@@ -736,7 +749,12 @@
             </group>
             <group>
                 <label>Religion</label>
-                <type>Religion</type>
+                <type>Religieux</type>
+            </group>
+            <group>
+                <label>Noble</label>
+                <type>Noble sans profession</type>
+                <type>Noble</type>
             </group>
             <group>
                 <label>Commerce</label>
@@ -753,11 +771,14 @@
             <group>
                 <label>Armée</label>
                 <type>Armée</type>
+                <type>Officier militaire roturier</type>
+                <type>Officier militaire noble</type>
             </group>
             <group>
                 <label>Autres</label>
                 <type>Bourgeois de Paris</type>
                 <type>Laboureur</type>
+                <type>Sans profession</type>
                 <type>Autres</type>
             </group>
         </occupationTypes>
