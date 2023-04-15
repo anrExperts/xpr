@@ -59,7 +59,7 @@
     </xs:schema>
 
     <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:places/eac:place" constraint="eac:placeRole or eac:placeName or eac:address"/>
-    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem" constraint="*[1][self::eac:date or self::eac:dateRange or self::eac:dateSet] and  *[2][self::eac:event or self::eac:chronItemSet]"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem" constraint="(*[1][self::eac:date or self::eac:dateRange or self::eac:dateSet] and  *[2][self::eac:event or self::eac:chronItemSet]) or (*[1][self::eac:date or self::eac:dateRange or self::eac:dateSet] and  *[2][self::eac:event or self::eac:chronItemSet] and *[3][self::eac:place])"/>
 
     <!--   class="{if(is-valid(.), 'valid', 'invalid')}" -->
     <!-- Dates -->
