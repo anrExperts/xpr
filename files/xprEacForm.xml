@@ -4542,8 +4542,8 @@
                                 </xf:itemset>
                             </xf:choices>
                             <xf:choices>
-                                <xf:label>Expert et juriste</xf:label>
-                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Expert et juriste']/type">
+                                <xf:label>Bâtiment et Droit</xf:label>
+                                <xf:itemset ref="instance('occupationTypes')/group[normalize-space(label)='Bâtiment et Droit']/type">
                                     <xf:label ref="."/>
                                     <xf:value value="concat(parent::group/label, ';', .)"/>
                                 </xf:itemset>
