@@ -2072,14 +2072,16 @@ function getExpertisesStatistics($year) {
     let $duration := $dates[fn:last()] - $dates[1]
     return fn:days-from-duration($duration)
 
-let $places :=
-    let $listPlace := fn:distinct-values(db:open('xpr')//*:expertise//*:places/*:place/@type)
+  let $places :=
+    (:let $listPlace := fn:distinct-values(db:open('xpr')//*:expertise//*:places/*:place/@type):)
+    let $listPlace := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
     let $seq := ('paris', 'suburbs', 'province')
     let $pairs :=
       for $i at $pos in $seq
       for $j in fn:subsequence($seq, $pos+1, fn:count($seq))
       return [$i, $j]
     return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
+
 
   let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
   let $appendiceTypes :=
@@ -2140,17 +2142,48 @@ let $places :=
           },
           "total" : countExpertisesByPlaces($expertises, $place)
         }
+      },
+      "categories" : array{
+        for $category in fn:distinct-values($expertises/description/categories/category/@type)
+        let $cases := $expertises[description/categories[fn:count(category) = 1][category[@type = $category]]]
+        return map{
+          "category" : $category,
+          "label" : ($expertises/description/categories/category[@type=$category])[1] => fn:normalize-space(),
+          "total" : fn:count($cases),
+          "frameworks" : array{
+            for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
+            return map{
+              "framework" : $framework,
+              "total" : fn:count($cases[description/procedure/framework[@type=$framework]])
+            }
+          }
+        }
+      },
+      "frameworks" : array{
+        for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
+        return map{
+          "framework" : $framework,
+          "label" : ($expertises/description/procedure/framework[@type=$framework])[1] => fn:normalize-space(),
+          "total" : fn:count($expertises[description/procedure[framework[@type = $framework]]])
+        }
       }
     }
   }
   return $content
 };
 
-declare function countExpertisesByPlaces($expertises, $place) {
+(:declare function countExpertisesByPlaces($expertises, $place) {
   if($place castable as xs:string) then fn:count($expertises//places[place[@type = $place]][fn:not(place[@type != $place])])
   else if(array:size($place) = 2) then fn:count($expertises//places[place[@type = array:get($place, 1)] and place[@type = array:get($place, 2)]][fn:not(place[@type != array:get($place, 1) and @type != array:get($place, 2)])])
   else if(array:size($place) = 3) then fn:count($expertises//places[place[@type = 'paris'] and place[@type = 'suburbs'] and place[@type = 'province']])
+};:)
+
+declare function countExpertisesByPlaces($expertises, $place) {
+  if($place castable as xs:string) then fn:count($expertises//sessions[date[@type = $place]][fn:not(date[@type != $place])])
+  else if(array:size($place) = 2) then fn:count($expertises//sessions[date[@type = array:get($place, 1)] and date[@type = array:get($place, 2)]][fn:not(date[@type != array:get($place, 1) and @type != array:get($place, 2)])])
+  else if(array:size($place) = 3) then fn:count($expertises//sessions[date[@type = 'paris'] and date[@type = 'suburbs'] and date[@type = 'province']])
 };
+
 
 
 declare function getDistribution($seq, $step, $max) {
