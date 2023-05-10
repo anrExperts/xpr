@@ -2082,6 +2082,11 @@ function getExpertisesStatistics($year) {
       return [$i, $j]
     return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
 
+  let $objects :=
+      let $types := fn:distinct-values(db:open('xpr')/xpr/expertises/expertise/description/procedure/objects/object/@type)
+      for $type in $types
+      let $label := (db:open('xpr')/xpr/expertises/expertise/description/procedure/objects/object[@type = $type])[1] => fn:normalize-space()
+      return [$type, $label]
 
   let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
   let $appendiceTypes :=
@@ -2154,7 +2159,22 @@ function getExpertisesStatistics($year) {
             for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
             return map{
               "framework" : $framework,
-              "total" : fn:count($cases[description/procedure/framework[@type=$framework]])
+              "total" : fn:count($cases[description/procedure/framework[@type=$framework]]),
+              "places" : array{
+                for $place in $places
+                return map{
+                  "place" : array{$place},
+                  "total" : countExpertisesByPlaces($cases[description/procedure/framework[@type=$framework]], $place),
+                  "objects" : array{
+                    for $object in $objects
+                    return map{
+                      "object" : array:get($object, 1),
+                      "label" : array:get($object, 2),
+                      "total" : ''
+                    }
+                  }
+                }
+              }
             }
           }
         }
