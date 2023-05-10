@@ -4,7 +4,15 @@ XPR est un outil de dépouillement de sources archivistiques basé sur des techn
 
 Les données archivistiques ont été dépouillées à l’aide d’une application développée avec des technologies XML dans le cadre du projet. La base de données XML native [BaseX](https://basex.org) a permis la création d’une API REST développée en [XQuery](https://www.w3.org/XML/Query/) qui soutient l’ensemble du travail. Plusieurs formulaires dynamiques ont été développés avec [XForms](https://www.w3.org/TR/xforms11/) afin de permettre la mise à jour des dépouillements, de pouvoir renseigner la prosopographie et pour disposer de formulaires spécifiques pour le traitement de certaines sources telles que les inventaires après décès ou des annuaires. Cette application permet à l’équipe de partager les données au fur et à mesure de la réalisation du travail et de publier les résultats avant d’avoir terminé les dépouillements. L’utilisation de la base de données permet également de faire des requêtes riches pour des usages statistiques, des analyses de réseau ou pour produire des visualisations dynamiques.
 
+### Bibliographie
+
+- Château-Dutier, Emmanuel, et Josselin Morvan. 2021. « Un outil de dépouillement de sources archivistiques basé sur des technologies XML ». Dans *Colloque Humanistica 2021 - Recueil des résumés*. , 78‑80. Rennes, 10-12 mai 2021 (France). https://doi.org/10.5281/zenodo.4745006.
+
 ## Documentation
+
+### Licence
+
+GNU General Public License
 
 ### Dépendances
 
@@ -14,7 +22,8 @@ Les données archivistiques ont été dépouillées à l’aide d’une applicat
 ### Installation
 
 - Cloner le répertoire et placer dans le répertoire `webapp` de BaseX
-- Lancer BaseX avec basexhttp
+- Lancer BaseX avec le script d’exécution `bin/basexhttp`
+- Installer les données du projet (https://github.com/anrExperts/data)
 - Accéder à l’application sur le localhost de basexhttp
 
 ## L’ANR Experts
