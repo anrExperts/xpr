@@ -890,3 +890,7 @@ ul#list li:nth-child(odd):hover {
     display: inline;
     content: '∞ ';
 }
+
+.invalid:after {
+    content: " ×";
+}

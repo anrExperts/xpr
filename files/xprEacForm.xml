@@ -4610,7 +4610,7 @@
                         <xf:select1 ref="eac:part[@localType='xprRef']">
                             <xf:label>Identifiant base de données Experts</xf:label>
                             <xf:itemset nodeset="instance('xprEntities')/xpr:entity">
-                                <xf:label ref="xpr:label"/>
+                                <xf:label><xf:output value="concat(xpr:label, ' - ', @type)" /></xf:label>
                                 <xf:value value="concat('#', @xml:id)"/>
                             </xf:itemset>
                         </xf:select1>
@@ -5590,6 +5590,38 @@
             <xf:textarea ref=".">
                 <xf:label>Commentaire sur le formulaire</xf:label>
             </xf:textarea>
+        </xf:group>
+    </xf:case>
+    <xf:case id="validationPanel" selected="false">
+        <xf:group ref="eac:control">
+        <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">control</xf:label>
+        </xf:group>
+        <xf:group ref="eac:cpfDescription">
+            <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">cpfDescription</xf:label>
+            <xf:group ref="eac:identity">
+                <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">Identité</xf:label>
+            </xf:group>
+            <xf:group ref="eac:description">
+                <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">Description</xf:label>
+                <xf:group ref="eac:functions">
+                    <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">Functions</xf:label>
+                </xf:group>
+                <xf:group ref="eac:occupations">
+                    <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">occupations</xf:label>
+                </xf:group>
+                <xf:group ref="eac:existDates">
+                    <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">existDates</xf:label>
+                </xf:group>
+                <xf:group ref="eac:places">
+                    <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">places</xf:label>
+                </xf:group>
+                <xf:group ref="eac:biogHist">
+                    <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">eac:biogHist</xf:label>
+                </xf:group>
+            </xf:group>
+            <xf:group ref="eac:relations">
+                <xf:label class="{if(is-valid(.), 'valid', 'invalid')}">Relations</xf:label>
+            </xf:group>
         </xf:group>
     </xf:case>
     <xf:trigger>

@@ -45,6 +45,10 @@
         <xf:toggle case="commentPanel" ev:event="DOMActivate" />
     </xf:trigger>
     <xf:trigger>
+        <xf:label>Validation</xf:label>
+        <xf:toggle case="validationPanel" ev:event="DOMActivate" />
+    </xf:trigger>
+    <xf:trigger>
         <xf:label ref="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-control']/tei:div[@type='fullName']"/>
         <xf:toggle case="controlPanel" ev:event="DOMActivate" />
     </xf:trigger>
