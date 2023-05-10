@@ -2170,7 +2170,7 @@ function getExpertisesStatistics($year) {
                     return map{
                       "object" : array:get($object, 1),
                       "label" : array:get($object, 2),
-                      "total" : ''
+                      "total" : countExpertisesByPlaces($cases[description/procedure[framework[@type=$framework]][objects[object/@type=array:get($object, 1)]]], $place)
                     }
                   }
                 }
