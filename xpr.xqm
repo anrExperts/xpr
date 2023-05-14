@@ -2168,7 +2168,7 @@ function getExpertisesStatistics($corpus) {
         "days" : map{
           "total" : fn:sum($duration),
           "averageByExpertise" : fn:sum($duration) div fn:count($expertises),
-          "distributionByDays" : map:merge(getDistribution($duration, 5, 20))
+          "distributionByDays" : array{getDistribution($duration, 5, 20)}
         },
         "sessions" : map{
           "total" : fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']),
