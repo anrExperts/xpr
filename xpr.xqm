@@ -2137,7 +2137,7 @@ function getExpertisesStatistics($corpus) {
       "extent" : map{
         "total" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
         "averageByExpertise" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
-        "extentDistribution" : map:merge(getDistribution($extent, 5, 20))
+        "extentDistribution" : array{getDistribution($extent, 5, 20)}
       },
       "sketches" : map{
         "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
