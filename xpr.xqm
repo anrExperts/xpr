@@ -2026,8 +2026,9 @@ declare
   %output:method('json')
 function getStatistics() {
   let $db := db:open("xpr")
-  let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when))
-  let $expertises := map {
+  let $corpus := $db/xpr/expertises/expertise
+  (:let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when)):)
+  (:let $expertises := map {
     "corpus" : getExpertisesStatistics(""),
     "expertisesByYear" : array{
       for $year in $years
@@ -2035,7 +2036,8 @@ function getStatistics() {
         $year : getExpertisesStatistics($year)
       }
     }
-  }
+  }:)
+  let $expertises := getExpertisesStatistics($corpus)
   let $experts := map{
     "todo" : "todo"
   }
@@ -2045,14 +2047,49 @@ function getStatistics() {
   }
 };
 
+(:~
+ : This resource function produces stats
+ : @return a list of stats on expertises and experts in json
+ :)
+
+(:~
+ : This resource function produces stats
+ : @return a list of stats on expertises and experts in json
+ :)
+declare
+  %rest:path("/xpr/statistics/{$year}")
+  %rest:produces('application/json')
+  %output:media-type('application/json')
+  %output:method('json')
+function getStatisticsByYear($year) {
+  let $db := db:open("xpr")
+  let $corpus := $db/xpr/expertises/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
+  (:let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when)):)
+  (:let $expertises := map {
+    "corpus" : getExpertisesStatistics(""),
+    "expertisesByYear" : array{
+      for $year in $years
+      return map {
+        $year : getExpertisesStatistics($year)
+      }
+    }
+  }:)
+  let $expertises := getExpertisesStatistics($corpus)
+  let $experts := map{
+    "todo" : "todo"
+  }
+  return map{
+    "corpus" : $year,
+    "expertises" : $expertises,
+    "experts" : $experts
+  }
+};
+
 declare
   %output:method('json')
-function getExpertisesStatistics($year) {
+function getExpertisesStatistics($corpus) {
   let $db := db:open('xpr')
-  let $year := fn:string($year)
-  let $expertises := (if($year = "")
-    then $db/xpr/expertises/expertise
-    else $db/xpr/expertises/expertise[descendant::sessions/date[@when castable as xs:date][fn:starts-with(@when, $year)]])
+  let $expertises := $corpus
 
   let $sessionPlaces :=
     for $place in fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
