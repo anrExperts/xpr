@@ -359,6 +359,7 @@ declare function getExpertsDataXML($queryParam as map(*), $content as map(*)) as
 
 declare function getExpertsDataCSV($queryParam as map(*), $content as map(*)) as element() {
 let $experts := $content?experts
+let $year := $queryParam?year
 return
   <csv>
     <record>
@@ -388,12 +389,25 @@ return
                 case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
                 case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
                 default return 'unknown'
+        let $function :=
+          for $function in $functions/*:function[*:term = 'Expert bourgeois' or *:term = 'Expert entrepreneur' or *:term = 'Arpenteur']
+          where
+            $function/*:date[fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) = $year] or
+            $function/*:dateRange[fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) <= $year][*:toDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) >= $year]
+          return $function
+
+        let $col :=
+          switch ($function)
+            case ($function[*:term = 'Expert bourgeois']) return 'architecte'
+            case ($function[*:term = 'Expert entrepreneur']) return 'entrepreneur'
+            case ($function[*:term = 'Arpenteur']) return 'arpenteur'
+            default return 'unknown'
     return
     <record>
         <cell>{$expert/@xml:id => fn:normalize-space()}</cell>
         <cell>{$name}</cell>
         <cell>{$surname}</cell>
-        <cell>{$column}</cell>
+        <cell>{$col}</cell>
         <cell>{$birth}</cell>
         <cell>{$death}</cell>
         <cell>{$age}</cell>
