@@ -396,7 +396,7 @@ return
             $function/*:dateRange[fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) <= $year][*:toDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) >= $year]
           return $function
 
-        let $col :=
+        let $col := for $f in $function return
           switch ($function)
             case ($function[*:term = 'Expert bourgeois']) return 'architecte'
             case ($function[*:term = 'Expert entrepreneur']) return 'entrepreneur'
