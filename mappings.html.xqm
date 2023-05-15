@@ -553,8 +553,8 @@ declare function getDescription($node as node()*, $options as map(*)) as item()*
       <li>{getSex($node/eac:localDescriptions/eac:localDescription[@localType="sex"], $options)}</li>
     }</ul>
   </div>,
-  getFunctions($node/eac:functions, $options),
-  getBiogHist($node/eac:biogHist, $options)
+  if($node/eac:functions) then getFunctions($node/eac:functions, $options),
+  if($node/eac:functions) then getBiogHist($node/eac:biogHist, $options)
 };
 
 declare function getSex($node as node(), $options as map(*)) as xs:string {
