@@ -393,10 +393,15 @@ return
           for $function in $functions/*:function[*:term = 'Expert bourgeois' or *:term = 'Expert entrepreneur' or *:term = 'Arpenteur']
           where
             $function/*:date[fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) = $year] or
-            $function/*:dateRange[fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) <= $year][*:toDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) >= $year]
+            $function/*:dateRange[*:fromDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) <= $year][*:toDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) >= $year]
           return $function
 
-        let $col := fn:count($function)
+        let $col :=
+          switch ($function)
+            case ($function[*:term = 'Expert bourgeois']) return 'architecte'
+            case ($function[*:term = 'Expert entrepreneur']) return 'entrepreneur'
+            case ($function[*:term = 'Arpenteur']) return 'arpenteur'
+            default return 'unknown'
     return
     <record>
         <cell>{$expert/@xml:id => fn:normalize-space()}</cell>
