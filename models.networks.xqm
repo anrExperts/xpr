@@ -378,7 +378,7 @@ return
         let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[@status='alternative'][1]/*:part[@localType='surname'] => fn:normalize-space()
         let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
         let $death := $expert//*:existDates/*:dateRange/*:toDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
-        let $age := fn:number($queryParam?year) - fn:number(fn:substring($birth, 1, 4))
+        let $age := if(fn:normalize-space($birth) != '') then fn:number($queryParam?year) - fn:number(fn:substring($birth, 1, 4)) else ""
         let $functions := $expert//*:functions
         let $column :=
               switch ($functions)
