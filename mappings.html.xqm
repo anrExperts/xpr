@@ -577,7 +577,7 @@ declare function getFunctions($node as node(), $options as map(*)) as node(){
 
 declare function getFunction($node as node(), $options as map(*)) as node() {
   <div>
-    <p>{$node/eac:term}, de {getDate($node/eac:dateRange, $options)}</p>
+    <p>{$node/eac:term}, de {if($node/eac:dateRange) then getDate($node/eac:dateRange, $options)}</p>
   </div>
   (: @todo prévoir cas où date fixe :)
 };

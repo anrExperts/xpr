@@ -90,7 +90,6 @@ let $listExpert :=
     (:let $expertName := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:nameEntry[*:authorizedForm]/*:part => fn:normalize-space()
     let $expertFunction := $xprDb//*:eac-cpf[@xml:id=$expertId]//*:function[$year >= *:dateRange/*:fromDate/@standardDate and $year <= *:dateRange/*:toDate/@standardDate] => fn:normalize-space():)
     return $prosopo//*:eac[@xml:id=$expertId]
-    (: <expert><id>{$expertId}</id><name>{$expertName}</name><function>{$expertFunction}</function></expert>:)
 
 let $comment :=
     let $countAlmanakExperts := fn:count(fn:distinct-values($almanakExperts))
@@ -369,6 +368,7 @@ return
       <cell>column</cell>
       <cell>birth</cell>
       <cell>death</cell>
+      <cell>age</cell>
       <cell>almanach</cell>
     </record>{
     for $expert in $experts/*:eac
@@ -377,6 +377,7 @@ return
         let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[@status='alternative'][1]/*:part[@localType='surname'] => fn:normalize-space()
         let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
         let $death := $expert//*:existDates/*:dateRange/*:toDate/@*[fn:local-name() = 'when' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
+        let $age := fn:number($queryParam?year) - fn:number(fn:substring($birth, 1, 4))
         let $functions := $expert//*:functions
         let $column :=
               switch ($functions)
@@ -395,6 +396,7 @@ return
         <cell>{$column}</cell>
         <cell>{$birth}</cell>
         <cell>{$death}</cell>
+        <cell>{$age}</cell>
         <cell>almanach</cell>
     </record>
     }
