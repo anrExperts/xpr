@@ -2026,7 +2026,9 @@ declare
   %output:method('json')
 function getStatistics() {
   let $db := db:open("xpr")
-  let $corpus := $db/xpr/expertises/expertise
+  let $expertises := $db/xpr/expertises/expertise
+  (:@todo experts:)
+  let $experts := $db/xpr/bio/*:eac
   (:let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when)):)
   (:let $expertises := map {
     "corpus" : getExpertisesStatistics(""),
@@ -2037,10 +2039,7 @@ function getStatistics() {
       }
     }
   }:)
-  let $expertises := getExpertisesStatistics($corpus)
-  let $experts := map{
-    "todo" : "todo"
-  }
+  let $expertises := getExpertisesStatistics($expertises, $experts)
   return map{
     "expertises" : $expertises,
     "experts" : $experts
@@ -2063,8 +2062,20 @@ declare
   %output:method('json')
 function getStatisticsByYear($year) {
   let $db := db:open("xpr")
-  let $expertises := $db/xpr/expertises/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
-  let $experts := xpr.models.networks:getExpertsByYear(map{"year":$year})//*:eac
+  let $listExpertises := $db/xpr/expertises/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
+  let $listExperts := xpr.models.networks:getExpertsByYear(map{"year":$year})//*:eac
+  let $experts := xpr.models.networks:getFormatedExpertsData(
+    map{
+      "year" : $year,
+      "format" : "xml"
+    },
+    map{
+      "experts" : $listExperts
+    },
+    map{
+
+    }
+  )
   (:let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when)):)
   (:let $expertises := map {
     "corpus" : getExpertisesStatistics(""),
@@ -2075,8 +2086,8 @@ function getStatisticsByYear($year) {
       }
     }
   }:)
-  let $expertises := getExpertisesStatistics($expertises)
-  let $experts := getExpertsStatistics($experts, $expertises, $year)
+  let $expertises := getExpertisesStatistics($listExpertises, $experts)
+  let $experts := getExpertsStatistics($experts, $listExpertises)
   return map{
     "corpus" : $year,
     "expertises" : $expertises,
@@ -2086,7 +2097,7 @@ function getStatisticsByYear($year) {
 
 declare
   %output:method('json')
-function getExpertisesStatistics($corpus) {
+function getExpertisesStatistics($corpus, $experts) {
   let $db := db:open('xpr')
   let $expertises := $corpus
 
@@ -2131,6 +2142,7 @@ function getExpertisesStatistics($corpus) {
     return [$type, $label]
   let $content := map{
     "total" : fn:count($expertises),
+    "thirParty" : fn:count($expertises[description/participants/experts/expert[@context='third-party']]),
     "extent" : map{
       "total" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
       "averageByExpertise" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
@@ -2213,6 +2225,32 @@ function getExpertisesStatistics($corpus) {
         }
       }
     },
+    "experts" : array{
+      let $maxExperts := for $expertise in $expertises return fn:count($expertise/description/participants/experts/expert)
+      for $numExperts in fn:sort(fn:distinct-values($maxExperts))
+        let $affaires := $expertises[description/participants/experts[fn:count(expert) = $numExperts]]
+        let $distrib :=
+          for $expertise in $affaires
+          return
+          <expertise>{
+            for $expert in $expertise/description/participants/experts/expert
+                      return <expert>{$experts/expert[id = $expert/fn:substring-after(@ref, '#')]/column => fn:normalize-space()}</expert>
+          }</expertise>
+      return map{
+        "totalExperts" :  $numExperts,
+        "totalExpertises" : fn:count($affaires),
+        "distribution" : array{
+          if ($numExperts = 1) then for $column in ('architecte', 'entrepreneur') return map{
+            "label" : $column,
+            "total" : fn:count($distrib[expert = $column])
+          }
+          else if ($numExperts = 2) then for $collab in (['architecte', 'architecte'], ['entrepreneur', 'architecte'], ['entrepreneur', 'entrepreneur']) return map{
+            "label" : fn:string-join($collab, ' - '),
+            "total" : fn:count($distrib[expert = array:get($collab, 1)][expert = array:get($collab, 2)])
+          }
+        }
+      }
+    },
     "frameworks" : array{
       for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
       return map{
@@ -2227,13 +2265,59 @@ function getExpertisesStatistics($corpus) {
 
 declare
   %output:method('json')
-function getExpertsStatistics($listExperts, $expertises, $year) {
+function getExpertsStatistics($experts, $expertises) {
   let $db := db:open('xpr')
-  let $experts := $listExperts
+  let $experts := $experts
 
 
   let $content := map{
-    "total" : fn:count($experts)
+    "total" : fn:count($experts/expert),
+    "architects" : fn:count($experts/expert[column = 'architecte']),
+    "entrepreneur" : fn:count($experts/expert[column = 'entrepreneur']),
+    "surveyor" : fn:count($experts/expert[column = 'arpenteur']),
+    "list" : array{
+      for $expert in $experts/expert
+      let $affaires := $expertises[description/participants/experts[expert[fn:substring-after(@ref, '#') = fn:normalize-space($expert/id)]]]
+      let $collaborations := $affaires[description/participants/experts[fn:count(expert) > 1]]
+      return map{
+        "id" : $expert/id => fn:normalize-space(),
+        "name" : $expert/name => fn:normalize-space(),
+        "surname" : $expert/surname => fn:normalize-space(),
+        "birth" : $expert/birth => fn:normalize-space(),
+        "death" : $expert/death => fn:normalize-space(),
+        "age" : $expert/age => fn:normalize-space(),
+        "column" : $expert/column => fn:normalize-space(),
+        "expertises" : map{
+          "total" : fn:count($affaires),
+          "thirParty" : fn:count($affaires[description/participants/experts[expert[@context = 'third-party'][fn:substring-after(@ref, '#') = fn:normalize-space($expert/id)]]]),
+          "collab" : map{
+            "total" : fn:count($collaborations),
+            "experts" : array{
+              for $collab in fn:distinct-values($collaborations/description/participants/experts/expert[fn:substring-after(@ref, '#') != fn:normalize-space($expert/id)]/@ref)
+              let $id := fn:substring-after($collab, '#')
+              let $expertData := $experts/expert[id = $id]
+              let $totalCollab := $collaborations[description/participants/experts[expert[fn:substring-after(@ref, '#') != fn:normalize-space($expert/id)]][expert[@ref = $collab]]]
+              return map{
+                "id" : $id,
+                "name" : $expertData/name => fn:normalize-space(),
+                "column" : $expertData/column => fn:normalize-space(),
+                "age" : $expertData/age => fn:normalize-space(),
+                "totalCollab" : fn:count($totalCollab)
+              }
+            }
+          },
+          "categories" : array{
+            for $category in fn:distinct-values($expertises/description/categories/category/@type)
+            let $cases := $affaires[description/categories[fn:count(category) = 1][category[@type = $category]]]
+            return map{
+              "category" : $category,
+              "label" : ($expertises/description/categories/category[@type=$category])[1] => fn:normalize-space(),
+              "total" : fn:count($cases)
+            }
+          }
+        }
+      }
+    }
   }
   return $content
 };

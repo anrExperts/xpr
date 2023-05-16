@@ -354,7 +354,53 @@ if ($queryParam?format = 'xml')
 };
 
 declare function getExpertsDataXML($queryParam as map(*), $content as map(*)) as element() {
-    $content?experts
+let $experts := $content?experts
+let $year := $queryParam?year
+return
+  <listExpert>{
+    for $expert in $experts
+        order by $expert/@xml:id
+        let $name := $expert//*:cpfDescription/*:identity/*:nameEntry[@preferredForm='true']/*:part => fn:normalize-space()
+        let $surname := $expert//*:cpfDescription/*:identity/*:nameEntry[@status='alternative'][1]/*:part[@localType='surname'] => fn:normalize-space()
+        let $birth := $expert//*:existDates/*:dateRange/*:fromDate/@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
+        let $death := $expert//*:existDates/*:dateRange/*:toDate/@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notAfter' or fn:local-name() = 'notBefore'] => fn:normalize-space()
+        let $age := if(fn:normalize-space($birth) != '') then fn:number($queryParam?year) - fn:number(fn:substring($birth, 1, 4)) else ""
+        let $functions := $expert//*:functions
+        let $column :=
+              switch ($functions)
+                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+                case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+                case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+                default return 'unknown'
+        let $function :=
+          for $function in $functions/*:function[*:term = 'Expert bourgeois' or *:term = 'Expert entrepreneur' or *:term = 'Arpenteur']
+          where
+            $function/*:date[fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) = $year] or
+            $function/*:dateRange[*:fromDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) <= $year][*:toDate/fn:substring(@*[fn:local-name() = 'standardDate' or fn:local-name() = 'notBefore' or fn:local-name() = 'notAfter'], 1, 4) >= $year]
+          return $function
+
+        let $col :=
+          switch ($function)
+            case ($function[*:term = 'Expert bourgeois']) return 'architecte'
+            case ($function[*:term = 'Expert entrepreneur']) return 'entrepreneur'
+            case ($function[*:term = 'Arpenteur']) return 'arpenteur'
+            default return 'unknown'
+    return
+    <expert>
+        <id>{$expert/@xml:id => fn:normalize-space()}</id>
+        <name>{$name}</name>
+        <surname>{$surname}</surname>
+        <column>{$col}</column>
+        <birth>{$birth}</birth>
+        <death>{$death}</death>
+        <age>{$age}</age>
+        <almanach>almanach</almanach>
+    </expert>
+    }
+  </listExpert>
 };
 
 declare function getExpertsDataCSV($queryParam as map(*), $content as map(*)) as element() {
