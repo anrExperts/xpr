@@ -2142,7 +2142,11 @@ function getExpertisesStatistics($corpus, $experts) {
     return [$type, $label]
   let $content := map{
     "total" : fn:count($expertises),
-    "thirParty" : fn:count($expertises[description/participants/experts/expert[@context='third-party']]),
+    "thirdParty" : map{
+      "total" : fn:count($expertises[description/participants/experts/expert[@context='third-party']]),
+      "architectes" : fn:count($expertises[description/participants/experts/expert[@context='third-party'][fn:substring-after(@ref, '#') = $experts/expert[column='architecte']/id]]),
+      "entrepreneurs" : fn:count($expertises[description/participants/experts/expert[@context='third-party'][fn:substring-after(@ref, '#') = $experts/expert[column='entrepreneur']/id]])
+    },
     "extent" : map{
       "total" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
       "averageByExpertise" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
