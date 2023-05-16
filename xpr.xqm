@@ -2063,7 +2063,8 @@ declare
   %output:method('json')
 function getStatisticsByYear($year) {
   let $db := db:open("xpr")
-  let $corpus := $db/xpr/expertises/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
+  let $expertises := $db/xpr/expertises/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
+  let $experts := xpr.models.networks:getExpertsByYear(map{"year":$year})//*:eac
   (:let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when)):)
   (:let $expertises := map {
     "corpus" : getExpertisesStatistics(""),
@@ -2074,10 +2075,8 @@ function getStatisticsByYear($year) {
       }
     }
   }:)
-  let $expertises := getExpertisesStatistics($corpus)
-  let $experts := map{
-    "todo" : "todo"
-  }
+  let $expertises := getExpertisesStatistics($expertises)
+  let $experts := getExpertsStatistics($experts, $expertises, $year)
   return map{
     "corpus" : $year,
     "expertises" : $expertises,
@@ -2130,101 +2129,111 @@ function getExpertisesStatistics($corpus) {
     for $type in fn:distinct-values($expertises//sourceDesc/physDesc/appendices/appendice/type/@type[fn:normalize-space(.)!=''])
     let $label := if($type!='other') then ($expertises//type[@type=$type])[1] => fn:normalize-space() else 'Autre'
     return [$type, $label]
-  let $prosopo := $db/xpr/bio
   let $content := map{
-    "expertises" : map{
-      "total" : fn:count($expertises),
-      "extent" : map{
-        "total" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
-        "averageByExpertise" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
-        "extentDistribution" : array{getDistribution($extent, 5, 20)}
-      },
-      "sketches" : map{
-        "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
-        "expertisesWithoutSketch" : fn:count($expertises[descendant::extent[@sketch != 'true']])
-      },
-      "appendices" : map{
-        "total" : fn:count($expertises/sourceDesc/physDesc/appendices/appendice[fn:normalize-space(.)!='']),
-        "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices[fn:normalize-space(.)!='']]),
-        "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices[fn:normalize-space(.)!=''])]),
-        "types" : array{ for $type in $appendiceTypes return  map{
-          "type" : array:get($type, 1),
-          "label" : array:get($type, 2),
-          "total" : fn:count($expertises//appendice[type/@type=array:get($type, 1)]),
-          "expertises" : fn:count($expertises[sourceDesc/physDesc/appendices/appendice/type/@type=$type])
-          (:"extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),:)
-        }}
+    "total" : fn:count($expertises),
+    "extent" : map{
+      "total" : fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']),
+      "averageByExpertise" : fn:round(fn:sum($expertises/sourceDesc/physDesc/extent[fn:normalize-space(.)!='']) div fn:count($expertises), 2),
+      "extentDistribution" : array{getDistribution($extent, 5, 20)}
+    },
+    "sketches" : map{
+      "expertisesWithSketch" : fn:count($expertises[descendant::extent[@sketch = 'true']]),
+      "expertisesWithoutSketch" : fn:count($expertises[descendant::extent[@sketch != 'true']])
+    },
+    "appendices" : map{
+      "total" : fn:count($expertises/sourceDesc/physDesc/appendices/appendice[fn:normalize-space(.)!='']),
+      "expertisesWithAppendices" : fn:count($expertises[sourceDesc/physDesc/appendices[fn:normalize-space(.)!='']]),
+      "expertisesWithoutAppendices" : fn:count($expertises[fn:not(sourceDesc/physDesc/appendices[fn:normalize-space(.)!=''])]),
+      "types" : array{ for $type in $appendiceTypes return  map{
+        "type" : array:get($type, 1),
+        "label" : array:get($type, 2),
+        "total" : fn:count($expertises//appendice[type/@type=array:get($type, 1)]),
+        "expertises" : fn:count($expertises[sourceDesc/physDesc/appendices/appendice/type/@type=$type])
+        (:"extent" : fn:sum($expertises/sourceDesc/physDesc/appendices/appendice/extent[fn:normalize-space(.)!='']),:)
+      }}
+    },
+    "sessions" : map{
+      "total" : fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']),
+      "averageByExpertise" : fn:round(fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises), 2),
+      "places" : array{ for $place in $sessionPlaces return map{
+        "place" : array:get($place, 1),
+        "label" : array:get($place, 2),
+        "total" : fn:count($expertises/description/sessions/date[@type=array:get($place, 1)])
+      }}
+    },
+    "duration" : map{
+      "days" : map{
+        "total" : fn:sum($duration),
+        "averageByExpertise" : fn:sum($duration) div fn:count($expertises),
+        "distributionByDays" : array{getDistribution($duration, 5, 20)}
       },
       "sessions" : map{
-        "total" : fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']),
-        "averageByExpertise" : fn:round(fn:count($expertises//sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises), 2),
-        "places" : array{ for $place in $sessionPlaces return map{
-          "place" : array:get($place, 1),
-          "label" : array:get($place, 2),
-          "total" : fn:count($expertises/description/sessions/date[@type=array:get($place, 1)])
-        }}
-      },
-      "duration" : map{
-        "days" : map{
-          "total" : fn:sum($duration),
-          "averageByExpertise" : fn:sum($duration) div fn:count($expertises),
-          "distributionByDays" : array{getDistribution($duration, 5, 20)}
+        "total" : fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']),
+        "averageByExpertise" : fn:round((fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2)
+      }
+    },
+    (:@todo revoir avec EC le fonctionnement + fonction:)
+    "places" : array{
+      for $place in $places
+      return map{
+        "place" : array{
+          $place
         },
-        "sessions" : map{
-          "total" : fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']),
-          "averageByExpertise" : fn:round((fn:count($expertises/description/sessions/date[fn:normalize-space(@when)!='']) div fn:count($expertises)) div 2, 2)
-        }
-      },
-      (:@todo revoir avec EC le fonctionnement + fonction:)
-      "places" : array{
-        for $place in $places
-        return map{
-          "place" : array{
-            $place
-          },
-          "total" : countExpertisesByPlaces($expertises, $place)
-        }
-      },
-      "categories" : array{
-        for $category in fn:distinct-values($expertises/description/categories/category/@type)
-        let $cases := $expertises[description/categories[fn:count(category) = 1][category[@type = $category]]]
-        return map{
-          "category" : $category,
-          "label" : ($expertises/description/categories/category[@type=$category])[1] => fn:normalize-space(),
-          "total" : fn:count($cases),
-          "frameworks" : array{
-            for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
-            return map{
-              "framework" : $framework,
-              "total" : fn:count($cases[description/procedure/framework[@type=$framework]]),
-              "places" : array{
-                for $place in $places
-                return map{
-                  "place" : array{$place},
-                  "total" : countExpertisesByPlaces($cases[description/procedure/framework[@type=$framework]], $place),
-                  "objects" : array{
-                    for $object in $objects
-                    return map{
-                      "object" : array:get($object, 1),
-                      "label" : array:get($object, 2),
-                      "total" : countExpertisesByPlaces($cases[description/procedure[framework[@type=$framework]][objects[object/@type=array:get($object, 1)]]], $place)
-                    }
+        "total" : countExpertisesByPlaces($expertises, $place)
+      }
+    },
+    "categories" : array{
+      for $category in fn:distinct-values($expertises/description/categories/category/@type)
+      let $cases := $expertises[description/categories[fn:count(category) = 1][category[@type = $category]]]
+      return map{
+        "category" : $category,
+        "label" : ($expertises/description/categories/category[@type=$category])[1] => fn:normalize-space(),
+        "total" : fn:count($cases),
+        "frameworks" : array{
+          for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
+          return map{
+            "framework" : $framework,
+            "total" : fn:count($cases[description/procedure/framework[@type=$framework]]),
+            "places" : array{
+              for $place in $places
+              return map{
+                "place" : array{$place},
+                "total" : countExpertisesByPlaces($cases[description/procedure/framework[@type=$framework]], $place),
+                "objects" : array{
+                  for $object in $objects
+                  return map{
+                    "object" : array:get($object, 1),
+                    "label" : array:get($object, 2),
+                    "total" : countExpertisesByPlaces($cases[description/procedure[framework[@type=$framework]][objects[object/@type=array:get($object, 1)]]], $place)
                   }
                 }
               }
             }
           }
         }
-      },
-      "frameworks" : array{
-        for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
-        return map{
-          "framework" : $framework,
-          "label" : ($expertises/description/procedure/framework[@type=$framework])[1] => fn:normalize-space(),
-          "total" : fn:count($expertises[description/procedure[framework[@type = $framework]]])
-        }
+      }
+    },
+    "frameworks" : array{
+      for $framework in fn:distinct-values($expertises/description/procedure/framework/@type)
+      return map{
+        "framework" : $framework,
+        "label" : ($expertises/description/procedure/framework[@type=$framework])[1] => fn:normalize-space(),
+        "total" : fn:count($expertises[description/procedure[framework[@type = $framework]]])
       }
     }
+  }
+  return $content
+};
+
+declare
+  %output:method('json')
+function getExpertsStatistics($listExperts, $expertises, $year) {
+  let $db := db:open('xpr')
+  let $experts := $listExperts
+
+
+  let $content := map{
+    "total" : fn:count($experts)
   }
   return $content
 };
