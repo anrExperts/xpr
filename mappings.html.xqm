@@ -594,7 +594,7 @@ declare function getChronList($node as node(), $options as map(*)) as node()* {
   return
     <div>
       <h5>{$chronItem/eac:event => fn:normalize-space()}</h5>
-      <p>Date : { getDate($chronItem/*[fn:local-name() = 'date' or fn:local-name() = 'dateRange'], $options) }</p>
+      <p>Date : { if($chronItem/*[fn:local-name() = 'date' or fn:local-name() = 'dateRange']) then getDate($chronItem/*[fn:local-name() = 'date' or fn:local-name() = 'dateRange'], $options) }</p>
     </div>
 };
 
