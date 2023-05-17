@@ -548,7 +548,7 @@ declare function getDescription($node as node()*, $options as map(*)) as item()*
   <div>
     <h4>Description</h4>
     <ul>{
-      getExistDates($node/eac:existDates, $options),
+      if($node/eac:existDates) then getExistDates($node/eac:existDates, $options),
       if(fn:normalize-space($node/eac:localDescriptions/eac:localDescription[@localType="sex"]) != '') then
       <li>{getSex($node/eac:localDescriptions/eac:localDescription[@localType="sex"], $options)}</li>
     }</ul>
