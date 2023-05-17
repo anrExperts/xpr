@@ -2232,7 +2232,7 @@ function getExpertisesStatistics($corpus, $experts) {
     "experts" : array{
       let $maxExperts := for $expertise in $expertises return fn:count($expertise/description/participants/experts/expert)
       for $numExperts in fn:sort(fn:distinct-values($maxExperts))
-        let $affaires := $expertises[description/participants/experts[fn:count(expert) = $numExperts]]
+        let $affaires := $expertises[description/participants/experts[fn:not(expert[@context='third-party'])][fn:count(expert) = $numExperts]]
         let $distrib :=
           for $expertise in $affaires
           return
@@ -2250,7 +2250,8 @@ function getExpertisesStatistics($corpus, $experts) {
           }
           else if ($numExperts = 2) then for $collab in (['architecte', 'architecte'], ['entrepreneur', 'architecte'], ['entrepreneur', 'entrepreneur']) return map{
             "label" : fn:string-join($collab, ' - '),
-            "total" : fn:count($distrib[expert = array:get($collab, 1)][expert = array:get($collab, 2)])
+            "total" : if(array:get($collab, 1) = array:get($collab, 2)) then fn:count($distrib[expert[1] = array:get($collab, 1)][expert[2] = array:get($collab, 2)])
+                      else fn:count($distrib[expert[1] = array:get($collab, 1)][expert[2] = array:get($collab, 2)]) + fn:count($distrib[expert[1] = array:get($collab, 2)][expert[2] = array:get($collab, 1)])
           }
         }
       }
@@ -2726,7 +2727,8 @@ function xpr.xpr:query($term) {
               </thead>
               <tbody>
               {
-                for $expertise in $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
+                let $listExpertises := $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
+                for $expertise in $listExpertises
                 order by $expertise/@xml:id
                 return
                 <tr>
