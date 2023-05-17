@@ -2727,6 +2727,7 @@ function xpr.xpr:query($term) {
               <tbody>
               {
                 for $expertise in $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
+                order by $expertise/@xml:id
                 return
                 <tr>
                   <td>
