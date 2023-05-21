@@ -2302,7 +2302,7 @@ function getExpertsStatistics($experts, $expertises) {
               let $id := fn:substring-after($collab, '#')
               let $expertData := $experts/expert[id = $id]
               let $totalCollab := $collaborations[description/participants/experts[expert[fn:substring-after(@ref, '#') != fn:normalize-space($expert/id)]][expert[@ref = $collab]]]
-              order by $totalCollab
+              order by fn:count($totalCollab)
               return map{
                 "id" : $id,
                 "name" : $expertData/name => fn:normalize-space(),
