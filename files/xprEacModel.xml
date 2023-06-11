@@ -42,6 +42,7 @@
     <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:identity/eac:entityType/@value" required="true()"/>
 
     <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:relations/eac:relation/eac:targetEntity/eac:part/@localType" readonly="true()"/>
+    <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:relations/eac:relation/eac:targetEntity/eac:part[@localType='xprRef']" readonly="true()"/>
 
     <!--@rmq eac:part "cannot be empty and requires at least one non-whitespace character, such as a hyphen, if no actual name can be given." -->
     <xf:bind nodeset="instance('eacInstance')/eac:cpfDescription/eac:identity//eac:part" type="eac:part"/>
@@ -894,19 +895,18 @@
         <xf:setvalue if="//eac:targetRole[@target=''][preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]" ref="//@target[.=''][parent::eac:targetRole[preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]]" value="concat('#', event('response'))"/>
     </xf:action>
 
-    <!--<xf:instance id="isearch">
-        <root xmlns="">
-            <search/>
-        </root>
-    </xf:instance>
-    <xf:instance id="iresults">
-        <root xmlns=""/>
+    <xf:instance id="query">
+        <query xmlns=""/>
     </xf:instance>
 
-    <xf:submission id="getWord" method="get" replace="instance" instance="iresults" serialization="none" mode="synchronous">
-        <xf:resource value="concat('/xpr/search/bio/',instance('isearch')/search)"/>
+    <xf:instance id="results">
+        <results xmlns=""/>
+    </xf:instance>
+
+    <xf:submission id="getWord" method="get" replace="instance" instance="results" serialization="none" mode="synchronous">
+        <xf:resource value="concat('/xpr/search/bio/',instance('query'))"/>
     </xf:submission>
-    -->
+
     
     <!--<xf:submission id="s1" method="get" replace="instance" instance="iresults" serialization="none" mode="synchronous" mediatype="application/javascript">
         <xf:resource value="concat('http://en.wikipedia.org/w/api.php?action=opensearch&amp;format=json&amp;search=',instance('isearch')/search)"/>

@@ -718,6 +718,33 @@ function getDataXforms() {
 };
 
 (:~
+ : This resource function lists the persons or corporate bodies
+ : @return an xml list of persons/corporate bodies
+ :)
+declare
+  %rest:path("/xpr/search/bio/{$person}")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getTerm($person) {
+  let $prosopo := db:open('xpr')/xpr/bio/eac:eac
+(:
+<cpfDescription>
+<identity>
+<entityType value="person"/>
+<nameEntry sourceReference="" preferredForm="true" status="authorized">
+<part localType="full">Adhenet, Thomas (1690 - ?)</part>
+</nameEntry>
+:)
+  return (
+    <results xmlns="">{
+      for $person in $prosopo[fn:matches(descendant::eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part[@localType='full'], $person, 'i')]
+      return <result xml:id="{$person/@xml:id}">{$person/descendant::eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part[@localType='full'] => fn:normalize-space()}</result>
+    }</results>
+  )
+
+};
+
+(:~
  : Permissions: expertises
  : Checks if the current user is granted; if not, redirects to the login page.
  : @param $perm map with permission data
@@ -2130,7 +2157,7 @@ function getExpertisesStatistics($corpus, $experts) {
     return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
 
   let $objects :=
-      let $types := fn:distinct-values(db:open('xpr')/xpr/expertises/expertise/description/procedure/objects/object/@type)
+      let $types := fn:distinct-values($db/xpr/expertises/expertise/description/procedure/objects/object/@type)
       for $type in $types
       let $label := (db:open('xpr')/xpr/expertises/expertise/description/procedure/objects/object[@type = $type])[1] => fn:normalize-space()
       return [$type, $label]

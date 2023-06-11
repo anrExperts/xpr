@@ -289,3 +289,19 @@ xforms-repeat[xf-bound] + xforms-trigger
 {
     margin-top: 3em;
 }
+
+.autocomplete {
+    top: 25%;
+    left: 25%;
+    width: 50%;
+    height: 50%;
+}
+
+.autocomplete .autocompleteResults > xforms-repeat-item {
+    display: block !important;
+}
+
+input[readonly] {
+    background-color: lightgray;
+    color: gray;
+}
