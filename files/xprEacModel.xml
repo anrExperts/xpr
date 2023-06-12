@@ -22,7 +22,7 @@
 
     <xf:instance id="eacInstance" src="/xpr/files/_xprEacInstance.xml"/>
 
-    <xf:instance id="xprEntities" src="/xpr/entities"/>
+    <!--<xf:instance id="xprEntities" src="/xpr/entities"/>-->
 
     <xf:instance id="getAgent">
         <data xmlns="">

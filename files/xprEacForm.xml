@@ -4651,6 +4651,8 @@
                             </xf:switch>
                             <xf:trigger>
                                 <xf:label>Annuler</xf:label>
+                                <xf:setvalue ev:event="DOMActivate" ref="instance('query')" value="''" />
+                                <xf:delete ev:event="DOMActivate" nodeset="instance('results')/*" />
                                 <xf:hide ev:event="DOMActivate" dialog="xprEntity"/>
                             </xf:trigger>
                         </xf:dialog>
