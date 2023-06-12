@@ -737,7 +737,7 @@ function getTerm($person) {
 :)
   return (
     <results xmlns="">{
-      for $person in $prosopo[fn:matches(fn:normalize-space(eac:cpfDescription/eac:identity), $person, 'i')]
+      for $person in $prosopo[fn:normalize-space(eac:cpfDescription/eac:identity) contains text {$person} using fuzzy]
       return <result xml:id="{$person/@xml:id}">{$person/descendant::eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part[@localType='full'] => fn:normalize-space()}</result>
     }</results>
   )
