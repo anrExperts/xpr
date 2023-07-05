@@ -20,3 +20,4 @@ declare variable $G:xsltFormsPath := "/xpr/files/xsltforms/xsltforms/xsltforms.x
 declare variable $G:xsltForms16Path := "/xpr/files/xsltforms16/xsltforms.xsl" ;
 declare variable $G:home := file:base-dir() ;
 declare variable $G:interface := fn:doc($G:home || "files/interface.xml") ;
+declare variable $G:years := (1696, 1706, 1716, 1726, 1736, 1746, 1756, 1766, 1776, 1786);

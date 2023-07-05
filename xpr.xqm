@@ -257,6 +257,81 @@ function getExpertisesJson($body) {
 
 (:~
  : This resource function lists all the expertises
+ : @return an ordered list of expertises in json
+ : @todo to develop
+ :)
+declare
+  %rest:path("/xpr/expertises/table")
+  (:%rest:POST("{$body}"):)
+  %rest:produces('application/html')
+  %output:method("html")
+function getExpertisesTable() {
+(:  let $body := json:parse( $body, map{"format" : "xquery"}):)
+  let $db := db:open('xpr')
+  let $expertises := $db/xpr/expertises
+  let $prosopo := $db/xpr/bio
+  (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
+  let $dateCount := map:merge(
+    for $group in $expertises/expertise
+    for $year in $group/description/sessions/date/fn:year-from-date(@when[. castable as xs:date])
+    group by $year
+    return map { $year : fn:count($group/self::node()) }
+  )
+  let $experts := map:merge(
+    for $expert in $prosopo/eac:eac[descendant::eac:otherEntityType[fn:normalize-space(eac:term)='expert']]/@xml:id
+    return map { $expert : xpr.mappings.html:getEntityName($expert) }
+  )
+  (:let $meta := map {
+      'start' : $body?start,
+      'count' : $body?count,
+      'totalExpertises' : fn:count($expertises/expertise),
+      'datesCount' : $dateCount,
+      'experts' : $experts
+  }:)
+  let $content :=
+    <table>
+      <tbody>
+        <tr>
+          <th>id</th>
+          <th>Dates</th>
+          <th>Experts</th>
+          <th>Greffiers</th>
+          <th>Cas</th>
+          <th>Tiers expertise</th>
+        </tr>{
+        for $expertise in $expertises/expertise
+        let $dates := fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
+        let $experts :=
+          for $expert in $expertise//experts/expert[fn:normalize-space(@ref)!='']
+          return array{
+            $expert/fn:substring-after(@ref, '#'),
+            xpr.mappings.html:getEntityName($expert/fn:substring-after(@ref, '#'))
+          }
+
+        let $clerks :=
+          for $clerk in $expertise//clerks/clerk[fn:normalize-space(@ref)!='']
+          return array{
+            $clerk/fn:substring-after(@ref, '#'),
+            xpr.mappings.html:getEntityName($clerk/fn:substring-after(@ref, '#'))
+          }
+        return
+          <tr>
+            <td><a href="/xpr/expertises/{fn:normalize-space($expertise/@xml:id)}/view">{fn:normalize-space($expertise/@xml:id)}</a></td>
+            <td>{fn:string-join($dates, ' ; ')}</td>
+            <td>{for $expert at $i in $experts return (<a href="/xpr/biographies/{array:get($expert, 1)}/view">{array:get($expert, 2)}</a>, if(fn:count($experts) > $i) then ' ; ')}</td>
+            <td>{for $clerk at $i in $clerks return (<a href="/xpr/biographies/{array:get($clerk, 1)}/view">{array:get($clerk, 2)}</a>, if(fn:count($clerk) > $i) then ' ; ')}</td>
+            <td>{$expertise//procedure/*[fn:local-name() = 'case']/fn:normalize-space()}</td>
+            <td>{if($expertise//experts/expert[@context='third-party']) then 'true' else 'false'}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+
+  return $content
+};
+
+(:~
+ : This resource function lists all the expertises
  : @return an ordered list of expertises with saxonjs
  :)
 declare 
@@ -1024,6 +1099,70 @@ declare
   %output:method("xml")
 function getBiography($id) {
   db:open('xpr')//eac:eac[eac:control/eac:recordId=$id]
+};
+
+
+
+(:~
+ : This resource function get the activity of an entity
+ : @return an xml/svg representation of the activity
+ : @bug order sessions dates
+ :)
+declare
+  %rest:path("xpr/biographies/{$id}/activity")
+  %rest:produces('application/svg+xml')
+  %output:method("xml")
+function getExpertActivity($id) {
+  let $db := db:open('xpr')
+  let $expertises := $db/xpr/expertises/expertise
+  let $expert := getBiography($id)
+
+  let $length := fn:count($G:years) * 50
+
+  let $activity :=
+    <xpr:activity>{
+      for $year in $G:years
+      return
+        <xpr:year>
+          <xpr:label>{$year}</xpr:label>
+          <xpr:quantity>{fn:count($expertises[description/participants/experts[expert[fn:substring-after(@ref, '#') = $id]]][description/sessions[date[1][fn:matches(@when, xs:string($year), 'i')]]])}</xpr:quantity>
+        </xpr:year>
+    }</xpr:activity>
+
+  let $maxHeight := fn:max($activity//xpr:quantity)
+
+  let $color := "orangered"
+
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <g transform="translate(0,{$maxHeight + 20})">
+        <line x1="0" y1="0" x2="{$length}" y2="0" stroke="purple" stroke-width="1"/>
+        <line x1="0" y1="-{$length}" x2="0" y2="0" stroke="purple" stroke-width="2"/>
+        {for $year at $i in $activity/xpr:year
+        let $xPosition := ($i - 1) * 40
+        let $position := $i
+        return (
+          element rect {
+            attribute x {$xPosition},
+            attribute y {-$year/xpr:quantity},
+            attribute height {$year/xpr:quantity},
+            attribute width {"35"},
+            attribute fill {$color}
+          },
+          element text {
+            attribute x {$xPosition},
+            attribute y {"15"},
+            $year/xpr:label => fn:normalize-space()
+          },
+          element text {
+            attribute x {$xPosition},
+            attribute y {-$year/xpr:quantity + 5},
+            if($year/xpr:quantity > 0) then $year/xpr:quantity => fn:normalize-space()
+          }
+        )}
+      </g>
+    </svg>
+  )
 };
 
 (:~
