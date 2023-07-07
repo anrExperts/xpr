@@ -15,6 +15,7 @@ module namespace xpr.mappings.html = "xpr.mappings.html";
  :
  :)
 
+import module namespace xpr.xpr = "xpr.xpr" at './xpr.xqm' ;
 import module namespace G = 'xpr.globals' at './globals.xqm' ;
 import module namespace functx = "http://www.functx.com";
 import module namespace Session = 'http://basex.org/modules/session';
@@ -252,7 +253,7 @@ declare function getKeywords($node as node()*, $options as map(*)) as element() 
 };
 
 declare function getFee($node as node()*, $options as map(*)) as xs:string {
-  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $prosopo := xpr.xpr:getBiographies()
   let $expertName := fn:normalize-space($prosopo/eac:eac[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
   let $type :=
   switch ($node/@type)
@@ -260,7 +261,7 @@ declare function getFee($node as node()*, $options as map(*)) as xs:string {
     return (
       ('Expert',
       if(fn:normalize-space($node/@ref)!='') then
-        let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+        let $prosopo := xpr.xpr:getBiographies()
         let $expertName := fn:normalize-space($prosopo/eac:eac[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
         return '(' || $expertName || ')')) => fn:string-join(' ')
     case 'clerk' return 'Greffier'
@@ -286,7 +287,7 @@ declare function getValue($node as node()*, $options as map(*)) as xs:string {
 };
 
 declare function getOpinion($node as node()*, $options as map(*)) as node()* {
-  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $prosopo := xpr.xpr:getBiographies()
   let $expertName := fn:normalize-space($prosopo/eac:eac[@xml:id=fn:substring-after($node/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
   let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/@ref)}/view">{ $expertName }</a>
   let $opinion := $node/text()
@@ -323,7 +324,7 @@ declare function getParty($node as node()*, $options as map(*)) as element() {
     case 'true' return 'intervenante'
     case 'false' return 'non intervenante'
     default return ''
-  let $expertName := fn:normalize-space(db:open('xpr')/xpr:xpr/xpr:bio/eac:eac[@xml:id=fn:substring-after($node/xpr:expert/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
+  let $expertName := fn:normalize-space(xpr.xpr:getBiographies()/eac:eac[@xml:id=fn:substring-after($node/xpr:expert/@ref, '#')]/eac:cpfDescription/eac:identity/eac:nameEntry[@status='authorized']/eac:part)
   let $expert := <a href="/xpr/biographies/{fn:normalize-space($node/xpr:expert/@ref)}/view">{ $expertName }</a>
   return
     <div class="party">{
@@ -436,7 +437,7 @@ declare function getAddress($node as node()*, $options as map(*)) as xs:string* 
 };
 
 declare function getExpert($node as node()*, $options as map(*)) as node()* {
-  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $prosopo := xpr.xpr:getBiographies()
   let $expertName := getEntityName(fn:substring-after($node/@ref, '#'))
   let $expert := <a href="/xpr/biographies/{fn:normalize-space(fn:substring-after($node/@ref, '#'))}/view">{ $expertName }</a>
   let $context :=
@@ -495,7 +496,7 @@ declare function getIdentity($node as node()*, $options as map(*)) as node()* {
 };
 
 declare function getEntityName($str as xs:string*) as xs:string {
-  let $prosopo := db:open('xpr')/xpr:xpr/xpr:bio
+  let $prosopo := xpr.xpr:getBiographies()
   let $id := $str
   let $entityName := $prosopo/eac:eac[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true' and @status='authorized'][1]/eac:part/fn:normalize-space()
   return $entityName
@@ -599,8 +600,7 @@ declare function getChronList($node as node(), $options as map(*)) as node()* {
 };
 
 declare function getExpertises($node as node(), $options as map(*)) as node(){
-  let $db := db:open('xpr')
-  let $expertises := $db//*:expertise[descendant::*:experts/*:expert[@ref = fn:concat('#', $node)]]
+  let $expertises := xpr.xpr:getExpertises()/*:expertise[descendant::*:experts/*:expert[@ref = fn:concat('#', $node)]]
   return(
     <div>
       <h4>Expertises</h4>
@@ -708,7 +708,7 @@ function passthru($nodes as node(), $options as map(*)) as item()* {
  :)
 declare function listXpr2html($content, $options) {
   <ul id="list">{
-    for $expertise in $content/xpr:expertise
+    for $expertise in $content//xpr:expertise
     return itemXpr2html($expertise, map{'path' : '/xpr/expertises/'})
   }</ul>
 };

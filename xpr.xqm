@@ -128,7 +128,8 @@ declare
   %rest:produces('application/xml')
   %output:method("xml")
 function getExpertises() {
-  db:open('xpr')/xpr/expertises
+<expertises>{ db:open('xpr', 'xpr/expertises') }</expertises>
+
 };
 
 (:~
@@ -140,11 +141,11 @@ declare
   %rest:path("/xpr/expertises/experts")
   %rest:produces('application/xml')
   %output:method("xml")
-  %rest:query-param('ids', '{$ids}', 'xpr0228')
+  %rest:query-param('ids', '{$ids}', 'xpr0001')
 function getExpertises($ids as xs:string) {
   if($ids) then
-    <xml>{db:open('xpr')/xpr/expertises/expertise[descendant::experts/expert[@ref=$ids]]}</xml>
-  else db:open('xpr')/xpr/expertises
+    <xml>{ db:open('xpr', 'xpr/expertises')/*:expertise[descendant::*:expert/@ref='#'||$ids] }</xml>
+  else db:open('xpr', 'xpr/expertises')
 };
 
 (:~
@@ -209,7 +210,7 @@ declare
 function getExpertisesJson($body) {
   let $body := json:parse( $body, map{"format" : "xquery"})
   let $db := db:open('xpr')
-  let $expertises := $db/xpr/expertises
+  let $expertises := getExpertises()
   let $prosopo := $db/xpr/bio
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
@@ -236,9 +237,7 @@ function getExpertisesJson($body) {
       'dates' : array{
         fn:sort($expertise//sessions/date/fn:normalize-space(@when[. castable as xs:date]))
       },
-      'experts' : array{
-        xpr.mappings.html:getEntityName($expertise//experts/expert[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))
-      },
+      'experts' : array{ for $expert in $expertise//experts/expert[fn:normalize-space(@ref)!=''] return xpr.mappings.html:getEntityName($expert/fn:substring-after(@ref, '#'))},
       'expertsId' : array{
         $expertise//participants/experts/expert[fn:normalize-space(@ref)!='']/fn:normalize-space(@ref)
       },
@@ -340,7 +339,7 @@ declare
   %output:method("html")
 function getExpertisesSaxon() {
   let $content := map {
-    'data' : db:open('xpr')//expertise,
+    'data' : db:open('xpr', 'xpr/expertises'),
     'trigger' : '',
     'form' : ''
   }
@@ -359,7 +358,7 @@ declare
   %rest:path("xpr/expertises/{$id}")
   %output:method("xml")
 function getExpertise($id) {
-  db:open('xpr')//expertise[@xml:id=$id]
+  db:open('xpr', 'xpr/expertises')/expertise[@xml:id=$id]
 };
 
 (:~
@@ -396,7 +395,7 @@ declare
   %output:method("html")
 function getExpertiseSaxon($id) {
   let $content := map {
-    'data' : db:open('xpr')//expertise[@xml:id=$id],
+    'data' : getExpertise($id),
     'trigger' : '',
     'form' : ''
   }
@@ -418,7 +417,7 @@ declare
   %output:media-type('application/json')
   %output:method('json')
 function getExpertiseJson($id) {
-  let $expertise := db:open('xpr')//expertise[@xml:id=$id]
+  let $expertise := getExpertise($id)
   let $meta := map{
     'id' : fn:normalize-space($expertise/@xml:id),
     'cote' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
@@ -694,7 +693,12 @@ function putExpertise($param, $referer) {
         )
         return $d
       return (
-        replace node $db/xpr/expertises/expertise[@xml:id = $location] with $param,
+      (:
+        @rmq avec db:replace, l'ordre des arguments est à l'inverse de db:add : d'abord l'ancien fichier, puis le nouveau
+        avec Basex 10.x, db:replace devient db:put, et l'ordre est aligné avec db:add
+      :)
+        db:replace('xpr', 'xpr/expertises/'|| $location ||'.xml', $param),
+        db:rename("xpr", 'xpr/expertises/'|| $location ||'.xml', 'xpr/expertises/'|| $id ||'.xml'),
         update:output(
          (
           <rest:response>
@@ -727,7 +731,7 @@ function putExpertise($param, $referer) {
         )
         return $d
       return (
-        insert node $param into $db/xpr/expertises,
+        db:add('xpr', $param, 'xpr/expertises/'|| $id ||'.xml'),
         update:output(
          (
           <rest:response>
@@ -769,7 +773,7 @@ declare
   %rest:produces('application/xml')
   %output:method("xml")
 function getBiographies() {
-  db:open('xpr')/xpr/bio
+  <bio>{ db:open('xpr', 'xpr/biographies') }</bio>
 };
 
 (:~
@@ -784,10 +788,11 @@ function getDataXforms() {
   let $id := request:parameter('data')
   let $param := request:parameter('param')
   let $db := db:open('xpr')
+  let $biographies := getBiographies()
   return (
     if($id = 'getSourceId') then <source localType="new" xml:id="{'xprSource' || fn:generate-id($db)}"/>
     else if ($param = 'getAgent') then <agent xmlns="">{fn:normalize-space(user:list-details(Session:get('id'))/@name)}</agent>
-    else $db/xpr/bio/eac:eac-cpf[@xml:id = $id]
+    else $biographies/bio/eac:eac[@xml:id = $id]
   )
 
 };
@@ -801,15 +806,7 @@ declare
   %rest:produces('application/xml')
   %output:method("xml")
 function getTerm($person) {
-  let $prosopo := db:open('xpr')/xpr/bio/eac:eac
-(:
-<cpfDescription>
-<identity>
-<entityType value="person"/>
-<nameEntry sourceReference="" preferredForm="true" status="authorized">
-<part localType="full">Adhenet, Thomas (1690 - ?)</part>
-</nameEntry>
-:)
+  let $prosopo := getBiographies()/eac:eac
   return (
     <results xmlns="">{
       for $person in $prosopo[fn:normalize-space(eac:cpfDescription/eac:identity) contains text {$person} all words using fuzzy]
@@ -898,7 +895,7 @@ declare
   %output:method("html")
 function getEntitiesListSaxon() {
   let $content := map {
-    'data' : db:open('xpr')//bio,
+    'data' : getBiographies(),
     'trigger' : '',
     'form' : ''
   }
@@ -920,8 +917,7 @@ declare
   %output:method('json')
 function getBiographiesJson($body) {
   let $body := json:parse( $body, map{"format" : "xquery"})
-  let $db := db:open('xpr')
-  let $biographies := $db/xpr/bio
+  let $biographies := getBiographies()
 
   let $meta := map {
     'start' : $body?start,
@@ -975,18 +971,17 @@ declare
   %output:media-type('application/json')
   %output:method('json')
 function getBiographyJson($id) {
-  let $db := db:open('xpr')
-  let $biography := $db/xpr/bio/eac:eac[@xml:id=$id]
-  let $expertises := $db/xpr/expertises/expertise[descendant::experts/expert[@ref = '#' || $biography/@xml:id]]
+  let $biography := xpr.xpr:getBiography($id)
+  let $expertises := getExpertises()/expertise[descendant::experts/expert[@ref = '#' || $id]]
   let $meta := map {}
   let $content := map{
-    'id' : fn:normalize-space($biography/@xml:id),
-    'authorizedForm' : xpr.mappings.html:getEntityName($biography/@xml:id),
-    'alternativeForms' : if($biography/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm != 'true'][fn:normalize-space(.)!='']) then array{
-      for $alternativeForm in $biography/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm != 'true'][fn:normalize-space(.)!='']
+    'id' : fn:normalize-space($biography/eac:eac/eac:control/eac:recordId),
+    'authorizedForm' : xpr.mappings.html:getEntityName(fn:normalize-space($biography/eac:eac/@xml:id)),
+    'alternativeForms' : if($biography/eac:eac/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm != 'true'][fn:normalize-space(.)!='']) then array{
+      for $alternativeForm in $biography/eac:eac/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm != 'true'][fn:normalize-space(.)!='']
       return
       map:merge((
-          map{'sources' : array{xpr.mappings.html:getSources($alternativeForm/@sourceReference, $biography/eac:control/eac:sources, map{})}},
+          map{'sources' : array{xpr.mappings.html:getSources($alternativeForm/@sourceReference, $biography/eac:eac/eac:control/eac:sources, map{})}},
           map{'parts' : array{
             for $part in $alternativeForm/eac:part
             let $d := xpr.mappings.html:getPart($part, map{})
@@ -995,8 +990,8 @@ function getBiographyJson($id) {
           }}
       ))
     },
-    'existDates' : xpr.mappings.html:getEacDates($biography/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange, $biography/eac:control/eac:sources, map{}),
-    'sex' : $biography/eac:cpfDescription/eac:description/eac:localDescriptions/eac:localDescription[@localType='sex']/eac:term => fn:normalize-space(),
+    'existDates' : xpr.mappings.html:getEacDates($biography/eac:eac/eac:cpfDescription/eac:description/eac:existDates/eac:dateRange, $biography/eac:eac/eac:control/eac:sources, map{}),
+    'sex' : $biography/eac:eac/eac:cpfDescription/eac:description/eac:localDescriptions/eac:localDescription[@localType='sex']/eac:term => fn:normalize-space(),
     (:'places' : if($biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']) then array{
       for $place in $biography/eac:cpfDescription/eac:description/eac:places/eac:place[fn:normalize-space(.)!='']
       return map{
@@ -1029,44 +1024,44 @@ function getBiographyJson($id) {
         'note' : $place/eac:descriptiveNote/eac:p => fn:normalize-space()
       }
     },:)
-    'occupations' : if($biography/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']) then array{
-      for $occupation in $biography/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']
+    'occupations' : if($biography/eac:eac/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']) then array{
+      for $occupation in $biography/eac:eac/eac:cpfDescription/eac:description/eac:occupations/eac:occupation[fn:normalize-space(.)!='']
       return map{
         'occupation' : $occupation/eac:term => fn:normalize-space(),
-        'dates' : if($occupation/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then array { xpr.mappings.html:getEacDates($occupation/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources, map{})},
-        'sources' : if(fn:normalize-space($occupation/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($occupation/@sourceReference, $biography/eac:control/eac:sources)
+        'dates' : if($occupation/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then array { xpr.mappings.html:getEacDates($occupation/*[self::eac:date or self::eac:dateRange], $biography/eac:eac/eac:control/eac:sources, map{})},
+        'sources' : if(fn:normalize-space($occupation/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($occupation/@sourceReference, $biography/eac:eac/eac:control/eac:sources)
       }
     },
-    'functions' : if($biography/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']) then array{
-      for $function in $biography/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']
+    'functions' : if($biography/eac:eac/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']) then array{
+      for $function in $biography/eac:eac/eac:cpfDescription/eac:description/eac:functions/eac:function[fn:normalize-space(.)!='']
       return map{
         'function' : $function/eac:term => fn:normalize-space(),
-        'dates' : if($function/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($function/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources, map{}),
-        'sources' : if(fn:normalize-space($function/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($function/@sourceReference, $biography/eac:control/eac:sources)
+        'dates' : if($function/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($function/*[self::eac:date or self::eac:dateRange], $biography/eac:eac/eac:control/eac:sources, map{}),
+        'sources' : if(fn:normalize-space($function/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($function/@sourceReference, $biography/eac:eac/eac:control/eac:sources)
       }
     },
-    'events' : if($biography/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']) then array{
-      for $event in $biography/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']
+    'events' : if($biography/eac:eac/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']) then array{
+      for $event in $biography/eac:eac/eac:cpfDescription/eac:description/eac:biogHist/eac:chronList/eac:chronItem[fn:normalize-space(.)!='']
       return map{
         'event' : $event/eac:event => fn:normalize-space(),
         'place' : if($event/eac:place[fn:normalize-space(.)!='']) then $event/eac:place => fn:normalize-space(),
         (:@todo participants ?:)
-        'sources' : if(fn:normalize-space($event/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($event/@sourceReference, $biography/eac:control/eac:sources),
-        'dates' : if($event/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($event/*[self::eac:date or self::eac:dateRange], $biography/eac:control/eac:sources, map{})
+        'sources' : if(fn:normalize-space($event/@sourceReference) != '') then xpr.mappings.html:getEacSourceReference($event/@sourceReference, $biography/eac:eac/eac:control/eac:sources),
+        'dates' : if($event/*[self::eac:date or self::eac:dateRange or self::eac:dateSet][.//@*[fn:normalize-space(.) castable as xs:date or xs:gYearMonth or xs:gYear]]) then xpr.mappings.html:getEacDates($event/*[self::eac:date or self::eac:dateRange or self::eac:dateSet], $biography/eac:eac/eac:control/eac:sources, map{})
       }
     },
-    'relations' : if(fn:count($biography/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!='']) > 0) then array{
-      for $relation in $biography/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!=''] return map{
+    'relations' : if(fn:count($biography/eac:eac/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!='']) > 0) then array{
+      for $relation in $biography/eac:eac/eac:cpfDescription/eac:relations/eac:relation[fn:normalize-space(.)!=''] return map{
         'relation' : $relation/eac:targetEntity/eac:part[@localType='full'] => fn:normalize-space(),
         'roles' : if($relation/eac:targetRole[fn:normalize-space(.)!='']) then array{
-          for $role in $relation/eac:targetRole 
+          for $role in $relation/eac:targetRole
           let $sources := $relation/eac:relationType[@id = fn:substring-after($role/@target, '#')]/@sourceReference
           return map{
             'role' : $role => fn:normalize-space(),
-            'sources' : if(fn:normalize-space($sources) != '') then xpr.mappings.html:getEacSourceReference($sources, $biography/eac:control/eac:sources)
+            'sources' : if(fn:normalize-space($sources) != '') then xpr.mappings.html:getEacSourceReference($sources, $biography/eac:eac/eac:control/eac:sources)
           }
-        }, 
-        'events' : if($relation/@target[fn:normalize-space(.)!='']) then array{ 
+        },
+        'events' : if($relation/@target[fn:normalize-space(.)!='']) then array{
           for $event in fn:tokenize($relation/@target, ' ')
           let $eventId := fn:substring-after($event, '#')
           return map{
@@ -1098,7 +1093,7 @@ declare
   %rest:path("xpr/biographies/{$id}")
   %output:method("xml")
 function getBiography($id) {
-  db:open('xpr')//eac:eac[eac:control/eac:recordId=$id]
+  db:open('xpr', 'xpr/biographies/'||$id||'.xml')
 };
 
 
@@ -1113,8 +1108,7 @@ declare
   %rest:produces('application/svg+xml')
   %output:method("xml")
 function getExpertActivity($id) {
-  let $db := db:open('xpr')
-  let $expertises := $db/xpr/expertises/expertise
+  let $expertises := getExpertises()/expertise
   let $expert := getBiography($id)
 
   let $length := fn:count($G:years) * 50
@@ -1175,7 +1169,7 @@ declare
   %output:method("html")
 function getBiographySaxon($id) {
   let $content := map {
-    'data' : db:open('xpr')//eac:eac[eac:control/eac:recordId=$id],
+    'data' : getBiography($id),
     'trigger' : '',
     'form' : ''
   }
@@ -1197,7 +1191,7 @@ declare
 function getBiographyHtml($id) {
   let $content := map {
     'title' : 'Fiche de ' || $id,
-    'data' : getBiography($id),
+    'data' : getBiography($id)/eac:eac,
     'trigger' : '',
     'form' : ''
   }
@@ -1304,7 +1298,8 @@ function putBiography($param, $referer) {
     if ($param/*/@xml:id)
     then
       let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
-      return replace node $db/xpr/bio/eac:eac[@xml:id = $location] with $param
+      return db:replace('xpr', 'xpr/biographies/'|| $location ||'.xml', $param)
+
     else
       let $type := switch ($param//eac:identity/eac:entityType/@value)
         case 'person' return 'xprPerson'
@@ -1322,7 +1317,8 @@ function putBiography($param, $referer) {
         )
         return $d
       return (
-        insert node $param into $db/xpr/bio,
+
+        db:add('xpr', $param, 'xpr/biographies/'|| $id ||'.xml'),
         update:output(
           (
           <rest:response>
@@ -1352,7 +1348,7 @@ declare
 function getEntities() {
   <entities xmlns="xpr">
     {
-      for $entity in db:open('xpr')/xpr/bio/eac:eac
+      for $entity in getBiographies()/eac:eac
       let $id := $entity/@xml:id
       order by fn:lower-case($entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1])
       return <entity xml:id="{$id}" type="{fn:string-join($entity//eac:otherEntityTypes/eac:otherEntityType/eac:term, ' ')}"><label>{$entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part/text()}</label></entity>
@@ -1369,7 +1365,7 @@ declare
   %rest:produces('application/xml')
   %output:method("xml")
 function getInventories() {
-  db:open('xpr')/xpr/posthumousInventories
+  <posthumousInventories>{ db:open('xpr', 'xpr/inventories') }</posthumousInventories>
 };
 
 (:~
@@ -1487,7 +1483,7 @@ function putInventory($param, $referer) {
           modify (replace value of node $d/inventory/control/maintenanceHistory/maintenanceEvent[1]/agent with $user)
           return $d
         return (
-          replace node $db/xpr/posthumousInventories/inventory[@xml:id = $location] with $param,
+          db:replace('xpr', 'xpr/inventories/'|| $location ||'.xml', $param),
           update:output(
            (
             <rest:response>
@@ -1509,7 +1505,7 @@ function putInventory($param, $referer) {
           )
           return $d
         return (
-          insert node $param into $db/xpr/posthumousInventories,
+          db:add('xpr', $param, 'xpr/inventories/'|| $id ||'.xml'),
           update:output(
             (<rest:response>
               <http:response status="200" message="test">
@@ -1534,7 +1530,7 @@ declare
   %rest:path("xpr/inventories/{$id}")
   %output:method("xml")
 function getInventory($id) {
-  db:open('xpr')//inventory[@xml:id=$id]
+  db:open('xpr', 'xpr/inventories/'||$id||'.xml')
 };
 
 (:~
@@ -1550,8 +1546,7 @@ declare
   %output:method('json')
 function getInventoriesJson($body) {
   let $body := json:parse( $body, map{"format" : "xquery"})
-  let $db := db:open('xpr')
-  let $inventories := $db/xpr/posthumousInventories
+  let $inventories := getInventories()
 
   let $meta := map {
       'start' : $body?start,
@@ -1584,8 +1579,7 @@ declare
   %output:media-type('application/json')
   %output:method('json')
 function getInventoryJson($id) {
-  let $db := db:open('xpr')
-  let $inventory := $db/xpr/posthumousInventories/inventory[@xml:id=$id]
+  let $inventory := getInventory($id)/inventory
 
   let $meta := map {}
   let $content := map{
@@ -1646,8 +1640,8 @@ declare
   %output:method("json")
   %rest:produces("application/json")
 function getNetworks($year) {
-  let $expertises := db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
-  let $experts := fn:distinct-values(db:open('xpr')//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
+  let $expertises := getExpertises()//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
+  let $experts := fn:distinct-values(getExpertises()//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
   
   let $nodes := 
     for $expert in $experts
@@ -2192,9 +2186,9 @@ declare
   %output:method('json')
 function getStatistics() {
   let $db := db:open("xpr")
-  let $expertises := $db/xpr/expertises/expertise
+  let $expertises := getExpertises()/expertise
   (:@todo experts:)
-  let $experts := $db/xpr/bio/*:eac
+  let $experts := getBiographies()/*:eac
   (:let $years := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[1][@when castable as xs:date][fn:ends-with(fn:string(fn:year-from-date(@when)), '6')]/fn:year-from-date(@when)):)
   (:let $expertises := map {
     "corpus" : getExpertisesStatistics(""),
@@ -2227,8 +2221,7 @@ declare
   %output:media-type('application/json')
   %output:method('json')
 function getStatisticsByYear($year) {
-  let $db := db:open("xpr")
-  let $listExpertises := $db/xpr/expertises/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
+  let $listExpertises := getExpertises()/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
   let $listExperts := xpr.models.networks:getExpertsByYear(map{"year":$year})//*:eac
   let $experts := xpr.models.networks:getFormatedExpertsData(
     map{
@@ -2264,11 +2257,10 @@ function getStatisticsByYear($year) {
 declare
   %output:method('json')
 function getExpertisesStatistics($corpus, $experts) {
-  let $db := db:open('xpr')
   let $expertises := $corpus
 
   let $sessionPlaces :=
-    for $place in fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
+    for $place in fn:distinct-values(getExpertises()/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
     let $label := switch ($place)
       case 'paris' return 'Paris'
       case 'suburbs' return 'Banlieue'
@@ -2287,7 +2279,7 @@ function getExpertisesStatistics($corpus, $experts) {
 
   let $places :=
     (:let $listPlace := fn:distinct-values(db:open('xpr')//*:expertise//*:places/*:place/@type):)
-    let $listPlace := fn:distinct-values($db/xpr/expertises/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
+    let $listPlace := fn:distinct-values(getExpertises()/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
     let $seq := ('paris', 'suburbs', 'province')
     let $pairs :=
       for $i at $pos in $seq
@@ -2296,9 +2288,9 @@ function getExpertisesStatistics($corpus, $experts) {
     return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
 
   let $objects :=
-      let $types := fn:distinct-values($db/xpr/expertises/expertise/description/procedure/objects/object/@type)
+      let $types := fn:distinct-values(getExpertises()/expertise/description/procedure/objects/object/@type)
       for $type in $types
-      let $label := (db:open('xpr')/xpr/expertises/expertise/description/procedure/objects/object[@type = $type])[1] => fn:normalize-space()
+      let $label := (getExpertises()/expertise/description/procedure/objects/object[@type = $type])[1] => fn:normalize-space()
       return [$type, $label]
 
   let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
@@ -2437,7 +2429,6 @@ function getExpertisesStatistics($corpus, $experts) {
 declare
   %output:method('json')
 function getExpertsStatistics($experts, $expertises) {
-  let $db := db:open('xpr')
   let $experts := $experts
 
 
@@ -2639,7 +2630,6 @@ declare
   %perm:allow("admin", "write")
   %updating
 function putUser($param, $referer) {
-  let $db := db:open("xpr")
   let $user := $param
   let $userName := fn:normalize-space($user/*:user/*:name)
   let $userPwd := fn:normalize-space($user/*:user/*:password)
@@ -2747,7 +2737,9 @@ declare
   %rest:path("xpr/meteo")
   %output:method("html")
 function meteo() {
-  let $db := db:open('xpr')
+  let $expertises := getExpertises()
+  let $biographies := getBiographies()
+  let $inventories := getInventories()
   return
     <html>
       <head>
@@ -2760,14 +2752,14 @@ function meteo() {
           <div class="expertises">
             <h2>Expertises</h2>
             <ul>
-              <li>{ fn:count($db//expertise) || ' expertises enregistrées dans la base de données' }</li>
-              <li>{ fn:count($db//expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' expertises complètes' }</li>
-              <li>{ fn:count($db//expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' expertises en cours de dépouillement' }</li>
-              <li>{ fn:count($db//expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' expertises à revoir' }</li>
-              <li>{ fn:count(fn:distinct-values($db//expertise/descendant::idno[@type='unitid'])) || ' dossiers dépouillés' }
+              <li>{ fn:count($expertises/expertise) || ' expertises enregistrées dans la base de données' }</li>
+              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' expertises complètes' }</li>
+              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' expertises en cours de dépouillement' }</li>
+              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' expertises à revoir' }</li>
+              <li>{ fn:count(fn:distinct-values($expertises/expertise/descendant::idno[@type='unitid'])) || ' dossiers dépouillés' }
                 <ul>{
-                  for $unitid in fn:distinct-values($db//expertise/descendant::idno[@type='unitid'])
-                  return <li>{ fn:count($db//expertise/descendant::idno[@type='unitid'][. = $unitid]) || ' expertises cotées "' || $unitid || '"' }</li>
+                  for $unitid in fn:distinct-values($expertises/expertise/descendant::idno[@type='unitid'])
+                  return <li>{ fn:count($expertises/expertise/descendant::idno[@type='unitid'][. = $unitid]) || ' expertises cotées "' || $unitid || '"' }</li>
                 }</ul>
               </li>
             </ul>
@@ -2775,24 +2767,24 @@ function meteo() {
           <div class="prosopographie">
             <h2>Prosopographie</h2>
             <ul>
-              <li>{fn:count($db//bio/eac:eac-cpf) || ' fiches prosopographiques enregistrées dans la base de données'}
+              <li>{fn:count($biographies/eac:eac-cpf) || ' fiches prosopographiques enregistrées dans la base de données'}
                 <ul>{
-                  for $entityType in fn:distinct-values($db//bio/descendant::eac:identity/@localType)
-                  return <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:identity[@localType = $entityType]]) || ' entités ayant pour qualité "' ||$entityType || '"' }</li>
+                  for $entityType in fn:distinct-values($biographies/descendant::eac:identity/@localType)
+                  return <li>{ fn:count($biographies/eac:eac[descendant::eac:identity[@localType = $entityType]]) || ' entités ayant pour qualité "' ||$entityType || '"' }</li>
                 }</ul>
               </li>
-              <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'completed']]) || ' fiches complètes' }</li>
-              <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'in progress']]) || ' fiches en cours de dépouillement' }</li>
-              <li>{ fn:count($db//bio/eac:eac-cpf[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'to revise']]) || ' fiches à revoir' }</li>
+              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'completed']]) || ' fiches complètes' }</li>
+              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'in progress']]) || ' fiches en cours de dépouillement' }</li>
+              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'to revise']]) || ' fiches à revoir' }</li>
             </ul>
           </div>
           <div class="iad">
             <h2>Inventaires après-décès</h2>
             <ul>
-              <li>{ fn:count($db//posthumousInventories/inventory) || ' inventaires après-décès enregistrés dans la base de données' }</li>
-              <li>{ fn:count($db//posthumousInventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' inventaires complets' }</li>
-              <li>{ fn:count($db//posthumousInventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' inventaires en cours de dépouillement' }</li>
-              <li>{ fn:count($db//posthumousInventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' inventaires à revoir' }</li>
+              <li>{ fn:count($inventories/inventory) || ' inventaires après-décès enregistrés dans la base de données' }</li>
+              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' inventaires complets' }</li>
+              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' inventaires en cours de dépouillement' }</li>
+              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' inventaires à revoir' }</li>
             </ul>
           </div>
         </div>
@@ -2814,7 +2806,6 @@ declare
 %output:method("html")
 %output:html-version('5.0')
 function xpr.xpr:query($term) {
-  let $db := db:open('xpr')
   let $data := xpr.xpr:queryData($term)
   let $expertises := fn:count($data//expertise)
   let $diacritics := 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöùúûüýÿ'
@@ -2851,7 +2842,7 @@ function xpr.xpr:query($term) {
               {
               for $year in fn:distinct-values($data//year)
               let $expertiseCount := fn:count($data//expertise[year = $year])
-              let $expertiseYear := fn:count($db//expertise[descendant::sessions/date[1]/fn:substring(@when, '1', '4') = $year])
+              let $expertiseYear := fn:count(getExpertises()//expertise[descendant::sessions/date[1]/fn:substring(@when, '1', '4') = $year])
               let $pourcentage := fn:format-number($expertiseCount div $expertiseYear, '0%')
               order by $year
               return (
@@ -2894,7 +2885,7 @@ function xpr.xpr:query($term) {
               </thead>
               <tbody>
               {
-                let $listExpertises := $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
+                let $listExpertises := getExpertises()//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
                 for $expertise in $listExpertises
                 order by $expertise/@xml:id
                 return
@@ -2953,13 +2944,12 @@ function xpr.xpr:query($term) {
 };
 
 declare function xpr.xpr:queryData($term) {
-let $db := db:open('xpr')
 let $diacritics := 'ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÑÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïñòóôõöùúûüýÿ'
 let $noAccent := 'AAAAAACEEEEIIIINOOOOOUUUUYaaaaaaceeeeiiiinooooouuuuyy'
 return (
     <expertises>
         {
-            for $expertise in $db//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
+            for $expertise in getExpertises()//expertise[fn:matches(fn:translate(fn:normalize-space(.), $diacritics, $noAccent), fn:translate($term, $diacritics, $noAccent), 'i')]
             (:where $expertise//text() contains text "réparation":)
             return
             (
@@ -2992,16 +2982,16 @@ return (
 };
 
 declare function xpr.xpr:expertiseCounter() {
-    let $db := db:open('xpr')//expertises
+    let $expertises := getExpertises()
     return(
      <data>
        {
-         for $unitid in fn:distinct-values($db/expertise/fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j'))
+         for $unitid in fn:distinct-values($expertises/expertise/fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j'))
          return (
            <file>
              <unitid>{$unitid}</unitid>
-             <count>{fn:format-number(fn:count($db/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid]), '000')}</count>
-             <last>{$db/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid][fn:last()]/fn:substring-after(@xml:id, 'd')}</last>
+             <count>{fn:format-number(fn:count($expertises/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid]), '000')}</count>
+             <last>{$expertises/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid][fn:last()]/fn:substring-after(@xml:id, 'd')}</last>
            </file>
          )
        }
@@ -3020,8 +3010,7 @@ declare
 %output:method("html")
 %output:html-version('5.0')
 function xpr.xpr:status() {
-    let $db := db:open('xpr')//expertises
-    let $expertises := fn:count($db/expertise)
+    let $expertises := getExpertises()/expertise
     let $data := xpr.xpr:expertiseCounter()
     return(
       <html>
@@ -3031,7 +3020,7 @@ function xpr.xpr:status() {
         <body>
           <div>
             <h1>État des dépouillements</h1>
-            <p>Expertises dépouillées : {$expertises}</p>
+            <p>Expertises dépouillées : { fn:count($expertises) }</p>
             <table>
               <tr class="label">
                 <td>Unitid</td>

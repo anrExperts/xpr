@@ -15,6 +15,7 @@ module namespace xpr.models.networks = "xpr.models.networks";
  :
  :)
 
+import module namespace xpr.xpr = "xpr.xpr" at './xpr.xqm' ;
 import module namespace G = 'xpr.globals' at './globals.xqm' ;
 
 declare namespace rest = "http://exquery.org/ns/restxq" ;
@@ -79,7 +80,7 @@ declare function getExpertsByYear($queryParam as map(*)) as element() {
 let $almanakDb := db:open('almanak')
 let $year := $queryParam?year
 let $expertises := xpr.models.networks:getExpertisesByYear($queryParam)
-let $prosopo := db:open('xpr')/xpr/bio
+let $prosopo := xpr.xpr:getBiographies()
 
 let $almanak := $almanakDb//*:TEI[fn:matches(descendant::*:titleStmt/*:title, $year) or fn:matches(descendant::*:titleStmt/*:title, fn:string(fn:number($year) + 1))]
 let $almanakExperts := $almanak//*:item/*:persName[fn:normalize-space(@ref) != '']/@ref
@@ -117,7 +118,7 @@ return
 declare function getClerksByYear($queryParam as map(*)) as element() {
 let $year := $queryParam?year
 let $expertises := xpr.models.networks:getExpertisesByYear($queryParam)
-let $prosopo := db:open('xpr')/xpr/bio
+let $prosopo := xpr.xpr:getBiographies
 
 let $clerks :=
   let $dbClerk :=
@@ -146,9 +147,8 @@ return
  : @todo multiple categories
  :)
 declare function getExpertisesByYear($queryParam as map(*)) as element() {
-let $db := db:open('xpr')
 let $year := $queryParam?year
-let $expertises := $db//expertise[descendant::sessions/date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::categories/category) = 1]
+let $expertises := xpr.xpr:getExpertises()//expertise[descendant::sessions/date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::categories/category) = 1]
 return <expertises xmlns="xpr">{$expertises}</expertises>
 };
 

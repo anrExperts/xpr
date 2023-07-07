@@ -144,9 +144,9 @@
         <data xmlns="xpr"/>
     </xf:instance>
 
-    <xf:bind nodeset="instance('xprGetData')" calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
+    <!--<xf:bind nodeset="instance('xprGetData')" calculate="substring-after(instance('xprInventory')/xpr:sourceDesc/xpr:expert/@ref, '#')"/>
     <xf:send ev:event="getData" submission="submitGetData"/>
-    <xf:submission id="submitGetData" ref="instance('xprGetData')" method="get" resource="/xpr/xforms" replace="instance" instance="xprProsopo"/>
+    <xf:submission id="submitGetData" ref="instance('xprGetData')" method="get" resource="/xpr/xforms" replace="instance" instance="xprProsopo"/>-->
 
     <xf:submission id="submitInventory" mode="synchronous" resource="/xpr/inventories/put" method="put" replace="none">
         <xf:action ev:event="xforms-submit-done">
