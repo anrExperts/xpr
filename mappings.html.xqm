@@ -46,9 +46,11 @@ declare default collation "http://basex.org/collation?lang=fr" ;
  :)
 declare function getMessage($id, $lang) {
   let $message := $G:interface/xpr:interface/xpr:prosopo/xpr:element[@xml:id=$id]/xpr:message[@xml:lang]/node()
-  return if ($message[fn:normalize-space(.)!=''])
-    then $message
-    else <message>todo</message>
+  return
+    if ($message[fn:normalize-space(.)!='']) then
+      $message
+    else
+      <message>todo</message>
 };
 
 (:~
@@ -216,6 +218,44 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
       }</ul>
     }</div>
   </article>
+};
+
+(:~
+ : This function serialize an expertises list
+ : @return an html list of expertises
+ :)
+declare function listXpr2html($content, $options) {
+  <ul id="list">{
+    for $expertise in $content//xpr:expertise
+    return itemXpr2html($expertise, map{'path' : '/xpr/expertises/'})
+  }</ul>
+};
+
+(:~
+ : This function serialize an expertise item in a list
+ : @return an html item of expertises in a list
+ :)
+declare function itemXpr2html($expertise as node(), $options as map(*)) as node() {
+  let $id := $expertise/@xml:id => fn:string()
+  let $path := $options?path
+  let $status := $expertise/xpr:control/xpr:localControl/xpr:term
+  let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()
+  let $addresses := for $place in $expertise/xpr:description/xpr:places
+    return fn:normalize-space($place) => fn:string-join(' ; ')
+  let $dates := $expertise//xpr:sessions/xpr:date/@when => fn:string-join(' ; ')
+  let $user := if(Session:get('id') != '') then Session:get('id')
+  return
+    <li status="{$status}">
+      <h3 class="cote">{$cote}</h3>
+      <p class="date">{$dates}</p>
+      <p>{$addresses}</p>
+      <p>
+        <a class="view" href="{$path || $id || '/view'}">Voir</a>
+        {if ($user and user:list-details($user)/*:info/*:grant/@type = 'expertises' and user:list-details($user)/*:database[@pattern='xpr']/@permission = 'write') then
+         (' | ', <a class="modify" href="{$path || $id || '/modify'}">Modifier</a>)
+        }
+      </p>
+    </li>
 };
 
 declare function getMaintenanceEvent($node as node()*, $options as map(*)) as xs:string {
@@ -471,6 +511,53 @@ function eac2html($node as node()*, $options as map(*)) as item()* {
   }</article>
 };
 
+(:~
+ : This function serialize a list of entities
+ : @param
+ :)
+declare function listEac2html($node as node()*, $options as map(*)) as item()* {
+  <ul id="list">{
+    for $entity in $node//eac:eac
+    let $id := $entity/@xml:id => fn:normalize-unicode()
+    let $name := $entity//eac:nameEntry[@status='authorized'] => fn:normalize-unicode()
+    let $type := $entity//eac:identity/@localType => getMessage($options)
+    let $dates := $entity/@xml:id => fn:normalize-unicode()
+    return
+      <li>
+        <h3 class="name">{$name}</h3>
+        <p class="date">{$dates}</p>
+        <p class="type">{$type}</p>
+        <p><a class="view" href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a class="modify" href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
+      </li>
+  }</ul>
+};
+
+declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
+  typeswitch($node)
+    case text() return $node[fn:normalize-unicode(.)!='']
+    default return passthruXpr($node, $options)
+  };
+
+(:~
+ : This function pass through child nodes (xsl:apply-templates)
+ :)
+declare
+  %output:indent('no')
+function passthruXpr($nodes as node(), $options as map(*)) as item()* {
+  for $node in $nodes/node()
+  return serializeXpr($node, $options)
+};
+
+(:~
+ : This function pass through child nodes (xsl:apply-templates)
+ :)
+declare
+  %output:indent('no')
+function passthru($nodes as node(), $options as map(*)) as item()* {
+  for $node in $nodes/node()
+  return eac2html($node, $options)
+};
+
 declare function getIdentity($node as node()*, $options as map(*)) as node()* {
   <header>{(
     getEntityType($node/eac:entityType, $options),
@@ -495,9 +582,8 @@ declare function getIdentity($node as node()*, $options as map(*)) as node()* {
   )}</header>
 };
 
-declare function getEntityName($str as xs:string*) as xs:string {
+declare function getEntityName($id as xs:string*) as xs:string {
   let $prosopo := xpr.xpr:getBiographies()
-  let $id := $str
   let $entityName := $prosopo/eac:eac[@xml:id=$id]/eac:cpfDescription/eac:identity/eac:nameEntry[@preferredForm='true' and @status='authorized'][1]/eac:part/fn:normalize-space()
   return $entityName
 };
@@ -513,14 +599,14 @@ declare function getEntityType($node as node(), $options as map(*)) as xs:string
   }</h3>
 };
 
-declare function getSources($str as xs:string, $sources as node()*, $options as map(*)) as xs:string* {
-let $refs := fn:tokenize($str, ' ')
+declare function getSources($refs as xs:string, $sources as node()*, $options as map(*)) as xs:string* {
+let $refs := fn:tokenize($refs, ' ')
 for $ref in $refs
 return getSource($ref, $sources, $options)
 };
 
-declare function getSource($str as xs:string, $node as node(), $options as map(*)) as xs:string {
-let $source := $node/eac:source[@id = fn:substring-after($str, '#')]/eac:reference => fn:normalize-space()
+declare function getSource($ref as xs:string, $node as node(), $options as map(*)) as xs:string {
+let $source := $node/eac:source[@id = fn:substring-after($ref, '#')]/eac:reference => fn:normalize-space()
 return $source
 };
 
@@ -673,92 +759,6 @@ declare function getEacSourceReference($node, $option) {
       'id' : ''
     }
   }
-};
-
-
-declare function serializeXpr($node as node()*, $options as map(*)) as item()* {
-  typeswitch($node)
-    case text() return $node[fn:normalize-unicode(.)!='']
-    default return passthruXpr($node, $options)
-  };
-
-(:~
- : This function pass through child nodes (xsl:apply-templates)
- :)
-declare
-  %output:indent('no')
-function passthruXpr($nodes as node(), $options as map(*)) as item()* {
-  for $node in $nodes/node()
-  return serializeXpr($node, $options)
-};
-
-(:~
- : This function pass through child nodes (xsl:apply-templates
- :)
-declare
-  %output:indent('no')
-function passthru($nodes as node(), $options as map(*)) as item()* {
-  for $node in $nodes/node()
-  return eac2html($node, $options)
-};
-
-(:~
- : This function serialize an expertises list
- : @return an html list of expertises
- :)
-declare function listXpr2html($content, $options) {
-  <ul id="list">{
-    for $expertise in $content//xpr:expertise
-    return itemXpr2html($expertise, map{'path' : '/xpr/expertises/'})
-  }</ul>
-};
-
-(:~
- : This function serialize an expertise item in a list
- : @return an html item of expertises in a list
- :)
-declare function itemXpr2html($expertise as node(), $options as map(*)) as node() {
-  let $id := $expertise/@xml:id => fn:string()
-  let $path := $options?path
-  let $status := $expertise/xpr:control/xpr:localControl/xpr:term
-  let $cote := ($expertise/xpr:sourceDesc/xpr:idno[@type='unitid'] || '/' || $expertise/xpr:sourceDesc/xpr:idno[@type='item']) => fn:normalize-space()
-  let $addresses := for $place in $expertise/xpr:description/xpr:places
-    return fn:normalize-space($place) => fn:string-join(' ; ')
-  let $dates := $expertise//xpr:sessions/xpr:date/@when => fn:string-join(' ; ')
-  let $user := if(Session:get('id') != '') then Session:get('id')
-  return
-    <li status="{$status}">
-      <h3 class="cote">{$cote}</h3>
-      <p class="date">{$dates}</p>
-      <p>{$addresses}</p>
-      <p>
-        <a class="view" href="{$path || $id || '/view'}">Voir</a>
-        {if ($user and user:list-details($user)/*:info/*:grant/@type = 'expertises' and user:list-details($user)/*:database[@pattern='xpr']/@permission = 'write') then
-         (' | ', <a class="modify" href="{$path || $id || '/modify'}">Modifier</a>)
-        }
-      </p>
-    </li>
-};
-
-(:~
- : This function serialize a list of entities
- : @param
- :)
-declare function listEac2html($node as node()*, $options as map(*)) as item()* {
-  <ul id="list">{
-    for $entity in $node//eac:eac
-    let $id := $entity/@xml:id => fn:normalize-unicode()
-    let $name := $entity//eac:nameEntry[@status='authorized'] => fn:normalize-unicode()
-    let $type := $entity//eac:identity/@localType => getMessage($options)
-    let $dates := $entity/@xml:id => fn:normalize-unicode()
-    return
-      <li>
-        <h3 class="name">{$name}</h3>
-        <p class="date">{$dates}</p>
-        <p class="type">{$type}</p>
-        <p><a class="view" href="{'/xpr/biographies/' || $id || '/view'}">Voir</a> | <a class="modify" href="{'/xpr/biographies/' || $id || '/modify'}">Modifier</a></p>
-      </li>
-  }</ul>
 };
 
 (:~

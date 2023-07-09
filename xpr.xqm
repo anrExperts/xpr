@@ -78,7 +78,6 @@ function root() {
 (:~
  : This resource function install
  : @return create the db
- :
  : @todo create the prosopo db
  :)
 declare 
@@ -120,6 +119,192 @@ function home() {
 };
 
 (:~
+ : This resource function creates the about page
+ : @return an about page
+ :)
+declare
+  %rest:path("/xpr/about")
+  %output:method("html")
+function about() {
+  let $content := map {
+      'title' : 'À propos de l’ANR Experts',
+      'data' :
+      <div>
+        <section class="alternate">
+        <br/>
+        <br/>
+        <h2>Pratiques des savoirs entre jugement et innovation. Experts, expertises du bâtiment, Paris 1690-1790 – ANR EXPERTS</h2>
+        <p>Notre projet vise à examiner, à partir d’un secteur économique majeur — celui du bâtiment à l’époque moderne —, le mécanisme de l’expertise : comment la langue technique régulatrice des experts s’impose à la société, comment leur compétence se convertit en autorité, voire parfois en « abus d’autorité » ? L’existence d’un fonds d’archives exceptionnel (AN Z<sup>1J</sup>) qui conserve l’ensemble des procès-verbaux d’expertise du bâtiment parisien de 1643 à 1792 nous permet de lancer une enquête pluridisciplinaire d’envergure sur la question de l’expertise qui connaît, à partir de 1690, un tournant particulier. En effet, les experts, autrefois uniquement gens de métiers, se divisent en deux branches exerçant deux activités concurrentes, parfois complémentaires : l’architecture et l’entreprise de construction.</p>
+        <p>La base de notre travail consistera d’abord à établir parallèlement deux corpus : d’une part, un dictionnaire prosopographique des 234 experts exerçant de 1690 à 1790 ; d’autre part, l’inventaire et l’analyse des procès-verbaux d’expertise sur la même période. Au regard de l’immensité du fond, nous travaillerons sur un groupe de près de 10 000 expertises par le biais d’un sondage au 1/10<sup>e</sup> sur les dix années de 1696 à 1786, espacées chacune de 10 ans. Chaque expertise sera inventoriée, indexée, numérisée et analysée dans le détail. L’ensemble fera l’objet d’une étude sérielle sur le siècle parcouru, mais surtout d’un travail approfondi sur son contenu. Deux questions seront résolues : 1° Comment la décision de l’expert se prend-elle ? Quels savoirs y sont convoqués ? 2° Comment ces experts parviennent à innover dans domaine de leur compétence ? Le projet correspond au moins à trois enjeux contemporains.</p>
+        <p>Le premier concerne le rapport au risque et à l’innovation sociale. Comment affronter des situations à risque permet d’innover techniquement, voire socialement ? La confrontation à des incertitudes ouvre des possibilités de résoudre des conflits entre des communautés opposées. Tenant compte de la partition des fonctions d’experts, la mission d’expertise se différencie-t-elle selon la qualité de son auteur ? Les experts en viennent, souvent grâce à l’expertise, à innover dans le champ d’activité qui est le leur. Ainsi, pourquoi l’expertise induit-elle l’innovation ?</p>
+        <p>Le second concerne la part du droit dans la prise de décision démocratique. Comment le droit peut-il servir entre les mains de non-juristes ? La diffusion des principes du droit dans la vie citoyenne permet un usage de ces derniers dans la vie publique mais également dans des domaines de la vie privée. Dans le cadre de notre projet, comment et pourquoi des experts, non juristes mais au fait du droit, argumenteront en droit et persuaderont le juge de leur position ?</p>
+        <p>Le troisième concerne la régulation des valeurs de biens. Quels critères faut-il mettre en avant pour échafauder une hiérarchie des choses ? Une stricte normalisation objective de ces critères peut ne pas apparaître souhaitable face aux lois du marché qui par leur rigueur nécessiteraient un contrebalancement de règles subjectivées. Précisément, comment les experts du bâtiment ont-ils mis en place les critères objectifs et subjectifs d’estimation de la valeur des biens immobiliers ?</p>
+        <p>Rejoignant l’idée d’« abus d’autorité » de l’expert, le fait que plusieurs types de savoirs, et plusieurs groupes sociaux, partagent l’expertise, diminuerait-il le risque d’abus d’autorité et au-delà le risque technique en général ?</p>
+        <p>Les résultats de cette recherche sont présentés dans une base de connaissances collaborative accueillie sur un site dédié sur lequel l’ensemble des corpus seront accessibles à la communauté des chercheurs. L’analyse d’<em>exempla</em> fera l’objet d’une éditorialisation particulière sous forme d’exposition virtuelle pour le grand public. La synthèse de nos résultats sera consignée dans un ouvrage et deux rencontres nationale et internationale viendront clore le projet.</p></section>
+        <section class="alternate">
+          <div>
+            <h2>Responsables du projet</h2>
+            <ul>
+              <li>Robert Carvais, CNRS (UMR 7074)</li>
+              <li>Emmanuel Chateau-Dutier, Université de Montréal (CRIHN)</li>
+              <li>Valérie Nègre, Université Paris I (UMR 8066)</li>
+              <li>Michela Barbot, CNRS (UMR 8533)</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Co-chercheurs</h2>
+            <ul>
+              <li>Juliette Hernu-Belaud (Chercheuse post-doctorale ANR Experts)</li>
+              <li>Léonore Losserand (Chercheuse post-doctorale ANR Experts)</li>
+              <li>Yvon Plouzennec (Chercheur post-doctorale ANR Experts)</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Ingénieur d’étude</h2>
+            <ul>
+              <li>Josselin Morvan</li>
+            </ul>
+          </div>
+          <div>
+            <h2>Partenaires</h2>
+            <ul>
+              <li><a href="https://anr.fr/Projet-ANR-17-CE26-0006">Agence nationale de recherche, projet ANR-17-CE26-0006</a></li>
+              <li><a href="http://www.gip-recherche-justice.fr">Mission de recherche Droit &amp; Justice (2015-2017)</a></li>
+              <li><a href="https://www.archives-nationales.culture.gouv.fr">Archives Nationales de France</a></li>
+              <li>Ce projet a bénéficié du soutien du <a href="https://sites.haa.pitt.edu/na-dah/">Getty Advanced Workshop on Network Analysis and Digital Art History (NA+DAH)</a></li>
+            </ul>
+          </div>
+        </section>
+      </div>
+    }
+    let $outputParam := map {
+      'layout' : "template.xml"
+      (: 'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{}) :)
+    }
+    return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~ Login page (visible to everyone). :)
+declare
+  %rest:path("xpr/meteo")
+  %output:method("html")
+function meteo() {
+  let $expertises := getExpertises()
+  let $biographies := getBiographies()
+  let $inventories := getInventories()
+  return
+    <html>
+      <head>
+        <title>!xpr¡</title>
+        <meta charset="UTF-8"/>
+      </head>
+      <body>
+        <div>
+          <h1>Météo des experts</h1>
+          <div class="expertises">
+            <h2>Expertises</h2>
+            <ul>
+              <li>{ fn:count($expertises/expertise) || ' expertises enregistrées dans la base de données' }</li>
+              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' expertises complètes' }</li>
+              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' expertises en cours de dépouillement' }</li>
+              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' expertises à revoir' }</li>
+              <li>{ fn:count(fn:distinct-values($expertises/expertise/descendant::idno[@type='unitid'])) || ' dossiers dépouillés' }
+                <ul>{
+                  for $unitid in fn:distinct-values($expertises/expertise/descendant::idno[@type='unitid'])
+                  return <li>{ fn:count($expertises/expertise/descendant::idno[@type='unitid'][. = $unitid]) || ' expertises cotées "' || $unitid || '"' }</li>
+                }</ul>
+              </li>
+            </ul>
+          </div>
+          <div class="prosopographie">
+            <h2>Prosopographie</h2>
+            <ul>
+              <li>{fn:count($biographies/eac:eac-cpf) || ' fiches prosopographiques enregistrées dans la base de données'}
+                <ul>{
+                  for $entityType in fn:distinct-values($biographies/descendant::eac:identity/@localType)
+                  return <li>{ fn:count($biographies/eac:eac[descendant::eac:identity[@localType = $entityType]]) || ' entités ayant pour qualité "' ||$entityType || '"' }</li>
+                }</ul>
+              </li>
+              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'completed']]) || ' fiches complètes' }</li>
+              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'in progress']]) || ' fiches en cours de dépouillement' }</li>
+              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'to revise']]) || ' fiches à revoir' }</li>
+            </ul>
+          </div>
+          <div class="iad">
+            <h2>Inventaires après-décès</h2>
+            <ul>
+              <li>{ fn:count($inventories/inventory) || ' inventaires après-décès enregistrés dans la base de données' }</li>
+              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' inventaires complets' }</li>
+              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' inventaires en cours de dépouillement' }</li>
+              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' inventaires à revoir' }</li>
+            </ul>
+          </div>
+        </div>
+      </body>
+    </html>
+};
+
+(:~
+ : this function defines a static files directory for the app
+ : @param $file file or unknown path
+ : @return binary file
+ :)
+declare
+  %rest:path('xpr/files/{$file=.+}')
+function xpr.xpr:file($file as xs:string) as item()+ {
+  let $path := file:base-dir() || 'files/' || $file
+  return
+    (
+      web:response-header( map {'media-type' : web:content-type($path)}),
+      file:read-binary($path)
+    )
+};
+
+(:~
+ : this variable defines style for status & query functions
+ : @rmq to be removed
+ :)
+declare variable $xpr.xpr:style :=
+  <style>
+    body {{
+      font-family: sans-serif; /* 1 */
+      background-color: #fff;
+      color: #E73E0D;
+    }}
+    html {{
+      line-height: 1.15; /* 2 */
+      -ms-text-size-adjust: 100%; /* 3 */
+      -webkit-text-size-adjust: 100%; /* 3 */
+    }}
+    main {{
+      width: 95%;
+      margin:auto;
+    }}
+    table {{
+      display: inline;
+      border-collapse:collapse;
+    }}
+    thead td {{
+      background-color: #E73E0D;
+      color:#fff;
+      min-width:50px;
+    }}
+    div:not(.detail) thead td {{
+      height:400px;
+      writing-mode:vertical-rl;
+    }}
+    td {{
+      border: 0.15em solid ;
+    }}
+    tbody td {{
+      text-align: center;
+    }}
+    main div {{
+      margin-bottom: 3em;
+    }}
+  </style>;
+
+(:~
  : This resource function lists all the expertises
  : @return an ordered list of expertises in xml
  :)
@@ -128,24 +313,120 @@ declare
   %rest:produces('application/xml')
   %output:method("xml")
 function getExpertises() {
-<expertises>{ db:open('xpr', 'xpr/expertises') }</expertises>
-
+  <expertises>{ db:open('xpr', 'xpr/expertises') }</expertises>
 };
 
 (:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises in xml
- : @todo check for multiple value for expert
+ : This resource function edits a new expertise
+ : @return an xforms to edit an expertise
+:)
+declare
+  %rest:path("xpr/expertises/new")
+  %output:method("xml")
+  %perm:allow("expertises")
+function newExpertise() {
+  let $content := map {
+    'instance' : '',
+    'model' : ('xprExpertiseModel.xml', 'xprAutosaveModel.xml'),
+    'trigger' : 'xprExpertiseTrigger.xml',
+    'form' : 'xprExpertiseForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This function creates new expertises
+ : @param $param content to insert in the database
+ : @param $refere the callback url
+ : @return update the database with an updated content and an 200 http
+ : @bug change of cote and dossier doesn’t work
  :)
 declare
-  %rest:path("/xpr/expertises/experts")
-  %rest:produces('application/xml')
+  %rest:path("xpr/expertises/put")
   %output:method("xml")
-  %rest:query-param('ids', '{$ids}', 'xpr0001')
-function getExpertises($ids as xs:string) {
-  if($ids) then
-    <xml>{ db:open('xpr', 'xpr/expertises')/*:expertise[descendant::*:expert/@ref='#'||$ids] }</xml>
-  else db:open('xpr', 'xpr/expertises')
+  %rest:header-param("Referer", "{$referer}", "none")
+  %rest:PUT("{$param}")
+  %perm:allow("expertises", "write")
+  %updating
+function putExpertise($param, $referer) {
+  let $db := db:open("xpr")
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
+  return
+    if (fn:ends-with($referer, 'modify')) then
+      let $location := fn:analyze-string($referer, 'xpr/expertises/(.+?)/modify')//fn:group[@nr='1']
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
+      let $param :=
+        copy $d := $param
+        modify(
+          replace value of node $d/expertise/@xml:id with $id,
+          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
+          let $idPlace := fn:generate-id($place)
+          where $place[fn:not(@xml:id)]
+          return(
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+          )
+        )
+        return $d
+      return(
+      (:
+        @rmq avec db:replace, l'ordre des arguments est à l'inverse de db:add : d'abord l'ancien fichier, puis le nouveau
+        avec Basex 10.x, db:replace devient db:put, et l'ordre est aligné avec db:add
+      :)
+        db:replace('xpr', 'xpr/expertises/'|| $location ||'.xml', $param),
+        db:rename("xpr", 'xpr/expertises/'|| $location ||'.xml', 'xpr/expertises/'|| $id ||'.xml'),
+        update:output((
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>La ressource a été modifiée.</message>
+            <url></url>
+          </result>
+        ))
+      )
+    else
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
+      let $param :=
+        copy $d := $param
+        modify(
+          insert node attribute xml:id {$id} into $d/*,
+          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
+          let $idPlace := fn:generate-id($place)
+          return(
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+          )
+        )
+        return $d
+      return(
+        db:add('xpr', $param, 'xpr/expertises/'|| $id ||'.xml'),
+        update:output((
+          <rest:response>
+            <http:response status="200" message="test">
+              <http:header name="Content-Language" value="fr"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>La ressource a été créée.</message>
+            <url></url>
+          </result>
+        ))
+      )
 };
 
 (:~
@@ -173,35 +454,10 @@ function getExpertisesHtml($start as xs:integer, $count as xs:integer) {
 
 (:~
  : This resource function lists all the expertises
- : @return an ordered list of expertises with xforms
- :)
-declare 
-  %rest:path("/xpr/expertises/xforms")
-  %rest:produces('text/html')
-  %output:method("xml")
-function getExpertisesXforms() {
-  let $content := map {
-    'instance' : '',
-    'model' : 'xprListModel.xml',
-    'trigger' : '',
-    'form' : 'xprList.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This resource function lists all the expertises
  : @return an ordered list of expertises in json
  : @todo to develop
  :)
-declare 
+declare
   %rest:path("/xpr/expertises/json")
   %rest:POST("{$body}")
   %rest:produces('application/json')
@@ -215,7 +471,7 @@ function getExpertisesJson($body) {
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
     for $group in $expertises/expertise
-    for $year in $group/description/sessions/date/fn:year-from-date(@when[. castable as xs:date])
+    for $year in $group/sourceDesc/unitdate
     group by $year
     return map { $year : fn:count($group/self::node()) }
   )
@@ -256,8 +512,52 @@ function getExpertisesJson($body) {
 
 (:~
  : This resource function lists all the expertises
- : @return an ordered list of expertises in json
- : @todo to develop
+ : @return an ordered list of expertises with saxonjs
+ :)
+declare
+  %rest:path("/xpr/expertises/saxon")
+  %rest:produces('application/html')
+  %output:method("html")
+function getExpertisesSaxon() {
+  let $content := map {
+    'data' : db:open('xpr', 'xpr/expertises'),
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertiseSaxon.xml"
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises with xforms
+ :)
+declare 
+  %rest:path("/xpr/expertises/xforms")
+  %rest:produces('text/html')
+  %output:method("xml")
+function getExpertisesXforms() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprListModel.xml',
+    'trigger' : '',
+    'form' : 'xprList.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return(
+    processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+  )
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered table of expertises in html
  :)
 declare
   %rest:path("/xpr/expertises/table")
@@ -265,14 +565,14 @@ declare
   %rest:produces('application/html')
   %output:method("html")
 function getExpertisesTable() {
-(:  let $body := json:parse( $body, map{"format" : "xquery"}):)
+  (: let $body := json:parse( $body, map{"format" : "xquery"}) :)
   let $db := db:open('xpr')
   let $expertises := $db/xpr/expertises
   let $prosopo := $db/xpr/bio
   (:map:merge(for $x in //emp return map{$x!name : $x!@salary}):)
   let $dateCount := map:merge(
     for $group in $expertises/expertise
-    for $year in $group/description/sessions/date/fn:year-from-date(@when[. castable as xs:date])
+    for $year in $group/sourceDesc/unitdate
     group by $year
     return map { $year : fn:count($group/self::node()) }
   )
@@ -330,23 +630,35 @@ function getExpertisesTable() {
 };
 
 (:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises with saxonjs
+ : This resource function lists all the expertises’ ids
+ : @return an xml list the expertises with theire @xml:id
  :)
-declare 
-  %rest:path("/xpr/expertises/saxon")
-  %rest:produces('application/html')
-  %output:method("html")
-function getExpertisesSaxon() {
-  let $content := map {
-    'data' : db:open('xpr', 'xpr/expertises'),
-    'trigger' : '',
-    'form' : ''
-  }
-  let $outputParam := map {
-    'layout' : "listeExpertiseSaxon.xml"
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
+declare
+  %rest:path("/xpr/expertises/ids")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getExpertisesId() {
+  <expertises>{
+    for $expertise in getExpertises()/expertise
+    return <expertise xmlns="xpr" xml:id="{$expertise/@xml:id}"></expertise>
+  }</expertises>
+};
+
+(:~
+ : This resource function lists all the expertises of an expert
+ : @return an ordered list of expertises in xml
+ : @todo check for multiple value for expert
+ :)
+declare
+  %rest:path("/xpr/expertises/experts")
+  %rest:produces('application/xml')
+  %output:method("xml")
+  %rest:query-param('ids', '{$ids}', 'xpr0001')
+function getExpertises($ids as xs:string) {
+  if($ids) then
+    <expertises>{ db:open('xpr', 'xpr/expertises')/*:expertise[descendant::*:expert/@ref='#'||$ids] }</expertises>
+  else
+    <expertises>{ db:open('xpr', 'xpr/expertises') }</expertises>
 };
 
 (:~
@@ -359,6 +671,33 @@ declare
   %output:method("xml")
 function getExpertise($id) {
   db:open('xpr', 'xpr/expertises')/expertise[@xml:id=$id]
+};
+
+(:~
+ : This resource function modify an expertise item
+ : @param $id the expertise id
+ : @return an xforms to edit the expertise
+ :)
+declare
+  %rest:path("xpr/expertises/{$id}/modify")
+  %output:method("xml")
+  %perm:allow("expertises")
+function modifyExpertise($id) {
+  let $content := map {
+    'instance' : $id,
+    'path' : 'expertises',
+    'model' : ('xprExpertiseModel.xml', 'xprAutosaveModel.xml'),
+    'trigger' : 'xprExpertiseTrigger.xml',
+    'form' : 'xprExpertiseForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return(
+    processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+  )
 };
 
 (:~
@@ -387,31 +726,10 @@ function getExpertiseHtml($id) {
 (:~
  : This resource function returns an expertise item
  : @param $id the expertise id
- : @return an expertise item in html
- :)
-declare 
-  %rest:path("xpr/expertises/{$id}/saxon")
-  %rest:produces('application/html')
-  %output:method("html")
-function getExpertiseSaxon($id) {
-  let $content := map {
-    'data' : getExpertise($id),
-    'trigger' : '',
-    'form' : ''
-  }
-  let $outputParam := map {
-    'layout' : "ficheExpertiseSaxon.xml"
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-(:~
- : This resource function returns an expertise item
- : @param $id the expertise id
  : @return an expertise item in json
  : @todo to develop
  :)
-declare 
+declare
   %rest:path("xpr/expertises/{$id}/json")
   %rest:produces('application/json')
   %output:media-type('application/json')
@@ -422,6 +740,7 @@ function getExpertiseJson($id) {
     'id' : fn:normalize-space($expertise/@xml:id),
     'cote' : $expertise/sourceDesc/idno[@type='unitid'] => fn:string(),
     'dossier' : $expertise/sourceDesc/idno[@type='item'] => fn:string(),
+    'unitdate' : $expertise/sourceDesc/unitdate => fn:string(),
     'facsimile' : map {
         'start' : $expertise/sourceDesc/facsimile/@from => fn:normalize-space(),
         'end' : $expertise/sourceDesc/facsimile/@to => fn:normalize-space()
@@ -587,55 +906,24 @@ function getExpertiseJson($id) {
 };
 
 (:~
- : This resource function edits a new expertise
- : @return an xforms to edit an expertise
-:)
-declare
-  %rest:path("xpr/expertises/new")
-  %output:method("xml")
-  %perm:allow("expertises")
-function newExpertise() {
-  let $content := map {
-    'instance' : '',
-    'model' : ('xprExpertiseModel.xml', 'xprAutosaveModel.xml'),
-    'trigger' : 'xprExpertiseTrigger.xml',
-    'form' : 'xprExpertiseForm.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This resource function modify an expertise item
+ : This resource function returns an expertise item
  : @param $id the expertise id
- : @return an xforms to edit the expertise
+ : @return an expertise item in html with saxon
  :)
 declare 
-  %rest:path("xpr/expertises/{$id}/modify")
-  %output:method("xml")
-  %perm:allow("expertises")
-function modifyExpertise($id) {
+  %rest:path("xpr/expertises/{$id}/saxon")
+  %rest:produces('application/html')
+  %output:method("html")
+function getExpertiseSaxon($id) {
   let $content := map {
-    'instance' : $id,
-    'path' : 'expertises',
-    'model' : ('xprExpertiseModel.xml', 'xprAutosaveModel.xml'),
-    'trigger' : 'xprExpertiseTrigger.xml',
-    'form' : 'xprExpertiseForm.xml'
+    'data' : getExpertise($id),
+    'trigger' : '',
+    'form' : ''
   }
   let $outputParam := map {
-    'layout' : "template.xml"
+    'layout' : "ficheExpertiseSaxon.xml"
   }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -657,115 +945,7 @@ function permExpertise($perm) {
 };
 
 (:~
- : This function creates new expertises
- : @param $param content to insert in the database
- : @param $refere the callback url
- : @return update the database with an updated content and an 200 http
- : @bug change of cote and dossier doesn’t work
- :)
-declare
-  %rest:path("xpr/expertises/put")
-  %output:method("xml")
-  %rest:header-param("Referer", "{$referer}", "none")
-  %rest:PUT("{$param}")
-  %perm:allow("expertises", "write")
-  %updating
-function putExpertise($param, $referer) {
-  let $db := db:open("xpr")
-  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
-  return 
-    if (fn:ends-with($referer, 'modify'))
-    then 
-      let $location := fn:analyze-string($referer, 'xpr/expertises/(.+?)/modify')//fn:group[@nr='1']
-      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
-      let $param :=
-        copy $d := $param
-        modify (
-          replace value of node $d/expertise/@xml:id with $id,
-          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
-          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
-          let $idPlace := fn:generate-id($place)
-          where $place[fn:not(@xml:id)]
-          return (
-            insert node attribute xml:id {$idPlace} into $place,
-            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
-            )
-        )
-        return $d
-      return (
-      (:
-        @rmq avec db:replace, l'ordre des arguments est à l'inverse de db:add : d'abord l'ancien fichier, puis le nouveau
-        avec Basex 10.x, db:replace devient db:put, et l'ordre est aligné avec db:add
-      :)
-        db:replace('xpr', 'xpr/expertises/'|| $location ||'.xml', $param),
-        db:rename("xpr", 'xpr/expertises/'|| $location ||'.xml', 'xpr/expertises/'|| $id ||'.xml'),
-        update:output(
-         (
-          <rest:response>
-            <http:response status="200" message="test">
-              <http:header name="Content-Language" value="fr"/>
-              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
-            </http:response>
-          </rest:response>,
-          <result>
-            <id>{$id}</id>
-            <message>La ressource a été modifiée.</message>
-            <url></url>
-          </result>
-         )
-        )
-      )  
-    else
-      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
-      let $param := 
-        copy $d := $param
-        modify (
-          insert node attribute xml:id {$id} into $d/*,
-          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
-          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
-          let $idPlace := fn:generate-id($place)
-          return (
-            insert node attribute xml:id {$idPlace} into $place,
-            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
-          )
-        )
-        return $d
-      return (
-        db:add('xpr', $param, 'xpr/expertises/'|| $id ||'.xml'),
-        update:output(
-         (
-          <rest:response>
-            <http:response status="200" message="test">
-              <http:header name="Content-Language" value="fr"/>
-            </http:response>
-          </rest:response>,
-          <result>
-            <id>{$id}</id>
-            <message>La ressource a été créée.</message>
-            <url></url>
-          </result>
-         )
-        )
-      )  
-};
-
-(:~
- : This resource function lists all the expertises’ ids
- : @return an xml list the expertises with theire @xml:id
- :)
-declare
-  %rest:path("/xpr/expertises/ids")
-  %rest:produces('application/xml')
-  %output:method("xml")
-function getExpertisesId() {
-  <expertises>{
-    for $expertise in getExpertises()/expertise
-    return <expertise xmlns="xpr" xml:id="{$expertise/@xml:id}"></expertise>
-  }</expertises>
-};
-
-(:~
- : This resource function lists the persons or corporate bodies
+ : This resource function lists the entities
  : @return an xml list of persons/corporate bodies
  :)
 declare 
@@ -777,65 +957,81 @@ function getBiographies() {
 };
 
 (:~
- : This resource function lists the persons or corporate bodies
- : @return an xml list of persons/corporate bodies
- :)
+ : This resource function creates an new entity
+ : @return an xforms for the entity
+:)
 declare
-  %rest:path("/xpr/xforms")
-  %rest:produces('application/xml')
+  %rest:path("xpr/biographies/new")
   %output:method("xml")
-function getDataXforms() {
-  let $id := request:parameter('data')
-  let $param := request:parameter('param')
-  let $db := db:open('xpr')
-  let $biographies := getBiographies()
-  return (
-    if($id = 'getSourceId') then <source localType="new" xml:id="{'xprSource' || fn:generate-id($db)}"/>
-    else if ($param = 'getAgent') then <agent xmlns="">{fn:normalize-space(user:list-details(Session:get('id'))/@name)}</agent>
-    else $biographies/bio/eac:eac[@xml:id = $id]
+  %perm:allow("prosopography")
+function newBiography() {
+  let $content := map {
+    'instance' : '',
+    'model' : ('xprEacModel.xml', 'xprEacNoValidationModel.xml'),
+    'trigger' : 'xprEacTrigger.xml',
+    'form' : 'xprEacForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return(
+    processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltForms16Path, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
   )
-
 };
 
 (:~
- : This resource function lists the persons or corporate bodies
- : @return an xml list of persons/corporate bodies
+ : This function consumes new entity
+ : @param $param content
  :)
 declare
-  %rest:path("/xpr/search/bio/{$person}")
-  %rest:produces('application/xml')
+  %rest:path("xpr/biographies/put")
   %output:method("xml")
-function getTerm($person) {
-  let $prosopo := getBiographies()/eac:eac
-  return (
-    <results xmlns="">{
-      for $person in $prosopo[fn:normalize-space(eac:cpfDescription/eac:identity) contains text {$person} all words using fuzzy]
-      return <result xml:id="{$person/@xml:id}">{$person/descendant::eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part[@localType='full'] => fn:normalize-space()}</result>
-    }</results>
-  )
-
-};
-
-(:~
- : Permissions: expertises
- : Checks if the current user is granted; if not, redirects to the login page.
- : @param $perm map with permission data
- :)
-declare
-    %perm:check('xpr/biographies', '{$perm}')
-function permBiographies($perm) {
-  let $user := Session:get('id')
+  %rest:header-param("Referer", "{$referer}", "none")
+  %rest:PUT("{$param}")
+  %perm:allow("prosopography")
+  %updating
+function putBiography($param, $referer) {
+  let $db := db:open("xpr")
+  (:let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name):)
   return
-    if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
-      then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
-      then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
-      then web:redirect('/xpr/login')
+    if ($param/*/@xml:id) then
+      let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
+      return db:replace('xpr', 'xpr/biographies/'|| $location ||'.xml', $param)
+    else
+      let $type := switch ($param//eac:identity/eac:entityType/@value)
+        case 'person' return 'xprPerson'
+        case 'org' return 'xprOrg'
+        case 'family' return 'xprFamily'
+        default return 'xprOther'
+      let $id := $type || fn:generate-id($param)
+      let $param :=
+        copy $d := $param
+        modify(
+          insert node attribute xml:id {$id} into $d/*,
+          replace value of node $d//eac:recordId with $id
+        )
+        return $d
+      return(
+        db:add('xpr', $param, 'xpr/biographies/'|| $id ||'.xml'),
+        update:output((
+          <rest:response>
+            <http:response status="200" message="">
+              <http:header name="Content-Language" value="fr"/>
+              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
+            </http:response>
+          </rest:response>,
+          <result>
+            <id>{$id}</id>
+            <message>Une nouvelle entité a été ajoutée : {$param//eac:nameEntry[@preferred='true']/eac:part}.</message>
+          </result>
+        ))
+      )
 };
 
 (:~
- : This resource function lists all the expertises
+ : This resource function lists all the entities
  : @return an ordered list of expertises in html
  :)
 declare
@@ -851,56 +1047,6 @@ function getBiographiesHtml() {
   let $outputParam := map {
     'layout' : "listeProsopo.xml",
     'mapping' : xpr.mappings.html:listEac2html(map:get($content, 'data'), map{})
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-(:~
- : This resource function lists all the biographies
- : @return an html list of persons/corporate bodies
- :)
-declare 
-  %rest:path("/xpr/biographies/old")
-  %rest:produces('text/html')
-  %output:method("html")
-function getBiographiesOld() {
-  <html>
-    <head>Expertises</head>
-    <body>
-      <h1>xpr Biographies</h1>
-      <p><a href="/xpr/biographies/new">Nouvelle fiche</a></p>
-      <ul>
-      {
-        for $entity in db:open('xpr')//bio/eac:eac-cpf
-        let $id := $entity/eac:cpfDescription//eac:entityId
-        let $identity := $entity//eac:nameEntry[child::eac:authorizedForm]/eac:part
-        return 
-          <li>
-            <a href="/xpr/biographies/{$id}">{$identity}</a> 
-            <a href="/xpr/biographies/{$id}/modify">Modifier</a>
-          </li>
-      }
-      </ul>
-    </body>
-  </html>
-};
-
-(:~
- : This resource function lists all the entities
- : @return an ordered list of entities
- :)
-declare 
-  %rest:path("/xpr/biographies/saxon")
-  %rest:produces('application/html')
-  %output:method("html")
-function getEntitiesListSaxon() {
-  let $content := map {
-    'data' : getBiographies(),
-    'trigger' : '',
-    'form' : ''
-  }
-  let $outputParam := map {
-    'layout' : "listeProsopoSaxon.xml"
   }
   return xpr.models.xpr:wrapper($content, $outputParam)
 };
@@ -963,6 +1109,86 @@ function getBiographiesJson($body) {
 
 (:~
  : This resource function lists all the entities
+ : @return an ordered list of entities with saxon
+ :)
+declare
+  %rest:path("/xpr/biographies/saxon")
+  %rest:produces('application/html')
+  %output:method("html")
+function getBiographiesSaxon() {
+  let $content := map {
+    'data' : getBiographies(),
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "listeProsopoSaxon.xml"
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function get an entity
+ : @return an xml representation of an entity
+ :)
+declare
+  %rest:path("xpr/biographies/{$id}")
+  %output:method("xml")
+function getBiography($id) {
+  db:open('xpr', 'xpr/biographies/'||$id||'.xml')
+};
+
+(:~
+ : This resource function modify an entity
+ : @return an xforms to modify an entity
+ :)
+declare
+  %rest:path("xpr/biographies/{$id}/modify")
+  %output:method("xml")
+  %perm:allow("prosopography")
+function modifyBiography($id) {
+  let $content := map {
+    'instance' : $id,
+    'path' : 'biographies',
+    'model' : ('xprEacModel.xml', 'xprEacNoValidationModel.xml'),
+    'trigger' : 'xprEacTrigger.xml',
+    'form' : 'xprEacForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltForms16Path, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This resource function show an entity
+ : @return an html view of an entity with xquery templating
+ :)
+declare
+  %rest:path("/xpr/biographies/{$id}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getBiographyHtml($id) {
+  let $content := map {
+    'title' : 'Fiche de ' || $id,
+    'data' : getBiography($id)/eac:eac,
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheProsopo.xml",
+    'mapping' : xpr.mappings.html:eac2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function lists an entities
  : @return an ordered list of entities in json
  :)
 declare
@@ -1086,17 +1312,51 @@ function getBiographyJson($id) {
 };
 
 (:~
- : This resource function get an entity
- : @return an xml representation of an entitu
+ : This resource function show an entity
+ : @return an html view of an entity
  :)
-declare 
-  %rest:path("xpr/biographies/{$id}")
-  %output:method("xml")
-function getBiography($id) {
-  db:open('xpr', 'xpr/biographies/'||$id||'.xml')
+declare
+  %rest:path("/xpr/biographies/{$id}/saxon")
+  %rest:produces('application/html')
+  %output:method("html")
+function getBiographySaxon($id) {
+  let $content := map {
+    'data' : getBiography($id),
+    'trigger' : '',
+    'form' : ''
+  }
+  let $outputParam := map {
+    'layout' : "ficheProsopoSaxon.xml"
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
-
+(:~
+ : This resource function modify an entity
+ : @return an xforms to modify an entity
+ : @todo everywhere replace instance/$path with a direct link to the resource (model.xpr.xqm => getModels)
+ : @rmq abandonned because it was to complicated to treat the content with xforms
+ :)
+declare
+  %rest:path("xpr/biographies/{$id}/xforms")
+  %output:method("xml")
+function getBiographyXforms($id) {
+  let $content := map {
+    'instance' : ($id, getExpertises($id)),
+    'path' : 'biographies',
+    'model' : 'xprProsopoViewModel.xml',
+    'trigger' : '',
+    'form' : 'xprProsopoViewForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
 
 (:~
  : This resource function get the activity of an entity
@@ -1160,222 +1420,13 @@ function getExpertActivity($id) {
 };
 
 (:~
- : This resource function show an entity
- : @return an html view of an entity
- :)
-declare 
-  %rest:path("/xpr/biographies/{$id}/saxon")
-  %rest:produces('application/html')
-  %output:method("html")
-function getBiographySaxon($id) {
-  let $content := map {
-    'data' : getBiography($id),
-    'trigger' : '',
-    'form' : ''
-  }
-  let $outputParam := map {
-    'layout' : "ficheProsopoSaxon.xml"
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-(:~
- : This resource function show an entity
- : @return an html view of an entity with xquery templating
- :)
-declare 
-  %rest:path("/xpr/biographies/{$id}/view")
-  %rest:produces('application/html')
-  %output:method("html")
-  %output:html-version('5.0')
-function getBiographyHtml($id) {
-  let $content := map {
-    'title' : 'Fiche de ' || $id,
-    'data' : getBiography($id)/eac:eac,
-    'trigger' : '',
-    'form' : ''
-  }
-  let $outputParam := map {
-    'layout' : "ficheProsopo.xml",
-    'mapping' : xpr.mappings.html:eac2html(map:get($content, 'data'), map{})
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-(:~
- : This resource function modify an entity
- : @return an xforms to modify an entity
- : @todo everywhere replace instance/$path with a direct link to the resource (model.xpr.xqm => getModels)
- : @rmq abandonned because it was to complicated to treat the content with xforms
- :)
-declare
-  %rest:path("xpr/biographies/{$id}/xforms")
-  %output:method("xml")
-function getBiographyXforms($id) {
-  let $content := map {
-    'instance' : ($id, getExpertises($id)),
-    'path' : 'biographies',
-    'model' : 'xprProsopoViewModel.xml',
-    'trigger' : '',
-    'form' : 'xprProsopoViewForm.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This resource function modify an entity
- : @return an xforms to modify an entity
- :)
-declare 
-  %rest:path("xpr/biographies/{$id}/modify")
-  %output:method("xml")
-  %perm:allow("prosopography")
-function modifyEntity($id) {
-  let $content := map {
-    'instance' : $id,
-    'path' : 'biographies',
-    'model' : ('xprEacModel.xml', 'xprEacNoValidationModel.xml'),
-    'trigger' : 'xprEacTrigger.xml',
-    'form' : 'xprEacForm.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltForms16Path, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This resource function creates an new entity
- : @return an xforms for the entity
-:)
-declare
-  %rest:path("xpr/biographies/new")
-  %output:method("xml")
-  %perm:allow("prosopography")
-function newBiography() {
-  let $content := map {
-    'instance' : '',
-    'model' : ('xprEacModel.xml', 'xprEacNoValidationModel.xml'),
-    'trigger' : 'xprEacTrigger.xml',
-    'form' : 'xprEacForm.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltForms16Path, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This function consumes new entity 
- : @param $param content
- :)
-declare
-  %rest:path("xpr/biographies/put")
-  %output:method("xml")
-  %rest:header-param("Referer", "{$referer}", "none")
-  %rest:PUT("{$param}")
-  %perm:allow("prosopography")
-  %updating
-function putBiography($param, $referer) {
-  let $db := db:open("xpr")
-  (:let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name):)
-  return
-    if ($param/*/@xml:id)
-    then
-      let $location := fn:analyze-string($referer, 'xpr/biographies/(.+?)/modify')//fn:group[@nr='1']
-      return db:replace('xpr', 'xpr/biographies/'|| $location ||'.xml', $param)
-
-    else
-      let $type := switch ($param//eac:identity/eac:entityType/@value)
-        case 'person' return 'xprPerson'
-        case 'org' return 'xprOrg'
-        case 'family' return 'xprFamily'
-        default return 'xprOther'
-
-      let $id := $type || fn:generate-id($param)
-      let $param :=
-        copy $d := $param
-        modify
-        (
-          insert node attribute xml:id {$id} into $d/*,
-          replace value of node $d//eac:recordId with $id
-        )
-        return $d
-      return (
-
-        db:add('xpr', $param, 'xpr/biographies/'|| $id ||'.xml'),
-        update:output(
-          (
-          <rest:response>
-            <http:response status="200" message="">
-              <http:header name="Content-Language" value="fr"/>
-              <http:header name="Content-Type" value="text/plain; charset=utf-8"/>
-            </http:response>
-          </rest:response>,
-          <result>
-            <id>{$id}</id>
-            <message>Une nouvelle entité a été ajoutée : {$param//eac:nameEntry[@preferred='true']/eac:part}.</message>
-          </result>
-          )
-        )
-      )
-};
-
-(:~
- : This resource function lists all the entities
- : @return an ordered xml ressource of all the entities with @xml:id, @type and an authorized form of the name
- : @todo collation for order by (for accent)
- :)
-declare 
-  %rest:path("/xpr/entities")
-  %rest:produces('application/xml')
-  %output:method("xml")
-function getEntities() {
-  <entities xmlns="xpr">
-    {
-      for $entity in getBiographies()/eac:eac
-      let $id := $entity/@xml:id
-      order by fn:lower-case($entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1])
-      return <entity xml:id="{$id}" type="{fn:string-join($entity//eac:otherEntityTypes/eac:otherEntityType/eac:term, ' ')}"><label>{$entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part/text()}</label></entity>
-    }
-  </entities>
-};
-
-(:~
- : This resource function lists all the inventories
- : @return a xml ressource of all the inventories
- :)
-declare 
-  %rest:path("/xpr/inventories")
-  %rest:produces('application/xml')
-  %output:method("xml")
-function getInventories() {
-  <posthumousInventories>{ db:open('xpr', 'xpr/inventories') }</posthumousInventories>
-};
-
-(:~
- : Permissions: inventories
+ : Permissions: biographies
  : Checks if the current user is granted; if not, redirects to the login page.
  : @param $perm map with permission data
  :)
 declare
-    %perm:check('xpr/inventories', '{$perm}')
-function permInventories($perm) {
+    %perm:check('xpr/biographies', '{$perm}')
+function permBiographies($perm) {
   let $user := Session:get('id')
   return
     if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
@@ -1388,23 +1439,14 @@ function permInventories($perm) {
 
 (:~
  : This resource function lists all the inventories
- : @return an ordered list of inventories in html
+ : @return a xml ressource of all the inventories
  :)
-declare
-  %rest:path("/xpr/inventories/view")
-  %rest:produces('application/html')
-  %output:method("html")
-  %output:html-version('5.0')
-function getInventoriesHtml() {
- let $content := map {
-    'title' : 'Liste des inventaires après-décès',
-    'data' : getInventories()
-  }
-  let $outputParam := map {
-    'layout' : "listeInventaires.xml",
-    'mapping' : xpr.mappings.html:listIad2html(map:get($content, 'data'), map{})
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
+declare 
+  %rest:path("/xpr/inventories")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getInventories() {
+  <posthumousInventories>{ db:open('xpr', 'xpr/inventories') }</posthumousInventories>
 };
 
 (:~
@@ -1433,33 +1475,7 @@ function newInventory() {
 };
 
 (:~
- : This resource function modify an inventory
- : @return an xforms to modify an inventory
- :)
-declare
-  %rest:path("xpr/inventories/{$id}/modify")
-  %output:method("xml")
-  %perm:allow("posthumusInventory")
-function modifyInventory($id) {
-  let $content := map {
-    'instance' : $id,
-    'path' : 'inventories',
-    'model' : ('xprInventoryModel.xml', 'xprProsopoModel.xml'),
-    'trigger' : 'xprInventoryTrigger.xml',
-    'form' : 'xprInventoryForm.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This function consumes new inventory 
+ : This function consumes new inventory
  : @param $param content
  : @todo modify
  :)
@@ -1522,20 +1538,29 @@ function putInventory($param, $referer) {
 };
 
 (:~
- : This resource function returns an expertise item
- : @param $id the expertise id
- : @return an expertise item in xml (xpr)
+ : This resource function lists all the inventories
+ : @return an ordered list of inventories in html
  :)
 declare
-  %rest:path("xpr/inventories/{$id}")
-  %output:method("xml")
-function getInventory($id) {
-  db:open('xpr', 'xpr/inventories/'||$id||'.xml')
+  %rest:path("/xpr/inventories/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getInventoriesHtml() {
+ let $content := map {
+    'title' : 'Liste des inventaires après-décès',
+    'data' : getInventories()
+  }
+  let $outputParam := map {
+    'layout' : "listeInventaires.xml",
+    'mapping' : xpr.mappings.html:listIad2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
- : This resource function lists all the sources
- : @return an ordered list of sources in json
+ : This resource function lists all the inventories
+ : @return an ordered list of inventories in json
  : @todo to develop
  :)
 declare
@@ -1569,6 +1594,44 @@ function getInventoriesJson($body) {
 };
 
 (:~
+ : This resource function returns an inventory item
+ : @param $id the inventory id
+ : @return an inventory item in xml (xpr)
+ :)
+declare
+  %rest:path("xpr/inventories/{$id}")
+  %output:method("xml")
+function getInventory($id) {
+  db:open('xpr', 'xpr/inventories/'||$id||'.xml')
+};
+
+(:~
+ : This resource function modify an inventory
+ : @return an xforms to modify an inventory
+ :)
+declare
+  %rest:path("xpr/inventories/{$id}/modify")
+  %output:method("xml")
+  %perm:allow("posthumusInventory")
+function modifyInventory($id) {
+  let $content := map {
+    'instance' : $id,
+    'path' : 'inventories',
+    'model' : ('xprInventoryModel.xml', 'xprProsopoModel.xml'),
+    'trigger' : 'xprInventoryTrigger.xml',
+    'form' : 'xprInventoryForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
  : This resource function returns an inventory
  : @return an inventory in json
  : @todo to develop
@@ -1595,6 +1658,260 @@ function getInventoryJson($id) {
 };
 
 (:~
+ : Permissions: inventories
+ : Checks if the current user is granted; if not, redirects to the login page.
+ : @param $perm map with permission data
+ :)
+declare
+    %perm:check('xpr/inventories', '{$perm}')
+function permInventories($perm) {
+  let $user := Session:get('id')
+  return
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'new'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:info/*:grant/@type = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+      then web:redirect('/xpr/login')
+};
+
+(:~
+ : This resource function lists all the expertises
+ : @return an ordered list of expertises with 2 or more categories in xml
+ :)
+declare
+  %rest:path("/xpr/dualcat")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getExpertisesDualCategories() {
+  <expertises>{ db:open('xpr')/xpr/expertises/expertise[fn:count(descendant::category) > 1] }</expertises>
+};
+
+(:~
+ : This resource function lists all the expertises with 2 or more categories
+ : @return an ordered list of expertises with 2 or more categories in html
+ :)
+declare
+  %rest:path("/xpr/dualcat/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getExpertisesDualCategoriesHtml() {
+ let $content := map {
+    'title' : 'Liste des expertises avec plusieurs catégories d‘expertise',
+    'data' : getExpertisesDualCategories()
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml",
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+(:~
+ : This resource function lists the persons or corporate bodies
+ : @return an xml list of persons/corporate bodies
+ :)
+declare
+  %rest:path("/xpr/xforms")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getDataXforms() {
+  let $id := request:parameter('data')
+  let $param := request:parameter('param')
+  let $db := db:open('xpr')
+  let $biographies := getBiographies()
+  return (
+    if($id = 'getSourceId') then <source localType="new" xml:id="{'xprSource' || fn:generate-id($db)}"/>
+    else if ($param = 'getAgent') then <agent xmlns="">{fn:normalize-space(user:list-details(Session:get('id'))/@name)}</agent>
+    else $biographies/bio/eac:eac[@xml:id = $id]
+  )
+
+};
+
+(:~
+ : This resource function lists the persons or corporate bodies
+ : @return an xml list of persons/corporate bodies
+ :)
+declare
+  %rest:path("/xpr/search/bio/{$person}")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getTerm($person) {
+  let $prosopo := getBiographies()/eac:eac
+  return (
+    <results xmlns="">{
+      for $person in $prosopo[fn:normalize-space(eac:cpfDescription/eac:identity) contains text {$person} all words using fuzzy]
+      return <result xml:id="{$person/@xml:id}">{$person/descendant::eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part[@localType='full'] => fn:normalize-space()}</result>
+    }</results>
+  )
+};
+
+(:~
+ : This resource function lists all the entities
+ : @return an ordered xml ressource of all the entities with @xml:id, @type and an authorized form of the name
+ : @todo collation for order by (for accent)
+ :)
+declare
+  %rest:path("/xpr/entities")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getEntities() {
+  <entities xmlns="xpr">{
+    for $entity in getBiographies()/eac:eac
+      let $id := $entity/@xml:id
+      order by fn:lower-case($entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1])
+    return
+      <entity xml:id="{$id}" type="{fn:string-join($entity//eac:otherEntityTypes/eac:otherEntityType/eac:term, ' ')}"><label>{$entity//eac:nameEntry[@preferredForm='true'][@status='authorized'][1]/eac:part/text()}</label></entity>
+  }</entities>
+};
+
+(:~ Login page (visible to everyone). :)
+declare
+  %rest:path("xpr/login")
+  %output:method("html")
+function login() {
+  <html>
+    Please log in:
+    <form action="/xpr/login/check" method="post">
+      <input name="name"/>
+      <input type="password" name="pass"/>
+      <input type="submit"/>
+    </form>
+  </html>
+};
+
+(:
+ : this function checks if the user is registered
+ :)
+declare
+  %rest:path("xpr/login/check")
+  %rest:query-param("name", "{$name}")
+  %rest:query-param("pass", "{$pass}")
+function login($name, $pass) {
+  try {
+    user:check($name, $pass),
+    Session:set('id', $name),
+    web:redirect("/")
+  } catch user:* {
+    web:redirect("/")
+  }
+};
+
+(:
+ : this function logs out current user
+ :)
+declare
+  %rest:path("xpr/logout")
+function logout() {
+  Session:delete('id'),
+  web:redirect("/")
+};
+
+(:~
+ : This resource function edits a new user
+    : @return an xforms to edit a new user
+:)
+declare
+  %rest:path("xpr/users/new")
+  %output:method("xml")
+  %perm:allow("admin", "write")
+function newUser() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprUserModel.xml',
+    'trigger' : '',
+    'form' : 'xprUserForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This function creates new user in dba.
+ : @todo return creation message
+ : @todo control for duplicate user.
+ :)
+declare
+  %rest:path("xpr/users/put")
+  %output:method("xml")
+  %rest:header-param("Referer", "{$referer}", "none")
+  %rest:PUT("{$param}")
+  %perm:allow("admin", "write")
+  %updating
+function putUser($param, $referer) {
+  let $user := $param
+  let $userName := fn:normalize-space($user/*:user/*:name)
+  let $userPwd := fn:normalize-space($user/*:user/*:password)
+  let $userPermission := fn:normalize-space($user/*:user/*:permission)
+  let $userInfo :=
+    <info xmlns="">{
+        for $right in $user/*:user/*:info/*:grant
+        return <grant type="{$right/@type}">{fn:normalize-space($right)}</grant>
+    }</info>
+  return
+    user:create(
+      $userName,
+      $userPwd,
+      $userPermission,
+      'xpr',
+      $userInfo)
+};
+
+(:~
+ : This resource returns a xml file with all the expertises of a user
+ : @return an xml resource
+ :)
+declare
+  %rest:path("xpr/users/expertises/{$user}")
+  %rest:produces('application/html')
+  %output:method("xml")
+function getUsersExpertises($user) {
+  <expertises xmlns="xpr">{ db:open('xpr')//expertise[descendant::agent[fn:normalize-space(.) = $user]] }</expertises>
+};
+
+(:~
+ : This resource returns a list with all the expertises of a user
+ : @return an ordered list of expertises in html
+ :)
+declare
+  %rest:path("xpr/users/expertises/{$user}/view")
+  %rest:produces('application/html')
+  %output:method("html")
+  %output:html-version('5.0')
+function getUsersExpertisesHtml($user) {
+ let $content := map {
+    'title' : 'Liste des expertises',
+    'data' : getUsersExpertises($user)
+  }
+  let $outputParam := map {
+    'layout' : "listeExpertise.xml",
+    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
+  }
+  return xpr.models.xpr:wrapper($content, $outputParam)
+};
+
+
+declare
+    %perm:check('xpr/users', '{$perm}')
+function permUsers($perm) {
+  let $user := Session:get('id')
+  return
+    if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow[2])) and fn:ends-with($perm?path, 'new'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
+      then web:redirect('/xpr/login')
+    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'put'))
+      then web:redirect('/xpr/login')
+};
+
+(:~
  : This function
  :)
 declare
@@ -1604,7 +1921,7 @@ declare
   %rest:produces("text/plain")
 function getCsvExpertises() {
  <csv>{
-  let $data := db:open('xpr')//expertises
+  let $data := db:open('xpr', 'xpr/expertises')
   for $expertise in $data/expertise
   return element record {
     element unitid {$expertise/sourceDesc/idno[@type="unitid"] => fn:normalize-space()},
@@ -1615,6 +1932,7 @@ function getCsvExpertises() {
     element extent {$expertise/sourceDesc/physDesc/extent => fn:normalize-space()},
     element nbAppendice {$expertise/sourceDesc/physDesc/appendices/appendice => fn:count()},
     element sessions {$expertise/description/sessions/date/fn:concat(@when, ' ; ', @type) => fn:string-join(" | ")},
+    (:element experts {$expertise/description/participants/experts/expert[@ref!=""]/xpr.mappings.html:getEntityName(fn:substring-after(@ref, '#')) => fn:string-join(" | ")},:)
     (:tous les lieux n'ont pas la même structure s'ils sont à paris, banlieue, etc.:)
     element places {$expertise/description/places/place/fn:concat(@type, ' ; ', fn:string-join(descendant::node()[fn:not(node())], " ; ")) => fn:string-join(" | ")},
     element categories {$expertise/description/categories/category => fn:string-join(" | ")},
@@ -1625,9 +1943,107 @@ function getCsvExpertises() {
     element origination {$expertise/description/procedure/origination => fn:normalize-space()},
     element originationType {$expertise/description/procedure/origination/@type => fn:normalize-space()},
     element sentences {$expertise/description/procedure/sentences/sentence/fn:concat(fn:normalize-space(orgName), " : ", fn:string-join(date/@when, ' ; ')) => fn:string-join(" | ")},
-    element sentences {$expertise/description/procedure/case => fn:normalize-space()},
-    element sentences {$expertise/description/procedure/objects/object => fn:string-join(' | ')}}
+    element case {$expertise/description/procedure/case => fn:normalize-space()},
+    element objects {$expertise/description/procedure/objects/object => fn:string-join(' | ')}}
  }</csv>
+};
+
+(:
+ : this function returns the list of experts, clerks and expertises (with only 1 category) for a year.
+ :)
+declare
+  %rest:path("/xpr/data/{$year}")
+  %rest:produces("application/xml")
+  %output:method("xml")
+  %rest:query-param("format", "{$format}", "xml")
+function getDataByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+    let $content := map{
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam),
+      'clerks' : xpr.models.networks:getClerksByYear($queryParam)
+    }
+
+    let $outputParam := map{}
+
+    return
+      <xpr>{
+        $content?expertises,
+        $content?experts,
+        $content?clerks
+      }</xpr>
+};
+
+(:
+ : this function returns the experts data for a specific year.
+ :)
+declare
+  %rest:path("/xpr/data/{$year}/experts")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getExpertsDataByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+    let $content := map{
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+    }
+    let $outputParam := map{}
+    return xpr.models.networks:getFormatedExpertsData($queryParam, $content, $outputParam)
+};
+
+(:
+ : this function returns clerks data for a specific year.
+ :)
+declare
+  %rest:path("/xpr/data/{$year}/clerks")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getClerksDataByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
+      'clerks' : xpr.models.networks:getClerksByYear($queryParam)
+    }
+
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getFormatedClerksData($queryParam, $content, $outputParam)
+};
+
+(:
+ : this function returns expertises data for a specific year.
+ :)
+declare
+  %rest:path("/xpr/data/{$year}/expertises")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getExpertisesDataByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+    }
+
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getFormatedExpertisesData($queryParam, $content, $outputParam)
 };
 
 (:~
@@ -1640,8 +2056,8 @@ declare
   %output:method("json")
   %rest:produces("application/json")
 function getNetworks($year) {
-  let $expertises := getExpertises()//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]][fn:count(.//participants/experts/expert) = 2]
-  let $experts := fn:distinct-values(getExpertises()//expertise[description/sessions/date[1][fn:starts-with(@when, $year)]]//participants/experts/expert/@ref)
+  let $expertises := getExpertises()//expertise[sourceDesc/unitdate[fn:normalize-space(.) = $year]][fn:count(.//participants/experts/expert) = 2]
+  let $experts := fn:distinct-values(getExpertises()//expertise[sourceDesc/unitdate[fn:normalize-space(.) = $year]]//participants/experts/expert/@ref)
   
   let $nodes := 
     for $expert in $experts
@@ -1773,6 +2189,75 @@ function dragended(d) {{
 
 };
 
+(:
+ : this function returns a resource with expertises network for a specific year.
+ :)
+declare
+  %rest:path("/xpr/networks/{$year}/expertises")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getExpertisesNetworkByYear($year as xs:string, $format as xs:string) {
+  let $queryParam := map{
+    'year' : $year,
+    'format' : $format
+  }
+  let $content := map{
+    'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+    'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+  }
+  let $outputParam := map{}
+
+  return xpr.models.networks:getFormatedExpertisesNetwork($queryParam, $content, $outputParam)
+};
+
+(:
+ : this function returns csv resource for clerks network by year.
+ :)
+declare
+  %rest:path("/xpr/networks/{$year}/clerks")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getClerksNetworkByYear($year as xs:string, $format as xs:string) {
+    let $queryParam := map{
+      'year' : $year,
+      'format' : $format
+    }
+
+    let $content := map{
+      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+      'experts' : xpr.models.networks:getExpertsByYear($queryParam),
+      'clerks' : xpr.models.networks:getClerksByYear($queryParam)
+    }
+
+    let $outputParam := map{
+
+    }
+    return xpr.models.networks:getFormatedClerksNetwork($queryParam, $content, $outputParam)
+};
+
+(:
+ : this function returns csv resource for categories network by year.
+ :)
+declare
+  %rest:path("/xpr/networks/{$year}/categories")
+  %rest:produces("application/csv")
+  %output:method("csv")
+  %rest:query-param("format", "{$format}", "csv")
+function getCategoriesNetworkByYear($year as xs:string, $format as xs:string) {
+  let $queryParam := map{
+    'year' : $year,
+    'format' : $format
+  }
+  let $content := map{
+    'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
+    'experts' : xpr.models.networks:getExpertsByYear($queryParam)
+  }
+  let $outputParam := map{}
+
+  return xpr.models.networks:getFormatedCategoriesNetwork($queryParam, $content, $outputParam)
+};
 
 (:~
  :
@@ -1839,339 +2324,8 @@ function getReseauByYearHtml($year as xs:string, $format as xs:string) {
       'layout' : "listeExpertise.xml",
       'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
   }
-    return xpr.models.xpr:wrapper($content, $outputParam)
-};
 
-
-(:
- : this function returns the list of experts and expertise (with only 1 category) for a year.
- :)
-declare
-  %rest:path("/xpr/data/{$year}")
-  %rest:produces("application/xml")
-  %output:method("xml")
-  %rest:query-param("format", "{$format}", "xml")
-function getDataByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return
-    <xpr>{
-      $content?expertises,
-      $content?experts
-    }</xpr>
-};
-
-(:
- : this function returns csv resource for categories network by year.
- :)
-declare
-  %rest:path("/xpr/data/{$year}/experts")
-  %rest:produces("application/csv")
-  %output:method("csv")
-  %rest:query-param("format", "{$format}", "csv")
-function getExpertsDataByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return xpr.models.networks:getFormatedExpertsData($queryParam, $content, $outputParam)
-};
-
-(:
- : this function returns csv resource for clerks network by year.
- :)
-declare
-  %rest:path("/xpr/data/{$year}/clerks")
-  %rest:produces("application/csv")
-  %output:method("csv")
-  %rest:query-param("format", "{$format}", "csv")
-function getClerksDataByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'clerks' : xpr.models.networks:getClerksByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return xpr.models.networks:getFormatedClerksData($queryParam, $content, $outputParam)
-};
-
-(:
- : this function returns csv resource for categories network by year.
- :)
-declare
-  %rest:path("/xpr/data/{$year}/expertises")
-  %rest:produces("application/csv")
-  %output:method("csv")
-  %rest:query-param("format", "{$format}", "csv")
-function getExpertisesDataByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return xpr.models.networks:getFormatedExpertisesData($queryParam, $content, $outputParam)
-};
-
-
-(:
- : this function returns csv resource for categories network by year.
- :)
-declare
-  %rest:path("/xpr/networks/{$year}/categories")
-  %rest:produces("application/csv")
-  %output:method("csv")
-  %rest:query-param("format", "{$format}", "csv")
-function getCategoriesNetworkByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return xpr.models.networks:getFormatedCategoriesNetwork($queryParam, $content, $outputParam)
-};
-
-(:
- : this function returns csv resource for clerks network by year.
- :)
-declare
-  %rest:path("/xpr/networks/{$year}/clerks")
-  %rest:produces("application/csv")
-  %output:method("csv")
-  %rest:query-param("format", "{$format}", "csv")
-function getClerksNetworkByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam),
-      'clerks' : xpr.models.networks:getClerksByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return xpr.models.networks:getFormatedClerksNetwork($queryParam, $content, $outputParam)
-};
-
-
-
-(:
- : this function returns csv resource for expertises network by year.
- :)
-declare
-  %rest:path("/xpr/networks/{$year}/expertises")
-  %rest:produces("application/csv")
-  %output:method("csv")
-  %rest:query-param("format", "{$format}", "csv")
-function getExpertisesNetworkByYear($year as xs:string, $format as xs:string) {
-    let $queryParam := map{
-      'year' : $year,
-      'format' : $format
-    }
-
-    let $content := map{
-      'expertises' : xpr.models.networks:getExpertisesByYear($queryParam),
-      'experts' : xpr.models.networks:getExpertsByYear($queryParam)
-    }
-
-    let $outputParam := map{
-
-    }
-    return xpr.models.networks:getFormatedExpertisesNetwork($queryParam, $content, $outputParam)
-};
-
-
-(:
- :display table
- : 
-:)
-
-(:~
- : This resource function lists all the expertises with 2 or more categories
- : @return an ordered list of expertises in xml
- :)
-declare 
-  %rest:path("/xpr/dualcat")
-  %rest:produces('application/xml')
-  %output:method("xml")
-function getExpertisesDualCategories() {
-  <expertises>{db:open('xpr')/xpr/expertises/expertise[fn:count(descendant::category) > 1]}</expertises>
-};
-
-(:~
- : This resource function lists all the expertises
- : @return an ordered list of expertises in html
- :)
-declare
-  %rest:path("/xpr/dualcat/view")
-  %rest:produces('application/html')
-  %output:method("html")
-  %output:html-version('5.0')
-function getExpertisesDualCategoriesHtml() {
- let $content := map {
-    'title' : 'Liste des expertises avec plusieurs catégories d‘expertise',
-    'data' : getExpertisesDualCategories()
-  }
-  let $outputParam := map {
-    'layout' : "listeExpertise.xml",
-    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
-  }
   return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-
-(:~
- : This function consumes 
- : @param $year content
- : 
- :)
-(: declare
-  %rest:path("xpr/networks/{$year}/viz")
-  %output:method("html")
-function networkViz($year) {
-  <html>
-    <head>
-      <title>Basic sigma.js example</title>
-      <style type="text/css">
-        <![CDATA[body {
-        margin: 0;
-      }
-    #container {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-    }
-    ]]>
-  </style>
-</head>
-<body>
-  <div id="container"></div>
-  <script src="/xpr/files/js/sigma/build/sigma.require.js"></script>
-  <script src="/xpr/files/js/sigma/build/plugins/sigma.parsers.json.min.js"></script>
-  <script src="/xpr/files/js/sigma/plugins/sigma.layout.forceAtlas2/worker.js"></script>
-  <script src="/xpr/files/js/sigma/plugins/sigma.layout.forceAtlas2/supervisor.js"></script>
-  <script>
-    sigma.parsers.json('/xpr/networks/{$year}', {{
-      container: 
-        'container',
-        settings: {{
-          defaultNodeColor: '#ec5148'
-        }}
-    }});
-    sigma.startForceAtlas2({{linLogMode: true, worker: true, barnesHutOptimize: false}});
-    sigma.graph.nodes();
-    sigma.refresh();
-  </script>
-</body>
-</html>
-
-}; :)
-
-(:~
- : This resource function creates the about page
- : @return an about page
- :)
-declare
-  %rest:path("/xpr/about")
-  %output:method("html")
-function about() {
-  let $content := map {
-      'title' : 'À propos de l’ANR Experts',
-      'data' : <div>
-                          <section class="alternate">
-                          <br/>
-                          <br/>
-                          <h2>Pratiques des savoirs entre jugement et innovation. Experts, expertises du bâtiment, Paris 1690-1790 – ANR EXPERTS</h2>
-                          <p>Notre projet vise à examiner, à partir d’un secteur économique majeur — celui du bâtiment à l’époque moderne —, le mécanisme de l’expertise : comment la langue technique régulatrice des experts s’impose à la société, comment leur compétence se convertit en autorité, voire parfois en « abus d’autorité » ? L’existence d’un fonds d’archives exceptionnel (AN Z<sup>1J</sup>) qui conserve l’ensemble des procès-verbaux d’expertise du bâtiment parisien de 1643 à 1792 nous permet de lancer une enquête pluridisciplinaire d’envergure sur la question de l’expertise qui connaît, à partir de 1690, un tournant particulier. En effet, les experts, autrefois uniquement gens de métiers, se divisent en deux branches exerçant deux activités concurrentes, parfois complémentaires : l’architecture et l’entreprise de construction.</p>
-                        <p>La base de notre travail consistera d’abord à établir parallèlement deux corpus : d’une part, un dictionnaire prosopographique des 234 experts exerçant de 1690 à 1790 ; d’autre part, l’inventaire et l’analyse des procès-verbaux d’expertise sur la même période. Au regard de l’immensité du fond, nous travaillerons sur un groupe de près de 10 000 expertises par le biais d’un sondage au 1/10<sup>e</sup> sur les dix années de 1696 à 1786, espacées chacune de 10 ans. Chaque expertise sera inventoriée, indexée, numérisée et analysée dans le détail. L’ensemble fera l’objet d’une étude sérielle sur le siècle parcouru, mais surtout d’un travail approfondi sur son contenu. Deux questions seront résolues : 1° Comment la décision de l’expert se prend-elle ? Quels savoirs y sont convoqués ? 2° Comment ces experts parviennent à innover dans domaine de leur compétence ? Le projet correspond au moins à trois enjeux contemporains.</p>
-                        <p>Le premier concerne le rapport au risque et à l’innovation sociale. Comment affronter des situations à risque permet d’innover techniquement, voire socialement ? La confrontation à des incertitudes ouvre des possibilités de résoudre des conflits entre des communautés opposées. Tenant compte de la partition des fonctions d’experts, la mission d’expertise se différencie-t-elle selon la qualité de son auteur ? Les experts en viennent, souvent grâce à l’expertise, à innover dans le champ d’activité qui est le leur. Ainsi, pourquoi l’expertise induit-elle l’innovation ?</p>
-                        <p>Le second concerne la part du droit dans la prise de décision démocratique. Comment le droit peut-il servir entre les mains de non-juristes ? La diffusion des principes du droit dans la vie citoyenne permet un usage de ces derniers dans la vie publique mais également dans des domaines de la vie privée. Dans le cadre de notre projet, comment et pourquoi des experts, non juristes mais au fait du droit, argumenteront en droit et persuaderont le juge de leur position ?</p>
-                        <p>Le troisième concerne la régulation des valeurs de biens. Quels critères faut-il mettre en avant pour échafauder une hiérarchie des choses ? Une stricte normalisation objective de ces critères peut ne pas apparaître souhaitable face aux lois du marché qui par leur rigueur nécessiteraient un contrebalancement de règles subjectivées. Précisément, comment les experts du bâtiment ont-ils mis en place les critères objectifs et subjectifs d’estimation de la valeur des biens immobiliers ?</p>
-                        <p>Rejoignant l’idée d’« abus d’autorité » de l’expert, le fait que plusieurs types de savoirs, et plusieurs groupes sociaux, partagent l’expertise, diminuerait-il le risque d’abus d’autorité et au-delà le risque technique en général ?</p>
-                    <p>Les résultats de cette recherche sont présentés dans une base de connaissances collaborative accueillie sur un site dédié sur lequel l’ensemble des corpus seront accessibles à la communauté des chercheurs. L’analyse d’<em>exempla</em> fera l’objet d’une éditorialisation particulière sous forme d’exposition virtuelle pour le grand public. La synthèse de nos résultats sera consignée dans un ouvrage et deux rencontres nationale et internationale viendront clore le projet.</p></section>
-                        <section class="alternate">
-                          <div><h2>Responsables du projet</h2>
-                          <ul>
-                            <li>Robert Carvais, CNRS (UMR 7074)</li>
-                            <li>Emmanuel Chateau-Dutier, Université de Montréal (CRIHN)</li>
-                            <li>Valérie Nègre, Université Paris I (UMR 8066)</li>
-                            <li>Michela Barbot, CNRS (UMR 8533)</li>
-                          </ul></div>
-                          <div>
-                            <h2>Co-chercheurs</h2>
-                            <ul>
-                              <li>Juliette Hernu-Belaud (Chercheuse post-doctorale ANR Experts)</li>
-                              <li>Léonore Losserand (Chercheuse post-doctorale ANR Experts)</li>
-                              <li>Yvon Plouzennec (Chercheur post-doctorale ANR Experts)</li>
-                            </ul>
-                          </div>
-                          <div>
-                            <h2>Ingénieur d’étude</h2>
-                            <ul>
-                              <li>Josselin Morvan</li>
-                            </ul>
-                          </div>
-                          <div>
-                            <h2>Partenaires</h2>
-                            <ul>
-                              <li><a href="https://anr.fr/Projet-ANR-17-CE26-0006">Agence nationale de recherche, projet ANR-17-CE26-0006</a></li>
-                              <li><a href="http://www.gip-recherche-justice.fr">Mission de recherche Droit &amp; Justice (2015-2017)</a></li>
-                              <li><a href="https://www.archives-nationales.culture.gouv.fr">Archives Nationales de France</a></li>
-                              <li>Ce projet a bénéficié du soutien du <a href="https://sites.haa.pitt.edu/na-dah/">Getty Advanced Workshop on Network Analysis and Digital Art History (NA+DAH)</a></li>
-                            </ul>
-                          </div>
-                        </section>
-                        </div>
-    }
-    let $outputParam := map {
-      'layout' : "template.xml"
-      (: 'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{}) :)
-    }
-    return xpr.models.xpr:wrapper($content, $outputParam)
 };
 
 (:~
@@ -2221,7 +2375,7 @@ declare
   %output:media-type('application/json')
   %output:method('json')
 function getStatisticsByYear($year) {
-  let $listExpertises := getExpertises()/expertise[description/sessions/date[@when castable as xs:date][fn:year-from-date(@when) = xs:integer($year)]]
+  let $listExpertises := getExpertises()/expertise[sourceDesc/unitdate[fn:normalize-space(.) = $year]]
   let $listExperts := xpr.models.networks:getExpertsByYear(map{"year":$year})//*:eac
   let $experts := xpr.models.networks:getFormatedExpertsData(
     map{
@@ -2254,11 +2408,8 @@ function getStatisticsByYear($year) {
   }
 };
 
-declare
-  %output:method('json')
-function getExpertisesStatistics($corpus, $experts) {
-  let $expertises := $corpus
-
+declare function getExpertisesStatistics($expertises, $experts) {
+  let $expertises := $expertises
   let $sessionPlaces :=
     for $place in fn:distinct-values(getExpertises()/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
     let $label := switch ($place)
@@ -2267,7 +2418,6 @@ function getExpertisesStatistics($corpus, $experts) {
       case 'province' return 'Province'
       default return 'Indéterminé'
     return [$place, $label]
-
   let $duration :=
     for $expertise in $expertises/description/sessions
     let $dates :=
@@ -2276,7 +2426,6 @@ function getExpertisesStatistics($corpus, $experts) {
       return xs:date($session/@when)
     let $duration := $dates[fn:last()] - $dates[1]
     return fn:days-from-duration($duration)
-
   let $places :=
     (:let $listPlace := fn:distinct-values(db:open('xpr')//*:expertise//*:places/*:place/@type):)
     let $listPlace := fn:distinct-values(getExpertises()/expertise/description/sessions/date[fn:normalize-space(@type)!=""]/@type)
@@ -2286,18 +2435,17 @@ function getExpertisesStatistics($corpus, $experts) {
       for $j in fn:subsequence($seq, $pos+1, fn:count($seq))
       return [$i, $j]
     return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
-
   let $objects :=
       let $types := fn:distinct-values(getExpertises()/expertise/description/procedure/objects/object/@type)
       for $type in $types
       let $label := (getExpertises()/expertise/description/procedure/objects/object[@type = $type])[1] => fn:normalize-space()
       return [$type, $label]
-
   let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
   let $appendiceTypes :=
     for $type in fn:distinct-values($expertises//sourceDesc/physDesc/appendices/appendice/type/@type[fn:normalize-space(.)!=''])
     let $label := if($type!='other') then ($expertises//type[@type=$type])[1] => fn:normalize-space() else 'Autre'
     return [$type, $label]
+
   let $content := map{
     "total" : fn:count($expertises),
     "thirdParty" : map{
@@ -2516,287 +2664,10 @@ declare function getDistribution($seq, $step, $max) {
   )
 };
 
-(:~
- : ~:~:~:~:~:~:~:~:~
- : utilities 
- : ~:~:~:~:~:~:~:~:~
- :)
 
 (:~
- : this function defines a static files directory for the app
- :
- : @param $file file or unknown path
- : @return binary file
- :)
-declare
-  %rest:path('xpr/files/{$file=.+}')
-function xpr.xpr:file($file as xs:string) as item()+ {
-  let $path := file:base-dir() || 'files/' || $file
-  return
-    (
-      web:response-header( map {'media-type' : web:content-type($path)}),
-      file:read-binary($path)
-    )
-};
-
-(:~
- : this variable defines style for status & query functions
- : @rmq to be removed
- :)
-declare variable $xpr.xpr:style :=
-          <style>
-            body {{
-              font-family: sans-serif; /* 1 */
-              background-color: #fff;
-              color: #E73E0D;
-            }}
-
-            html {{
-              line-height: 1.15; /* 2 */
-              -ms-text-size-adjust: 100%; /* 3 */
-              -webkit-text-size-adjust: 100%; /* 3 */
-            }}
-
-            main {{
-              width: 95%;
-              margin:auto;
-            }}
-
-            table {{
-              display: inline;
-              border-collapse:collapse;
-            }}
-
-            thead td {{
-              background-color: #E73E0D;
-              color:#fff;
-              min-width:50px;
-            }}
-
-            div:not(.detail) thead td {{
-              height:400px;
-              writing-mode:vertical-rl;
-            }}
-
-            td {{
-              border: 0.15em solid ;
-            }}
-
-            tbody td {{
-              text-align: center;
-            }}
-
-            main div {{
-              margin-bottom: 3em;
-
-            }}
-          </style>;
-
-(:~
- : This resource function edits a new user
-    : @return an xforms to edit a new user
-:)
-declare
-  %rest:path("xpr/users/new")
-  %output:method("xml")
-  %perm:allow("admin", "write")
-function newUser() {
-  let $content := map {
-    'instance' : '',
-    'model' : 'xprUserModel.xml',
-    'trigger' : '',
-    'form' : 'xprUserForm.xml'
-  }
-  let $outputParam := map {
-    'layout' : "template.xml"
-  }
-  return
-    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
-    <?css-conversion no?>,
-    xpr.models.xpr:wrapper($content, $outputParam)
-    )
-};
-
-(:~
- : This function creates new user in dba.
- : @todo return creation message
- : @todo control for duplicate user.
- :)
-declare
-  %rest:path("xpr/users/put")
-  %output:method("xml")
-  %rest:header-param("Referer", "{$referer}", "none")
-  %rest:PUT("{$param}")
-  %perm:allow("admin", "write")
-  %updating
-function putUser($param, $referer) {
-  let $user := $param
-  let $userName := fn:normalize-space($user/*:user/*:name)
-  let $userPwd := fn:normalize-space($user/*:user/*:password)
-  let $userPermission := fn:normalize-space($user/*:user/*:permission)
-  let $userInfo :=
-    <info xmlns="">{
-        for $right in $user/*:user/*:info/*:grant
-        return <grant type="{$right/@type}">{fn:normalize-space($right)}</grant>
-    }</info>
-  return
-    user:create(
-      $userName,
-      $userPwd,
-      $userPermission,
-      'xpr',
-      $userInfo)
-};
-
-(:~
- : This resource returns a xml file with all the expertises of a user
- : @return an xml resource
- :)
-declare
-  %rest:path("xpr/users/expertises/{$user}")
-  %rest:produces('application/html')
-  %output:method("xml")
-function getUsersExpertises($user) {
-  <expertises xmlns="xpr">{db:open('xpr')//expertise[descendant::agent[fn:normalize-space(.) = $user]]}</expertises>
-};
-
-(:~
- : This resource returns a list with all the expertises of a user
- : @return an ordered list of expertises in html
- :)
-declare
-  %rest:path("xpr/users/expertises/{$user}/view")
-  %rest:produces('application/html')
-  %output:method("html")
-  %output:html-version('5.0')
-function getUsersExpertisesHtml($user) {
- let $content := map {
-    'title' : 'Liste des expertises',
-    'data' : getUsersExpertises($user)
-  }
-  let $outputParam := map {
-    'layout' : "listeExpertise.xml",
-    'mapping' : xpr.mappings.html:listXpr2html(map:get($content, 'data'), map{})
-  }
-  return xpr.models.xpr:wrapper($content, $outputParam)
-};
-
-
-declare
-    %perm:check('xpr/users', '{$perm}')
-function permUsers($perm) {
-  let $user := Session:get('id')
-  return
-    if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow[2])) and fn:ends-with($perm?path, 'new'))
-      then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'modify'))
-      then web:redirect('/xpr/login')
-    else if((fn:empty($user) or fn:not(user:list-details($user)/*:database[parent::*:user/@permission = $perm?allow[1]][@pattern='xpr']/@permission = $perm?allow)) and fn:ends-with($perm?path, 'put'))
-      then web:redirect('/xpr/login')
-};
-
-(:~ Login page (visible to everyone). :)
-declare
-  %rest:path("xpr/login")
-  %output:method("html")
-function login() {
-  <html>
-    Please log in:
-    <form action="/xpr/login/check" method="post">
-      <input name="name"/>
-      <input type="password" name="pass"/>
-      <input type="submit"/>
-    </form>
-  </html>
-};
-
-declare
-  %rest:path("xpr/login/check")
-  %rest:query-param("name", "{$name}")
-  %rest:query-param("pass", "{$pass}")
-function login($name, $pass) {
-  try {
-    user:check($name, $pass),
-    Session:set('id', $name),
-    web:redirect("/")
-  } catch user:* {
-    web:redirect("/")
-  }
-};
-
-declare
-  %rest:path("xpr/logout")
-function logout() {
-  Session:delete('id'),
-  web:redirect("/")
-};
-
-
-(:~ Login page (visible to everyone). :)
-declare
-  %rest:path("xpr/meteo")
-  %output:method("html")
-function meteo() {
-  let $expertises := getExpertises()
-  let $biographies := getBiographies()
-  let $inventories := getInventories()
-  return
-    <html>
-      <head>
-        <title>!xpr¡</title>
-        <meta charset="UTF-8"/>
-      </head>
-      <body>
-        <div>
-          <h1>Météo des experts</h1>
-          <div class="expertises">
-            <h2>Expertises</h2>
-            <ul>
-              <li>{ fn:count($expertises/expertise) || ' expertises enregistrées dans la base de données' }</li>
-              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' expertises complètes' }</li>
-              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' expertises en cours de dépouillement' }</li>
-              <li>{ fn:count($expertises/expertise[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' expertises à revoir' }</li>
-              <li>{ fn:count(fn:distinct-values($expertises/expertise/descendant::idno[@type='unitid'])) || ' dossiers dépouillés' }
-                <ul>{
-                  for $unitid in fn:distinct-values($expertises/expertise/descendant::idno[@type='unitid'])
-                  return <li>{ fn:count($expertises/expertise/descendant::idno[@type='unitid'][. = $unitid]) || ' expertises cotées "' || $unitid || '"' }</li>
-                }</ul>
-              </li>
-            </ul>
-          </div>
-          <div class="prosopographie">
-            <h2>Prosopographie</h2>
-            <ul>
-              <li>{fn:count($biographies/eac:eac-cpf) || ' fiches prosopographiques enregistrées dans la base de données'}
-                <ul>{
-                  for $entityType in fn:distinct-values($biographies/descendant::eac:identity/@localType)
-                  return <li>{ fn:count($biographies/eac:eac[descendant::eac:identity[@localType = $entityType]]) || ' entités ayant pour qualité "' ||$entityType || '"' }</li>
-                }</ul>
-              </li>
-              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'completed']]) || ' fiches complètes' }</li>
-              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'in progress']]) || ' fiches en cours de dépouillement' }</li>
-              <li>{ fn:count($biographies/eac:eac[descendant::eac:localControl[@localType='detailLevel']/eac:term[fn:normalize-space(.) = 'to revise']]) || ' fiches à revoir' }</li>
-            </ul>
-          </div>
-          <div class="iad">
-            <h2>Inventaires après-décès</h2>
-            <ul>
-              <li>{ fn:count($inventories/inventory) || ' inventaires après-décès enregistrés dans la base de données' }</li>
-              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'completed']]) || ' inventaires complets' }</li>
-              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'in progress']]) || ' inventaires en cours de dépouillement' }</li>
-              <li>{ fn:count($inventories/inventory[descendant::localControl[@localType='detailLevel']/term[fn:normalize-space(.) = 'to revise']]) || ' inventaires à revoir' }</li>
-            </ul>
-          </div>
-        </div>
-      </body>
-    </html>
-};
-
-
-(:~
- : this function queries term in xpr databes
+ : this function queries term in xpr database
  : @param $term
- :
  : @todo use XQFT
  : @todo use mapping
  :)
@@ -2979,88 +2850,4 @@ return (
         }
     </expertises>
 )
-};
-
-declare function xpr.xpr:expertiseCounter() {
-    let $expertises := getExpertises()
-    return(
-     <data>
-       {
-         for $unitid in fn:distinct-values($expertises/expertise/fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j'))
-         return (
-           <file>
-             <unitid>{$unitid}</unitid>
-             <count>{fn:format-number(fn:count($expertises/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid]), '000')}</count>
-             <last>{$expertises/expertise[fn:substring-after(fn:substring-before(@xml:id, 'd'), 'z1j') = $unitid][fn:last()]/fn:substring-after(@xml:id, 'd')}</last>
-           </file>
-         )
-       }
-     </data>
-    )
-};
-
-
-(:~
- : this function returns the xpr database status
- : @todo use mapping
- :)
-declare
-%rest:path('/xpr/status')
-%rest:produces('application/html')
-%output:method("html")
-%output:html-version('5.0')
-function xpr.xpr:status() {
-    let $expertises := getExpertises()/expertise
-    let $data := xpr.xpr:expertiseCounter()
-    return(
-      <html>
-        <head>
-          {$xpr.xpr:style}
-        </head>
-        <body>
-          <div>
-            <h1>État des dépouillements</h1>
-            <p>Expertises dépouillées : { fn:count($expertises) }</p>
-            <table>
-              <tr class="label">
-                <td>Unitid</td>
-                <td>Nb expertises</td>
-                <td>last expertise</td>
-              </tr>
-              {
-                for $unitid in $data/file
-                order by $unitid
-                return (
-                <tr>
-                  <td>{$unitid/unitid}</td>
-                  <td>{$unitid/count}</td>
-                  <td>{$unitid/last}</td>
-                </tr>
-                )
-              }
-              </table>
-              <table>
-              <tr class="label">
-                <td colspan="3">À vérifier</td>
-              </tr>
-                <tr class="label">
-                  <td>Unitid</td>
-                  <td>Nb expertises</td>
-                  <td>last expertise</td>
-                </tr>
-                {
-                  for $diff in $data//file[count != last]
-                  return  (
-                  <tr>
-                    <td>{$diff/unitid}</td>
-                    <td>{$diff/count}</td>
-                    <td>{$diff/last}</td>
-                  </tr>
-                  )
-                }
-              </table>
-          </div>
-        </body>
-      </html>
-    )
 };

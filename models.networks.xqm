@@ -66,15 +66,128 @@ declare function pairsCombinations($seq) {
  : @return the asked format network of collaboration
  :)
 declare function getExpertsCollaborations($queryParam as map(*)) as element() {
-  if ($queryParam?format = 'graphml')
-  then getExpertsCollaborationsGraphML($queryParam)
-  else getExpertsCollaborationsGexf($queryParam)
+  if ($queryParam?format = 'graphml') then
+    getExpertsCollaborationsGraphML($queryParam)
+  else
+    getExpertsCollaborationsGexf($queryParam)
+};
+
+(:~
+ : Experts collaboration
+ : @return a gexf network of collaborations
+ : @todo select experts by year
+ :)
+declare function getExpertsCollaborationsGexf($queryParam as map(*)) as element() {
+let $db := db:open('xpr')
+let $year := $queryParam?year
+let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
+let $edges :=
+    if ($year) then
+      for $affaires in db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
+      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
+    else
+      for $affaires in db:open('xpr')//xpr:expertise
+      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
+let $description := "Associations d’experts"
+return
+  <gexf xmlns="http://www.gexf.net/1.2draft" version="1.2">
+    <meta lastmodifieddate="{fn:current-date()}">
+      <creator>ANR Experts</creator>
+      <description>{$description}</description>
+    </meta>
+    <graph mode="static" defaultedgetype="undirected">
+      <attributes class="node">
+        <attribute id="0" title="category" type="string"/>
+      </attributes>
+      <nodes>{
+        for $node in $nodes
+        let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+        let $functions := $node//*:functions
+        let $function :=
+          switch ($functions)
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+            case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+            case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+            case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+            case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+            case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+            default return 'unknown'
+          return
+            <node id="{$node/@xml:id}" label="{$label}">
+              <attvalues>
+                <attvalue for="0" value="{$function}"/>
+                  </attvalues>
+                </node>
+      }</nodes>
+      <edges>{
+        for $edge at $i in $edges
+        return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
+      }</edges>
+    </graph>
+  </gexf>
+};
+
+
+(:~
+ : Experts collaboration
+ : @return a gexf network of collaborations
+ : @todo resolve issue with the cases dates (for now we take the first date)
+ :)
+declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as element() {
+  let $db := db:open('xpr')
+  let $year := $queryParam?year
+  let $cases := db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
+  let $nodes := $db//*:eac-cpf[@xml:id = $cases//xpr:experts/xpr:expert/@ref][*:cpfDescription/*:identity[@localType = 'expert']]
+  let $edges := if ($year)
+    then
+      for $case in $cases
+      let $participants := $case/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
+    else
+      for $case in db:open('xpr')//xpr:expertise
+      let $participants := $case/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
+      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
+  let $description := "Associations d’experts"
+  return
+  <graphml
+    xmlns="http://graphml.graphdrawing.org/xmlns"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
+    <key id="d0" for="node" attr.name="category" attr.type="string"/>
+    <key id="d1" for="node" attr.name="name" attr.type="string"/>
+    <graph edgedefault="undirected">
+      {
+        for $node in $nodes
+        let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
+        let $functions := $node//*:functions
+        let $function :=
+        switch ($functions)
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
+          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
+          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
+          default return 'unknown'
+        return
+          <node id="{$node/@xml:id}">
+            <data key="d0">{$function}</data>
+            <data key="d1">{$label/text()}</data>
+          </node>
+      }
+      {
+        for $edge at $i in $edges
+        return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
+      }
+    </graph>
+  </graphml>
 };
 
 (:~
  : List of Experts by year
  : @return a xml file
- : @todo select experts by year
  :)
 declare function getExpertsByYear($queryParam as map(*)) as element() {
 let $almanakDb := db:open('almanak')
@@ -111,14 +224,14 @@ return
 };
 
 (:~
- : List of Experts by year
+ : List of clerks by year
  : @return a xml file
- : @todo select experts by year
+ : @todo select clerks by year
  :)
 declare function getClerksByYear($queryParam as map(*)) as element() {
 let $year := $queryParam?year
 let $expertises := xpr.models.networks:getExpertisesByYear($queryParam)
-let $prosopo := xpr.xpr:getBiographies
+let $prosopo := xpr.xpr:getBiographies()
 
 let $clerks :=
   let $dbClerk :=
@@ -129,8 +242,6 @@ let $clerks :=
     return $clerk/@xml:id => fn:normalize-space()
   let $z1jClerks := fn:distinct-values($expertises//*:expertise[descendant::*:sessions/*:date[fn:substring(@when, 1, 4) = $year]]//*:clerks/*:clerk[fn:normalize-space(@ref)!='']/fn:substring-after(@ref, '#'))
 return ($dbClerk, $z1jClerks)
-
-
 
 let $comment := <comment></comment>
 return
@@ -148,7 +259,7 @@ return
  :)
 declare function getExpertisesByYear($queryParam as map(*)) as element() {
 let $year := $queryParam?year
-let $expertises := xpr.xpr:getExpertises()//expertise[descendant::sessions/date[fn:substring(@when, 1, 4) = $year]][fn:count(descendant::categories/category) = 1]
+let $expertises := xpr.xpr:getExpertises()//expertise[sourceDesc/unitdate[fn:normalize-space(.) = $year]][fn:count(descendant::categories/category) = 1]
 return <expertises xmlns="xpr">{$expertises}</expertises>
 };
 
@@ -157,13 +268,13 @@ return <expertises xmlns="xpr">{$expertises}</expertises>
  : @return a xml file
  :)
 declare function getFormatedCategoriesNetwork($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
-if ($queryParam?format = 'graphml')
-  then getCategoriesNetworkGraphML($queryParam, $content)
+  if ($queryParam?format = 'graphml') then getCategoriesNetworkGraphML($queryParam, $content)
   else if(($queryParam?format = 'csv')) then getCategoriesNetworkCSV($queryParam, $content)
   else getCategoriesNetworkGexf($queryParam, $content)
 };
+
 declare function getCategoriesNetworkGexf($queryParam as map(*), $content as map(*)) as element() {
-<toto/>
+<todo/>
 };
 
 (:
@@ -513,9 +624,10 @@ return
  : @return a xml file
  :)
 declare function getFormatedExpertisesData($queryParam as map(*), $content as map(*), $outputParam as map(*)) as element() {
-if ($queryParam?format = 'xml')
-  then getExpertisesDataXML($queryParam, $content)
-  else if(($queryParam?format = 'csv')) then getExpertisesDataCSV($queryParam, $content)
+  if ($queryParam?format = 'xml') then
+    getExpertisesDataXML($queryParam, $content)
+  else if(($queryParam?format = 'csv')) then
+    getExpertisesDataCSV($queryParam, $content)
 };
 
 declare function getExpertisesDataXML($queryParam as map(*), $content as map(*)) as element() {
@@ -570,117 +682,4 @@ return
       <cell>{for $function in fn:distinct-values($functions) order by $function return $function}</cell>
     </record>}
   </csv>
-};
-
-(:~
- : Experts collaboration
- : @return a gexf network of collaborations
- : @todo select experts by year
- :)
-declare function getExpertsCollaborationsGexf($queryParam as map(*)) as element() {
-let $db := db:open('xpr')
-let $year := $queryParam?year
-let $nodes := $db//*:eac-cpf[*:cpfDescription/*:identity[@localType = 'expert']]
-let $edges :=
-    if ($year) then
-      for $affaires in db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
-      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
-      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
-    else
-      for $affaires in db:open('xpr')//xpr:expertise
-      let $participants := $affaires/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
-      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
-let $description := "Associations d’experts"
-return
-  <gexf xmlns="http://www.gexf.net/1.2draft" version="1.2">
-    <meta lastmodifieddate="{fn:current-date()}">
-      <creator>ANR Experts</creator>
-      <description>{$description}</description>
-    </meta>
-    <graph mode="static" defaultedgetype="undirected">
-      <attributes class="node">
-        <attribute id="0" title="category" type="string"/>
-      </attributes>
-      <nodes>{
-        for $node in $nodes
-        let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
-        let $functions := $node//*:functions
-        let $function :=
-          switch ($functions)
-          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
-            case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
-            case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
-            case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
-            case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
-            case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
-            default return 'unknown'
-          return
-            <node id="{$node/@xml:id}" label="{$label}">
-              <attvalues>
-                <attvalue for="0" value="{$function}"/>
-                  </attvalues>
-                </node>
-      }</nodes>
-      <edges>{
-        for $edge at $i in $edges
-        return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
-      }</edges>
-    </graph>
-  </gexf>
-};
-
-
-(:~
- : Experts collaboration
- : @return a gexf network of collaborations
- : @todo resolve issue with the cases dates (for now we take the first date)
- :)
-declare function getExpertsCollaborationsGraphML($queryParam as map(*)) as element() {
-  let $db := db:open('xpr')
-  let $year := $queryParam?year
-  let $cases := db:open('xpr')//xpr:expertise[xpr:description/xpr:sessions/xpr:date[1][fn:not(@when = '')][fn:year-from-date(@when) = xs:integer($year)]]
-  let $nodes := $db//*:eac-cpf[@xml:id = $cases//xpr:experts/xpr:expert/@ref][*:cpfDescription/*:identity[@localType = 'expert']]
-  let $edges := if ($year)
-    then
-      for $case in $cases
-      let $participants := $case/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
-      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
-    else
-      for $case in db:open('xpr')//xpr:expertise
-      let $participants := $case/xpr:description/xpr:participants/xpr:experts[fn:count(xpr:expert)>=2]
-      return pairsCombinations($participants/xpr:expert/@ref ! fn:data())
-  let $description := "Associations d’experts"
-  return
-  <graphml
-    xmlns="http://graphml.graphdrawing.org/xmlns"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.1/graphml.xsd">
-    <key id="d0" for="node" attr.name="category" attr.type="string"/>
-    <key id="d1" for="node" attr.name="name" attr.type="string"/>
-    <graph edgedefault="undirected">
-      {
-        for $node in $nodes
-        let $label := $node//*:cpfDescription/*:identity/*:nameEntry[*:authorizedForm]/*:part
-        let $functions := $node//*:functions
-        let $function :=
-        switch ($functions)
-          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert bourgeois']) return 'architecte'
-          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Expert entrepreneur']) return 'entrepreneur'
-          case ($functions[fn:count(*:function) = 1][*:function/*:term = 'Arpenteur']) return 'arpenteur'
-          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur' and *:function/*:term = 'Expert bourgeois']) return 'transfuge'
-          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert entrepreneur'][fn:not(*:function/*:term = 'Expert bourgeois')]) return 'entrepreneur'
-          case ($functions[fn:count(*:function) >= 2][*:function/*:term = 'Expert bourgeois'][fn:not(*:function/*:term = 'Expert entrepreneur')]) return 'architecte'
-          default return 'unknown'
-        return
-          <node id="{$node/@xml:id}">
-            <data key="d0">{$function}</data>
-            <data key="d1">{$label/text()}</data>
-          </node>
-      }
-      {
-        for $edge at $i in $edges
-        return <edge id="{random:uuid()}" source="{$edge?source}" target="{$edge?target}"/>
-      }
-    </graph>
-  </graphml>
 };
