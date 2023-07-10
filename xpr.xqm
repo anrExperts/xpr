@@ -101,7 +101,7 @@ function install() {
  : @todo change the export path
  :)
 declare
-  %rest:path("/xpr/expertises/export")
+  %rest:path("/xpr/export")
 function z1jExport(){
   db:export("xpr", '/sites/expertdb/resource/data/', map { 'method': 'xml' }),
   web:redirect("/xpr/expertises/view")
