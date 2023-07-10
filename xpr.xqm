@@ -103,7 +103,7 @@ function install() {
 declare
   %rest:path("/xpr/expertises/export")
 function z1jExport(){
-  db:export("xpr", file:base-dir(), map { 'method': 'xml' }),
+  db:export("xpr", '/sites/expertdb/resource/data/', map { 'method': 'xml' }),
   web:redirect("/xpr/expertises/view")
 };
 
@@ -2272,7 +2272,7 @@ function getReseau($format as xs:string) {
 };
 
 (:
- : view doesn't work for now
+ :view doesn't work for now
  :)
 declare
   %rest:path("/xpr/reseau/view")
@@ -2578,8 +2578,6 @@ declare
   %output:method('json')
 function getExpertsStatistics($experts, $expertises) {
   let $experts := $experts
-
-
   let $content := map{
     "total" : fn:count($experts/expert),
     "architects" : fn:count($experts/expert[column = 'architecte']),
