@@ -73,18 +73,27 @@ declare function getExpertisesStatistics($expertises, $experts) {
       return [$i, $j]
     return ($listPlace, $pairs, ['paris', 'suburbs', 'province'])
   let $objects :=
-      let $types := fn:distinct-values(xpr.xpr:getExpertises()/expertise/description/procedure/objects/object/@type)
-      for $type in $types
+    let $types := fn:distinct-values(xpr.xpr:getExpertises()/expertise/description/procedure/objects/object/@type)
+    for $type in $types
       let $label := (xpr.xpr:getExpertises()/expertise/description/procedure/objects/object[@type = $type])[1] => fn:normalize-space()
-      return [$type, $label]
+    return [$type, $label]
   let $extent := for $expertise in $expertises return fn:number($expertise/sourceDesc/physDesc/extent[fn:normalize-space(.)!=''])
   let $appendiceTypes :=
     for $type in fn:distinct-values($expertises//sourceDesc/physDesc/appendices/appendice/type/@type[fn:normalize-space(.)!=''])
-    let $label := if($type!='other') then ($expertises//type[@type=$type])[1] => fn:normalize-space() else 'Autre'
+      let $label := if($type!='other') then ($expertises//type[@type=$type])[1] => fn:normalize-space() else 'Autre'
     return [$type, $label]
 
-  let $frameworks := fn:distinct-values($expertises/description/procedure/framework/@type[fn:normalize-space(.)!=''])
-  let $categories := fn:distinct-values($expertises/description/categories/category/@type[fn:normalize-space(.)!=''])
+  let $frameworks :=
+    let $types := fn:distinct-values($expertises/description/procedure/framework/@type[fn:normalize-space(.)!=''])
+    for $type in $types
+      let $label := ($expertises/description/procedure/framework[fn:normalize-space(@type)=$type])[1] => fn:normalize-space()
+    return [$type, $label]
+
+  let $categories :=
+    let $types := fn:distinct-values($expertises/description/categories/category/@type[fn:normalize-space(.)!=''])
+    for $type in $types
+      let $label := ($expertises/description/categories/category[fn:normalize-space(@type)=$type])[1] => fn:normalize-space()
+    return [$type, $label]
 
   let $content := map{
     "total" : fn:count($expertises),
@@ -222,7 +231,8 @@ declare function getExpertisesStatistics($expertises, $experts) {
             for $cat in $categories
             let $e := $e[description/categories/category/fn:normalize-space(@type) = $cat]
             return map{
-              "category" : $cat,
+              "category" : array:get($cat, 1),
+              "label" : array:get($cat, 2),
               "total" : fn:count($e)
             }
           },
@@ -230,7 +240,8 @@ declare function getExpertisesStatistics($expertises, $experts) {
             for $framework in $frameworks
             let $e := $e[description/procedure/framework[fn:normalize-space(@type)=$framework]]
             return map {
-              "framework" : $framework,
+              "framework" : array:get($framework, 1),
+              "label" : array:get($framework, 2),
               "total" : fn:count($e)
             }
           }
