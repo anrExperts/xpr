@@ -55,11 +55,32 @@ declare
   %updating
 function putExpertiseAutosave($param, $referer) {
   let $db := db:open("xprAutosave")
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
   let $unitid := $param//idno[@type='unitid']
   let $item := $param//idno[@type='item']
-  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
   let $fileId := fn:generate-id($param)
-  return (
+  return
+    if ($param/*[@xml:id]) then
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
+      let $param :=
+        copy $d := $param
+        modify(
+          replace value of node $d/expertise/@xml:id with $id,
+          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
+          let $idPlace := fn:generate-id($place)
+          where $place[fn:not(@xml:id)]
+          return(
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+          )
+        )
+        return $d
+      return (
+        db:add('xprAutosave', $param, 'xpr/expertises/'|| $fileId ||'.xml'),
+        deleteExpertiseAutosave()
+      )
+    else
       let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
       let $param :=
         copy $d := $param
@@ -78,8 +99,6 @@ function putExpertiseAutosave($param, $referer) {
         db:add('xprAutosave', $param, 'xpr/expertises/'|| $fileId ||'.xml'),
         deleteExpertiseAutosave()
       )
-
-  )
 };
 
 declare %updating function deleteExpertiseAutosave() {
