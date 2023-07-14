@@ -25,7 +25,7 @@
 
   <xf:submission id="submitAuto"
                  ref="instance('xprAutosave')/xpr:expertise"
-                 resource="/xpr/autosave/put"
+                 resource="/xpr/expertises/autosave/put"
                  method="put"
                  replace="none">
     <xf:action ev:event="xforms-submit-done">

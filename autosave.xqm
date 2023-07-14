@@ -34,6 +34,7 @@ declare namespace xf = "http://www.w3.org/2002/xforms" ;
 declare namespace xlink = "http://www.w3.org/1999/xlink" ;
 
 declare namespace xpr = "xpr" ;
+declare default element namespace "xpr" ;
 declare default function namespace "xpr.autosave" ;
 
 declare default collation "http://basex.org/collation?lang=fr" ;
@@ -46,7 +47,7 @@ declare default collation "http://basex.org/collation?lang=fr" ;
  : @return update the database with an updated content
  :)
 declare
-  %rest:path("xpr/autosave/put")
+  %rest:path("xpr/expertises/autosave/put")
   %output:method("xml")
   %rest:header-param("Referer", "{$referer}", "none")
   %rest:PUT("{$param}")
@@ -54,21 +55,48 @@ declare
   %updating
 function putExpertiseAutosave($param, $referer) {
   let $db := db:open("xprAutosave")
-  return(
-    if($db//xpr:expertises/xpr:expertise[descendant::xpr:idno[@type='unitid']=$param//xpr:idno[@type='unitid'] and descendant::xpr:idno[@type='item']=$param//xpr:idno[@type='item']]) then
-      let $oldSave := $db//xpr:expertises/xpr:expertise[descendant::xpr:idno[@type='unitid']=$param//xpr:idno[@type='unitid'] and descendant::xpr:idno[@type='item']=$param//xpr:idno[@type='item']]
-      return replace node $oldSave with $param
-    else insert node $param as first into $db//xpr:expertises
+  let $unitid := $param//idno[@type='unitid']
+  let $item := $param//idno[@type='item']
+  let $user := fn:normalize-space(user:list-details(Session:get('id'))/@name)
+  let $fileId := fn:generate-id($param)
+  return (
+      let $id := fn:replace(fn:lower-case($param/expertise/sourceDesc/idno[@type="unitid"]), '/', '-') || 'd' || fn:format-integer($param/expertise/sourceDesc/idno[@type="item"], '000') || $param/expertise/sourceDesc/idno[@type="supplement"]
+      let $param :=
+        copy $d := $param
+        modify(
+          insert node attribute xml:id {$id} into $d/*,
+          replace value of node $d/expertise/control/maintenanceHistory/maintenanceEvent[1]/agent with $user,
+          for $place at $i in $d/expertise/description[categories/category[@type="estimation"]]/places/place
+          let $idPlace := fn:generate-id($place)
+          return(
+            insert node attribute xml:id {$idPlace} into $place,
+            insert node attribute ref {fn:concat('#', $idPlace)} into $d/expertise/description/conclusions/estimates/place[$i]
+          )
+        )
+        return $d
+      return (
+        db:add('xprAutosave', $param, 'xpr/expertises/'|| $fileId ||'.xml'),
+        deleteExpertiseAutosave()
+      )
+
   )
+};
+
+declare %updating function deleteExpertiseAutosave() {
+    if(fn:count(db:open("xprAutosave", 'xpr/expertises')/*:expertise) > 100) then (
+        let $file2delete := db:list("xprAutosave", 'xpr/expertises')[1]
+        return db:delete("xprAutosave", $file2delete)
+    )
 };
 
 (:~
  : This function returns xprAutosave db
  :)
+(:
 declare
   %rest:path("xpr/autosave")
   %output:method("xml")
 function getAutosave() {
   let $db := db:open("xprAutosave")
   return $db
-};
+};:)
