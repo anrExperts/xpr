@@ -3,7 +3,7 @@
         <no xmlns=""/>
     </xf:instance>
 
-    <xf:submission id="noValidationSubmission" ref="instance('eacNoValidation')" method="put" resource="file:" mediatype="application/xml" value="form-source()">
+    <!--<xf:submission id="noValidationSubmission" ref="instance('eacNoValidation')" method="put" resource="file:" mediatype="application/xml" value="form-source()">
         <xf:action ev:event="xforms-submit">
             <xf:delete nodeset="instance('eacInstance')//@standardDate[. = '']"/>
             <xf:delete nodeset="instance('eacInstance')//@notBefore[. = '']"/>
@@ -14,6 +14,69 @@
         </xf:action>
         <xf:action ev:event="xforms-submit-error">
 
+        </xf:action>
+    </xf:submission>-->
+
+    <xf:submission id="noValidationSubmission" ref="instance('eacNoValidation')" method="put" resource="/xpr/biographies/put" replace="none">
+        <xf:action ev:event="xforms-submit">
+            <!-- @maintenanceStatus -->
+            <xf:setvalue if="instance('eacNoValidation')//eac:control/@maintenanceStatus = 'new'" ref="eac:control/@maintenanceStatus" value="'updated'"/>
+            <xf:setvalue if="instance('eacNoValidation')//eac:control/@maintenanceStatus = ''" ref="eac:control/@maintenanceStatus" value="'new'"/>
+
+            <!-- agent -->
+            <xf:setvalue ref="instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent" value="instance('getAgent')/agent"/>
+
+            <!-- @agentType -->
+            <xf:setvalue ref="instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:agent/@agentType" value="'human'"/>
+
+            <!-- @maintenanceEventType -->
+            <xf:setvalue if="count(instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent) > 1" ref="instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/@maintenanceEventType" value="'revised'"/>
+            <xf:setvalue if="count(instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent) = 1" ref="instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/@maintenanceEventType" value="'created'"/>
+
+            <!-- eventDateTime -->
+            <xf:setvalue ref="instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDateTime/@standardDateTime" value="now()"/>
+
+            <xf:setvalue ref="instance('eacNoValidation')//eac:control/eac:maintenanceHistory/eac:maintenanceEvent[1]/eac:eventDescription" value="'Enregistrement forcé'"/>
+
+
+            <xf:delete nodeset="instance('eacNoValidation')//@standardDate[normalize-space(.)='']"/>
+            <xf:delete nodeset="instance('eacNoValidation')//@notBefore[normalize-space(.)='']"/>
+            <xf:delete nodeset="instance('eacNoValidation')//@notAfter[normalize-space(.)='']"/>
+        </xf:action>
+
+        <xf:action ev:event="xforms-submit-done">
+            <xf:hide dialog="control"/>
+            <xf:message level="modal">
+                La ressource a été enregistrée, des erreurs restent à corriger !
+                Status : <xf:output value="event('response-status-code')"/>;
+                URI : <xf:output value="event('resource-uri')"/>;
+                Headers : <xf:output value="event('response-headers')"/>;
+                Reason : <xf:output value="event('response-reason-phrase')"/>;
+                Body : <xf:output value="event('response-body')"/>.
+            </xf:message>
+            <xf:load resource="/xpr/biographies/view" show="replace"/>
+        </xf:action>
+        <xf:action ev:event="xforms-submit-error">
+            <xf:message level="modal">
+                erreur :
+                error-type: <xf:output value="event('error-type')"/>
+                error-message: <xf:output value="event('error-message')"/>
+                response-status-code: <xf:output value="event('response-status-code')"/>
+                response-reason-phrase: <xf:output value="event('response-reason-phrase')"/>
+                resource-uri: <xf:output value="event('resource-uri')"/>
+            </xf:message>
+            <xf:action while="instance('eacNoValidation')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@standardDate)]">
+                <xf:insert context="instance('eacNoValidation')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@standardDate)]"
+                           origin="instance('eacDates')/eac:date/@standardDate"/>
+            </xf:action>
+            <xf:action while="instance('eacNoValidation')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notAfter)]">
+                <xf:insert context="instance('eacNoValidation')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notAfter)]"
+                           origin="instance('eacDates')/eac:date/@notAfter"/>
+            </xf:action>
+            <xf:action while="instance('eacNoValidation')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notBefore)]">
+                <xf:insert context="instance('eacNoValidation')//*[self::eac:date or self::eac:fromDate or self::eac:toDate][not(@notBefore)]"
+                           origin="instance('eacDates')/eac:date/@notBefore"/>
+            </xf:action>
         </xf:action>
     </xf:submission>
 </xf:model>
