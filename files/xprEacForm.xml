@@ -419,6 +419,18 @@
                     <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
                 </xf:action>
             </xf:trigger>
+            <xf:trigger ref="self::eac:sources[not(eac:source)]" class="trigger">
+                <xf:label>Ajouter une nouvelle source</xf:label>
+                <xf:action ev:event="DOMActivate">
+                    <xf:insert context="." nodeset="node()" origin="instance('eacSources')/eac:sources/eac:source" at="last()"/>
+                </xf:action>
+                <xf:action ev:event="DOMActivate">
+                    <xf:delete nodeset="eac:source[last()]/eac:descriptiveNote"/>
+                    <xf:delete nodeset="eac:source[last()]/eac:citedRange"/>
+                    <!--<xf:delete nodeset="eac:source[last()]/eac:reference/@href"/>-->
+                    <xf:dispatch name="getid" targetid="entity" ev:event="DOMActivate"/>
+                </xf:action>
+            </xf:trigger>
             <xf:group ref="eac:descriptiveNote">
                 <xf:label>
                     Notes générales sur les sources
