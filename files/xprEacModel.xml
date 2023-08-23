@@ -644,6 +644,14 @@
                 <value>reception</value>
             </event>
             <event>
+                <label>Réception dans la première colonne</label>
+                <value>receptionColumn1</value>
+            </event>
+            <event>
+                <label>Réception dans la seconde colonne</label>
+                <value>receptionColumn2</value>
+            </event>
+            <event>
                 <label>Présence dans les Almanachs</label>
                 <value>almanacs</value>
             </event>

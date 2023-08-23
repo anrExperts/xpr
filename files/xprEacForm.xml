@@ -279,7 +279,9 @@
                         <xf:hint><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='elements']/tei:div[@xml:id='elem-reference']/tei:div[@type='summary']"/></xf:hint>
                     </xf:input>
                     <xf:input ref="@href">
-                        <xf:label>Hyperlien</xf:label>
+                        <xf:label>
+                            Hyperlien <xf:group ref=".[.!='' and not(starts-with(., '#'))]"><a href="{.}" target="_blank"><xf:output value="' (Accéder)'"/></a></xf:group>
+                        </xf:label>
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-href']/tei:div[@type='description']"/></xf:help>
                         <xf:hint><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-href']/tei:div[@type='summary']"/></xf:hint>
                     </xf:input>
