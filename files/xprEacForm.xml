@@ -3418,7 +3418,7 @@
                                 <xf:value ref="value"/>
                             </xf:itemset>
                             <xf:action ev:event="xforms-value-changed">
-                                <xf:show if=".='reception'" dialog="eventReception"/>
+                                <xf:show if="contains(., 'reception')" dialog="eventReception"/>
                             </xf:action>
                             <xf:action if=".='reception'" ev:event="xforms-deselect">
                                 <xf:show dialog="test"/>
@@ -5138,11 +5138,11 @@
                 </xf:trigger>
             </xf:group>
             <xf:group class="trigger">
-                <xf:trigger ref=".[ancestor::eac:cpfDescription//eac:chronItem[@localType='reception']]">
+                <xf:trigger ref=".[ancestor::eac:cpfDescription//eac:chronItem[contains(@localType, 'reception')][1]]">
                     <xf:label>Ajouter les relations citées dans le dossier de réception</xf:label>
                     <xf:action ev:event="DOMActivate">
-                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relationType/@sourceReference" value="instance('eacInstance')/eac:cpfDescription//eac:chronItem[@localType='reception']/@sourceReference"/>
-                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relation/@target" value="concat('#', instance('eacInstance')/eac:cpfDescription//eac:chronItem[@localType='reception']/@id)"/>
+                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relationType/@sourceReference" value="instance('eacInstance')/eac:cpfDescription//eac:chronItem[contains(@localType, 'reception')][1]/@sourceReference"/>
+                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relation/@target" value="concat('#', instance('eacInstance')/eac:cpfDescription//eac:chronItem[contains(@localType, 'reception')][1]/@id)"/>
                     </xf:action>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert context="." nodeset="eac:relation" at="last()" position="after" origin="instance('eacRelations4Reception')/eac:relations//eac:relation"/>
