@@ -68,8 +68,8 @@ function xpr2html($node as node()*, $options as map(*)) as item()* {
       <div class="canvas-container">
         <sequence-panel
           id='sequence'
-          manifest-id="/xpr/files/manifest/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}.manifest.json"
-          start-canvas="https://xpr/iiif/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()}/canvas/p{$node/xpr:sourceDesc/xpr:facsimile/@from => fn:normalize-space()}"
+          manifest-id="/xpr/files/manifest/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()=>fn:replace('/', '-')}.manifest.json"
+          start-canvas="https://xpr/iiif/{$node/xpr:sourceDesc/xpr:idno[@type='unitid']=>fn:normalize-space()=>fn:replace('/', '-')}/canvas/p{$node/xpr:sourceDesc/xpr:facsimile/@from => fn:normalize-space()}"
           margin='30'>
         </sequence-panel>
         <button id='prev'>prev</button>
@@ -672,7 +672,7 @@ declare function getFunction($node as node(), $options as map(*)) as node() {
 declare function getBiogHist($node as node()*, $options as map(*)) as node()* {
   <div class="biogHist">
     <h4>Informations biographiques</h4>
-    { getChronList($node/eac:chronList, $options) }
+    { if($node/eac:chronList) then getChronList($node/eac:chronList, $options) }
   </div>
 };
 
