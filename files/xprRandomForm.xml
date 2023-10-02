@@ -1,0 +1,26 @@
+<form xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+    <xf:group>
+        <xf:select1 ref="." incremental="true">
+            <xf:label>Select your clerk!</xf:label>
+            <xf:itemset nodeset="instance('xprEntities')/xpr:entity[contains(@type, 'clerk')]">
+                <xf:label ref="xpr:label"/>
+                <xf:value value="@xml:id"/>
+            </xf:itemset>
+            <xf:send submission="getRandomExpertise" ev:event="xforms-value-changed"/>
+        </xf:select1>
+
+        <xf:trigger>
+            <xf:label>Try Again!</xf:label>
+            <xf:send submission="getRandomExpertise" ev:event="DOMActivate"/>
+        </xf:trigger>
+    </xf:group>
+
+    <xf:group ref="instance('xprRandom')/xpr:id[normalize-space(.)!='']">
+        <xf:label>Résultat du tirage au sort</xf:label>
+        <xf:output value="concat('id : ', instance('xprRandom')/xpr:id)"/>
+        <xf:output value="concat('Nombre de feuillet(s) : ', instance('xprRandom')/xpr:extent)"/>
+        <xf:output value="concat('dessin(s) : ', instance('xprRandom')/xpr:sketch)"/>
+    </xf:group>
+
+
+</form>

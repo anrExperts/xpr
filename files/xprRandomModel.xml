@@ -1,0 +1,14 @@
+<xf:model id="random" xmlns:xf="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events">
+
+    <xf:instance id="xprClerk">
+        <clerk xmlns="xpr"></clerk>
+    </xf:instance>
+    <xf:instance id="xprEntities" src="/xpr/entities"/>
+    <xf:instance id="xprRandom">
+        <data xmlns="xpr"/>
+    </xf:instance>
+
+    <xf:submission id="getRandomExpertise" method="get" replace="instance" instance="xprRandom" serialization="none" mode="synchronous">
+        <xf:resource value="concat('/xpr/clerks/',., '/random')"/>
+    </xf:submission>
+</xf:model>

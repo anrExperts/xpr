@@ -1439,6 +1439,64 @@ function permBiographies($perm) {
 };
 
 (:~
+ : This resource function edits new inventory
+ : @return an xforms for the inventory
+:)
+declare
+  %rest:path("xpr/clerks")
+  %output:method("xml")
+function pickAClerk() {
+  let $content := map {
+    'instance' : '',
+    'model' : 'xprRandomModel.xml',
+    'trigger' : '',
+    'form' : 'xprRandomForm.xml'
+  }
+  let $outputParam := map {
+    'layout' : "template.xml"
+  }
+  return
+    (processing-instruction xml-stylesheet { fn:concat("href='", $G:xsltFormsPath, "'"), "type='text/xsl'"},
+    <?css-conversion no?>,
+    xpr.models.xpr:wrapper($content, $outputParam)
+    )
+};
+
+(:~
+ : This resource function edits new inventory
+ : @return an xforms for the inventory
+:)
+declare
+  %rest:path("xpr/clerks/{$id}")
+  %output:method("xml")
+function getExpertisesByClerk($id) {
+  let $db := getExpertises()
+  let $expertises := $db/expertise[descendant::clerk[fn:substring-after(@ref, '#') = $id]]
+  return <expertises>{$expertises}</expertises>
+};
+
+(:~
+ : This resource function lists the persons or corporate bodies
+ : @return an xml list of persons/corporate bodies
+ :)
+declare
+  %rest:path("/xpr/clerks/{$id}/random")
+  %rest:produces('application/xml')
+  %output:method("xml")
+function getRandomExpertise($id) {
+  let $expertises := getExpertisesByClerk($id)
+  let $random := random:integer(fn:count($expertises/*:expertise))
+  let $expertise := $expertises/expertise[$random]
+  return (
+    <results xmlns="xpr">
+      <id>{$expertise/@xml:id => fn:normalize-space()}</id>
+      <extent>{$expertise/sourceDesc/physDesc/extent => fn:normalize-space()}</extent>
+      <sketch>{$expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space()}</sketch>
+    </results>
+  )
+};
+
+(:~
  : This resource function lists all the inventories
  : @return a xml ressource of all the inventories
  :)
