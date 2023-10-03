@@ -18,7 +18,9 @@
     <xf:group ref="instance('xprRandom')/xpr:id[normalize-space(.)!='']">
         <xf:label>Résultat du tirage au sort</xf:label>
         <xf:output value="concat('id : ', instance('xprRandom')/xpr:id)"/>
+        <xf:output value="concat('Greffier(s) : ', instance('xprRandom')/xpr:clerk)"/>
         <xf:output value="concat('Nombre de feuillet(s) : ', instance('xprRandom')/xpr:extent)"/>
+        <xf:output value="concat('Facsimiles : ', instance('xprRandom')/xpr:facsimile)"/>
         <xf:output value="concat('dessin(s) : ', instance('xprRandom')/xpr:sketch)"/>
     </xf:group>
 

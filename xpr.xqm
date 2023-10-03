@@ -1492,6 +1492,8 @@ function getRandomExpertise($id) {
       <id>{$expertise/@xml:id => fn:normalize-space()}</id>
       <extent>{$expertise/sourceDesc/physDesc/extent => fn:normalize-space()}</extent>
       <sketch>{$expertise/sourceDesc/physDesc/extent/@sketch => fn:normalize-space()}</sketch>
+      <clerk>{fn:string-join($expertise/description/participants/clerks/clerk/fn:string-join(persName/*[fn:normalize-space(.)!=''], ', '), ' ; ')}</clerk>
+      <facsimile>{$expertise/sourceDesc/facsimile/@from => fn:normalize-space()}</facsimile>
     </results>
   )
 };

@@ -705,7 +705,7 @@
     </xf:instance>
 
     <xf:instance id="otherEntityTypes">
-        <otherEntityTypes xmlns="">
+        <otherEntityTypes xmlns="https://archivists.org/ns/eac/v2">
             <type>
                 <label>Expert (tableau)</label>
                 <otherEntityType><term>expert</term></otherEntityType>
