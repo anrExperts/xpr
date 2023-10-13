@@ -2568,7 +2568,7 @@ function xpr.xpr:query($term) {
                   <td>
                   {
                   let $unitid := fn:normalize-space($expertise/@xml:id)
-                  let $path := '/xpr/expertises/' || $unitid || '/modify'
+                  let $path := '/xpr/expertises/' || $unitid || '/view'
                   return <a href="{$path}">{$unitid}</a>
                   }
                   </td>
