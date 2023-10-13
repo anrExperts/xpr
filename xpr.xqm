@@ -104,7 +104,7 @@ function install() {
 declare
   %rest:path("/xpr/export")
 function z1jExport(){
-  db:export("xpr", '/sites/expertdb/resource/data/', map { 'method': 'xml' }),
+  db:export("xpr", '/sites/expertdb/resource/data/db/', map { 'method': 'xml' }),
   web:redirect("/xpr/expertises/view")
 };
 
