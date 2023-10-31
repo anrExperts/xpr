@@ -506,7 +506,7 @@
                     <role>arrière-grand-mère</role>
                 </roles>
             </type>
-            <type vocabularySource="RiC-O" vocabularySourceUri="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasFamilyAssociationWith">
+            <type vocabularySource="RiC-O" vocabularySourceURI="https://www.ica.org/standards/RiC/ontology" valueURI="https://www.ica.org/standards/RiC/ontology#hasFamilyAssociationWith">
                 <label>a une relation familiale avec</label>
                 <value>rico:hasFamilyAssociationWith</value>
                 <roles>
