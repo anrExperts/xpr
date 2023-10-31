@@ -4701,9 +4701,9 @@
                             <xf:value ref="value"/>
                         </xf:itemset>
                         <xf:action ev:event="xforms-value-changed">
-                            <xf:setvalue ref="@valueURI" value="instance('relationTypes')//type[.=current()]/@valueURI"/>
-                            <xf:setvalue ref="@vocabularySource" value="instance('relationTypes')//type[.=current()]/@vocabularySource"/>
-                            <xf:setvalue ref="@vocabularySourceURI" value="instance('relationTypes')//type[.=current()]/@vocabularySourceURI"/>
+                            <xf:setvalue ref="@valueURI" value="instance('relationTypes')//type[value=current()]/@valueURI"/>
+                            <xf:setvalue ref="@vocabularySource" value="instance('relationTypes')//type[value=current()]/@vocabularySource"/>
+                            <xf:setvalue ref="@vocabularySourceURI" value="instance('relationTypes')//type[value=current()]/@vocabularySourceURI"/>
                         </xf:action>
                     </xf:select1>
                     <xf:select1 ref="following-sibling::*[1][self::eac:targetRole[preceding-sibling::*[1][self::eac:relationType] = instance('relationTypes')/type[roles]/value]]">
