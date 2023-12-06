@@ -689,6 +689,7 @@
             </event>
         </events>
     </xf:instance>
+
     <xf:instance id="nameParts">
         <parts xmlns="">
             <!-- https://en.wikipedia.org/wiki/Title -->
@@ -812,6 +813,10 @@
             <xf:delete nodeset="instance('eacInstance')//@standardDate[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacInstance')//@notBefore[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacInstance')//@notAfter[normalize-space(.)='']"/>
+
+            <xf:delete nodeset="instance('eacInstance')//eac:date[not(ancestor::eac:existDates)]/@sourceReference"/>
+            <xf:delete nodeset="instance('eacInstance')//eac:fromDate[not(ancestor::eac:existDates)]/@sourceReference"/>
+            <xf:delete nodeset="instance('eacInstance')//eac:toDate[not(ancestor::eac:existDates)]/@sourceReference"/>
         </xf:action>
 
         <xf:action ev:event="xforms-submit-done">
@@ -842,6 +847,10 @@
             <xf:delete nodeset="instance('eacInstance')//@standardDate[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacInstance')//@notBefore[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacInstance')//@notAfter[normalize-space(.)='']"/>
+
+            <xf:delete nodeset="instance('eacInstance')//eac:date[not(ancestor::eac:existDates)]/@sourceReference"/>
+            <xf:delete nodeset="instance('eacInstance')//eac:fromDate[not(ancestor::eac:existDates)]/@sourceReference"/>
+            <xf:delete nodeset="instance('eacInstance')//eac:toDate[not(ancestor::eac:existDates)]/@sourceReference"/>
         </xf:action>
 
         <xf:action ev:event="xforms-submit-done">
@@ -900,7 +909,7 @@
 
     <xf:action ev:event="callbackevent">
         <xf:setvalue ref="//@id[.=''][parent::*[self::eac:source or self::eac:chronItem or self::eac:relationType][not(preceding::*[self::eac:source or self::eac:chronItem or self::eac:relationType][@id=''])]]" value="event('response')"/>
-        <xf:setvalue if="//eac:targetRole[@target=''][preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]" ref="//@target[.=''][parent::eac:targetRole[preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]]" value="concat('#', event('response'))"/>
+        <xf:setvalue if="//eac:targetRole[@target=''][preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]" ref="//@target[.=''][parent::eac:targetRole[preceding-sibling::*[1][self::eac:relationType[normalize-space(@id)!='']]]]" value="event('response')"/>
     </xf:action>
 
     <xf:instance id="query">

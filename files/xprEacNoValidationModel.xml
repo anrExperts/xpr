@@ -20,7 +20,7 @@
     <xf:submission id="noValidationSubmission" ref="instance('eacNoValidation')" method="put" resource="/xpr/biographies/put" replace="none">
         <xf:action ev:event="xforms-submit">
             <!-- @maintenanceStatus -->
-            <xf:setvalue if="instance('eacNoValidation')//eac:control/@maintenanceStatus = 'new'" ref="eac:control/@maintenanceStatus" value="'updated'"/>
+            <xf:setvalue if="instance('eacNoValidation')//eac:control/@maintenanceStatus = 'new'" ref="eac:control/@maintenanceStatus" value="'revised'"/>
             <xf:setvalue if="instance('eacNoValidation')//eac:control/@maintenanceStatus = ''" ref="eac:control/@maintenanceStatus" value="'new'"/>
 
             <!-- agent -->
@@ -42,6 +42,10 @@
             <xf:delete nodeset="instance('eacNoValidation')//@standardDate[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacNoValidation')//@notBefore[normalize-space(.)='']"/>
             <xf:delete nodeset="instance('eacNoValidation')//@notAfter[normalize-space(.)='']"/>
+
+            <xf:delete nodeset="instance('eacNoValidation')//eac:date[not(ancestor::eac:existDates)]/@sourceReference"/>
+            <xf:delete nodeset="instance('eacNoValidation')//eac:fromDate[not(ancestor::eac:existDates)]/@sourceReference"/>
+            <xf:delete nodeset="instance('eacNoValidation')//eac:toDate[not(ancestor::eac:existDates)]/@sourceReference"/>
         </xf:action>
 
         <xf:action ev:event="xforms-submit-done">

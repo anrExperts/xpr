@@ -1021,7 +1021,7 @@
                     <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                         <!--@todo Q° multiple references inside one source !-->
                         <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                        <xf:value value="concat('#', @id)"/>
+                        <xf:value ref="@id"/>
                     </xf:itemset>
                 </xf:select>
             </xf:repeat>
@@ -1157,7 +1157,7 @@
                         <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                             <!--@todo Q° multiple references inside one source !-->
                             <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                            <xf:value value="concat('#', @id)"/>
+                            <xf:value ref="@id"/>
                         </xf:itemset>
                     </xf:select>
                 </xf:group>
@@ -1729,7 +1729,7 @@
                         <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                             <!--@todo Q° multiple references inside one source !-->
                             <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                            <xf:value value="concat('#', @id)"/>
+                            <xf:value ref="@id"/>
                         </xf:itemset>
                     </xf:select>
                 </xf:group>
@@ -2238,16 +2238,26 @@
                     <xf:insert context="." nodeset="eac:identity" position="after" origin="instance('eacDescription')/eac:description"/>
                 </xf:action>
                 <xf:action ev:event="DOMActivate">
-                    <xf:insert if="eac:description[not(eac:functions)]" context="eac:description" nodeset="*" at="1" position="before" origin="instance('eacPlaces')/eac:places"/>
-                    <xf:insert if="eac:description[eac:functions]" context="eac:description" nodeset="eac:functions" position="after" origin="instance('eacPlaces')/eac:places"/>
+                    <xf:action if="eac:description[not(eac:occupations)]">
+                        <xf:insert if="eac:description[not(*[self::eac:functions or self::eac:languagesUsed or self::eac:legalStatuses or self::eac:localDescriptions or self::eac:mandates])]" context="eac:description" nodeset="*" at="1" position="before" origin="instance('eacPlaces')/eac:places"/>
+                        <xf:insert if="eac:description[*[self::eac:functions or self::eac:languagesUsed or self::eac:legalStatuses or self::eac:localDescriptions or self::eac:mandates]]" context="eac:description" nodeset="*[self::eac:functions or self::eac:languagesUsed or self::eac:legalStatuses or self::eac:localDescriptions or self::eac:mandates]" at="last()" position="after" origin="instance('eacPlaces')/eac:places"/>
+                    </xf:action>
+                    <xf:action if="eac:description[eac:occupations]">
+                        <xf:insert context="eac:description" nodeset="eac:occupations" position="after" origin="instance('eacPlaces')/eac:places"/>
+                    </xf:action>
                 </xf:action>
                 <xf:delete nodeset="eac:description/eac:places/eac:descriptiveNote" ev:event="DOMActivate"/>
             </xf:trigger>
             <xf:trigger ref="eac:cpfDescription[eac:description[not(eac:places)]]">
                 <xf:label>Ajouter des lieux</xf:label>
                 <xf:action ev:event="DOMActivate">
-                    <xf:insert if="eac:description[not(eac:functions)]" context="eac:description" nodeset="*" at="1" position="before" origin="instance('eacPlaces')/eac:places"/>
-                    <xf:insert if="eac:description[eac:functions]" context="eac:description" nodeset="eac:functions" position="after" origin="instance('eacPlaces')/eac:places"/>
+                    <xf:action if="eac:description[not(eac:occupations)]">
+                        <xf:insert if="eac:description[not(*[self::eac:functions or self::eac:languagesUsed or self::eac:legalStatuses or self::eac:localDescriptions or self::eac:mandates])]" context="eac:description" nodeset="*" at="1" position="before" origin="instance('eacPlaces')/eac:places"/>
+                        <xf:insert if="eac:description[*[self::eac:functions or self::eac:languagesUsed or self::eac:legalStatuses or self::eac:localDescriptions or self::eac:mandates]]" context="eac:description" nodeset="*[self::eac:functions or self::eac:languagesUsed or self::eac:legalStatuses or self::eac:localDescriptions or self::eac:mandates]" at="last()" position="after" origin="instance('eacPlaces')/eac:places"/>
+                    </xf:action>
+                    <xf:action if="eac:description[eac:occupations]">
+                        <xf:insert context="eac:description" nodeset="eac:occupations" position="after" origin="instance('eacPlaces')/eac:places"/>
+                    </xf:action>
                 </xf:action>
                 <xf:delete nodeset="eac:description/eac:places/eac:descriptiveNote" ev:event="DOMActivate"/>
             </xf:trigger>
@@ -2809,7 +2819,7 @@
                         <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                             <!--@todo Q° multiple references inside one source !-->
                             <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                            <xf:value value="concat('#', @id)"/>
+                            <xf:value ref="@id"/>
                         </xf:itemset>
                     </xf:select>
                 </xf:group>
@@ -2951,7 +2961,7 @@
                         <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
                         <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                             <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                            <xf:value value="concat('#', @id)"/>
+                            <xf:value ref="@id"/>
                         </xf:itemset>
                     </xf:select>
                 </xf:group>
@@ -3024,7 +3034,7 @@
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
                             <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                                 <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                                <xf:value value="concat('#', @id)"/>
+                                <xf:value ref="@id"/>
                             </xf:itemset>
                         </xf:select>
                     </xf:group>
@@ -3066,7 +3076,7 @@
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
                             <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                                 <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                                <xf:value value="concat('#', @id)"/>
+                                <xf:value ref="@id"/>
                             </xf:itemset>
                         </xf:select>
                     </xf:group>
@@ -3152,7 +3162,7 @@
                             <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
                             <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                                 <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                                <xf:value value="concat('#', @id)"/>
+                                <xf:value ref="@id"/>
                             </xf:itemset>
                         </xf:select>
                     </xf:group>
@@ -3194,7 +3204,7 @@
                                     <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
                                     <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                                         <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                                        <xf:value value="concat('#', @id)"/>
+                                        <xf:value ref="@id"/>
                                     </xf:itemset>
                                 </xf:select>
                             </xf:group>
@@ -3236,7 +3246,7 @@
                                     <xf:help><xf:output value="instance('documentation')/tei:text/tei:body/tei:div[@type='attributes']/tei:div[@xml:id='attr-sourceReference']/tei:div[@type='description']"/></xf:help>
                                     <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                                         <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                                        <xf:value value="concat('#', @id)"/>
+                                        <xf:value ref="@id"/>
                                     </xf:itemset>
                                 </xf:select>
                             </xf:group>
@@ -3468,7 +3478,7 @@
                             <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                                 <!--@todo Q° multiple references inside one source !-->
                                 <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                                <xf:value value="concat('#', @id)"/>
+                                <xf:value ref="@id"/>
                             </xf:itemset>
                         </xf:select>
                     </xf:group>
@@ -3558,7 +3568,7 @@
                     </xf:group>
                     <xf:trigger ref="self::eac:chronItem[not(eac:date) and not(eac:dateRange) and not(eac:dateSet)]" class="trigger">
                         <xf:label>Dater (date simple)</xf:label>
-                        <xf:insert context="." nodeset="eac:term" position="after" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
+                        <xf:insert context="." nodeset="eac:event" position="after" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
                     </xf:trigger>
                     <xf:group ref="eac:dateRange">
                         <xf:label>
@@ -3682,7 +3692,7 @@
                         <xf:label>
                             Dater (intervalle)
                         </xf:label>
-                        <xf:insert context="." nodeset="eac:term" position="after" origin="instance('eacDates')/eac:dateRange" ev:event="DOMActivate"/>
+                        <xf:insert context="." nodeset="eac:event" position="before" origin="instance('eacDates')/eac:dateRange" ev:event="DOMActivate"/>
                         <xf:insert context="eac:dateRange" nodeset="*" origin="instance('eacDates')/eac:fromDate" ev:event="DOMActivate"/>
                         <xf:insert context="eac:dateRange" nodeset="eac:fromDate" position="after" origin="instance('eacDates')/eac:toDate" ev:event="DOMActivate"/>
                     </xf:trigger>
@@ -3882,7 +3892,7 @@
                         <xf:label>
                             Dater (ensemble de dates)
                         </xf:label>
-                        <xf:insert context="." nodeset="eac:term" position="after" origin="instance('eacDates')/eac:dateSet" ev:event="DOMActivate"/>
+                        <xf:insert context="." nodeset="eac:event" position="before" origin="instance('eacDates')/eac:dateSet" ev:event="DOMActivate"/>
                         <xf:insert context="eac:dateSet" nodeset="*" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
                         <xf:insert context="eac:dateSet" nodeset="eac:date" position="after" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
                     </xf:trigger>
@@ -4488,7 +4498,7 @@
                         <xf:itemset ref="instance('eacInstance')//eac:chronItem[@id!='']">
                             <!--@todo Q° multiple references inside one source !-->
                             <xf:label ref="eac:event"/>
-                            <xf:value value="concat('#', @id)"/>
+                            <xf:value ref="@id"/>
                         </xf:itemset>
                     </xf:select>
                 </xf:group>
@@ -4733,7 +4743,7 @@
                         <xf:itemset ref="instance('eacInstance')/eac:control/eac:sources/eac:source[@id!='']">
                             <!--@todo Q° multiple references inside one source !-->
                             <xf:label><xf:output value="string-join(*, ', ')" /></xf:label>
-                            <xf:value value="concat('#', @id)"/>
+                            <xf:value ref="@id"/>
                         </xf:itemset>
                     </xf:select>
                     <!--<xf:group class="trigger">
@@ -4826,7 +4836,7 @@
                 </xf:group>
                 <xf:trigger ref="self::eac:relation[not(eac:date) and not(eac:dateRange) and not(eac:dateSet)]" class="trigger">
                     <xf:label>Dater (date simple)</xf:label>
-                    <xf:insert context="." nodeset="eac:term" position="after" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
+                    <xf:insert context="." nodeset="eac:targetEntity" position="after" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
                 </xf:trigger>
                 <xf:group ref="eac:dateRange">
                     <xf:label>
@@ -4924,7 +4934,7 @@
                     <xf:label>
                         Dater (intervalle)
                     </xf:label>
-                    <xf:insert context="." nodeset="eac:term" position="after" origin="instance('eacDates')/eac:dateRange" ev:event="DOMActivate"/>
+                    <xf:insert context="." nodeset="eac:targetEntity" position="after" origin="instance('eacDates')/eac:dateRange" ev:event="DOMActivate"/>
                     <xf:insert context="eac:dateRange" nodeset="*" origin="instance('eacDates')/eac:fromDate" ev:event="DOMActivate"/>
                     <xf:insert context="eac:dateRange" nodeset="eac:fromDate" position="after" origin="instance('eacDates')/eac:toDate" ev:event="DOMActivate"/>
                 </xf:trigger>
@@ -5072,7 +5082,7 @@
                     <xf:label>
                         Dater (ensemble de dates)
                     </xf:label>
-                    <xf:insert context="." nodeset="eac:term" position="after" origin="instance('eacDates')/eac:dateSet" ev:event="DOMActivate"/>
+                    <xf:insert context="." nodeset="eac:targetEntity" position="after" origin="instance('eacDates')/eac:dateSet" ev:event="DOMActivate"/>
                     <xf:insert context="eac:dateSet" nodeset="*" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
                     <xf:insert context="eac:dateSet" nodeset="eac:date" position="after" origin="instance('eacDates')/eac:date" ev:event="DOMActivate"/>
                 </xf:trigger>
@@ -5109,7 +5119,7 @@
                     <xf:label>
                         <xf:output value="'Ajouter une note '" />
                     </xf:label>
-                    <xf:insert context="." nodeset="eac:reference" origin="instance('eacSources')/eac:sources/eac:source/eac:descriptiveNote" at="last()" position="after" ev:event="DOMActivate"/>
+                    <xf:insert context="." nodeset="*" origin="instance('eacSources')/eac:sources/eac:source/eac:descriptiveNote" at="last()" position="after" ev:event="DOMActivate"/>
                 </xf:trigger>
             </xf:repeat>
             <xf:group class="trigger">
@@ -5138,7 +5148,7 @@
                     <xf:label>Ajouter les relations citées dans le dossier de réception</xf:label>
                     <xf:action ev:event="DOMActivate">
                         <xf:setvalue ref="instance('eacRelations4Reception')//eac:relationType/@sourceReference" value="instance('eacInstance')/eac:cpfDescription//eac:chronItem[contains(@localType, 'reception')][1]/@sourceReference"/>
-                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relation/@target" value="concat('#', instance('eacInstance')/eac:cpfDescription//eac:chronItem[contains(@localType, 'reception')][1]/@id)"/>
+                        <xf:setvalue ref="instance('eacRelations4Reception')//eac:relation/@target" value="instance('eacInstance')/eac:cpfDescription//eac:chronItem[contains(@localType, 'reception')][1]/@id"/>
                     </xf:action>
                     <xf:action ev:event="DOMActivate">
                         <xf:insert context="." nodeset="eac:relation" at="last()" position="after" origin="instance('eacRelations4Reception')/eac:relations//eac:relation"/>
@@ -5191,7 +5201,7 @@
         <xf:label>Enregistrer</xf:label>
         <xf:action ev:event="DOMActivate">
             <!-- @maintenanceStatus -->
-            <xf:setvalue if="eac:control/@maintenanceStatus = 'new'" ref="eac:control/@maintenanceStatus" value="'updated'"/>
+            <xf:setvalue if="eac:control/@maintenanceStatus = 'new'" ref="eac:control/@maintenanceStatus" value="'revised'"/>
             <xf:setvalue if="eac:control/@maintenanceStatus = ''" ref="eac:control/@maintenanceStatus" value="'new'"/>
 
             <!-- agent -->
