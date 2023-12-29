@@ -95,6 +95,20 @@ declare function getExpertisesStatistics($expertises, $experts) {
       let $label := ($expertises/description/categories/category[fn:normalize-space(@type)=$type])[1] => fn:normalize-space()
     return [$type, $label]
 
+  let $categories :=
+    let $types := fn:distinct-values($expertises/description/categories/category/@type[fn:normalize-space(.)!=''])
+    for $type in $types
+      let $label := ($expertises/description/categories/category[fn:normalize-space(@type)=$type])[1] => fn:normalize-space()
+    return [$type, $label]
+
+  let $agreements :=
+    let $types := fn:distinct-values($expertises/description/conclusions/agreement/@type[fn:normalize-space(.)!=''])
+    for $type in $types
+      let $label := ($expertises/description/conclusions/agreement[fn:normalize-space(@type)=$type])[1] => fn:normalize-space()
+    return [$type, $label]
+
+  let $fees := for $fee in $expertises/description/conclusions/fees/total return $fee/@l => fn:normalize-space()
+
   let $content := map{
     "total" : fn:count($expertises),
     "thirdParty" : map{
@@ -214,8 +228,8 @@ declare function getExpertisesStatistics($expertises, $experts) {
     "frameworks" : array{
       for $framework in $frameworks
       return map{
-        "framework" : $framework,
-        "label" : ($expertises/description/procedure/framework[@type=$framework])[1] => fn:normalize-space(),
+        "framework" : array:get($framework, 1),
+        "label" : array:get($framework, 2),
         "total" : fn:count($expertises[description/procedure[framework[@type = $framework]]])
       }
     },
@@ -260,8 +274,36 @@ declare function getExpertisesStatistics($expertises, $experts) {
       }
     },
     "conclusion" : array{
-
+      for $agreement in $agreements
+      return map{
+        "agreement" : array:get($agreement, 1),
+        "label" : array:get($agreement, 2),
+        "total" : fn:count($expertises[description/conclusions/agreement/@type=array:get($agreement, 1)])
+      }
+    },
+    "fees" : array{
+      map{"10" : fn:count($fees[fn:number(.) <= 10])},
+      map{"20" : fn:count($fees[fn:number(.) <= 20 and fn:number(.) > 10])},
+      map{"30" : fn:count($fees[fn:number(.) <= 30 and fn:number(.) > 20])},
+      map{"40" : fn:count($fees[fn:number(.) <= 40 and fn:number(.) > 30])},
+      map{"50" : fn:count($fees[fn:number(.) <= 50 and fn:number(.) > 40])},
+      map{"100" : fn:count($fees[fn:number(.) <= 100 and fn:number(.)>50])},
+      map{"200" : fn:count($fees[fn:number(.) <= 200 and fn:number(.) > 100])},
+      map{"300" : fn:count($fees[fn:number(.) <= 300 and fn:number(.) > 200])},
+      map{"400" : fn:count($fees[fn:number(.) <= 400 and fn:number(.) > 300])},
+      map{"500" : fn:count($fees[fn:number(.) <= 500 and fn:number(.) > 400])},
+      map{"750" : fn:count($fees[fn:number(.) <= 750 and fn:number(.) > 500])},
+      map{"1000" : fn:count($fees[fn:number(.) <= 1000 and fn:number(.)>750])},
+      map{"1250" : fn:count($fees[fn:number(.) <= 1250 and fn:number(.) > 1000])},
+      map{"1500" : fn:count($fees[fn:number(.) <= 1500 and fn:number(.) > 1250])},
+      map{"1750" : fn:count($fees[fn:number(.) <= 1750 and fn:number(.) > 1500])},
+      map{"2000" : fn:count($fees[fn:number(.) <= 2000 and fn:number(.) > 1750])},
+      map{"3000" : fn:count($fees[fn:number(.) <= 3000 and fn:number(.) > 2000])},
+      map{"4000" : fn:count($fees[fn:number(.) <= 4000 and fn:number(.) > 3000])},
+      map{"5000" : fn:count($fees[fn:number(.) <= 5000 and fn:number(.) > 4000])},
+      map{"+5000" : fn:count(fn:number(.) >= 5000)}
     }
+
   }
   return $content
 };
