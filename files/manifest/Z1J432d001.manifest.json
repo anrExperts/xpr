@@ -33,7 +33,7 @@
   "sequences" : [ {
     "canvases" : [ {
       "@id" : "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e\/info.json",
-      "label" : "1",
+      "label" : "f1r",
       "height" : 4000,
       "width" : 6016,
       "images" : [ {
@@ -55,23 +55,69 @@
       } ],
       "@type" : "sc:Canvas"
     }, {
-      "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f3",
-      "label" : "2",
+      "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76/info.json",
+      "label" : "f1v",
       "height" : 4000,
       "width" : 6016,
       "images" : [ {
         "motivation" : "sc:painting",
-        "on" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f3",
+        "on" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76/info.json",
         "resource" : {
           "format" : "image/jpeg",
           "service" : {
             "profile" : "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2",
             "@context" : "http://iiif.io/api/image/1/context.json",
-            "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f3"
+            "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76"
           },
           "height" : 4000,
           "width" : 6016,
-          "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f3/full/full/0/native.jpg",
+          "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76/100,0,3000,4000/full/0/default.jpg",
+          "@type" : "dctypes:Image"
+        },
+        "@type" : "oa:Annotation"
+      } ],
+      "@type" : "sc:Canvas"
+    }, {
+      "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76/info.json",
+      "label" : "f2r",
+      "height" : 4000,
+      "width" : 6016,
+      "images" : [ {
+        "motivation" : "sc:painting",
+        "on" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76/info.json",
+        "resource" : {
+          "format" : "image/jpeg",
+          "service" : {
+            "profile" : "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2",
+            "@context" : "http://iiif.io/api/image/1/context.json",
+            "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76"
+          },
+          "height" : 4000,
+          "width" : 6016,
+          "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/5c8e77a046216ab6aed848b2f781deb9495fea76/2900,0,3000,4000/full/0/default.jpg",
+          "@type" : "dctypes:Image"
+        },
+        "@type" : "oa:Annotation"
+      } ],
+      "@type" : "sc:Canvas"
+    }, {
+      "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/ed54a265988eb3974833d778916ce73596b459df/info.json",
+      "label" : "f2v",
+      "height" : 4000,
+      "width" : 6016,
+      "images" : [ {
+        "motivation" : "sc:painting",
+        "on" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/ed54a265988eb3974833d778916ce73596b459df/info.json",
+        "resource" : {
+          "format" : "image/jpeg",
+          "service" : {
+            "profile" : "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2",
+            "@context" : "http://iiif.io/api/image/1/context.json",
+            "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/ed54a265988eb3974833d778916ce73596b459df"
+          },
+          "height" : 4000,
+          "width" : 6016,
+          "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/ed54a265988eb3974833d778916ce73596b459df/100,0,3000,4000/full/0/default.jpg",
           "@type" : "dctypes:Image"
         },
         "@type" : "oa:Annotation"
