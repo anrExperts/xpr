@@ -34,8 +34,8 @@
     "canvases" : [ {
       "@id" : "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e\/info.json",
       "label" : "1",
-      "height" : 6016,
-      "width" : 4000,
+      "height" : 4000,
+      "width" : 6016,
       "images" : [ {
         "motivation" : "sc:painting",
         "on" : "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e\/info.json",
@@ -44,11 +44,11 @@
           "service" : {
             "profile" : "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2",
             "@context" : "http://iiif.io/api/image/1/context.json",
-            "@id" : "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e"
+            "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/35a963bada58a4568d1f80045e17547fa82b138e"
           },
-          "height" : 6016,
-          "width" : 4000,
-          "@id" : "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e\/full\/max\/0\/default.jpg",
+          "height" : 4000,
+          "width" : 6016,
+          "@id" : "https://api.nakala.fr/iiif/10.34847/nkl.027b840e/35a963bada58a4568d1f80045e17547fa82b138e/full/full/0/default.jpg",
           "@type" : "dctypes:Image"
         },
         "@type" : "oa:Annotation"
@@ -57,8 +57,8 @@
     }, {
       "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f3",
       "label" : "2",
-      "height" : 6016,
-      "width" : 4000,
+      "height" : 4000,
+      "width" : 6016,
       "images" : [ {
         "motivation" : "sc:painting",
         "on" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f3",
@@ -69,8 +69,8 @@
             "@context" : "http://iiif.io/api/image/1/context.json",
             "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f3"
           },
-          "height" : 6016,
-          "width" : 4000,
+          "height" : 4000,
+          "width" : 6016,
           "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f3/full/full/0/native.jpg",
           "@type" : "dctypes:Image"
         },
