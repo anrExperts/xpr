@@ -1,93 +1,87 @@
 {
-  "items": [
-    {
-      "items": [
-        {
-          "items": [
-            {
-              "body": {
-                "width": 6016,
-                "height": 4000,
-                "service": [
-                  {
-                    "profile": "level2",
-                    "type": "ImageService3",
-                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e\/info.json"
-                  }
-                ],
-                "format": "image\/jpeg",
-                "type": "Image",
-                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/35a963bada58a4568d1f80045e17547fa82b138e\/full\/max\/0\/default.jpg"
-              },
-              "target": "https:\/\/xpr\/iiif\/Z1J432\/canvas\/p0001",
-              "motivation": "painting",
-              "type": "Annotation",
-              "id": "https:\/\/xpr\/iiif\/Z1J432\/annotation\/p0001-image"
-            }
-          ],
-          "type": "AnnotationPage",
-          "id": "https:\/\/xpr\/iiif\/Z1J432\/page\/p0001\/1"
-        }
-      ],
-      "width": 6016,
-      "height": 4000,
-      "label": {
-        "fr": [
-          "Z1J432_0001.JPG"
-        ]
-      },
-      "type": "Canvas",
-      "id": "https:\/\/xpr\/iiif\/Z1J432\/canvas\/p0001"
-    },
-    {
-      "items": [
-        {
-          "items": [
-            {
-              "body": {
-                "width": 6016,
-                "height": 4000,
-                "service": [
-                  {
-                    "profile": "level2",
-                    "type": "ImageService3",
-                    "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/5c8e77a046216ab6aed848b2f781deb9495fea76\/info.json"
-                  }
-                ],
-                "format": "image\/jpeg",
-                "type": "Image",
-                "id": "https:\/\/api.nakala.fr\/iiif\/10.34847\/nkl.027b840e\/5c8e77a046216ab6aed848b2f781deb9495fea76\/full\/max\/0\/default.jpg"
-              },
-              "target": "https:\/\/xpr\/iiif\/Z1J432\/canvas\/p0002",
-              "motivation": "painting",
-              "type": "Annotation",
-              "id": "https:\/\/xpr\/iiif\/Z1J432\/annotation\/p0002-image"
-            }
-          ],
-          "type": "AnnotationPage",
-          "id": "https:\/\/xpr\/iiif\/Z1J432\/page\/p0002\/1"
-        }
-      ],
-      "width": 6016,
-      "height": 4000,
-      "label": {
-        "fr": [
-          "Z1J432_0002.JPG"
-        ]
-      },
-      "type": "Canvas",
-      "id": "https:\/\/xpr\/iiif\/Z1J432\/canvas\/p0002"
-    }
-  ],
-  "@context": "http:\/\/iiif.io\/api\/presentation\/3\/context.json",
-  "behavior": [
-    "paged"
-  ],
-  "label": {
-    "fr": [
-      "Z1J432"
-    ]
-  },
-  "type": "Manifest",
-  "id": "\/xpr\/iiif\/Z1J432\/manifest.json"
+  "@id" : "https://experts.huma-num.fr/xpr/files/manifest/Z1J432Z1J432d001.manifest.json",
+  "label" : "Z1J432d001",
+  "attribution" : "ANR Experts",
+  "license" : "PDM",
+  "seeAlso" : [ "https://experts.huma-num.fr/xpr/expertises/z1j432d001/view" ],
+  "description" : "Procès verbal d'expertise du 1696-01-21, rue de Macon à Paris, [Visite de puits mitoyen].",
+  "metadata" : [ {
+    "label" : "Digitised by",
+    "value" : "ANR Experts"
+  }, {
+    "label" : "Source Images",
+    "value" : "https://gallica.bnf.fr/ark:/12148/btv1b10224708f"
+  }, {
+    "label" : "Metadata Source",
+    "value" : "https://experts.huma-num.fr/xpr/expertises/z1j432d001"
+  }, {
+    "label" : "Title",
+    "value" : "Z1J432d001"
+  }, {
+    "label" : "Date",
+    "value" : "1696-01-21"
+  }, {
+    "label" : "Format",
+    "value" : "Papier. - 2 feuillets"
+  }, {
+    "label" : "Creator",
+    "value" : ""
+  }, {
+    "label" : "Type",
+    "value" : "Manuscrit"
+  } ],
+  "sequences" : [ {
+    "canvases" : [ {
+      "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f2",
+      "label" : "1",
+      "height" : 6496,
+      "width" : 4872,
+      "images" : [ {
+        "motivation" : "sc:painting",
+        "on" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f2",
+        "resource" : {
+          "format" : "image/jpeg",
+          "service" : {
+            "profile" : "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2",
+            "@context" : "http://iiif.io/api/image/1/context.json",
+            "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f2"
+          },
+          "height" : 6496,
+          "width" : 4872,
+          "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f2/full/full/0/native.jpg",
+          "@type" : "dctypes:Image"
+        },
+        "@type" : "oa:Annotation"
+      } ],
+      "@type" : "sc:Canvas"
+    }, {
+      "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f3",
+      "label" : "64",
+      "height" : 6496,
+      "width" : 4872,
+      "images" : [ {
+        "motivation" : "sc:painting",
+        "on" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/canvas/f3",
+        "resource" : {
+          "format" : "image/jpeg",
+          "service" : {
+            "profile" : "http://library.stanford.edu/iiif/image-api/1.1/compliance.html#level2",
+            "@context" : "http://iiif.io/api/image/1/context.json",
+            "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f3"
+          },
+          "height" : 6496,
+          "width" : 4872,
+          "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/f3/full/full/0/native.jpg",
+          "@type" : "dctypes:Image"
+        },
+        "@type" : "oa:Annotation"
+      } ],
+      "@type" : "sc:Canvas"
+    }],
+    "label" : "Current Page Order",
+    "@type" : "sc:Sequence",
+    "@id" : "https://gallica.bnf.fr/iiif/ark:/12148/btv1b10224708f/sequence/default"
+  } ],
+  "@type" : "sc:Manifest",
+  "@context" : "http://iiif.io/api/presentation/2/context.json"
 }
